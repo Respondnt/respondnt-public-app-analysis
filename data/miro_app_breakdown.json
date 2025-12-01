@@ -1,0 +1,1812 @@
+{
+  "application_name": "Miro – AI Innovation Workspace / Online Visual Collaboration Platform",
+  "generated_at": "2025-11-28T00:00:00Z",
+  "coverage_overview": {
+    "sources_analysed": [
+      {
+        "name": "AI Innovation Workspace | Miro (main marketing site)",
+        "url": "https://miro.com/index/",
+        "description": "High-level positioning of Miro as an AI-powered innovation workspace, with sections for AI, Intelligent Canvas, Formats, Blueprints, Security, and Integrations. "
+      },
+      {
+        "name": "Intelligent Canvas product page",
+        "url": "https://miro.com/intelligent-canvas/",
+        "description": "Describes the Intelligent Canvas, multiplayer collaboration, and Formats such as Docs, Diagrams, Tables, Timelines, Prototypes, and Slides, with strong emphasis on AI support. "
+      },
+      {
+        "name": "Using Miro – Help Center category",
+        "url": "https://help.miro.com/hc/en-us/categories/360001420434-Using-Miro",
+        "description": "Index of core end-user features: essential and advanced tools, facilitation tools, Miro AI, Formats, Spaces, board management, sharing, profiles, import/export, Miro Insights, Miroverse, troubleshooting. "
+      },
+      {
+        "name": "Getting Started – Help Center category",
+        "url": "https://help.miro.com/hc/en-us/categories/360001415214-Getting-Started",
+        "description": "Introductory resources on first boards, dashboard, registration, collaboration, roles, accessibility, content migration, and device apps. "
+      },
+      {
+        "name": "Integrations & Apps – Help Center category",
+        "url": "https://help.miro.com/hc/en-us/categories/360001415234-Integrations-Apps",
+        "description": "Overview of Miro integrations (Atlassian, Microsoft, Google, Zoom, Asana, AWS, etc.), installation basics, embedding boards, and permissions for third‑party apps. "
+      },
+      {
+        "name": "Administration – Help Center category",
+        "url": "https://help.miro.com/hc/en-us/categories/360001511814-Administration",
+        "description": "Covers admin roles, user management, team management, invitation settings, basic security (2FA), and admin FAQs for non‑Enterprise plans. "
+      },
+      {
+        "name": "Enterprise Administration – Help Center category",
+        "url": "https://help.miro.com/hc/en-us/categories/26366232516882-Enterprise-Administration",
+        "description": "Enterprise-specific admin docs: new Admin Console, enterprise deployment guide, Enterprise Guard, security & compliance settings, subscription and user management, app management, announcements. "
+      },
+      {
+        "name": "Miro AI overview – Help Center",
+        "url": "https://help.miro.com/hc/en-us/articles/28765406244498-Miro-AI-overview",
+        "description": "Details the suite of Miro AI capabilities (generation, summarization, diagramming, translation, clustering, Catch up, Sidekicks, AI credits and add‑ons). "
+      },
+      {
+        "name": "Miro Developer Platform – Introduction",
+        "url": "https://developers.miro.com/docs/introduction",
+        "description": "Entry point for developer docs covering the Web SDK, REST API, Marketplace, SCIM API, Live Embed, reference sections, and resources. "
+      },
+      {
+        "name": "Miro Enterprise Guard product page",
+        "url": "https://miro.com/products/enterprise-guard/",
+        "description": "Product marketing for Enterprise Guard: automated discovery, classification, intelligent guardrails, content lifecycle management, eDiscovery, and encryption key management. "
+      },
+      {
+        "name": "Miro Security Features page",
+        "url": "https://miro.com/features/security/",
+        "description": "Summarizes infrastructure security, encryption, Zero Trust, SSO, 2FA, role-based admin controls, compliance certifications, Enterprise Guard, SCIM, audit logs, and data residency. "
+      },
+      {
+        "name": "Single sign-on (SSO) – Help Center",
+        "url": "https://help.miro.com/hc/en-us/articles/360017571414-Single-sign-on-SSO",
+        "description": "Explains SAML SSO setup, domain control, login behavior, user attribute mapping, and interaction with 2FA. "
+      },
+      {
+        "name": "SCIM and User Provisioning – Help Center",
+        "url": "https://help.miro.com/hc/en-us/articles/360036827513-SCIM",
+        "description": "Describes SCIM-based user provisioning, relationship to SSO, constraints, and basic configuration patterns. "
+      },
+      {
+        "name": "Enterprise Integrations – Help Center",
+        "url": "https://help.miro.com/hc/en-us/articles/5004880908306-Enterprise-Integrations",
+        "description": "Central console for configuring Enterprise integrations: SCIM, SIEM, SAM tools, and \"Bring your own AI\" connections. "
+      },
+      {
+        "name": "Enterprise Guard and Microsoft Purview DSPM for AI Integration (Beta)",
+        "url": "https://help.miro.com/hc/en-us/articles/28617278171154-Enterprise-Guard-and-MS-Purview-DSPM-for-AI-Integration-Overview-Beta",
+        "description": "Beta documentation for forwarding AI prompts and responses from Enterprise Guard to Microsoft Purview DSPM for monitoring and control. "
+      }
+    ],
+    "likely_uncovered_areas_or_ambiguities": [
+      "Detailed behavior, edge cases, and UI flows for each specific board tool (e.g., individual chart types, code blocks, clustering options) beyond the high-level Help Center category listing.",
+      "Exact field-level data models, constraints, and error semantics for all REST, Web SDK, SCIM, and Live Embed APIs, as only their category-level documentation and reference indexes were reviewed. ",
+      "Full configuration surface of Enterprise Guard (all rule options, detection patterns, retention exceptions) and how it interacts with different regional data residency setups. ",
+      "Precise mapping of each enterprise security/compliance control to specific certifications and regulatory obligations (e.g., which features are required for HIPAA vs. SOC 2 vs. ISO 27001 scenarios). ",
+      "Mobile, desktop, and interactive display client behavior in offline or low-connectivity scenarios (local caching, encryption at rest on clients, and sync conflict handling). ",
+      "Fine-grained AI governance options (per‑team or per‑format AI restrictions, LLM provider choices, log retention of prompts/responses) beyond what is stated in public AI and Enterprise Guard docs. "
+    ],
+    "assumptions_made": [
+      "Help Center category indexes provide a reasonably complete list of major user-facing capabilities, even though individual article content was not exhaustively crawled. ",
+      "The Developer Platform introduction accurately reflects the primary API surfaces (Web SDK, REST API, Marketplace, SCIM API, Live Embed) used by third parties and internal integrations. ",
+      "Security and Enterprise Guard marketing/overview pages faithfully describe the high-level behavior of automated discovery, classification, guardrails, retention, and encryption key management, even if implementation details are abstracted. ",
+      "The current public documentation is up-to-date as of late 2025, and older references (e.g., to \"Beta\" features) still roughly describe behavior where no newer contradictory documentation is visible.",
+      "Common SaaS patterns (e.g., autosave, multi-tenant isolation, eventual consistency) apply unless documentation explicitly suggests otherwise."
+    ]
+  },
+  "capability_map": {
+    "core_product_capabilities": [
+      {
+        "name": "Visual Canvas and Essential Board Tools",
+        "description": "Provides an infinite, multiplayer canvas where users add and organize content with core whiteboarding tools such as cards, text, frames, charts, connection lines, and code blocks. ",
+        "primary_actors": [
+          "End users (contributors/editors)",
+          "Facilitators and meeting hosts",
+          "Designers, product managers, engineers"
+        ],
+        "main_interfaces": [
+          {
+            "channel": "ui",
+            "details": "Web and desktop apps – main board canvas and toolbar (Essential Tools).",
+            "url": "https://help.miro.com/hc/en-us/categories/360001420434-Using-Miro"
+          },
+          {
+            "channel": "ui",
+            "details": "Mobile apps and interactive displays, supporting core canvas interactions.",
+            "url": "https://help.miro.com/hc/en-us/categories/360001415214-Getting-Started"
+          }
+        ],
+        "key_data_involved": [
+          "Boards and board metadata (title, description, owner, access settings)",
+          "Frames, shapes, cards, charts, text boxes, code blocks, connectors",
+          "Comments and annotations",
+          "Embedded media (images, documents, external embeds)"
+        ],
+        "security_relevant_traits": [
+          "All canvas content is persisted in Miro’s cloud storage and subject to sharing, retention, and Enterprise Guard policies where enabled. ",
+          "Highly collaborative editing environment where many users can concurrently modify the same board, making audit trails and role-based access control important.",
+          "Canvas content frequently contains intellectual property and sensitive business information (e.g., roadmaps, architecture diagrams)."
+        ],
+        "evidence": [
+          {
+            "title": "Using Miro – Essential Tools",
+            "url": "https://help.miro.com/hc/en-us/categories/360001420434-Using-Miro",
+            "summary": "Lists cards, charts, code blocks, connection lines, fonts, and frames as core tools available on boards. ",
+            "notes": null
+          },
+          {
+            "title": "Intelligent Canvas product page",
+            "url": "https://miro.com/intelligent-canvas/",
+            "summary": "Describes the Intelligent Canvas as a multiplayer workspace for visual collaboration with multiple content types. ",
+            "notes": null
+          }
+        ],
+        "notes": null
+      },
+      {
+        "name": "Advanced Formats and Diagramming",
+        "description": "Supports higher-level formats such as diagrams, mind maps, org charts, timelines, Kanban boards, tables, docs, slides, and interactive prototypes, many of which can be generated or edited with AI assistance. ",
+        "primary_actors": [
+          "Product managers and project leads",
+          "Designers and UX researchers",
+          "Architects and engineers",
+          "Business analysts"
+        ],
+        "main_interfaces": [
+          {
+            "channel": "ui",
+            "details": "Formats area and Advanced Tools within the board (diagramming, docs, slides, tables, Kanban).",
+            "url": "https://help.miro.com/hc/en-us/categories/360001420434-Using-Miro"
+          },
+          {
+            "channel": "ui",
+            "details": "Intelligent Canvas and Formats marketing pages showcasing Docs, Diagrams, Tables, Timelines, Kanban, and Prototypes.",
+            "url": "https://miro.com/intelligent-canvas/"
+          }
+        ],
+        "key_data_involved": [
+          "Diagram nodes, connectors, swimlanes, and diagram libraries",
+          "Mind map and org chart hierarchies",
+          "Timeline items and milestones",
+          "Kanban columns and cards",
+          "Tables, rows, columns, and field values",
+          "Docs, slide decks, prototype components and flows"
+        ],
+        "security_relevant_traits": [
+          "Structured artifacts (e.g., system diagrams, org charts, timelines) often encode sensitive operational or organizational data.",
+          "AI-assisted generation and modification of formats implies that user-provided prompts and board context may be processed by AI services, subject to AI governance settings. "
+        ],
+        "evidence": [
+          {
+            "title": "Using Miro – Advanced Tools and Formats",
+            "url": "https://help.miro.com/hc/en-us/categories/360001420434-Using-Miro",
+            "summary": "Advanced Tools list includes Prototypes, Columns (Kanban), Grid, Mind map, Org chart, Timeline Builder, User story mapping; Formats include Diagramming, Docs, Kanban, Slides, Tables. ",
+            "notes": null
+          },
+          {
+            "title": "Intelligent Canvas – Formats",
+            "url": "https://miro.com/intelligent-canvas/",
+            "summary": "Highlights Miro Docs, Diagrams, Tables, Timelines, Kanban, Prototypes, and Slides as key formats tied to AI. ",
+            "notes": null
+          }
+        ],
+        "notes": null
+      },
+      {
+        "name": "Spaces, Blueprints, and Work Organization",
+        "description": "Provides Spaces to organize boards, people, and work around teams or initiatives, and Blueprints to standardize repeatable workflows with preconfigured boards and content. ",
+        "primary_actors": [
+          "Team leads and project owners",
+          "Department heads",
+          "Admins configuring standard ways of working"
+        ],
+        "main_interfaces": [
+          {
+            "channel": "ui",
+            "details": "Spaces area in the product, including Space Overview and Space Overview Dashboard.",
+            "url": "https://help.miro.com/hc/en-us/categories/360001420434-Using-Miro"
+          },
+          {
+            "channel": "ui",
+            "details": "Blueprints and Custom Blueprints configuration flows.",
+            "url": "https://miro.com/capabilities/blueprints"
+          }
+        ],
+        "key_data_involved": [
+          "Spaces and membership lists",
+          "Collections of boards, templates, and related resources grouped within a space",
+          "Blueprint definitions (templates, settings, suggested workflows)",
+          "Space-level metrics displayed in Space Overview Dashboard"
+        ],
+        "security_relevant_traits": [
+          "Spaces can centralize sensitive boards under a single access perimeter; co‑owners and sharing defaults matter for containment. ",
+          "Blueprints can encode and replicate specific security-relevant patterns (e.g., default sharing settings or board structures) across many teams."
+        ],
+        "evidence": [
+          {
+            "title": "Using Miro – Spaces section",
+            "url": "https://help.miro.com/hc/en-us/categories/360001420434-Using-Miro",
+            "summary": "Spaces category lists Spaces, Space Overview, Space Overview Dashboard (Beta), Blueprints (Beta), Custom Blueprints. ",
+            "notes": null
+          },
+          {
+            "title": "Miro platform overview – Blueprints",
+            "url": "https://miro.com/index/",
+            "summary": "Platform navigation surfaces Blueprints as part of the Platform capabilities for scaling workflows. ",
+            "notes": null
+          }
+        ],
+        "notes": null
+      },
+      {
+        "name": "Collaboration and Facilitation Tools",
+        "description": "Offers real-time and asynchronous collaboration features like comments, @mentions, asynchronous tools, attention management, breakout frames, and other facilitation aids tailored for meetings and workshops. ",
+        "primary_actors": [
+          "Facilitators and workshop leaders",
+          "Team members collaborating synchronously or asynchronously",
+          "External stakeholders invited to workshops"
+        ],
+        "main_interfaces": [
+          {
+            "channel": "ui",
+            "details": "Board-level collaboration and facilitation menus (Asynchronous Tools, Collaboration tools, Attention management, Breakout frames).",
+            "url": "https://help.miro.com/hc/en-us/categories/360001420434-Using-Miro"
+          },
+          {
+            "channel": "ui",
+            "details": "Templates and solution pages for meetings, workshops, brainstorming, agile ceremonies.",
+            "url": "https://miro.com/meetings-and-workshops/"
+          }
+        ],
+        "key_data_involved": [
+          "Comments, threads, and conversation metadata",
+          "@mention relationships and notification targets",
+          "Facilitation state (timers, breakout assignments, focus areas)",
+          "Voting results, reactions, and related session data"
+        ],
+        "security_relevant_traits": [
+          "Comments and facilitation content can contain sensitive discussions, decisions, and personal opinions.",
+          "External participants (guests or visitors) may be granted limited access to collaboration tools; misconfiguration could expose more content than intended. "
+        ],
+        "evidence": [
+          {
+            "title": "Using Miro – Facilitation Tools",
+            "url": "https://help.miro.com/hc/en-us/categories/360001420434-Using-Miro",
+            "summary": "Facilitation Tools category includes Asynchronous Tools, @Mentioning, Attention management, Breakout frames (Beta), Collaboration tools, and Azure DevOps dependencies. ",
+            "notes": null
+          },
+          {
+            "title": "Miro solutions – Meetings & Workshops",
+            "url": "https://miro.com/meetings-and-workshops/",
+            "summary": "Marketing materials position Miro for running meetings and workshops with collaborative boards.",
+            "notes": null
+          }
+        ],
+        "notes": null
+      },
+      {
+        "name": "Board Management, History, and Working on the Board",
+        "description": "Covers everyday board work such as navigation, UI, board duplication and deletion, feed, board history, synced copies, and visual customization like background color. ",
+        "primary_actors": [
+          "All active users",
+          "Team and board owners",
+          "Support staff assisting with recoveries"
+        ],
+        "main_interfaces": [
+          {
+            "channel": "ui",
+            "details": "Board actions menu (duplicate, delete, leave board, history, background settings).",
+            "url": "https://help.miro.com/hc/en-us/categories/360001420434-Using-Miro"
+          },
+          {
+            "channel": "ui",
+            "details": "Dashboard and feed for listing and navigating boards.",
+            "url": "https://help.miro.com/hc/en-us/articles/360017731373"
+          }
+        ],
+        "key_data_involved": [
+          "Board metadata (title, description, timestamps, ownership)",
+          "Activity history (who changed what and when)",
+          "Board lifecycle state (active, in trash, restored or permanently deleted)",
+          "Synced-copy relationships between boards or frames"
+        ],
+        "security_relevant_traits": [
+          "Deletion and restoration flows affect data retention and potential legal hold needs.",
+          "Activity history and board feed serve as user-level audit traces and can be important in incident reviews. "
+        ],
+        "evidence": [
+          {
+            "title": "Using Miro – Working on the board & Managing boards",
+            "url": "https://help.miro.com/hc/en-us/categories/360001420434-Using-Miro",
+            "summary": "Sections list Catch up (BETA), Synced copies, simplified UI, board background color, board history: activity, updating info, deleting, duplicating, leaving boards. ",
+            "notes": null
+          }
+        ],
+        "notes": null
+      },
+      {
+        "name": "Board Sharing and Access Control",
+        "description": "Allows sharing boards and spaces with team members, co‑owners, guests, and visitors, with configurable access rights, default sharing settings, and controls over copying/exporting content. ",
+        "primary_actors": [
+          "Board owners and co‑owners",
+          "Team admins",
+          "External collaborators (guests/visitors)"
+        ],
+        "main_interfaces": [
+          {
+            "channel": "ui",
+            "details": "Board share dialog, link sharing options, and access-rights configuration.",
+            "url": "https://help.miro.com/hc/en-us/articles/360017730093"
+          },
+          {
+            "channel": "ui",
+            "details": "Team and space-level sharing defaults and collaboration settings.",
+            "url": "https://help.miro.com/hc/en-us/categories/360001420434-Using-Miro"
+          }
+        ],
+        "key_data_involved": [
+          "Board- and space-level ACLs (roles, rights per user/group/link)",
+          "Guest and visitor identities and their access scopes",
+          "Flags for copy/export permissions and public access settings"
+        ],
+        "security_relevant_traits": [
+          "Misconfigured sharing links can cause cross-tenant or public exposure of sensitive boards.",
+          "Enterprise Guard may apply intelligent guardrails that restrict risky sharing or export behavior on sensitive boards. "
+        ],
+        "evidence": [
+          {
+            "title": "Using Miro – Sharing boards",
+            "url": "https://help.miro.com/hc/en-us/categories/360001420434-Using-Miro",
+            "summary": "Lists Board access rights, Co‑owners, Collaboration with Guests and Visitors, Default sharing settings, and copy/export restrictions. ",
+            "notes": null
+          },
+          {
+            "title": "Miro Security Features",
+            "url": "https://miro.com/features/security/",
+            "summary": "Highlights fine-grained access controls, admin roles, Enterprise Guard guardrails, and sharing restrictions. ",
+            "notes": null
+          }
+        ],
+        "notes": null
+      },
+      {
+        "name": "User Profile, Identity Settings, and Notifications (End User)",
+        "description": "Enables individual users to manage emails, passwords, language, notifications, and account deletion or leaving teams, within the constraints of SSO and enterprise controls. ",
+        "primary_actors": [
+          "End users",
+          "Support and helpdesk staff (assisting users)"
+        ],
+        "main_interfaces": [
+          {
+            "channel": "ui",
+            "details": "Profile/settings pages in the app for email, password, language, and notification preferences.",
+            "url": "https://help.miro.com/hc/en-us/categories/360001420434-Using-Miro"
+          },
+          {
+            "channel": "ui",
+            "details": "Login and SSO flows controlling what identity data is editable.",
+            "url": "https://help.miro.com/hc/en-us/articles/360017571414-Single-sign-on-SSO"
+          }
+        ],
+        "key_data_involved": [
+          "User identity attributes (name, email, avatar, language)",
+          "Authentication credentials where local login is allowed",
+          "Notification preferences and delivery channels"
+        ],
+        "security_relevant_traits": [
+          "When SSO and SCIM are enabled, many profile attributes become IdP‑controlled and cannot be changed directly in Miro.",
+          "Profile deletion and team‑leaving actions affect data access and must respect enterprise policies and legal hold requirements."
+        ],
+        "evidence": [
+          {
+            "title": "Using Miro – Managing your profile",
+            "url": "https://help.miro.com/hc/en-us/categories/360001420434-Using-Miro",
+            "summary": "Lists changing email, password, deleting profile, leaving teams, language settings, and notifications. ",
+            "notes": null
+          },
+          {
+            "title": "Single sign-on (SSO) – Help Center",
+            "url": "https://help.miro.com/hc/en-us/articles/360017571414-Single-sign-on-SSO",
+            "summary": "Explains that user attributes are sourced from IdP and certain parameters cannot be edited directly when SSO is enabled. ",
+            "notes": null
+          }
+        ],
+        "notes": null
+      },
+      {
+        "name": "Miro AI Workspace Features",
+        "description": "Adds AI-native capabilities like generative ideation, content creation, summarization, diagramming from text or images, translation, AI clustering, Catch Up summaries, AI Sidekicks, Flows, and AI credits. ",
+        "primary_actors": [
+          "All authenticated team members (end users)",
+          "Enterprise admins configuring AI policies",
+          "Security and compliance teams (via Enterprise Guard + AI Trust)"
+        ],
+        "main_interfaces": [
+          {
+            "channel": "ui",
+            "details": "AI menus on the canvas (Create with AI, AI Sidekicks, Flow builder, Catch up).",
+            "url": "https://help.miro.com/hc/en-us/articles/28765406244498-Miro-AI-overview"
+          },
+          {
+            "channel": "ui",
+            "details": "AI workspace marketing and configuration pages including AI overview and AI governance.",
+            "url": "https://miro.com/ai/ai-overview/"
+          }
+        ],
+        "key_data_involved": [
+          "AI prompts and input selections from boards (sticky notes, text, diagrams, images)",
+          "AI-generated outputs (text, diagrams, tables, slides, prototypes)",
+          "AI credits consumption and usage metrics per user or organization",
+          "AI Sidekicks and Flows configurations (workflows, knowledge sources)"
+        ],
+        "security_relevant_traits": [
+          "Miro AI uses large language models and may rely on external AI providers; docs note AI-specific terms and governance, and AI is restricted to team members (not guests/visitors). ",
+          "Enterprise Guard and AI Trust features can route AI prompts and responses to external DSPM tools like Microsoft Purview and enforce AI governance controls. "
+        ],
+        "evidence": [
+          {
+            "title": "Miro AI overview – Help Center",
+            "url": "https://help.miro.com/hc/en-us/articles/28765406244498-Miro-AI-overview",
+            "summary": "Describes key AI features (ideation, summarization, diagramming, translation, clustering, Catch up, Sidekicks) and AI credits. ",
+            "notes": null
+          },
+          {
+            "title": "AI Platform for Teams – AI overview",
+            "url": "https://miro.com/ai/ai-overview/",
+            "summary": "Describes Sidekicks, Flows, connecting models/knowledge, productivity AI, and enterprise AI governance and security. ",
+            "notes": null
+          }
+        ],
+        "notes": null
+      },
+      {
+        "name": "Templates, Miro Templates Gallery, and Miroverse Community",
+        "description": "Provides prebuilt templates for common workflows and a community-driven Miroverse where users can discover, use, and publish templates with feedback and comments. ",
+        "primary_actors": [
+          "End users selecting templates",
+          "Template creators and Miroverse publishers",
+          "Community moderators"
+        ],
+        "main_interfaces": [
+          {
+            "channel": "ui",
+            "details": "In-product template picker and template gallery.",
+            "url": "https://miro.com/templates/"
+          },
+          {
+            "channel": "ui",
+            "details": "Miroverse website for browsing and publishing community templates.",
+            "url": "https://miro.com/miroverse/"
+          }
+        ],
+        "key_data_involved": [
+          "Template definitions (board content, structure, metadata)",
+          "Miroverse page metadata (author, description, tags, comments)",
+          "Usage metrics (template usage, ratings, feedback)"
+        ],
+        "security_relevant_traits": [
+          "Public templates can expose example structures but should not contain confidential real data; misuse could leak actual IP if users publish internal boards. ",
+          "Organizations may prefer private or internal templates and may regulate Miroverse publication via policy or training."
+        ],
+        "evidence": [
+          {
+            "title": "Using Miro – Miroverse section",
+            "url": "https://help.miro.com/hc/en-us/categories/360001420434-Using-Miro",
+            "summary": "Miroverse section covers what Miroverse is, page types, using templates, editing templates, getting published, and comments/feedback. ",
+            "notes": null
+          },
+          {
+            "title": "Miro main site – Templates & Miroverse",
+            "url": "https://miro.com/index/",
+            "summary": "Navigation highlights Templates & Miroverse as a key resource under Resources. ",
+            "notes": null
+          }
+        ],
+        "notes": null
+      },
+      {
+        "name": "Import, Export, and Content Migration",
+        "description": "Allows users to import and export board content, including migrating from other whiteboard and diagramming tools (Mural, Jamboard, FigJam, Lucid, draw.io) and exporting boards for offline sharing. ",
+        "primary_actors": [
+          "End users migrating content",
+          "Admins overseeing tool consolidation",
+          "Security/compliance teams reviewing export policies"
+        ],
+        "main_interfaces": [
+          {
+            "channel": "ui",
+            "details": "Board-level import/export menus for files, images, and structured data.",
+            "url": "https://help.miro.com/hc/en-us/articles/360017731233-Ways-to-add-content"
+          },
+          {
+            "channel": "ui",
+            "details": "Migration articles for importing from other products.",
+            "url": "https://help.miro.com/hc/en-us/categories/360001415214-Getting-Started"
+          }
+        ],
+        "key_data_involved": [
+          "Uploaded files and embedded documents or images",
+          "Imported board structures from third-party tools",
+          "Exported artifacts (PDFs, images, CSV/other structured exports)"
+        ],
+        "security_relevant_traits": [
+          "Imports can bring sensitive data from other systems into Miro; organizations must ensure Miro’s security posture matches that data’s sensitivity.",
+          "Exports allow data to leave Miro; admins can restrict copying/exporting for sensitive boards. "
+        ],
+        "evidence": [
+          {
+            "title": "Using Miro – Import and Export",
+            "url": "https://help.miro.com/hc/en-us/categories/360001420434-Using-Miro",
+            "summary": "Dedicated Import and Export section indicates support for bringing content in and extracting it.",
+            "notes": null
+          },
+          {
+            "title": "Getting Started – Migrating Content to Miro",
+            "url": "https://help.miro.com/hc/en-us/categories/360001415214-Getting-Started",
+            "summary": "Lists import paths from Mural, Conceptboard, draw.io, FigJam, Jamboard, Lucidchart, Lucidspark.",
+            "notes": null
+          }
+        ],
+        "notes": null
+      },
+      {
+        "name": "Miro Insights (End-User Analytics)",
+        "description": "Provides analytics on boards and activities to help users and teams understand engagement and usage patterns via Miro Insights. ",
+        "primary_actors": [
+          "Board owners and project leads",
+          "Team leads monitoring engagement",
+          "Admins (where Insights overlaps with admin analytics)"
+        ],
+        "main_interfaces": [
+          {
+            "channel": "ui",
+            "details": "Insights panels accessible from boards or spaces.",
+            "url": "https://help.miro.com/hc/en-us/articles/29128182884050-What-is-Miro-Insights"
+          }
+        ],
+        "key_data_involved": [
+          "View and edit counts per board or artifact",
+          "Participant lists and time-based engagement metrics",
+          "Aggregated usage statistics for patterns or trends"
+        ],
+        "security_relevant_traits": [
+          "Insights data must respect access controls (e.g., not exposing identities or actions from boards a user cannot access).",
+          "Analytics may be subject to privacy regulations (e.g., GDPR) depending on configuration and data residency."
+        ],
+        "evidence": [
+          {
+            "title": "Using Miro – Miro Insights section",
+            "url": "https://help.miro.com/hc/en-us/categories/360001420434-Using-Miro",
+            "summary": "Lists articles explaining what Miro Insights is, how to set it up, and how to use it.",
+            "notes": null
+          }
+        ],
+        "notes": null
+      },
+      {
+        "name": "Device Apps and Hybrid Collaboration Support",
+        "description": "Distributes Miro via browser, desktop, mobile apps, and interactive displays, with support for enterprise mobility management (EMM) on Android/iOS and hybrid meeting scenarios. ",
+        "primary_actors": [
+          "End users on desktop and mobile",
+          "IT admins configuring managed devices",
+          "Facilitators running hybrid meetings on large displays"
+        ],
+        "main_interfaces": [
+          {
+            "channel": "ui",
+            "details": "Native apps (Windows, macOS, iOS, Android) and in‑room display experiences.",
+            "url": "https://miro.com/apps/"
+          },
+          {
+            "channel": "ui",
+            "details": "Help Center articles on desktop & mobile apps, EMM, and interactive displays.",
+            "url": "https://help.miro.com/hc/en-us/categories/360001415214-Getting-Started"
+          }
+        ],
+        "key_data_involved": [
+          "Local caches of board content on client devices",
+          "Device identifiers and EMM policies",
+          "Real-time collaboration data routed through Miro’s cloud"
+        ],
+        "security_relevant_traits": [
+          "Local caching on endpoints and shared displays introduces additional attack surfaces (lost/stolen devices, shared meeting rooms).",
+          "EMM configuration can enforce security baselines (e.g., device encryption, app whitelisting)."
+        ],
+        "evidence": [
+          {
+            "title": "Getting Started – Apps for devices",
+            "url": "https://help.miro.com/hc/en-us/categories/360001415214-Getting-Started",
+            "summary": "Apps for devices section lists EMM on Android/iOS, desktop app, mobile app, and interactive display guidance. ",
+            "notes": null
+          }
+        ],
+        "notes": null
+      }
+    ],
+    "administrative_and_operational_capabilities": [
+      {
+        "name": "Team and User Management (Non-Enterprise Plans)",
+        "description": "Provides admins with tools to manage teams, invite users, configure invitation settings, convert members to guests, merge or delete teams, and understand admin roles and privileges. ",
+        "primary_actors": [
+          "Team Admins",
+          "Company Admins on non‑Enterprise plans",
+          "Billing admins"
+        ],
+        "main_interfaces": [
+          {
+            "channel": "ui",
+            "details": "Team and admin settings in the app (user list, invitation settings, team permissions).",
+            "url": "https://help.miro.com/hc/en-us/categories/360001511814-Administration"
+          }
+        ],
+        "key_data_involved": [
+          "User accounts, roles, and team memberships",
+          "Invitation tokens and pending invites",
+          "Team metadata (names, logos, signup modes)"
+        ],
+        "security_relevant_traits": [
+          "Admin roles can grant or revoke access for many users, so correct scoping and custom admin roles are crucial.",
+          "Guests vs. members distinctions directly impact access levels and licensing. "
+        ],
+        "evidence": [
+          {
+            "title": "Administration – Get started as a Miro admin",
+            "url": "https://help.miro.com/hc/en-us/categories/360001511814-Administration",
+            "summary": "Includes articles on admin roles, custom admin roles, brand center, and plan management. ",
+            "notes": null
+          }
+        ],
+        "notes": null
+      },
+      {
+        "name": "Enterprise Admin Console and Organization Management",
+        "description": "Centralizes control for Enterprise customers to deploy Miro, manage teams at scale, consolidate self‑serve teams, activate features, and use Admin Analytics for visibility. ",
+        "primary_actors": [
+          "Enterprise Company Admins",
+          "Security and compliance admins",
+          "Enterprise program managers"
+        ],
+        "main_interfaces": [
+          {
+            "channel": "ui",
+            "details": "Enterprise Admin Console with sections for teams, users, analytics, and enterprise controls.",
+            "url": "https://help.miro.com/hc/en-us/categories/26366232516882-Enterprise-Administration"
+          }
+        ],
+        "key_data_involved": [
+          "Enterprise-wide list of teams, users, and licenses",
+          "Feature flags and activation states",
+          "Admin Analytics metrics across the organization"
+        ],
+        "security_relevant_traits": [
+          "Enterprise Admin Console operations are highly privileged and can affect all teams and users in the subscription.",
+          "Feature activation and self‑serve team consolidation can change attack surface (e.g., enabling new capabilities or merging external teams)."
+        ],
+        "evidence": [
+          {
+            "title": "Enterprise Administration – Managing Enterprise teams and content",
+            "url": "https://help.miro.com/hc/en-us/categories/26366232516882-Enterprise-Administration",
+            "summary": "Includes Miro's new Admin Console, Enterprise workflow automation, Admin Analytics, team management, and consolidation features. ",
+            "notes": null
+          }
+        ],
+        "notes": null
+      },
+      {
+        "name": "Identity, Authentication, and User Provisioning (SSO, SCIM, JIT, Domain Control, 2FA)",
+        "description": "Supports SAML SSO, domain verification and control, Just-in-Time provisioning, SCIM-based lifecycle management, and two‑factor authentication to centralize identity and access. ",
+        "primary_actors": [
+          "Enterprise Company Admins",
+          "Identity and Access Management (IAM) teams",
+          "Security administrators"
+        ],
+        "main_interfaces": [
+          {
+            "channel": "ui",
+            "details": "Enterprise Integrations and Security & Compliance sections for SSO, SCIM, domain control, 2FA.",
+            "url": "https://help.miro.com/hc/en-us/categories/26366232516882-Enterprise-Administration"
+          },
+          {
+            "channel": "api",
+            "details": "SCIM API endpoints for users, groups, and discovery features.",
+            "url": "https://developers.miro.com/docs/scim-api"
+          }
+        ],
+        "key_data_involved": [
+          "Identity provider configuration (SAML metadata, certs, SCIM tokens)",
+          "User identity attributes synced from IdP",
+          "Domain claims and verification state",
+          "2FA enrollment state and methods"
+        ],
+        "security_relevant_traits": [
+          "Misconfiguration of SSO or SCIM can lock out admins or unintentionally grant/deny access; docs recommend break‑glass accounts. ",
+          "Domain control and managed-user concepts are key to ensuring only corporate domain users are treated as managed and subject to organizational policies.",
+          "SCIM and JIT automate provisioning/deprovisioning, reducing orphaned accounts but increasing reliance on IdP correctness."
+        ],
+        "evidence": [
+          {
+            "title": "Single sign-on (SSO) – Help Center",
+            "url": "https://help.miro.com/hc/en-us/articles/360017571414-Single-sign-on-SSO",
+            "summary": "Covers SAML SSO flow, domain verification, lockout prevention, and relation to managed domains. ",
+            "notes": null
+          },
+          {
+            "title": "User provisioning on Enterprise Plan – Help Center",
+            "url": "https://help.miro.com/hc/en-us/articles/4403139914130-User-Provisioning-on-Enterprise-Plan",
+            "summary": "Describes invitations, JIT provisioning, and SCIM with SSO for automating user provisioning. ",
+            "notes": null
+          },
+          {
+            "title": "SCIM – Help Center",
+            "url": "https://help.miro.com/hc/en-us/articles/360036827513-SCIM",
+            "summary": "Explains SCIM setup prerequisites, IdP integration, and error modes.",
+            "notes": null
+          }
+        ],
+        "notes": null
+      },
+      {
+        "name": "Security and Compliance Settings (Enterprise)",
+        "description": "Lets Enterprise admins configure security posture, including data residency, security integrations, security management, SSO and 2FA, and other compliance-related controls. ",
+        "primary_actors": [
+          "Enterprise security and compliance teams",
+          "Company Admins"
+        ],
+        "main_interfaces": [
+          {
+            "channel": "ui",
+            "details": "Enterprise Administration – Security & Compliance section for Data residency, Data security, Domain Control, Security integrations, Security management, SSO, and 2FA.",
+            "url": "https://help.miro.com/hc/en-us/categories/26366232516882-Enterprise-Administration"
+          }
+        ],
+        "key_data_involved": [
+          "Region selection for data residency",
+          "Allowlists/blocklists for domains and email patterns",
+          "Integrations with security tools (SIEM, DLP, Purview, etc.)",
+          "Global security policy toggles and thresholds"
+        ],
+        "security_relevant_traits": [
+          "Data residency choices affect where customer data is stored (e.g., EU vs US vs AU) and regulatory compliance. ",
+          "Security integrations (e.g., SIEM, DSPM, SAM) can exfiltrate logs and metadata to third-party systems; these paths must be governed carefully."
+        ],
+        "evidence": [
+          {
+            "title": "Enterprise Administration – Security & Compliance section",
+            "url": "https://help.miro.com/hc/en-us/categories/26366232516882-Enterprise-Administration",
+            "summary": "Lists Data residency, Data security, Domain Control, Security integrations, Security management, SSO, 2FA. ",
+            "notes": null
+          },
+          {
+            "title": "Miro Security Features",
+            "url": "https://miro.com/features/security/",
+            "summary": "Describes encryption, Zero Trust architecture, compliance certifications, and Enterprise Guard.",
+            "notes": null
+          }
+        ],
+        "notes": null
+      },
+      {
+        "name": "Enterprise Guard Configuration and Governance",
+        "description": "Allows Enterprise customers to configure Enterprise Guard to automatically discover, classify, protect, retain, or dispose of sensitive content, manage encryption keys, and support eDiscovery and event logging. ",
+        "primary_actors": [
+          "Enterprise security and compliance teams",
+          "Company Admins and Enterprise Guard admins",
+          "Legal and eDiscovery teams"
+        ],
+        "main_interfaces": [
+          {
+            "channel": "ui",
+            "details": "Enterprise Administration – Enterprise Guard section (Overview, AI Trust, Discovery, Classification, Content Lifecycle Management, eDiscovery, Event Logging, Integrations, Encryption Key Management).",
+            "url": "https://help.miro.com/hc/en-us/categories/26366232516882-Enterprise-Administration"
+          },
+          {
+            "channel": "api",
+            "details": "Enterprise Guard Discovery/eDiscovery APIs and encryption key management integration with AWS KMS.",
+            "url": "https://miro.com/products/enterprise-guard/"
+          }
+        ],
+        "key_data_involved": [
+          "Board and content scans for PII, PHI, PCI, IP, and other sensitive patterns",
+          "Classification labels and policies associated with boards/content",
+          "Retention, disposition, and trash policies and associated audit trails",
+          "Encryption keys (or references) managed via AWS Key Management Service"
+        ],
+        "security_relevant_traits": [
+          "Enterprise Guard introduces automated DLP-like capabilities that can override user-level sharing or export attempts on sensitive content via Intelligent Guardrails. ",
+          "Classification and retention policies directly impact compliance posture and legal discovery support.",
+          "Key management and BYOK/EKM features affect who can decrypt data and under what conditions."
+        ],
+        "evidence": [
+          {
+            "title": "Enterprise Guard product page",
+            "url": "https://miro.com/products/enterprise-guard/",
+            "summary": "Explains automatic discovery, Intelligent Guardrails, content lifecycle management, eDiscovery, and AWS KMS-based key management. ",
+            "notes": null
+          },
+          {
+            "title": "Enterprise Administration – Enterprise Guard section",
+            "url": "https://help.miro.com/hc/en-us/categories/26366232516882-Enterprise-Administration",
+            "summary": "Lists Enterprise Guard Overview, AI Trust, Discovery, Classification, Content Lifecycle Management, eDiscovery, Event Logging, Integrations, Encryption Key Management. ",
+            "notes": null
+          }
+        ],
+        "notes": null
+      },
+      {
+        "name": "Enterprise Subscription, Licensing, and Software Asset Management",
+        "description": "Provides tools for managing Enterprise licenses, billing, license requests, and integrating with SAM tools like ServiceNow, Productiv, and Zylo for usage analysis. ",
+        "primary_actors": [
+          "Billing admins",
+          "Procurement and SAM teams",
+          "Company Admins"
+        ],
+        "main_interfaces": [
+          {
+            "channel": "ui",
+            "details": "Enterprise Subscription Management (Enterprise licensing, SAM, Enterprise billing) in Enterprise Administration.",
+            "url": "https://help.miro.com/hc/en-us/categories/26366232516882-Enterprise-Administration"
+          },
+          {
+            "channel": "ui",
+            "details": "Enterprise Integrations page for configuring SAM integrations.",
+            "url": "https://help.miro.com/hc/en-us/articles/5004880908306-Enterprise-Integrations"
+          }
+        ],
+        "key_data_involved": [
+          "License counts, billing groups, and subscription terms",
+          "Usage statistics exported to SAM tools",
+          "License requests and approvals at enterprise scale"
+        ],
+        "security_relevant_traits": [
+          "License changes directly affect user access; incorrect allocations can either block legitimate work or leave inactive accounts with access.",
+          "Exporting subscription and usage data to SAM tools sends meta-level user activity and identification to third parties."
+        ],
+        "evidence": [
+          {
+            "title": "Enterprise Administration – Enterprise Subscription Management and User Management",
+            "url": "https://help.miro.com/hc/en-us/categories/26366232516882-Enterprise-Administration",
+            "summary": "Includes Enterprise licensing, Software asset management, Enterprise billing, deactivated users, license requests, and invitations. ",
+            "notes": null
+          },
+          {
+            "title": "Enterprise Integrations – SAM section",
+            "url": "https://help.miro.com/hc/en-us/articles/5004880908306-Enterprise-Integrations",
+            "summary": "Describes integration with ServiceNow, Productiv, and Zylo for SAM. ",
+            "notes": null
+          }
+        ],
+        "notes": null
+      },
+      {
+        "name": "App Management and Enterprise Integrations",
+        "description": "Allows Enterprise admins to approve or block apps, manage app requests, configure Enterprise Developer Teams, and centrally configure integrations such as SCIM, SIEM, SAM, and Bring your own AI. ",
+        "primary_actors": [
+          "Enterprise Company Admins",
+          "Security and platform teams",
+          "Developers building internal apps"
+        ],
+        "main_interfaces": [
+          {
+            "channel": "ui",
+            "details": "Enterprise Administration – Managing apps on Enterprise Plan (App management, App request flow, Enterprise Developer teams, embed restrictions).",
+            "url": "https://help.miro.com/hc/en-us/categories/26366232516882-Enterprise-Administration"
+          },
+          {
+            "channel": "ui",
+            "details": "Enterprise Integrations page in Company settings (SCIM, SIEM, SAM, Bring your own AI).",
+            "url": "https://help.miro.com/hc/en-us/articles/5004880908306-Enterprise-Integrations"
+          }
+        ],
+        "key_data_involved": [
+          "App allowlists/blocklists and configuration metadata",
+          "Integration credentials (API keys, OAuth credentials, SCIM tokens)",
+          "App request records and approvals"
+        ],
+        "security_relevant_traits": [
+          "Controlling which apps and integrations are allowed mitigates risks from unvetted third parties.",
+          "Bring your own AI and SIEM/SAM integrations create new data flows that must be monitored for privacy and data loss."
+        ],
+        "evidence": [
+          {
+            "title": "Enterprise Administration – Managing apps on Enterprise Plan",
+            "url": "https://help.miro.com/hc/en-us/categories/26366232516882-Enterprise-Administration",
+            "summary": "Includes App management, App request flow, Enterprise Developer teams, and embedding restrictions. ",
+            "notes": null
+          },
+          {
+            "title": "Enterprise Integrations – Overview",
+            "url": "https://help.miro.com/hc/en-us/articles/5004880908306-Enterprise-Integrations",
+            "summary": "Defines Enterprise Integrations as a single place to configure SCIM, SIEM, SAM, and Bring your own AI without needing developer teams or private apps. ",
+            "notes": null
+          }
+        ],
+        "notes": null
+      },
+      {
+        "name": "Admin Analytics, Logs, and Announcements",
+        "description": "Provides enterprise-wide analytics and event logging for admins, plus capabilities to send admin announcements or product-related updates to users. ",
+        "primary_actors": [
+          "Enterprise Company Admins",
+          "Security/compliance teams",
+          "Internal communications managers"
+        ],
+        "main_interfaces": [
+          {
+            "channel": "ui",
+            "details": "Enterprise Administration – Getting Started and Admin Announcements sections; Product announcements portal.",
+            "url": "https://help.miro.com/hc/en-us/categories/26366232516882-Enterprise-Administration"
+          },
+          {
+            "channel": "integration",
+            "details": "SIEM integrations receiving audit logs from Miro.",
+            "url": "https://help.miro.com/hc/en-us/articles/5004880908306-Enterprise-Integrations"
+          }
+        ],
+        "key_data_involved": [
+          "Organization-level usage and activity metrics",
+          "Audit log entries for security- and governance-relevant actions",
+          "Admin announcement content and targeting criteria"
+        ],
+        "security_relevant_traits": [
+          "Analytics and logs underpin incident detection and investigation; lack or misconfiguration can hinder response. ",
+          "Announcements and product-communications may influence user behavior and must be protected from spoofing or abuse."
+        ],
+        "evidence": [
+          {
+            "title": "Enterprise Administration – Admin Analytics and Admin Announcements",
+            "url": "https://help.miro.com/hc/en-us/categories/26366232516882-Enterprise-Administration",
+            "summary": "Lists Admin Analytics, Admin announcements overview, and management articles.",
+            "notes": null
+          },
+          {
+            "title": "Miro Security Features – Visibility and control at enterprise scale",
+            "url": "https://miro.com/features/security/",
+            "summary": "Describes Enterprise Guard dashboards and comprehensive audit logs.",
+            "notes": null
+          }
+        ],
+        "notes": null
+      }
+    ],
+    "api_surface_and_integrations": [
+      {
+        "name": "Miro Web SDK for Board-Embedded Apps",
+        "description": "JavaScript SDK for building apps that run directly on Miro boards, interacting with board items, UI, viewport, collaboration sessions, and storage collections. ",
+        "primary_actors": [
+          "Third-party developers",
+          "Internal developer teams",
+          "Enterprise platform engineers"
+        ],
+        "main_interfaces": [
+          {
+            "channel": "api",
+            "details": "Web SDK reference covering boards, board items, UI, viewport, notifications, collaboration, history, tools, etc.",
+            "url": "https://developers.miro.com/docs/web-sdk-reference"
+          }
+        ],
+        "key_data_involved": [
+          "Board item structures (sticky notes, shapes, cards, connectors, images, text, etc.)",
+          "Board, viewport, and UI state information",
+          "App-specific configuration and stored data using storage collections",
+          "Collaboration session and attention data where exposed"
+        ],
+        "security_relevant_traits": [
+          "Apps can modify board content and potentially exfiltrate data if mis-scoped; permission scopes and review policies are critical. ",
+          "Web SDK relies on the user’s authenticated context; apps should respect least privilege for requested scopes."
+        ],
+        "evidence": [
+          {
+            "title": "Developer Platform – Web SDK sections",
+            "url": "https://developers.miro.com/docs/introduction",
+            "summary": "Introduction page links to Web SDK how-tos, reference, and app-building tutorials. ",
+            "notes": null
+          }
+        ],
+        "notes": null
+      },
+      {
+        "name": "REST API for Automation and Integrations",
+        "description": "HTTP-based REST API enabling programmatic access to boards, board items, users, and enterprise features, with OAuth 2.0 auth and official client libraries (Node.js, Python). ",
+        "primary_actors": [
+          "Integration developers",
+          "Automation engineers",
+          "Enterprise IT teams"
+        ],
+        "main_interfaces": [
+          {
+            "channel": "api",
+            "details": "REST API reference and quickstart docs for creating sticky notes, images, connectors, user info, and more.",
+            "url": "https://developers.miro.com/reference/api-reference"
+          }
+        ],
+        "key_data_involved": [
+          "Board definitions and content (items, tags, connectors)",
+          "User and team entities where exposed",
+          "Authentication tokens and OAuth refresh tokens",
+          "Enterprise management entities (e.g., teams, boards) depending on scopes"
+        ],
+        "security_relevant_traits": [
+          "REST API access is governed by OAuth scopes; mis-scoped tokens or leaked credentials can enable broad data access.",
+          "Rate limiting and error handling are important to protect service availability. "
+        ],
+        "evidence": [
+          {
+            "title": "Developer Platform – REST API section",
+            "url": "https://developers.miro.com/docs/introduction",
+            "summary": "Outlines REST API getting started, how‑tos, client libraries, and reference.",
+            "notes": null
+          }
+        ],
+        "notes": null
+      },
+      {
+        "name": "SCIM API for Identity Lifecycle Management",
+        "description": "SCIM-compliant API for automating provisioning, deprovisioning, and group-based access for Enterprise users, typically driven by an Identity Provider. ",
+        "primary_actors": [
+          "IAM engineers",
+          "Enterprise Company Admins",
+          "IdP administrators"
+        ],
+        "main_interfaces": [
+          {
+            "channel": "api",
+            "details": "SCIM API reference for Users, Groups, and Discovery features.",
+            "url": "https://developers.miro.com/docs/scim-api"
+          }
+        ],
+        "key_data_involved": [
+          "User identity records (name, email, status)",
+          "Group definitions and group membership mappings",
+          "Discovery data for supported features"
+        ],
+        "security_relevant_traits": [
+          "SCIM acts as a source of truth for user access; mistakes can silently grant or revoke access at scale.",
+          "SCIM tokens must be protected; compromise could let attackers manipulate user states. "
+        ],
+        "evidence": [
+          {
+            "title": "SCIM – Help Center & Developer docs",
+            "url": "https://help.miro.com/hc/en-us/articles/360036827513-SCIM",
+            "summary": "Explains that SCIM synchronizes Miro with IdP and provides centralized access control; developer docs provide reference endpoints. ",
+            "notes": null
+          }
+        ],
+        "notes": null
+      },
+      {
+        "name": "Live Embed API",
+        "description": "Embeddable experience for displaying and interacting with Miro boards inside external apps or websites, with support for view-only and authenticated modes and BoardPicker flows. ",
+        "primary_actors": [
+          "Developers embedding boards into third‑party products",
+          "Partners integrating Miro into their SaaS offerings"
+        ],
+        "main_interfaces": [
+          {
+            "channel": "api",
+            "details": "Live Embed documentation (introduction, authentication, oEmbed, tutorials).",
+            "url": "https://developers.miro.com/docs/embed-api-introduction"
+          }
+        ],
+        "key_data_involved": [
+          "Embedded board identifiers and access tokens",
+          "Viewer authentication state and capabilities",
+          "Embedding site/domain details"
+        ],
+        "security_relevant_traits": [
+          "Embedding boards extends the attack surface to third-party contexts, so embed configuration and domain controls are important.",
+          "View-only vs interactive modes must be carefully selected to avoid over-granting access."
+        ],
+        "evidence": [
+          {
+            "title": "Developer Platform – Live Embed section",
+            "url": "https://developers.miro.com/docs/introduction",
+            "summary": "Mentions Live Embed as a way to quickly embed Miro, with separate docs for authentication and oEmbed. ",
+            "notes": null
+          }
+        ],
+        "notes": null
+      },
+      {
+        "name": "Realtime Events and Webhooks",
+        "description": "Exposes realtime events via the Web SDK and REST API/webhook patterns so apps can react to board and item changes, collaboration events, and other activities. ",
+        "primary_actors": [
+          "App developers building reactive integrations",
+          "Monitoring and automation pipelines"
+        ],
+        "main_interfaces": [
+          {
+            "channel": "api",
+            "details": "Web SDK reference – Realtime Events and Collaboration sections.",
+            "url": "https://developers.miro.com/docs/web-sdk-reference"
+          },
+          {
+            "channel": "api",
+            "details": "REST API How‑Tos that demonstrate webhooks and event processing patterns.",
+            "url": "https://developers.miro.com/docs/rest-api-how-tos"
+          }
+        ],
+        "key_data_involved": [
+          "Event payloads describing changes (created/updated/deleted items, board changes, attention events)",
+          "Webhook configuration and delivery metadata"
+        ],
+        "security_relevant_traits": [
+          "Event payloads may contain sensitive content or identifiers; webhook endpoints must be secured and authenticated.",
+          "High-volume events can be abused for denial-of-service if not rate-limited."
+        ],
+        "evidence": [
+          {
+            "title": "Developer Platform – Reference sections",
+            "url": "https://developers.miro.com/docs/introduction",
+            "summary": "Reference list includes Realtime Events, Collaboration, and other entities for the Web SDK.",
+            "notes": null
+          }
+        ],
+        "notes": null
+      },
+      {
+        "name": "Miro Marketplace and App Lifecycle (Submission, Review, Monetization)",
+        "description": "Provides a marketplace for publishing apps, with design, security, development, and listing guidelines, app submission/review flows, metrics, and monetization via Stripe or Salable. ",
+        "primary_actors": [
+          "App developers and ISVs",
+          "Miro Marketplace review team",
+          "Enterprise platform owners evaluating apps"
+        ],
+        "main_interfaces": [
+          {
+            "channel": "ui",
+            "details": "Miro Marketplace website for browsing and installing apps.",
+            "url": "https://miro.com/marketplace/"
+          },
+          {
+            "channel": "api",
+            "details": "Developer docs – Marketplace: app design, app security, development policy, listing guidelines, monetization, app metrics.",
+            "url": "https://developers.miro.com/docs/introduction"
+          }
+        ],
+        "key_data_involved": [
+          "App listings, descriptions, categories, and pricing",
+          "Developer account information and marketplace profiles",
+          "App usage and metrics data shared with developers",
+          "Payment and subscription metadata for monetized apps"
+        ],
+        "security_relevant_traits": [
+          "App security guidelines and development policies set minimum standards for third-party apps; enforcement quality affects ecosystem risk.",
+          "Marketplace apps can be installed across many organizations; vulnerabilities can have wide blast radius if not contained."
+        ],
+        "evidence": [
+          {
+            "title": "Developer Platform – Marketplace section",
+            "url": "https://developers.miro.com/docs/introduction",
+            "summary": "Marketplace docs include app design and security guidelines, development policy, listing guidelines, deployment, monetization (Stripe, Salable), and app metrics. ",
+            "notes": null
+          }
+        ],
+        "notes": null
+      },
+      {
+        "name": "Built-in Integrations with Third-Party SaaS",
+        "description": "Ships prebuilt integrations with tools like Jira, Confluence, Asana, Linear, Trello, Microsoft Teams and Office, Google Workspace, Zoom, Webex, Figma, AWS, Glean, and more, often using cards or embedded boards. ",
+        "primary_actors": [
+          "End users linking work across tools",
+          "Team admins enabling integrations",
+          "Enterprise admins reviewing data flows"
+        ],
+        "main_interfaces": [
+          {
+            "channel": "ui",
+            "details": "Integrations & Apps section in Help Center; in-product app directory.",
+            "url": "https://help.miro.com/hc/en-us/categories/360001415234-Integrations-Apps"
+          }
+        ],
+        "key_data_involved": [
+          "Links, cards, and synced data from third-party systems (tickets, tasks, files, analytics)",
+          "Authentication tokens or connection configs for external services",
+          "Usage logs of integration actions"
+        ],
+        "security_relevant_traits": [
+          "Each integration introduces another data flow path; some (e.g., Jira, Asana, Google Drive) may carry highly sensitive project or customer data.",
+          "Admin controls over app installation and permissions are crucial to avoid shadow integrations. "
+        ],
+        "evidence": [
+          {
+            "title": "Integrations & Apps – Help Center",
+            "url": "https://help.miro.com/hc/en-us/categories/360001415234-Integrations-Apps",
+            "summary": "Lists integrations with Adobe, AWS, Asana, Atlassian, Glean, Google, Linear, Microsoft, Trello, Zoom, and others, plus basics on installing apps.",
+            "notes": null
+          }
+        ],
+        "notes": null
+      },
+      {
+        "name": "Enterprise Integrations Console (SCIM, SIEM, SAM, Bring Your Own AI)",
+        "description": "Dedicated Enterprise Integrations page lets admins configure identity, logging, asset management, and AI-provider integrations from one place without creating separate developer apps. ",
+        "primary_actors": [
+          "Enterprise Company Admins",
+          "Security and platform teams",
+          "IAM and observability teams"
+        ],
+        "main_interfaces": [
+          {
+            "channel": "ui",
+            "details": "Enterprise Integrations under Company settings.",
+            "url": "https://help.miro.com/hc/en-us/articles/5004880908306-Enterprise-Integrations"
+          }
+        ],
+        "key_data_involved": [
+          "Configuration for SCIM provisioning, SIEM exports, SAM connectors, and AI provider connections",
+          "Tokens, keys, and endpoint URLs for external systems",
+          "Status and health of configured integrations"
+        ],
+        "security_relevant_traits": [
+          "Centralizes high-impact security and governance integrations; compromise or misconfiguration affects identity, logging, and AI governance at once.",
+          "Bring your own AI settings may dictate where AI prompts and responses are processed and logged, influencing data residency and privacy."
+        ],
+        "evidence": [
+          {
+            "title": "Enterprise Integrations – Overview",
+            "url": "https://help.miro.com/hc/en-us/articles/5004880908306-Enterprise-Integrations",
+            "summary": "States that Enterprise Integrations centralizes SCIM, SIEM, SAM, and Bring your own AI setup. ",
+            "notes": null
+          }
+        ],
+        "notes": null
+      }
+    ],
+    "background_jobs_and_automation": [
+      {
+        "name": "Board Autosave, Activity History, and Catch Up",
+        "description": "Automatically saves board edits, records activity history, and uses AI-based Catch Up to summarize changes since a user’s last visit. ",
+        "primary_actors": [
+          "All board users",
+          "Board owners and reviewers"
+        ],
+        "main_interfaces": [
+          {
+            "channel": "ui",
+            "details": "Board history view and Catch Up interface under Working on the board.",
+            "url": "https://help.miro.com/hc/en-us/categories/360001420434-Using-Miro"
+          }
+        ],
+        "key_data_involved": [
+          "Event logs of edits, comments, and structural changes",
+          "AI-generated summaries of changes and suggested action items",
+          "Timestamps and user identifiers for each activity"
+        ],
+        "security_relevant_traits": [
+          "Activity history acts as a local audit log; integrity of these records is important for incident reconstruction.",
+          "Catch Up summaries process potentially sensitive content; AI outputs must be protected similarly to underlying boards."
+        ],
+        "evidence": [
+          {
+            "title": "Using Miro – Working on the board (Catch up, Board history)",
+            "url": "https://help.miro.com/hc/en-us/categories/360001420434-Using-Miro",
+            "summary": "Includes Catch up (BETA), Board history: activity, Activity List, and related features.",
+            "notes": null
+          }
+        ],
+        "notes": null
+      },
+      {
+        "name": "AI Content Generation, Summarization, and Clustering Jobs",
+        "description": "Runs asynchronous AI jobs to generate content, summarize sticky notes and discussions, create diagrams from text or images, translate text, and cluster items by theme or sentiment. ",
+        "primary_actors": [
+          "End users invoking AI features",
+          "Admins monitoring AI usage"
+        ],
+        "main_interfaces": [
+          {
+            "channel": "ui",
+            "details": "Miro AI panels and contextual actions on selections.",
+            "url": "https://help.miro.com/hc/en-us/articles/28765406244498-Miro-AI-overview"
+          }
+        ],
+        "key_data_involved": [
+          "User prompts and selected board content used as AI input",
+          "Generated text, diagrams, tables, and other artifacts",
+          "AI credit consumption records"
+        ],
+        "security_relevant_traits": [
+          "AI jobs potentially send board content to AI services; AI Terms and Enterprise Guard/AI Trust govern how this is handled and audited. "
+        ],
+        "evidence": [
+          {
+            "title": "Miro AI overview – capabilities",
+            "url": "https://help.miro.com/hc/en-us/articles/28765406244498-Miro-AI-overview",
+            "summary": "Describes generative AI, summarization, diagramming, translation, clustering, and Catch up capabilities.",
+            "notes": null
+          }
+        ],
+        "notes": null
+      },
+      {
+        "name": "Enterprise Guard Discovery, Classification, and Guardrails Enforcement",
+        "description": "Continuously scans boards for sensitive content, assigns classification labels, and applies Intelligent Guardrails to restrict sharing, exporting, or other actions based on risk. ",
+        "primary_actors": [
+          "Enterprise Guard administrators",
+          "Security and compliance teams"
+        ],
+        "main_interfaces": [
+          {
+            "channel": "ui",
+            "details": "Enterprise Guard Discovery and Classification configuration in Admin Console.",
+            "url": "https://help.miro.com/hc/en-us/categories/26366232516882-Enterprise-Administration"
+          }
+        ],
+        "key_data_involved": [
+          "Pattern matches for PII/PHI/PCI and IP across board content",
+          "Per-board or per-item classification labels and risk scores",
+          "Policy decisions triggering guardrail actions (e.g., block public sharing)"
+        ],
+        "security_relevant_traits": [
+          "Acts as a content DLP layer; misconfiguration could lead to either over-blocking collaboration or under-protecting sensitive data.",
+          "Discovery and classification metadata itself may be sensitive and should be carefully permissioned."
+        ],
+        "evidence": [
+          {
+            "title": "Enterprise Guard product overview",
+            "url": "https://miro.com/products/enterprise-guard/",
+            "summary": "Explains automatic discovery, classification, and Intelligent Guardrails to protect content while enabling collaboration. ",
+            "notes": null
+          }
+        ],
+        "notes": null
+      },
+      {
+        "name": "Content Lifecycle Management and eDiscovery",
+        "description": "Automates retention, disposition, trash policies, and eDiscovery indexing/export so organizations can manage content lifecycle at scale with full audit trails. ",
+        "primary_actors": [
+          "Legal and compliance teams",
+          "Enterprise Guard admins",
+          "Security operations"
+        ],
+        "main_interfaces": [
+          {
+            "channel": "ui",
+            "details": "Enterprise Guard Content Lifecycle Management and eDiscovery areas in Admin Console.",
+            "url": "https://help.miro.com/hc/en-us/categories/26366232516882-Enterprise-Administration"
+          },
+          {
+            "channel": "api",
+            "details": "Discovery/eDiscovery APIs described in Enterprise Guard materials.",
+            "url": "https://miro.com/products/enterprise-guard/"
+          }
+        ],
+        "key_data_involved": [
+          "Retention policies (durations, scopes, legal hold exceptions)",
+          "Deletion and restore events logged with timestamps and actors",
+          "Discovery search indexes and export datasets for legal cases"
+        ],
+        "security_relevant_traits": [
+          "Incorrect retention rules can violate either retention or minimization requirements under regulations.",
+          "eDiscovery exports may concentrate sensitive data; access must be tightly controlled."
+        ],
+        "evidence": [
+          {
+            "title": "Enterprise Guard – Content lifecycle management and eDiscovery",
+            "url": "https://miro.com/products/enterprise-guard/",
+            "summary": "Emphasizes configurable retention/disposition policies, audit trail, eDiscovery, and Discovery API. ",
+            "notes": null
+          }
+        ],
+        "notes": null
+      },
+      {
+        "name": "Automated User Provisioning and Deprovisioning",
+        "description": "Uses JIT and SCIM to automatically add, update, or deactivate users and assign them to teams and billing groups based on IdP data. ",
+        "primary_actors": [
+          "IAM administrators",
+          "Enterprise Company Admins"
+        ],
+        "main_interfaces": [
+          {
+            "channel": "integration",
+            "details": "SSO and SCIM integrations between Miro and IdPs like Okta, Entra ID, Google, OneLogin.",
+            "url": "https://help.miro.com/hc/en-us/articles/4403139914130-User-Provisioning-on-Enterprise-Plan"
+          }
+        ],
+        "key_data_involved": [
+          "User identities and attributes synced from IdP",
+          "Team and billing group assignments for provisioned users",
+          "User activation/deactivation states"
+        ],
+        "security_relevant_traits": [
+          "Automated deprovisioning reduces risk from stale accounts, but errors in IdP sync or SCIM filters can remove access from legitimate users or fail to disable ex‑employees.",
+          "SCIM tokens and SSO configuration secrets must be stored and rotated securely."
+        ],
+        "evidence": [
+          {
+            "title": "User Provisioning on Enterprise Plan – Help Center",
+            "url": "https://help.miro.com/hc/en-us/articles/4403139914130-User-Provisioning-on-Enterprise-Plan",
+            "summary": "Explains invitations, JIT, and SCIM for provisioning users on Enterprise.",
+            "notes": null
+          },
+          {
+            "title": "3.2 Setting up SCIM – Help Center",
+            "url": "https://help.miro.com/hc/en-us/articles/21832409790738-3-2-Setting-up-SCIM",
+            "summary": "Provides step-by-step procedure for enabling SCIM, generating tokens, and configuring IdPs. ",
+            "notes": null
+          }
+        ],
+        "notes": null
+      },
+      {
+        "name": "Logging, Analytics, and External Export Pipelines",
+        "description": "Streams audit logs, usage analytics, and Enterprise Guard events into internal analytics stores, Admin Analytics dashboards, Miro Insights, and external SIEM/SAM systems. ",
+        "primary_actors": [
+          "Security operations teams",
+          "Analytics and BI teams",
+          "SAM and compliance teams"
+        ],
+        "main_interfaces": [
+          {
+            "channel": "integration",
+            "details": "Enterprise Integrations – SIEM and SAM connectors.",
+            "url": "https://help.miro.com/hc/en-us/articles/5004880908306-Enterprise-Integrations"
+          },
+          {
+            "channel": "ui",
+            "details": "Admin Analytics and Miro Insights dashboards.",
+            "url": "https://help.miro.com/hc/en-us/categories/26366232516882-Enterprise-Administration"
+          }
+        ],
+        "key_data_involved": [
+          "Security audit events (logins, sharing changes, admin actions, Enterprise Guard actions)",
+          "Usage metrics for boards, users, and apps",
+          "Integration health and error logs"
+        ],
+        "security_relevant_traits": [
+          "Log pipelines are critical for threat detection; misconfiguration can lead to blind spots or data overload.",
+          "Exported logs may include personal data and sensitive metadata, so they must be protected in downstream SIEM/SAM systems."
+        ],
+        "evidence": [
+          {
+            "title": "Miro Security Features – Visibility and control",
+            "url": "https://miro.com/features/security/",
+            "summary": "Discusses Enterprise Guard dashboards, comprehensive audit logs, and SCIM/JIT provisioning.",
+            "notes": null
+          },
+          {
+            "title": "Enterprise Integrations – SIEM and SAM",
+            "url": "https://help.miro.com/hc/en-us/articles/5004880908306-Enterprise-Integrations",
+            "summary": "Highlights SIEM and SAM integrations for collecting audit logs and analyzing subscription usage. ",
+            "notes": null
+          }
+        ],
+        "notes": null
+      }
+    ]
+  },
+  "technical_components_and_data_flows": {
+    "services_or_modules": [
+      {
+        "name": "Miro Core Application (Web and Desktop)",
+        "description": "Primary service that renders boards, Spaces, and formats in browser and desktop apps, handling real-time collaboration and standard board operations."
+      },
+      {
+        "name": "Intelligent Canvas Service",
+        "description": "Backs the infinite canvas and Formats (Docs, Diagrams, Tables, Timelines, Kanban, Prototypes, Slides) with multiplayer features and AI‑driven transformations. "
+      },
+      {
+        "name": "Miro AI Service",
+        "description": "Orchestrates AI actions such as generation, summarization, translation, clustering, Catch up, Sidekicks, and Flows, using internal and/or third-party LLMs under AI governance. "
+      },
+      {
+        "name": "Spaces and Blueprints Module",
+        "description": "Implements Spaces, Space Overview dashboards, and Blueprints used to structure work and standardize workflows across teams. "
+      },
+      {
+        "name": "Admin Console and Enterprise Management Service",
+        "description": "Provides enterprise-wide admin views and controls for teams, users, feature activation, analytics, and Enterprise Guard configuration. "
+      },
+      {
+        "name": "Enterprise Guard Service",
+        "description": "Performs data discovery and classification on board content, enforces guardrails, manages content lifecycle, eDiscovery, and encryption key integrations. "
+      },
+      {
+        "name": "Identity and Provisioning Service",
+        "description": "Handles authentication (SSO, local login, 2FA), domain control, and user lifecycle automation via SCIM and JIT provisioning. "
+      },
+      {
+        "name": "Developer Platform (Web SDK, REST API, SCIM API, Live Embed)",
+        "description": "Exposes programmable surfaces for apps and integrations, including the Web SDK, REST API, SCIM API, and Live Embed infrastructure. "
+      },
+      {
+        "name": "Integrations and Marketplace Service",
+        "description": "Manages catalog of third‑party integrations, app installation and management, Marketplace listings, and app metrics. "
+      },
+      {
+        "name": "Analytics and Insights Service",
+        "description": "Aggregates usage data for Miro Insights, Admin Analytics, SAM exports, and security reporting dashboards."
+      }
+    ],
+    "storage_and_logs": [
+      {
+        "name": "Board Content Storage",
+        "description": "Stores boards, Spaces, items, formats, and attachments; hosted on AWS data centers in supported regions (EU, US, AU) with encryption at rest and in transit. "
+      },
+      {
+        "name": "User and Organization Directory Store",
+        "description": "Maintains user profiles, team memberships, organizations, roles, and enterprise-wide configuration such as domain and security settings."
+      },
+      {
+        "name": "Enterprise Guard Classification and Policy Store",
+        "description": "Holds classification labels, risk metadata, guardrail policies, retention/disposition rules, and key management configuration. "
+      },
+      {
+        "name": "Audit and Event Logs",
+        "description": "Captures login events, sharing changes, admin operations, board edits, Enterprise Guard events, and integration activity; can be exported to SIEM. "
+      },
+      {
+        "name": "Analytics and Insights Data Store",
+        "description": "Contains aggregated metrics for Miro Insights, Admin Analytics, licensing/SAM, and AI credit consumption."
+      },
+      {
+        "name": "Encryption Key Store / AWS KMS",
+        "description": "Stores or references encryption keys, including customer-managed keys via AWS Key Management Service for Enterprise Guard customers. "
+      }
+    ],
+    "external_systems": [
+      {
+        "name": "Identity Providers (IdPs)",
+        "description": "SSO and SCIM integrations with providers such as Okta, Microsoft Entra ID, Google, and OneLogin. "
+      },
+      {
+        "name": "Security Information and Event Management (SIEM) Tools",
+        "description": "External SIEM platforms ingest Miro audit logs via Enterprise Integrations. "
+      },
+      {
+        "name": "Software Asset Management (SAM) Tools",
+        "description": "ServiceNow, Productiv, Zylo receive subscription and usage data to manage licenses. "
+      },
+      {
+        "name": "Microsoft Purview DSPM for AI",
+        "description": "Receives AI prompts and responses from Enterprise Guard for monitoring and control in the AI security posture. "
+      },
+      {
+        "name": "Third-Party SaaS Integrations",
+        "description": "Products like Atlassian Jira/Confluence, Asana, Linear, Trello, Microsoft 365, Google Workspace, Zoom, Webex, Figma, Adobe, AWS, Glean, Amazon Q, etc. "
+      },
+      {
+        "name": "Payment and Monetization Providers",
+        "description": "Stripe and Salable support Marketplace app monetization flows. "
+      },
+      {
+        "name": "AWS Cloud Infrastructure",
+        "description": "Underlying hosting platform for Miro, including secure data centers and KMS. "
+      }
+    ],
+    "data_flows": [
+      {
+        "name": "User–Canvas Interaction Flow",
+        "description": "Users interact with boards via web/desktop/mobile; actions are sent to core services, updating board storage, emitting events, and reflecting back to collaborators in real time."
+      },
+      {
+        "name": "Identity and Provisioning Flow",
+        "description": "SSO login sequences exchange SAML messages with IdPs; SCIM and JIT propagate user and group changes from IdPs into Miro’s directory and team assignments. "
+      },
+      {
+        "name": "AI Processing Flow",
+        "description": "When users invoke AI, Miro packages relevant board context and prompts, forwards them to AI engines (and optionally Microsoft Purview DSPM via Enterprise Guard), then returns generated results to the board. "
+      },
+      {
+        "name": "Enterprise Guard Classification and Enforcement Flow",
+        "description": "Background jobs scan board content, store classification and risk metadata, and evaluate guardrail policies during user actions (e.g., sharing, exporting), possibly blocking or logging risky operations. "
+      },
+      {
+        "name": "Logging and Analytics Export Flow",
+        "description": "Events and usage metrics are collected into internal analytics stores and can be streamed or exported into SIEM and SAM tools for monitoring and license optimization. "
+      },
+      {
+        "name": "Embedded and Integration Flow",
+        "description": "Live Embed and integrations cause third-party apps to request Miro content via embed APIs or REST/Web SDK, often using OAuth tokens and respecting board permissions, while external artifacts (tickets, tasks, files) are rendered inside Miro. "
+      }
+    ]
+  },
+  "security_relevant_behaviours": {
+    "privileged_operations": [
+      "Configuring SAML SSO, domain control, SCIM, JIT, and 2FA settings for an organization via the Admin Console and Enterprise Integrations. ",
+      "Enabling and managing Enterprise Guard, including classification policies, Intelligent Guardrails, retention rules, and encryption key management with AWS KMS. ",
+      "Creating, merging, or deleting Enterprise teams; consolidating self‑serve teams into the Enterprise subscription; and granting admin roles or custom admin privileges. ",
+      "Managing app allowlists/blocklists, app requests, Enterprise Developer Teams, and controlling whether Miro boards can be embedded in external apps. ",
+      "Configuring Enterprise Integrations (SCIM, SIEM, SAM, Bring your own AI), which can alter identity, monitoring, and AI data flows at scale. ",
+      "Exporting large volumes of content or legal-discovery datasets via eDiscovery and export tools."
+    ],
+    "user_configurable_logic": [
+      "Board- and space-level sharing defaults (who can view/edit/comment, link visibility, copy/export restrictions) controlled by board owners and admins. ",
+      "Enterprise Guard policies for discovery, classification, retention, and guardrails configured by security/compliance teams, effectively encoding DLP logic inside Miro. ",
+      "AI governance settings (e.g., who can use Miro AI, credit allocation, bring-your-own AI configurations) adjustable per organization or team.",
+      "Admin Analytics and Miro Insights dashboards, where filters and views can be configured to focus on particular teams, users, or boards.",
+      "Admin Announcements and Product Announcements portal, which allow admins to craft and target in‑product messages to segments of users. "
+    ],
+    "auth_and_identity_behaviours": [
+      "Supports SAML-based SSO with IdP-driven attributes, disabling password/Google/Slack logins once enabled, and relies on domain verification to define managed users. ",
+      "Offers Just-in-Time provisioning (JIT) tied to SSO so new corporate-domain users are auto‑added to specified teams; supports SCIM for more granular lifecycle control. ",
+      "Allows multi-factor authentication (2FA) for users outside SSO; 2FA is recommended especially when SSO is not used or for non-managed domains. ",
+      "Uses domain control to ensure only verified corporate domains produce managed users forced through SSO, while unverified domains rely on email/password. ",
+      "Encourages creation of a 'break glass' account outside managed domains to avoid full admin lockout in case of SSO issues. ",
+      "SCIM API includes safeguards like blocking email changes that would move users outside managed domains, returning validation errors instead. "
+    ],
+    "logging_and_audit_behaviours": [
+      "Board history, activity lists, and Catch Up features provide per‑board logs of changes, including who performed them and when. ",
+      "Enterprise Guard event logging tracks classification, guardrail enforcement, retention, and key events, with options to expose them via Discovery or logging APIs. ",
+      "Enterprise Integrations enable exporting audit logs to SIEM solutions for centralized monitoring and correlation with other systems. ",
+      "Admin Analytics and Miro Insights aggregate activity data into dashboards rather than raw event views, suitable for operational oversight rather than forensic deep dives.",
+      "Security documentation emphasizes regular vulnerability management and penetration testing, suggesting internal logging for security operations. "
+    ],
+    "failure_modes": [
+      "Incorrect SSO configuration or domain control can prevent users or admins from logging in; docs recommend break‑glass accounts and support involvement to disable SSO if necessary. ",
+      "SCIM misconfiguration or IdP issues may result in users not being provisioned or unexpectedly deactivated; docs note allowlist and multi‑IdP edge cases. ",
+      "Enterprise Guard classification or retention misconfiguration can either over-block collaboration (too restrictive) or under-protect sensitive data (too permissive). ",
+      "App or integration misconfigurations (e.g., mis-scoped OAuth tokens, embed permissions) can inadvertently expose content within third‑party tools or to external users. ",
+      "Service outages or degraded performance are surfaced through the Miro Status page and may affect collaboration, AI features, or admin operations. ",
+      "Login issues (including SSO and email/password problems) and board access or performance issues have dedicated troubleshooting guides in the Help Center, indicating known classes of operational failures."
+    ]
+  },
+  "open_questions": [
+    {
+      "question": "What are the precise default retention periods for board content and activity logs across Free, Starter, Business, Education, and Enterprise plans, and how do Enterprise Guard policies override or extend them?",
+      "context": "Docs mention configurable retention and disposition in Enterprise Guard but not detailed default values per plan.",
+      "related_capabilities": [
+        "Enterprise Guard Configuration and Governance",
+        "Content Lifecycle Management and eDiscovery",
+        "Board Management, History, and Working on the Board"
+      ]
+    },
+    {
+      "question": "How granular are AI governance controls in practice (e.g., can specific AI model providers or features be disabled per team, per space, or per format type), and how are prompts/responses logged and redacted?",
+      "context": "AI overview and AI Trust materials describe governance and Purview DSPM integration but not exact configuration knobs or log schemas.",
+      "related_capabilities": [
+        "Miro AI Workspace Features",
+        "Enterprise Guard Configuration and Governance",
+        "Enterprise Integrations Console (SCIM, SIEM, SAM, Bring Your Own AI)"
+      ]
+    },
+    {
+      "question": "To what extent are mobile, desktop, and interactive display clients capable of offline work, and how are locally cached board contents protected (encryption at rest, OS keychains, remote wipe via EMM)?",
+      "context": "Device app docs and EMM articles reference managed devices but do not deeply specify local storage behavior or encryption details.",
+      "related_capabilities": [
+        "Device Apps and Hybrid Collaboration Support",
+        "Miro Core Application (Web and Desktop)",
+        "Security and Compliance Settings (Enterprise)"
+      ]
+    },
+    {
+      "question": "What strict guarantees and technical controls enforce tenant isolation for Miro AI processing, Enterprise Guard classification, and log exports, especially when using bring-your-own AI and external DSPM tools?",
+      "context": "Marketing and high-level security docs emphasize enterprise-grade security and compliance but abstract away underlying multi-tenant isolation mechanisms.",
+      "related_capabilities": [
+        "Miro AI Workspace Features",
+        "Enterprise Guard Discovery, Classification, and Guardrails Enforcement",
+        "Logging, Analytics, and External Export Pipelines"
+      ]
+    },
+    {
+      "question": "How are webhooks and realtime events authenticated and authorized, and what patterns are recommended for verifying event authenticity and preventing replay or spoofing for third-party endpoints?",
+      "context": "Developer docs list Realtime Events and webhook how-tos but we did not inspect the exact signing or verification schemes.",
+      "related_capabilities": [
+        "Realtime Events and Webhooks",
+        "Miro Web SDK for Board-Embedded Apps",
+        "REST API for Automation and Integrations"
+      ]
+    },
+    {
+      "question": "What level of granularity do Admin Analytics and Miro Insights provide (e.g., per-user, per-board, per-team), and how can organizations constrain analytics to meet privacy and internal policy requirements?",
+      "context": "Help Center indexes mention Admin Analytics and Miro Insights but do not fully detail metric schemas or privacy controls.",
+      "related_capabilities": [
+        "Miro Insights (End-User Analytics)",
+        "Admin Analytics, Logs, and Announcements",
+        "Logging, Analytics, and External Export Pipelines"
+      ]
+    }
+  ],
+  "evidence_index": [
+    {
+      "title": "AI Innovation Workspace | Miro (main marketing site)",
+      "url": "https://miro.com/index/",
+      "summary": "Platform-level overview of AI workspace, Intelligent Canvas, Formats, Blueprints, enterprise security, and integrations.",
+      "notes": null
+    },
+    {
+      "title": "Intelligent Canvas | Turns Ideas Into Impact | Miro",
+      "url": "https://miro.com/intelligent-canvas/",
+      "summary": "Describes Intelligent Canvas, multiplayer collaboration, and AI-powered Formats including Docs, Diagrams, Tables, Timelines, Kanban, Prototypes, and Slides. ",
+      "notes": null
+    },
+    {
+      "title": "Using Miro – Miro Help Center",
+      "url": "https://help.miro.com/hc/en-us/categories/360001420434-Using-Miro",
+      "summary": "Central index for end-user features: tools, facilitation, Miro AI, Formats, Spaces, working on boards, sharing, profiles, import/export, Miro Insights, Miroverse, troubleshooting. ",
+      "notes": null
+    },
+    {
+      "title": "Getting Started – Miro Help Center",
+      "url": "https://help.miro.com/hc/en-us/categories/360001415214-Getting-Started",
+      "summary": "Onboarding, first board, dashboard, roles, accessibility, importing from other tools, and device apps. ",
+      "notes": null
+    },
+    {
+      "title": "Integrations & Apps – Miro Help Center",
+      "url": "https://help.miro.com/hc/en-us/categories/360001415234-Integrations-Apps",
+      "summary": "Documents built-in integrations (Atlassian, Microsoft, Google, Zoom, etc.) and app installation and embedding basics. ",
+      "notes": null
+    },
+    {
+      "title": "Administration – Miro Help Center",
+      "url": "https://help.miro.com/hc/en-us/categories/360001511814-Administration",
+      "summary": "Admin-focused docs for small/medium environments: admin roles, user and team management, invitation settings, 2FA, and admin FAQs. ",
+      "notes": null
+    },
+    {
+      "title": "Enterprise Administration – Miro Help Center",
+      "url": "https://help.miro.com/hc/en-us/categories/26366232516882-Enterprise-Administration",
+      "summary": "Enterprise deployment, Admin Console, team and content management, app management, subscription and user management, Enterprise Guard, Security & Compliance, and announcements. ",
+      "notes": null
+    },
+    {
+      "title": "Miro AI overview – Help Center",
+      "url": "https://help.miro.com/hc/en-us/articles/28765406244498-Miro-AI-overview",
+      "summary": "Explains Miro AI capabilities, credits, and restrictions (team members only, guests/visitors excluded). ",
+      "notes": null
+    },
+    {
+      "title": "AI Platform for Teams | The Innovation Workspace | Miro",
+      "url": "https://miro.com/ai/ai-overview/",
+      "summary": "Marketing and overview for Miro AI, including Sidekicks, Flows, integrations with knowledge systems, and AI governance/security. ",
+      "notes": null
+    },
+    {
+      "title": "Miro Developer Platform – Introduction",
+      "url": "https://developers.miro.com/docs/introduction",
+      "summary": "Entry point to developer docs for Web SDK, REST API, Marketplace, SCIM API, Live Embed, references, and sample apps. ",
+      "notes": null
+    },
+    {
+      "title": "Miro Security Features",
+      "url": "https://miro.com/features/security/",
+      "summary": "Details infrastructure security, encryption, Zero Trust architecture, compliance certifications, Enterprise Guard, SCIM provisioning, and audit logging. ",
+      "notes": null
+    },
+    {
+      "title": "Enterprise Guard product page",
+      "url": "https://miro.com/products/enterprise-guard/",
+      "summary": "Describes Enterprise Guard capabilities for data discovery, classification, Intelligent Guardrails, lifecycle management, eDiscovery, and encryption key management. ",
+      "notes": null
+    },
+    {
+      "title": "Single sign-on (SSO) – Help Center",
+      "url": "https://help.miro.com/hc/en-us/articles/360017571414-Single-sign-on-SSO",
+      "summary": "Explains SAML SSO behavior, domain control, user data mapping, and guidance to avoid admin lockout. ",
+      "notes": null
+    },
+    {
+      "title": "SCIM – Help Center",
+      "url": "https://help.miro.com/hc/en-us/articles/360036827513-SCIM",
+      "summary": "Introduces SCIM-based provisioning, key requirements, and high-level configuration guidance. ",
+      "notes": null
+    },
+    {
+      "title": "3.2 Setting up SCIM – Help Center",
+      "url": "https://help.miro.com/hc/en-us/articles/21832409790738-3-2-Setting-up-SCIM",
+      "summary": "Step-by-step procedure for enabling SCIM in Miro and configuring IdPs. ",
+      "notes": null
+    },
+    {
+      "title": "User Provisioning on Enterprise Plan – Help Center",
+      "url": "https://help.miro.com/hc/en-us/articles/4403139914130-User-Provisioning-on-Enterprise-Plan",
+      "summary": "Covers invitation-based provisioning, JIT with SSO, and SCIM-driven lifecycle management. ",
+      "notes": null
+    },
+    {
+      "title": "Enterprise Integrations – Help Center",
+      "url": "https://help.miro.com/hc/en-us/articles/5004880908306-Enterprise-Integrations",
+      "summary": "Describes Enterprise Integrations console for SCIM, SIEM, SAM, and Bring your own AI. ",
+      "notes": null
+    },
+    {
+      "title": "Enterprise Guard and Microsoft Purview DSPM for AI Integration Overview (Beta)",
+      "url": "https://help.miro.com/hc/en-us/articles/28617278171154-Enterprise-Guard-and-MS-Purview-DSPM-for-AI-Integration-Overview-Beta",
+      "summary": "Explains how Enterprise Guard forwards AI prompts/responses to Microsoft Purview DSPM for monitoring and control. ",
+      "notes": null
+    }
+  ]
+}
