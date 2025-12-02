@@ -4,7 +4,7 @@ import Home from './components/Home'
 
 function App() {
   return (
-    <BrowserRouter basename="/respondnt-public-app-analysis">
+    <BrowserRouter basename="/">
       <div className="min-h-screen bg-white dark:bg-gray-950">
         <header className="fixed top-0 left-0 right-0 z-40 bg-white/80 dark:bg-gray-950/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
           <nav className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">

@@ -24,7 +24,7 @@ export default defineConfig({
       }
     }
   ],
-  base: '/respondnt-public-app-analysis/',
+  base: '/',
   publicDir: 'public',
 })
 
