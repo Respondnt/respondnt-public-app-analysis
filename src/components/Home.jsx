@@ -23,10 +23,10 @@ function Home() {
     <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16 lg:py-24">
       <div className="text-center mb-16">
         <h1 className="text-display-lg font-bold text-gray-900 dark:text-white mb-6">
-          Application Breakdowns
+          App Analysis
         </h1>
         <p className="text-body-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-          Comprehensive analysis of application capabilities, technical components, and security behaviors
+          Comprehensive analysis of application capabilities, technical components, and security behaviors and potential attack paths
         </p>
       </div>
 

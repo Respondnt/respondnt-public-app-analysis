@@ -35,8 +35,10 @@ jobs:
       
       - name: Copy data files
         run: |
-          mkdir -p dist/data
-          cp -r data/*.json dist/data/
+          mkdir -p dist/data/breakdowns
+          mkdir -p dist/data/attack_paths
+          cp -r data/breakdowns/*.json dist/data/breakdowns/
+          cp -r data/attack_paths/*.json dist/data/attack_paths/
       
       - name: Setup Pages
         uses: actions/configure-pages@v4
