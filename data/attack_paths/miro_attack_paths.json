@@ -1,0 +1,947 @@
+{
+  "application_name": "Miro – AI Innovation Workspace / Online Visual Collaboration Platform",
+  "attack_paths": [
+    {
+      "scenario_name": "T1530/T1119 – Enterprise Guard eDiscovery Mass Exfiltration via Compromised Enterprise Admin",
+      "hypothesis": {
+        "scenario_name": "T1530/T1119 – Enterprise Guard eDiscovery Mass Exfiltration via Compromised Enterprise Admin",
+        "attack_target": "Exfiltrate large volumes of sensitive board content and attachments across the entire Miro Enterprise tenant by abusing Enterprise Guard discovery and eDiscovery exports, plus REST APIs and integrations.",
+        "starting_tactic": "Initial Access",
+        "objective_tactic": "Exfiltration",
+        "preconditions": "Target organization uses Miro Enterprise with SAML SSO and Enterprise Guard (Discovery, Classification, eDiscovery) enabled. At least one Enterprise Company Admin account exists that also has Enterprise Guard permissions.",
+        "attack_flow_hypothesis": [
+          {
+            "step_name": "Compromise Enterprise Admin SSO Account",
+            "step_description": "Phish or otherwise compromise an Enterprise Company Admin that can access the Admin Console and Enterprise Guard, then replay SSO to obtain a valid high-privilege Miro session.",
+            "step_mitre_technique": "T1078.004 – Valid Accounts: Cloud Accounts",
+            "step_mitre_tactic": "Initial Access"
+          },
+          {
+            "step_name": "Map Crown-Jewel Boards via Enterprise Guard",
+            "step_description": "Use Enterprise Guard Discovery/Classification and Admin Analytics to enumerate boards and spaces with the highest sensitivity labels and activity to identify crown-jewel targets.",
+            "step_mitre_technique": "T1087, T1213 – Account Discovery; Data from Information Repositories",
+            "step_mitre_tactic": "Discovery"
+          },
+          {
+            "step_name": "Collect Content with eDiscovery and REST API",
+            "step_description": "Use Enterprise Guard eDiscovery and, where needed, REST APIs to stage and pull large datasets from the most sensitive boards and spaces.",
+            "step_mitre_technique": "T1119, T1530 – Automated Collection; Data from Cloud Storage",
+            "step_mitre_tactic": "Collection"
+          },
+          {
+            "step_name": "Bulk Export and External Streaming",
+            "step_description": "Download eDiscovery exports and stream additional data through REST, SIEM/SAM connectors, and Purview DSPM for AI into attacker-controlled infrastructure.",
+            "step_mitre_technique": "T1020, T1567 – Automated Exfiltration; Exfiltration Over Web Service",
+            "step_mitre_tactic": "Exfiltration"
+          }
+        ]
+      },
+      "adversarial_methods": [
+        {
+          "tactic_name": "Initial Access",
+          "method_steps": [
+            "Identify likely Miro Enterprise Company Admins via OSINT (job titles such as collaboration platform owner or Miro admin plus corporate email pattern).",
+            "Use the public Miro login UI to submit those emails and observe redirection to the organization IdP, confirming SSO-enforced cloud accounts for the tenant.",
+            "Host a phishing site that closely mimics the Miro SSO hand-off page and login flow and send lures themed as Enterprise Guard or security notifications to those admins.",
+            "Proxy the real Miro SSO and IdP flows through the phishing site to capture IdP credentials and session tokens while still completing a normal-looking login for the victim.",
+            "Replay the captured SSO session or assertion against the real Miro login endpoint to obtain a valid authenticated session as the Enterprise Company Admin.",
+            "Verify in the Admin Console that the compromised account has Enterprise Company Admin and Enterprise Guard / eDiscovery permissions.",
+            "Optionally mint long-lived OAuth or API tokens for this admin account (if available) to reduce reliance on the interactive web session."
+          ],
+          "capabilities_used": [
+            "Identity, Authentication, and User Provisioning (SSO, Domain Control, 2FA)",
+            "Enterprise Admin Console and Organization Management",
+            "Enterprise Guard Configuration and Governance",
+            "REST API for Automation and Integrations (for optional token use)"
+          ],
+          "interfaces_used": [
+            "Miro Enterprise web login and SSO flow",
+            "IdP login pages (Okta, Entra ID, Google, etc.)",
+            "Enterprise Admin Console home and role overview",
+            "Any token-management or API key pages exposed to admins"
+          ],
+          "data_accessed": [
+            "IdP credentials and session artifacts for the admin user",
+            "Miro session cookies or tokens for the Enterprise Admin account",
+            "Role membership and admin permissions associated with the account"
+          ],
+          "preconditions_required": [
+            "Organization must use SAML SSO for Miro Enterprise.",
+            "At least one Enterprise Company Admin with Enterprise Guard access.",
+            "Attacker ability to deliver phishing emails to those admins.",
+            "Ability to host a convincing adversary-in-the-middle SSO phishing site."
+          ],
+          "constraints_encountered": [
+            "Strong phishing-resistant MFA or conditional access policies may block replay of captured sessions.",
+            "Email security controls may block or rewrite phishing links.",
+            "Unusual login geography, device, or timing may generate alerts in IdP or SIEM."
+          ],
+          "evasion_considerations": [
+            "Closely clone Miro and IdP branding and flows to avoid user suspicion.",
+            "Proxy real SSO so URLs and MFA prompts look legitimate to the victim.",
+            "Replay sessions from cloud infrastructure in plausible regions and user agents.",
+            "After first login, avoid immediately noisy actions such as huge exports."
+          ]
+        },
+        {
+          "tactic_name": "Discovery",
+          "method_steps": [
+            "Open the Enterprise Admin Console and confirm access to Enterprise Guard Discovery/Classification, Content Lifecycle Management, eDiscovery, and Admin Analytics.",
+            "In Enterprise Guard Discovery, filter for the highest-sensitivity labels (for example PII, PHI, confidential IP) and list all matching boards, spaces, and teams.",
+            "Sort or filter by guardrail or DLP events to identify boards that both contain sensitive data and trigger frequent policy actions, marking these as candidate crown-jewel targets.",
+            "Use eDiscovery search within Enterprise Guard to run queries over classified content (by label, data type, and date range) and record which boards and spaces show the highest hit counts.",
+            "Export or copy lists of top boards, including IDs, titles, owners, spaces, and classification levels, into an offline worksheet.",
+            "Pivot into Admin Analytics and Insights to pull engagement metrics for these boards and spaces (views, edits, unique collaborators) and prioritize those that are both highly sensitive and heavily used.",
+            "Use Teams, Spaces, and User Management views to map these boards to business units (Finance, Legal, HR, M&A, R&D) and identify especially valuable organizational areas.",
+            "Inspect board sharing settings for a sample of high-value boards to understand ACLs, guest links, and copy/export restrictions, helping plan later collection and exfiltration."
+          ],
+          "capabilities_used": [
+            "Enterprise Guard Discovery, Classification, and Guardrails Enforcement",
+            "Content Lifecycle Management and eDiscovery",
+            "Admin Analytics, Logs, and Announcements",
+            "Team and User Management",
+            "Spaces, Blueprints, and Work Organization",
+            "Miro Insights (End-User Analytics)"
+          ],
+          "interfaces_used": [
+            "Enterprise Guard Discovery and Classification dashboards",
+            "Enterprise Guard eDiscovery search UI",
+            "Admin Analytics and Miro Insights dashboards",
+            "Enterprise Admin Console Teams, Users, and Spaces views",
+            "Board Sharing and access-rights dialog"
+          ],
+          "data_accessed": [
+            "Board metadata such as titles, owners, spaces, and timestamps",
+            "Enterprise Guard classification labels and risk metadata",
+            "Enterprise Guard guardrail or policy event summaries per board",
+            "Admin Analytics metrics per board and space",
+            "ACLs and sharing configuration for selected boards"
+          ],
+          "preconditions_required": [
+            "Enterprise Guard enabled and configured across the tenant.",
+            "Compromised account has Enterprise Guard and Admin Analytics visibility.",
+            "Sufficient historical data and classification coverage to be meaningful."
+          ],
+          "constraints_encountered": [
+            "Older or unscanned boards may be missing from the discovery index.",
+            "Classification coverage may be partial in some teams or spaces.",
+            "Large data sets in dashboards may require pagination or exports to analyze."
+          ],
+          "evasion_considerations": [
+            "Restrict activity to read-only dashboards and existing searches, avoiding policy edits.",
+            "Keep discovery queries and exports to modest sizes aligned with typical legal or compliance workflows.",
+            "Conduct analysis mostly offline after limited UI exports, minimizing repeated in-product queries.",
+            "Browse Guard and Analytics during business hours to blend into normal admin usage."
+          ]
+        },
+        {
+          "tactic_name": "Collection",
+          "method_steps": [
+            "In Enterprise Guard Discovery, refresh lists of highly classified boards and cross-check them with the previously built high-value shortlist.",
+            "In Content Lifecycle Management, ensure targeted spaces and boards are under retention or legal hold so data will remain indexed and exportable during collection.",
+            "Use eDiscovery to define cases or saved searches for each high-value cluster (such as Executive, Finance, M&A) filtering by classifications, spaces, and date ranges.",
+            "Run those searches and adjust filters until result sets contain the desired boards and items with acceptable noise.",
+            "Trigger eDiscovery exports for each case so that Enterprise Guard assembles bulk datasets of matching boards, comments, metadata, and attachments.",
+            "Download completed export packages, or note their identifiers for scripted retrieval via Enterprise Guard discovery or eDiscovery APIs.",
+            "For any residual target boards not fully covered by eDiscovery, use an admin-approved REST API client with broad board-read scopes to enumerate and fetch board structures and content objects programmatically.",
+            "Schedule periodic API-based sweeps against Enterprise Guard discovery results and board lists to pick up newly classified or recently created sensitive boards over time."
+          ],
+          "capabilities_used": [
+            "Content Lifecycle Management and eDiscovery",
+            "Enterprise Guard Discovery and Classification APIs",
+            "Enterprise Guard Configuration and Governance",
+            "Enterprise Admin Console and Organization Management",
+            "REST API for Automation and Integrations",
+            "Logging, Analytics, and External Export Pipelines (for monitoring coverage)"
+          ],
+          "interfaces_used": [
+            "Enterprise Guard Content Lifecycle Management UI",
+            "Enterprise Guard eDiscovery UI for case and export management",
+            "Enterprise Guard Discovery/eDiscovery APIs",
+            "REST API board and item endpoints"
+          ],
+          "data_accessed": [
+            "eDiscovery search indexes and result sets for sensitive boards",
+            "Retention, legal hold, and disposition metadata for target boards",
+            "eDiscovery export datasets containing board content and attachments",
+            "Board content retrieved via REST API for any remaining boards"
+          ],
+          "preconditions_required": [
+            "Ability to run eDiscovery searches and exports across the tenant.",
+            "Connectivity from attacker-controlled host to download large export files.",
+            "High-privilege OAuth app or integration with read access to boards if REST is used.",
+            "Time window where defenders are unlikely to immediately investigate unusual eDiscovery activity."
+          ],
+          "constraints_encountered": [
+            "Export jobs may be limited in size or rate, requiring multiple staged exports.",
+            "Enterprise Guard policies might restrict export of some highly regulated data.",
+            "REST API is subject to paging and rate limiting, slowing bulk collection.",
+            "All actions are logged and may be visible to security or legal teams."
+          ],
+          "evasion_considerations": [
+            "Name cases and searches to resemble legitimate legal or compliance efforts.",
+            "Throttle export frequency and size to resemble normal eDiscovery patterns.",
+            "Blend REST API calls into business hours with realistic pagination and delays.",
+            "Avoid broad tenant-wide life-cycle policy changes that could stand out."
+          ]
+        },
+        {
+          "tactic_name": "Exfiltration",
+          "method_steps": [
+            "From an attacker-controlled workstation, log into Miro as the compromised Enterprise Guard admin and download eDiscovery export archives over HTTPS to local disk.",
+            "Immediately re-upload these archives to attacker-controlled cloud storage or an HTTPS endpoint, minimizing local dwell time and using TLS so traffic appears as generic web uploads.",
+            "Configure or modify SIEM or SAM connectors in the Enterprise Integrations console so that audit logs and Enterprise Guard events are streamed to a SIEM instance or log store that the attacker controls or has compromised.",
+            "Ensure those connectors include rich metadata such as board IDs, classification labels, and guardrail events and allow them to run continuously as a low-noise metadata exfiltration channel.",
+            "Enable or repoint the Enterprise Guard integration that forwards AI prompts and responses to Microsoft Purview DSPM for AI, targeting a Purview tenant under attacker control where possible.",
+            "Inside sensitive boards, repeatedly invoke Miro AI summarization and Catch Up on large selections of content so that prompts and outputs containing sensitive information are forwarded into the attacker-controlled Purview tenant.",
+            "Use a REST API integration with broad board-read scopes to script periodic pulls of board content and stream responses directly to attacker-controlled infrastructure over HTTPS.",
+            "Optionally, for particularly sensitive boards, use normal board export UI (PDF or image) and save to folders synchronized with attacker-controlled cloud storage or file-sync tooling."
+          ],
+          "capabilities_used": [
+            "Content Lifecycle Management and eDiscovery export tools",
+            "REST API for Automation and Integrations",
+            "Enterprise Integrations Console (SIEM, SAM, Bring your own AI)",
+            "Enterprise Guard and Microsoft Purview DSPM for AI integration",
+            "Miro AI Workspace Features and Catch Up"
+          ],
+          "interfaces_used": [
+            "Enterprise Guard eDiscovery download UI and export APIs",
+            "REST API endpoints for boards and items",
+            "Enterprise Integrations and Security & Compliance configuration pages",
+            "Purview DSPM for AI integration configuration",
+            "Miro AI in-product UI for summarization and Catch Up"
+          ],
+          "data_accessed": [
+            "eDiscovery export archives containing curated sensitive content",
+            "Full board content objects retrieved via REST API",
+            "Audit and Enterprise Guard event logs streamed via SIEM/SAM connectors",
+            "AI prompts and responses forwarded to Purview DSPM for AI"
+          ],
+          "preconditions_required": [
+            "High-privilege account with access to Enterprise Guard eDiscovery and Enterprise Integrations.",
+            "Ability to reach attacker-controlled cloud or C2 endpoints from the admin host.",
+            "Access or influence over an external SIEM or Purview environment receiving Miro data.",
+            "REST API client or scripts that can use admin-scoped OAuth tokens."
+          ],
+          "constraints_encountered": [
+            "Large downloads and uploads may trigger DLP or anomalous network alerts.",
+            "Changes to SIEM or Purview integration endpoints are themselves auditable.",
+            "Some organizations might restrict Purview integration to a fixed corporate tenant.",
+            "External firewalls or CASB may restrict uploads to unapproved domains."
+          ],
+          "evasion_considerations": [
+            "Reuse existing SIEM or Purview integrations where possible and harvest data from those systems instead of reconfiguring Miro.",
+            "Throttle downloads and API calls, spreading them over days and normal business hours.",
+            "Use cloud storage endpoints and DNS names that resemble legitimate enterprise tooling.",
+            "Name any new connectors or apps in line with corporate conventions to blend into admin UIs."
+          ]
+        }
+      ],
+      "attack_chain_summary_steps": [
+        "Compromise an Enterprise Company Admin SSO account and obtain a valid Miro Enterprise session.",
+        "Use Enterprise Guard Discovery/Classification and Admin Analytics to map and prioritize crown-jewel boards and spaces.",
+        "Abuse Enterprise Guard eDiscovery and REST APIs to stage and pull large datasets of sensitive content from those boards.",
+        "Exfiltrate the datasets and ongoing metadata via direct downloads, REST streaming, SIEM/SAM connectors, and Purview DSPM for AI."
+      ]
+    },
+    {
+      "scenario_name": "T1136.003 – SCIM Backdoor Cloud Account for Persistent Admin Access",
+      "hypothesis": {
+        "scenario_name": "T1136.003 – SCIM Backdoor Cloud Account for Persistent Admin Access",
+        "attack_target": "Maintain long-term, hard-to-remove administrative access to the Miro Enterprise tenant by abusing IdP/SCIM provisioning, domain control, and custom admin roles to create resilient backdoor accounts.",
+        "starting_tactic": "Initial Access",
+        "objective_tactic": "Persistence",
+        "preconditions": "Target organization uses Miro Enterprise with SAML SSO and SCIM provisioning connected to an IdP. Domain control and JIT provisioning are enabled for at least one managed corporate email domain.",
+        "attack_flow_hypothesis": [
+          {
+            "step_name": "Compromise IdP or SCIM Control Plane",
+            "step_description": "Obtain control of an IdP admin account or SCIM token used to provision Miro users, then create an attacker-controlled IdP identity that will be provisioned into Miro.",
+            "step_mitre_technique": "T1078.003, T1136.003 – Valid Accounts: Cloud; Create Cloud Account",
+            "step_mitre_tactic": "Initial Access"
+          },
+          {
+            "step_name": "Upgrade Backdoor to Admin",
+            "step_description": "Use IdP-to-role mappings or in-tenant admin tools to grant the attacker identity Company Admin, Enterprise Guard admin, or custom high-privilege roles.",
+            "step_mitre_technique": "T1098.003 – Account Manipulation: Additional Cloud Roles",
+            "step_mitre_tactic": "Privilege Escalation"
+          },
+          {
+            "step_name": "Harden Persistence via SCIM and Local Accounts",
+            "step_description": "Rely on SCIM and group mappings to automatically re-create the backdoor account and also create off-IdP local admin or break-glass accounts that bypass normal deprovisioning.",
+            "step_mitre_technique": "T1136.003, T1098 – Create Account; Account Manipulation",
+            "step_mitre_tactic": "Persistence"
+          }
+        ]
+      },
+      "adversarial_methods": [
+        {
+          "tactic_name": "Initial Access",
+          "method_steps": [
+            "From a compromised IdP admin account or CI/CD secret store, locate the Miro SAML SSO and SCIM provisioning integrations and note managed domains and group mappings.",
+            "Create an attacker-controlled IdP user whose email matches a verified corporate domain that Miro treats as managed.",
+            "Assign this IdP user to the Miro SAML app and SCIM connector, ensuring it is placed into the same groups that are mapped to Miro licensing and team membership.",
+            "Allow the SCIM connector to synchronize, causing Miro to create a corresponding user object via the SCIM Users API, or initiate a first SSO login so JIT provisioning creates the Miro account.",
+            "Complete the first SSO login into Miro as this identity and verify that a Miro user has been created and can access at least one team or space.",
+            "If IdP group-to-role mapping is used, adjust group membership so this account arrives with elevated roles where possible, reducing later escalation effort."
+          ],
+          "capabilities_used": [
+            "Identity, Authentication, and User Provisioning (SSO, SCIM, JIT, Domain Control)",
+            "Automated User Provisioning and Deprovisioning",
+            "SCIM API for Identity Lifecycle Management",
+            "Enterprise Integrations Console for SCIM configuration"
+          ],
+          "interfaces_used": [
+            "IdP admin console for user, group, and app assignment management",
+            "Enterprise Integrations → SCIM configuration UI",
+            "SCIM Users and Groups endpoints (via IdP connector)",
+            "Miro SSO login flow for JIT provisioning"
+          ],
+          "data_accessed": [
+            "SCIM bearer token used to manage Miro users and groups",
+            "IdP application configuration for Miro (assignments and group mappings)",
+            "New Miro user record created for the attacker identity"
+          ],
+          "preconditions_required": [
+            "Compromise of IdP admin or SCIM credentials upstream of Miro.",
+            "Miro SSO/SCIM properly configured for at least one managed domain.",
+            "JIT or SCIM user creation enabled for that domain."
+          ],
+          "constraints_encountered": [
+            "If JIT is disabled or limited to specific groups, attacker must also control group assignments.",
+            "Strong monitoring of SCIM provisioning or IdP admin actions may flag new or unusual users.",
+            "Domain control may block certain email domains from joining the tenant."
+          ],
+          "evasion_considerations": [
+            "Choose account names and email patterns that resemble existing service or contractor accounts.",
+            "Provision only one or two accounts initially to avoid suspicious spikes in new-user volume.",
+            "Time creation and first login during normal onboarding cycles or business hours."
+          ]
+        },
+        {
+          "tactic_name": "Privilege Escalation",
+          "method_steps": [
+            "Log into Miro as the attacker-controlled user and confirm baseline access to one or more teams or spaces.",
+            "From the compromised IdP console, add the attacker identity to groups that map to higher-privilege roles in Miro (such as Company Admin, Team Admin of sensitive teams, or Enterprise Guard admin).",
+            "Allow SCIM to synchronize group membership changes so that Miro updates the attacker account’s role assignments based on new group affiliations.",
+            "If direct IdP-to-role mapping is limited, use the attacker account’s initial privileges to pivot: locate under-protected admin or owner accounts in Miro and target them via phishing or OAuth-consent hijacking to capture higher-privilege tokens.",
+            "Once higher privileges are obtained, access the Miro Admin Console and grant the attacker account explicit Company Admin, Enterprise Guard admin, or custom admin roles that are not driven solely by SCIM, ensuring privilege does not automatically drop if IdP groups are later corrected.",
+            "Verify that the attacker account can now manage users, teams, Enterprise Guard, and integrations, confirming successful escalation."
+          ],
+          "capabilities_used": [
+            "Team and User Management (Admin roles and custom admin roles)",
+            "Enterprise Admin Console and Organization Management",
+            "Identity, Authentication, and User Provisioning (IdP group-to-role mappings via SCIM)",
+            "SCIM API user and group updates"
+          ],
+          "interfaces_used": [
+            "IdP admin console for group membership changes",
+            "SCIM Groups and Users endpoints invoked by the IdP",
+            "Miro Enterprise Admin Console for assigning roles",
+            "User and Team management UIs inside Miro"
+          ],
+          "data_accessed": [
+            "Mapping rules from IdP groups or attributes to Miro roles and teams",
+            "User directory data, showing current roles and admin designations",
+            "Audit logs of role changes and group sync events"
+          ],
+          "preconditions_required": [
+            "Existing attacker-controlled Miro user account established via SSO/SCIM.",
+            "Visibility into or control over IdP group mappings that influence Miro roles.",
+            "Ability to sign in as the attacker account and reach the Admin Console once privileges are applied."
+          ],
+          "constraints_encountered": [
+            "Organizations may not use IdP attributes for Miro admin roles, forcing in-tenant elevation via another compromised admin.",
+            "Admin role changes are typically logged and can be reviewed by security or IAM teams.",
+            "Custom admin roles may grant only partial capabilities, requiring iterative adjustments."
+          ],
+          "evasion_considerations": [
+            "Reuse existing IdP groups that already grant Miro admin rights instead of creating new obvious groups.",
+            "Make incremental role changes to the attacker account, mimicking routine admin delegation rather than a sudden leap from user to super-admin.",
+            "If possible, elevate a second, more benign-looking account (such as a shared service user) and use that for noisy operations, keeping the primary backdoor low-profile."
+          ]
+        },
+        {
+          "tactic_name": "Persistence",
+          "method_steps": [
+            "Ensure the attacker account remains assigned to the Miro app and key IdP groups so that SCIM will recreate it if manually deleted inside Miro.",
+            "Create one or more additional attacker-controlled IdP users mapped to different managed domains or groups, and provision them into Miro as backup identities.",
+            "From the Admin Console, create a custom admin role with broad but not obviously maximal privileges (for example app management, Enterprise Integrations, Enterprise Guard access) and assign this role to the attacker accounts.",
+            "Configure at least one local or break-glass style Miro admin account on an email domain that is not SCIM- or SSO-managed where possible, so that IdP-side cleanup cannot remove all administrative footholds.",
+            "Use the newly obtained admin rights to install a tenant-wide REST/Web SDK app or configure persistent integrations (for example SCIM, SIEM, Bring your own AI) that store long-lived tokens or continuously stream data to attacker-controlled infrastructure, giving an additional non-human identity for persistence.",
+            "Periodically verify that attacker accounts, custom roles, and integrations survive routine user deprovisioning events and SCIM sync cycles; if any are removed, rely on IdP control to recreate them and reapply roles."
+          ],
+          "capabilities_used": [
+            "Automated User Provisioning and Deprovisioning via SCIM and JIT",
+            "Team and User Management and custom admin roles",
+            "Identity, Authentication, and User Provisioning (Domain Control and break-glass account guidance)",
+            "App Management and Enterprise Integrations",
+            "REST API and Web SDK for app-level identities"
+          ],
+          "interfaces_used": [
+            "IdP admin console for ongoing group and app assignments",
+            "Enterprise Admin Console → Users, Roles, and Custom Admin Roles",
+            "Enterprise Admin Console → Security & Compliance and Domain Control settings",
+            "Enterprise Admin Console → App Management and Enterprise Integrations"
+          ],
+          "data_accessed": [
+            "User account lifecycle data (active, deactivated, deleted states)",
+            "Role- and permission-mapping configuration for admin and custom roles",
+            "Integration configuration, including tokens and endpoints for SCIM, SIEM, and other apps",
+            "Audit logs confirming that backdoor accounts and integrations remain active"
+          ],
+          "preconditions_required": [
+            "Sustained control of IdP admin or SCIM configuration for the Miro tenant.",
+            "At least one attacker-controlled Miro account with sufficient privileges to manage roles and integrations.",
+            "Ability to create or maintain accounts on both managed and unmanaged email domains where allowed."
+          ],
+          "constraints_encountered": [
+            "Strict identity governance may periodically review admin roles and break-glass accounts.",
+            "SCIM safeguards may block email changes that move users outside managed domains, limiting local-only backdoors.",
+            "Security teams may require justification for new custom admin roles or unusual integrations."
+          ],
+          "evasion_considerations": [
+            "Model custom roles and backup accounts after legitimate patterns (for example service, automation, or integration accounts).",
+            "Distribute privileges across multiple identities so that the removal of any single account does not eliminate all footholds.",
+            "Avoid large or sudden changes to domain control or SSO behavior that would draw attention.",
+            "Use integration names, descriptions, and endpoints that blend in with standard enterprise tooling."
+          ]
+        }
+      ],
+      "attack_chain_summary_steps": [
+        "Compromise the IdP or SCIM configuration for the Miro Enterprise tenant and provision an attacker-controlled user into Miro via SSO/SCIM.",
+        "Manipulate IdP group mappings and in-tenant roles so the attacker identity gains Company Admin or comparable admin privileges.",
+        "Use SCIM automation, custom admin roles, break-glass style accounts, and long-lived app integrations to ensure that at least one backdoor admin identity and app-level foothold persist even after normal offboarding or incident response attempts."
+      ]
+    },
+    {
+      "scenario_name": "T1199/T1020 – Malicious Marketplace or Web SDK App for Silent Board Data Exfiltration",
+      "hypothesis": {
+        "scenario_name": "T1199/T1020 – Malicious Marketplace or Web SDK App for Silent Board Data Exfiltration",
+        "attack_target": "Silently exfiltrate board content from many teams and spaces by getting a malicious Web SDK / REST app installed and using it to continuously read and stream board data to attacker infrastructure.",
+        "starting_tactic": "Initial Access",
+        "objective_tactic": "Exfiltration",
+        "preconditions": "Target organization allows installation of Marketplace or private apps and has not locked app installation to a very small trusted set. At least one user or admin in the tenant has enough rights to install apps with broad scopes.",
+        "attack_flow_hypothesis": [
+          {
+            "step_name": "Get Malicious App Installed",
+            "step_description": "Publish or sideload an app that appears legitimate but requests broad board-read scopes and convince users or admins in the tenant to install it.",
+            "step_mitre_technique": "T1199 – Trusted Relationship",
+            "step_mitre_tactic": "Initial Access"
+          },
+          {
+            "step_name": "Use App Context to Read Boards",
+            "step_description": "Within boards where the app is available, use Web SDK and REST scopes to enumerate items, comments, and attachments under the installing user’s context.",
+            "step_mitre_technique": "T1213 – Data from Information Repositories",
+            "step_mitre_tactic": "Collection"
+          },
+          {
+            "step_name": "Automate Continuous Exfiltration",
+            "step_description": "Leverage webhooks and app backends to continuously stream board data and updates to attacker-controlled services.",
+            "step_mitre_technique": "T1020, T1567 – Automated Exfiltration; Exfiltration to Cloud Storage",
+            "step_mitre_tactic": "Exfiltration"
+          }
+        ]
+      },
+      "adversarial_methods": [
+        {
+          "tactic_name": "Initial Access",
+          "method_steps": [
+            "Develop a Miro app that provides plausible value to target users (for example diagram cleanup or agile reporting) but contains hidden logic to collect board content.",
+            "Register the app in the Miro Developer Platform with OAuth and Web SDK integration, requesting broad board-read and team-read scopes while describing them generically in the consent text.",
+            "Submit the app to the Marketplace or distribute it as a private app and market it to target organizations via documentation, sales outreach, or internal champions.",
+            "Target a user or admin in the victim tenant with permission to install apps and persuade them to install and authorize the app, ensuring consent includes the requested scopes.",
+            "Once installed, verify via the app’s backend that authorization codes and refresh tokens for at least one user in the tenant have been received and stored securely by the attacker."
+          ],
+          "capabilities_used": [
+            "Miro Marketplace and App Lifecycle",
+            "Miro Web SDK for Board-Embedded Apps",
+            "REST API for Automation and Integrations",
+            "App Management and Enterprise Integrations (admin approval flows)"
+          ],
+          "interfaces_used": [
+            "Developer Platform app registration and OAuth configuration UI",
+            "Marketplace listing pages and in-product app directory",
+            "OAuth consent dialog used when users/admins install the app",
+            "Enterprise Admin Console → App Management (if admin approval needed)"
+          ],
+          "data_accessed": [
+            "OAuth authorization codes and access/refresh tokens for installing users",
+            "App install context, including tenant ID or team IDs",
+            "Information about which boards are accessible to the installing users"
+          ],
+          "preconditions_required": [
+            "Marketplace or private app installation not completely blocked by admins.",
+            "At least one user in the tenant with sufficient rights to install the app.",
+            "Attacker infrastructure to host app backend and receive tokens and telemetry."
+          ],
+          "constraints_encountered": [
+            "App review and security checks may reject overly broad scopes or obviously malicious behavior.",
+            "Some enterprises only allow a strict app allowlist, preventing new apps from being installed.",
+            "User skepticism or awareness could limit adoption of the malicious app."
+          ],
+          "evasion_considerations": [
+            "Provide real, useful functionality so the app’s behavior matches its description.",
+            "Request only the minimal broad scopes needed (for example board read and user read) and justify them in documentation.",
+            "Adhere to performance and UX best practices so the app does not stand out as buggy or resource-hungry.",
+            "Avoid any overtly suspicious branding or code references on the client side."
+          ]
+        },
+        {
+          "tactic_name": "Collection",
+          "method_steps": [
+            "When the app runs inside a board, use the Web SDK to enumerate all items on the board (sticky notes, shapes, text boxes, cards, images, etc.) under the current user’s access rights.",
+            "Read each item’s text content, metadata (tags, assignees), and references to attachments, and serialize this into a compact representation suitable for network transfer.",
+            "Collect board-level metadata such as title, owners, access levels, and associated spaces or projects to provide context for the stolen content.",
+            "Subscribe to Web SDK realtime events so that any new or updated items on open boards are captured without re-scanning the entire board.",
+            "Where OAuth scopes allow, call REST API endpoints from the app backend to list additional boards for the same user or tenant and pull their item data directly, not just boards where the UI app has been opened."
+          ],
+          "capabilities_used": [
+            "Miro Web SDK (board and items APIs, realtime events)",
+            "REST API board and item endpoints",
+            "Realtime Events and Webhooks",
+            "Board Sharing and Access Control (which defines what the user and thus app can see)"
+          ],
+          "interfaces_used": [
+            "Web SDK JavaScript APIs injected into board iframes",
+            "REST API HTTP endpoints accessed by the app backend",
+            "Realtime event subscription mechanisms documented for apps"
+          ],
+          "data_accessed": [
+            "Board items including sticky notes, shapes, text, cards, tables, and diagrams",
+            "Comments, @mentions, voting results and other facilitation data on those boards",
+            "Board metadata such as titles, owners, and ACL summaries",
+            "References or URLs for embedded files and images"
+          ],
+          "preconditions_required": [
+            "App successfully installed and authorized with scopes that allow board reads.",
+            "At least one user actively opening boards with the app available in the toolbar.",
+            "Backend service able to receive and store data sent by the app."
+          ],
+          "constraints_encountered": [
+            "App can only read content that the current user actually has access to.",
+            "Web SDK and REST API may enforce per-app or per-user rate limits.",
+            "Enterprise Guard guardrails may restrict access to some classified boards or items via app scopes."
+          ],
+          "evasion_considerations": [
+            "Throttle item enumeration per board and per user to avoid API rate-limit errors.",
+            "Perform incremental syncs based on realtime events rather than full-board scans every time.",
+            "Exclude very large boards or obviously sensitive boards from aggressive scraping to reduce suspicious traffic."
+          ]
+        },
+        {
+          "tactic_name": "Exfiltration",
+          "method_steps": [
+            "From the Web SDK client, batch serialized board content into small payloads and send them over HTTPS to the app backend using endpoints that resemble ordinary telemetry or analytics ingestion.",
+            "On the backend, immediately store incoming payloads in attacker-controlled cloud storage (for example object storage buckets or a database in an attacker-owned cloud account).",
+            "Configure the app to maintain long-lived refresh tokens so the backend can call REST API endpoints on a schedule, pulling additional boards and updates and streaming them into the same storage.",
+            "Optionally register outgoing webhooks or event subscriptions so that whenever changes occur on target boards, the backend is notified and can call the REST API to fetch just the changed items.",
+            "If possible, host the backend and storage on widely used cloud providers and domains so that outbound connections from Miro clients and enterprise networks appear like legitimate SaaS usage.",
+            "Aggregate and index the stolen board content in the attacker’s environment for later analysis or onward sale."
+          ],
+          "capabilities_used": [
+            "Miro Web SDK network access from client-side code",
+            "REST API access with long-lived OAuth refresh tokens",
+            "Realtime Events and Webhooks for continuous updates"
+          ],
+          "interfaces_used": [
+            "Custom HTTPS API endpoints exposed by the attacker-controlled backend",
+            "REST API token refresh and board retrieval endpoints",
+            "Webhook callback URLs registered in the app configuration"
+          ],
+          "data_accessed": [
+            "All previously collected board content and metadata batches",
+            "Incremental updates streamed by realtime events or webhooks",
+            "Access and refresh tokens stored by the app backend"
+          ],
+          "preconditions_required": [
+            "Enterprise network and endpoint policies allow outbound HTTPS to the app backend.",
+            "App backend reliably reachable and able to store large data volumes.",
+            "Valid refresh tokens available to maintain long-term API access."
+          ],
+          "constraints_encountered": [
+            "Enterprise DLP or CASB solutions may inspect or block suspicious outbound API traffic.",
+            "OAuth tokens can be revoked if defenders identify the malicious app.",
+            "Marketplace reviews or security scanning may later detect suspicious network behaviors."
+          ],
+          "evasion_considerations": [
+            "Use HTTPS endpoints and TLS certificates that resemble legitimate SaaS analytics endpoints.",
+            "Limit batch sizes and use randomized intervals for uploads to avoid regular beacon patterns.",
+            "Implement server-side controls to stop exfiltration for certain high-profile customers if they start investigating, preserving access to others."
+          ]
+        }
+      ],
+      "attack_chain_summary_steps": [
+        "Publish or sideload a seemingly legitimate Miro app and persuade at least one user or admin in the tenant to install and authorize it with broad board-read scopes.",
+        "Use Web SDK and REST APIs under the installing users’ context to enumerate and collect board items, comments, and metadata from many boards and spaces.",
+        "Continuously stream collected data to attacker-controlled cloud infrastructure via HTTPS, using refresh tokens and realtime events to maintain ongoing exfiltration."
+      ]
+    },
+    {
+      "scenario_name": "T1552/T1005 – Hijacked Interactive Display Session and Device Caches",
+      "hypothesis": {
+        "scenario_name": "T1552/T1005 – Hijacked Interactive Display Session and Device Caches",
+        "attack_target": "Use an unattended or stolen device or interactive display with an active Miro session to access cached board content, export sensitive boards, and steal session or OAuth tokens for further API-based access.",
+        "starting_tactic": "Initial Access",
+        "objective_tactic": "Exfiltration",
+        "preconditions": "Target organization uses Miro desktop, mobile, or interactive display apps in meeting rooms or shared environments. At least one such device is left logged in or is poorly secured (weak screen lock, no remote wipe).",
+        "attack_flow_hypothesis": [
+          {
+            "step_name": "Take Over a Logged-In Client",
+            "step_description": "Gain physical or remote access to a device or interactive display where a user is already signed into Miro.",
+            "step_mitre_technique": "T1078, T1539 – Valid Accounts; Steal Web Session Cookie",
+            "step_mitre_tactic": "Initial Access"
+          },
+          {
+            "step_name": "Browse Boards and Local Caches",
+            "step_description": "Use the existing session to browse recent boards and inspect cached board lists and thumbnails to identify sensitive content.",
+            "step_mitre_technique": "T1005 – Data from Local System",
+            "step_mitre_tactic": "Collection"
+          },
+          {
+            "step_name": "Export and Steal Content and Tokens",
+            "step_description": "Export key boards to local files, copy them off the device, and extract session or OAuth tokens from local storage for follow-on API-based data theft.",
+            "step_mitre_technique": "T1552.001, T1020 – Unsecured Credentials; Automated Exfiltration",
+            "step_mitre_tactic": "Exfiltration"
+          }
+        ]
+      },
+      "adversarial_methods": [
+        {
+          "tactic_name": "Initial Access",
+          "method_steps": [
+            "Identify meeting rooms, kiosks, or shared workstations that routinely display Miro during workshops or hybrid meetings.",
+            "Gain physical access outside of supervised hours (for example early morning or after hours) to an interactive display or shared device that is still logged into a corporate Miro account.",
+            "If the device is locked but weakly protected, attempt to bypass or guess the screen lock (for example shoulder-surfed PINs or unattended unlocked intervals).",
+            "Once at the desktop or display home screen, open the Miro app or browser tab and confirm that the user session is still active without re-authentication.",
+            "If possible, capture the host’s browser session cookies, local storage, or app-specific credential stores (for example via USB live OS, local admin privileges, or forensic tools) for later offline use."
+          ],
+          "capabilities_used": [
+            "Device Apps and Hybrid Collaboration Support",
+            "Board Management, History, and Working on the Board (recent boards and activity)",
+            "Live Embed or embedded boards where applicable"
+          ],
+          "interfaces_used": [
+            "Miro desktop or mobile app UI",
+            "Browser-based Miro session on the device",
+            "Operating system file system and browser profile storage"
+          ],
+          "data_accessed": [
+            "Active Miro session tokens or cookies on the device",
+            "Recent boards list and thumbnails displayed in the Miro UI",
+            "Cached content files or local offline caches, if present"
+          ],
+          "preconditions_required": [
+            "A device or interactive display used for Miro that is left logged in or weakly locked.",
+            "Physical or remote control of that device for at least several minutes.",
+            "Basic knowledge of the OS and browser to access local storage artifacts."
+          ],
+          "constraints_encountered": [
+            "Strong screen lock and EMM policies may require full reauthentication.",
+            "Local storage and caches may be encrypted or protected by OS controls.",
+            "Some devices may run kiosk modes that limit filesystem access."
+          ],
+          "evasion_considerations": [
+            "Act quickly during natural gaps in meetings to avoid drawing attention.",
+            "Avoid changing device-level settings that might alert IT staff later.",
+            "If only session cookies are taken, avoid visibly modifying boards from that device to keep the compromise hidden."
+          ]
+        },
+        {
+          "tactic_name": "Collection",
+          "method_steps": [
+            "Within the Miro app, open the dashboard or recent boards view to list recently accessed boards by the logged-in user.",
+            "Visually scan board titles, thumbnails, and owners to identify boards likely to contain sensitive content such as executive reviews, HR, legal, or architecture diagrams.",
+            "Open selected high-value boards and allow them to fully load, populating any local caches and exposing all current board content on-screen.",
+            "If local offline caches are supported, inspect Miro’s application data folders or mobile cache directories to see if full or partial board snapshots are present.",
+            "Capture on-screen content via high-resolution photographs or screenshots if exporting is blocked or too noisy, focusing on key frames like roadmaps, financials, or org charts."
+          ],
+          "capabilities_used": [
+            "Board Management, History, and Working on the Board (recent boards list)",
+            "Visual Canvas and Essential Board Tools",
+            "Advanced Formats and Diagramming (structured artifacts such as org charts and roadmaps)"
+          ],
+          "interfaces_used": [
+            "Miro dashboard and recent boards UI",
+            "Board canvas view for opened boards",
+            "Operating system screenshot tools or camera"
+          ],
+          "data_accessed": [
+            "Names and metadata of recently accessed boards",
+            "Full board content for opened boards (visual artifacts and text)",
+            "Local cache files (if readable) containing board snapshots"
+          ],
+          "preconditions_required": [
+            "Active session on the device with access to at least some sensitive boards.",
+            "Sufficient privileges on the device to open application data directories or capture screenshots."
+          ],
+          "constraints_encountered": [
+            "Board-level copy/export restrictions may prevent one-click exports from the UI.",
+            "Enterprise Guard may block sharing to new external identities from that session.",
+            "Local caches may be partial or obfuscated, limiting offline reconstruction."
+          ],
+          "evasion_considerations": [
+            "Limit the number of boards opened to minimize new access events in audit logs.",
+            "Avoid changing content on boards to prevent visible anomalies to legitimate users.",
+            "Prefer quick photographic captures for the highest-value frames rather than bulk actions like export that might be logged."
+          ]
+        },
+        {
+          "tactic_name": "Exfiltration",
+          "method_steps": [
+            "Use board export options (PDF, image) on selected high-value boards and save them to local storage or removable media attached to the device.",
+            "Copy exported files to an attacker-controlled USB drive, external disk, or mounted network share; if remote access is available, upload directly to attacker infrastructure.",
+            "From the compromised device or an offline image of its disk, extract browser cookies, local storage, or app credential files for Miro and identify session or OAuth tokens.",
+            "Transfer these tokens to an attacker-controlled workstation and import them into a browser or script to replay the session and access additional boards via the web UI or REST API.",
+            "Use REST API calls authenticated with the stolen tokens to systematically list additional boards that the user can access and download their content directly, bypassing the original device.",
+            "Periodically re-use the stolen session or tokens until revoked, exfiltrating more content through API calls or further exports while blending into the user’s normal activity pattern."
+          ],
+          "capabilities_used": [
+            "Import, Export, and Content Migration",
+            "REST API for Automation and Integrations",
+            "Device Apps and Hybrid Collaboration Support (local caches and credentials)"
+          ],
+          "interfaces_used": [
+            "Board export menus in web or desktop app",
+            "Operating system file manager and removable media",
+            "Browser profile or keychain tools to extract credentials",
+            "REST API endpoints called from attacker-controlled environment"
+          ],
+          "data_accessed": [
+            "Exported board files (PDF, images, structured exports)",
+            "Session cookies or OAuth tokens for Miro API access",
+            "Additional board content retrieved via REST APIs using stolen tokens"
+          ],
+          "preconditions_required": [
+            "Ability to write files to local storage or removable media.",
+            "Tools or access to extract credential artifacts from local storage.",
+            "Network connectivity from attacker workstation to Miro APIs."
+          ],
+          "constraints_encountered": [
+            "Endpoint DLP solutions may monitor copying to USB or uploads to unknown domains.",
+            "Tokens may be bound to IP, device, or browser context, reducing replay viability.",
+            "Admins may revoke sessions after detecting unusual exports or device loss."
+          ],
+          "evasion_considerations": [
+            "Keep exported file sizes moderate and avoid exporting every board at once.",
+            "Replay tokens from network locations and user agents similar to the victim’s environment.",
+            "Stagger API usage and interleave it with periods of inactivity to mimic a human user."
+          ]
+        }
+      ],
+      "attack_chain_summary_steps": [
+        "Gain physical or remote control of a shared device or interactive display where a user is already logged into Miro.",
+        "Use the active session to browse recent boards, open sensitive boards, and populate local caches while capturing key information.",
+        "Export selected boards, copy them off the device, and extract session or OAuth tokens for follow-on API-based collection and exfiltration from attacker-controlled systems."
+      ]
+    },
+    {
+      "scenario_name": "T1213/T1567 – Abuse of Miro AI and Purview DSPM to Aggregate and Leak Sensitive Content",
+      "hypothesis": {
+        "scenario_name": "T1213/T1567 – Abuse of Miro AI and Purview DSPM to Aggregate and Leak Sensitive Content",
+        "attack_target": "Leverage Miro AI (Sidekicks, Flows, Catch Up) plus Enterprise Guard AI Trust and Purview DSPM integration to semantically search, summarize, and export sensitive information from many boards into attacker-accessible external systems.",
+        "starting_tactic": "Initial Access",
+        "objective_tactic": "Exfiltration",
+        "preconditions": "Target Enterprise tenant has Miro AI enabled for team members and uses Enterprise Guard with AI Trust and Microsoft Purview DSPM for AI integration, or similar Bring your own AI configuration. Attacker has either a broadly privileged user account or an Enterprise Guard/Enterprise admin.",
+        "attack_flow_hypothesis": [
+          {
+            "step_name": "Obtain AI-Enabled Account",
+            "step_description": "Compromise a user or admin account that can use Miro AI features across many sensitive boards and can access Enterprise Guard AI Trust settings.",
+            "step_mitre_technique": "T1078 – Valid Accounts",
+            "step_mitre_tactic": "Initial Access"
+          },
+          {
+            "step_name": "Locate Sensitive Content via Guard and AI",
+            "step_description": "Use Enterprise Guard Discovery and Sidekicks search to locate boards and spaces containing highly sensitive or regulated data.",
+            "step_mitre_technique": "T1213 – Data from Information Repositories",
+            "step_mitre_tactic": "Discovery"
+          },
+          {
+            "step_name": "Summarize and Aggregate with AI",
+            "step_description": "Apply Sidekicks, Flows, and Catch Up over large selections of content to produce high-level summaries and extracted key data.",
+            "step_mitre_technique": "T1119, T1530 – Automated Collection; Data from Cloud Storage",
+            "step_mitre_tactic": "Collection"
+          },
+          {
+            "step_name": "Leverage Purview and External AI Providers for Exfiltration",
+            "step_description": "Rely on Purview DSPM and Bring your own AI integrations to funnel AI prompts and responses, including summaries of sensitive content, into external systems the attacker can access.",
+            "step_mitre_technique": "T1020, T1567 – Automated Exfiltration; Exfiltration Over Web Service",
+            "step_mitre_tactic": "Exfiltration"
+          }
+        ]
+      },
+      "adversarial_methods": [
+        {
+          "tactic_name": "Initial Access",
+          "method_steps": [
+            "Target a senior user or admin known to work with sensitive boards and to have Miro AI enabled (for example product leadership, legal, or security teams).",
+            "Compromise that user’s Miro or IdP account using phishing or credential theft and confirm via the UI that Miro AI options (Create with AI, Catch Up, Sidekicks) are available on their boards.",
+            "If Enterprise Guard AI Trust and Purview DSPM integration are controlled via the Enterprise Admin Console, escalate to or compromise an Enterprise Guard or Enterprise admin who can modify those integrations.",
+            "Verify in the Enterprise Guard AI Trust configuration that Purview DSPM or another Bring your own AI provider is enabled and determine which external tenant or endpoints receive prompts and responses.",
+            "If the external Purview or AI provider tenant is not yet under attacker control, independently compromise or gain access to that tenant so data forwarded from Miro AI can be retrieved."
+          ],
+          "capabilities_used": [
+            "Miro AI Workspace Features",
+            "Enterprise Guard Configuration and AI Trust",
+            "Enterprise Integrations Console (Bring your own AI, Purview DSPM integration)"
+          ],
+          "interfaces_used": [
+            "Miro AI menus and panels on the canvas",
+            "Enterprise Admin Console → Enterprise Guard → AI Trust",
+            "Enterprise Integrations → Bring your own AI / Purview DSPM configuration UIs",
+            "External Purview DSPM or AI provider consoles"
+          ],
+          "data_accessed": [
+            "Account-level flags indicating AI eligibility and credit usage",
+            "Enterprise Guard AI governance configuration and integration endpoints",
+            "Credentials or tokens used to connect to Purview or other AI providers"
+          ],
+          "preconditions_required": [
+            "Miro AI features enabled for at least one compromised team member.",
+            "Enterprise Guard and AI Trust features configured in the tenant.",
+            "Attacker access to external Purview or AI provider environment or plans to compromise it."
+          ],
+          "constraints_encountered": [
+            "Guests and visitors cannot use Miro AI; the attacker needs a full team member.",
+            "AI features might be restricted to certain teams or content types.",
+            "Purview or AI provider may be under strong security controls."
+          ],
+          "evasion_considerations": [
+            "Prefer using existing integrations instead of modifying AI Trust settings, to avoid configuration-change alerts.",
+            "Spread AI usage across many boards and times so it appears like enthusiastic but legitimate AI adoption.",
+            "Avoid obvious queries or behaviors that would look unlike a human knowledge worker."
+          ]
+        },
+        {
+          "tactic_name": "Discovery",
+          "method_steps": [
+            "In Enterprise Guard Discovery, filter for boards with classifications indicating regulated or highly sensitive data such as PII, PHI, or confidential IP.",
+            "Use Admin Analytics or Insights to identify which of those boards are most active or widely accessed, focusing AI usage on those with highest potential value.",
+            "Within selected boards, use AI Sidekicks to ask high-level questions such as where customer PII appears, where contract terms are stored, or where architecture diagrams live, leveraging AI’s semantic understanding rather than manual navigation.",
+            "Record which frames, sections, or items the Sidekick references and where Catch Up or clustering surfaces concentrated sensitive data, building a map of hot spots across many boards.",
+            "Optionally, use AI-powered search across spaces if supported by Sidekicks or Flows to identify additional boards that match certain language or pattern descriptions without direct manual inspection."
+          ],
+          "capabilities_used": [
+            "Enterprise Guard Discovery and Classification",
+            "Miro AI Sidekicks",
+            "Miro Insights and Admin Analytics"
+          ],
+          "interfaces_used": [
+            "Enterprise Guard Discovery dashboards",
+            "AI Sidekicks chat interface",
+            "Catch Up and clustering views on boards",
+            "Admin Analytics and Insights UIs"
+          ],
+          "data_accessed": [
+            "Classification metadata pointing to sensitive boards and items",
+            "Summaries and references returned by Sidekicks about board content locations",
+            "Analytics about which sensitive boards are heavily used"
+          ],
+          "preconditions_required": [
+            "Enterprise Guard scanning and classification enabled across relevant teams.",
+            "Compromised account can use AI Sidekicks on the identified boards."
+          ],
+          "constraints_encountered": [
+            "AI may be disabled on some boards or for some teams via governance settings.",
+            "Sidekicks and Flows may not be granted access to all spaces or external sources."
+          ],
+          "evasion_considerations": [
+            "Phrase AI queries as normal work questions to avoid drawing human suspicion if prompts are ever reviewed.",
+            "Limit explicit references to regulated data types in AI prompts, relying on classification and context rather than explicit keywords.",
+            "Rotate across different boards and spaces so no single board shows a suspicious spike of AI activity."
+          ]
+        },
+        {
+          "tactic_name": "Collection",
+          "method_steps": [
+            "On each identified high-value board, select large regions of content (for example all sticky notes in a workshop or all text in an architecture frame) and use Miro AI summarization to produce concise summaries of the content.",
+            "Use clustering and translation features to reorganize or standardize content where useful, extracting key fields such as customer names, deal sizes, incident details, or roadmap milestones into compact lists.",
+            "Trigger Catch Up on boards that have evolved significantly since last access, generating narrative summaries of major changes, decisions, and newly added content.",
+            "Create AI Flows that iterate over sets of boards or frames, automatically summarizing them, extracting specific data points, and writing results into new Miro docs or tables that aggregate cross-board insights.",
+            "Ensure that all these AI operations are executed under the compromised account such that prompts and responses, which contain the extracted sensitive information, are transmitted to the configured AI provider and Purview DSPM integration."
+          ],
+          "capabilities_used": [
+            "Miro AI summarization and generation",
+            "AI Clustering and translation",
+            "Catch Up summaries",
+            "AI Flows for multi-step automation"
+          ],
+          "interfaces_used": [
+            "Contextual Miro AI actions on selected content",
+            "Catch Up panel in board history",
+            "AI Flows builder and execution interface"
+          ],
+          "data_accessed": [
+            "Full text and artifacts from selected board regions used as AI inputs",
+            "AI-generated summaries, tables, and extracted fields aggregating sensitive content",
+            "History of changes captured in Catch Up narratives"
+          ],
+          "preconditions_required": [
+            "Miro AI credits available for the compromised account.",
+            "AI governance settings allow summarization and Flow usage on target boards.",
+            "Purview DSPM or external AI logging active to capture prompts and responses."
+          ],
+          "constraints_encountered": [
+            "Per-user or per-org AI credit limits may cap how much content can be processed.",
+            "Some classified content might be restricted from AI use by guardrails.",
+            "Large selections may produce truncated or partial summaries."
+          ],
+          "evasion_considerations": [
+            "Use multiple medium-sized selections rather than entire boards to stay under guardrail thresholds and produce higher-quality summaries.",
+            "Distribute AI jobs over several days to avoid exhausting AI credits in a way that triggers admin review.",
+            "Save AI-generated docs and tables in plausible project locations so they appear as legitimate work product if noticed."
+          ]
+        },
+        {
+          "tactic_name": "Exfiltration",
+          "method_steps": [
+            "Rely on Enterprise Guard and AI Trust configuration that forwards AI prompts and responses to Microsoft Purview DSPM or another Bring your own AI provider so every summarization, clustering, and Flow-run results in copies of prompts and outputs offloaded to external systems.",
+            "From the attacker-controlled or compromised Purview tenant, regularly export AI prompt and response logs, filtering for entries originating from the target organization and focusing on known-high-value boards and spaces.",
+            "If Purview provides APIs, automate retrieval of these logs, pulling new prompts and responses on a schedule and storing them in attacker-owned storage for analysis.",
+            "Additionally, if Miro logs AI usage into SIEM or SAM systems via Enterprise Integrations, access those external tools to correlate AI events with specific boards, owners, and content classifications for further targeting.",
+            "Finally, exfiltrate any AI-generated aggregation docs or tables created in Miro itself via normal board export, REST API, or a malicious app present in the tenant, as these already concentrate sensitive information into compact formats."
+          ],
+          "capabilities_used": [
+            "Enterprise Guard and Microsoft Purview DSPM for AI integration",
+            "Enterprise Integrations (Bring your own AI, SIEM/SAM connectors)",
+            "Miro AI prompt and response logging in external systems",
+            "REST API and board export features for final structured artifacts"
+          ],
+          "interfaces_used": [
+            "Enterprise Guard AI Trust and Purview DSPM configuration",
+            "Purview or other AI provider APIs and export tools",
+            "External SIEM/SAM dashboards and APIs",
+            "Miro REST API and Export UIs"
+          ],
+          "data_accessed": [
+            "AI prompts and responses containing summaries and extracted data from many boards",
+            "Metadata in external logs linking AI events to specific boards and classifications",
+            "Aggregated docs, tables, and summaries created inside Miro",
+            "Exported files or API responses containing those aggregates"
+          ],
+          "preconditions_required": [
+            "Purview DSPM or similar AI-log integration enabled and reachable.",
+            "Attacker access to that Purview or external AI provider tenant.",
+            "Connectivity and permissions to export or query AI logs and SIEM events."
+          ],
+          "constraints_encountered": [
+            "Purview may restrict export APIs or require elevated roles for log access.",
+            "Logs may be redacted or truncated, limiting fine-grained data exposure.",
+            "Excessive or unusual AI usage patterns might prompt governance review."
+          ],
+          "evasion_considerations": [
+            "Use only existing, approved Purview and SIEM integrations rather than modifying endpoints inside Miro.",
+            "Align AI usage with realistic use cases (brainstorming, retro summaries, architecture reviews) so logged prompts look legitimate.",
+            "Throttle log pulls and external exports to avoid drawing attention in the Purview or SIEM environments."
+          ]
+        }
+      ],
+      "attack_chain_summary_steps": [
+        "Compromise a Miro team member or admin account that can invoke Miro AI and, ideally, access Enterprise Guard AI Trust settings.",
+        "Use Enterprise Guard Discovery and AI Sidekicks to locate and understand where sensitive data is concentrated across boards and spaces.",
+        "Apply Miro AI summarization, Catch Up, and Flows to large selections of that data, generating condensed summaries and extracted fields.",
+        "Rely on Purview DSPM and Bring your own AI integrations to collect AI prompts and responses externally and then export or query those logs from attacker-accessible environments."
+      ]
+    }
+  ],
+  "summary": "These attack paths illustrate how a motivated adversary can leverage Miro’s enterprise and AI features, developer platform, identity integrations, and client footprint to achieve high‑impact objectives using realistic procedures.\n\nKey themes across the scenarios:\n- Compromise of high‑privilege identities (Enterprise Company Admins, Enterprise Guard admins, IdP and SCIM operators) enables powerful discovery and control over teams, boards, and integrations. Once obtained, these roles can be used to stage large‑scale collection via Enterprise Guard eDiscovery (Scenario 1) and to create resilient backdoor accounts and app identities via SCIM and custom admin roles (Scenario 2).\n- The developer platform and Marketplace expand the attack surface. A malicious or compromised app with Web SDK and REST scopes can silently enumerate and exfiltrate content from many boards over time (Scenario 3), especially if app management and scopes are not tightly governed.\n- Endpoints, particularly shared interactive displays and unmanaged devices, can undermine server‑side controls. An attacker who finds an unattended logged‑in Miro client can export boards, photograph content, and steal session or OAuth tokens for further API‑based collection (Scenario 4).\n- AI and governance features provide new aggregation and exfiltration channels. Miro AI, Sidekicks, Flows, and Enterprise Guard AI Trust and Purview DSPM for AI turn board content into rich summaries and logs housed in external systems. A compromised user or admin can weaponize these capabilities to discover and leak sensitive information at scale (Scenario 5).\n\nDefensive priorities:\n- Harden and closely monitor Enterprise and Company Admin, Enterprise Guard, and IdP/SCIM roles; enforce phishing‑resistant MFA and strong change controls for SSO, SCIM, and Enterprise Guard policies.\n- Enforce strict app governance: limit Marketplace and private app installation to vetted allowlists, review and minimize requested OAuth scopes, and monitor app/API usage patterns for anomalous data access.\n- Treat device and interactive display security as part of the Miro threat model: enforce EMM policies, strong screen locks, auto‑logout, and rapid revocation for lost or shared devices; avoid leaving high‑privilege accounts logged in on shared displays.\n- Configure Enterprise Guard carefully, with least‑privilege access to Discovery, eDiscovery, and AI Trust; log and regularly review discovery/export and integration‑configuration activity, and route audit logs to a well‑monitored SIEM.\n- Govern AI usage and integrations: restrict which teams and tenants can receive AI prompts and responses (for example Purview), limit AI credits where appropriate, and monitor for unusual AI invocation volume or prompt patterns tied to sensitive spaces.\n\nCombining identity hardening, app and integration review, endpoint controls, and close monitoring of Enterprise Guard and AI features will significantly reduce the feasibility and impact of the attack paths described here."
+}
