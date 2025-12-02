@@ -631,7 +631,7 @@ function ApplicationBreakdown({ appName }) {
                                               <div className="flex items-center gap-3 text-body-xs text-gray-500 dark:text-gray-400">
                                                 <span>{stepCount} step{stepCount !== 1 ? 's' : ''}</span>
                                                 {method.capabilities_used && method.capabilities_used.length > 0 && (
-                                                  <span>• {method.capabilities_used.length} capability{method.capabilities_used.length !== 1 ? 'ies' : ''}</span>
+                                                  <span>• {method.capabilities_used.length} capabilit{method.capabilities_used.length !== 1 ? 'ies' : 'y'}</span>
                                                 )}
                                               </div>
                                             )}

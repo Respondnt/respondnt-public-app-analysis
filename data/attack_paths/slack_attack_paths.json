@@ -1,0 +1,1078 @@
+{
+  "application_name": "Slack Collaboration Platform",
+  "attack_paths": [
+    {
+      "scenario_name": "T1199/T1567 – Malicious Marketplace App for Mass Slack Data Exfiltration",
+      "hypothesis": {
+        "scenario_name": "T1199/T1567 – Malicious Marketplace App for Mass Slack Data Exfiltration",
+        "attack_target": "Steal messages, files, canvases, and AI/search-derived data from many Slack workspaces by distributing a seemingly legitimate marketplace app that continuously collects and exfiltrates data via Slack’s app platform.",
+        "starting_tactic": "Initial Access",
+        "objective_tactic": "Exfiltration",
+        "preconditions": "Attacker can publish apps to the Slack App Marketplace and operate a multi-tenant SaaS backend over HTTPS. Target organisations allow some third-party apps to be installed.",
+        "attack_flow_hypothesis": [
+          {
+            "step_name": "Publish over-privileged AI/assistant app in Slack Marketplace",
+            "step_description": "Attacker registers a Slack app, requests broad read scopes (messages, files, canvases, search-related), and lists it in the Slack App Marketplace as an AI/productivity assistant so admins will install it.",
+            "step_mitre_technique": "T1199",
+            "step_mitre_tactic": "Initial Access"
+          },
+          {
+            "step_name": "Use OAuth tokens and events for durable multi-tenant foothold",
+            "step_description": "On each install the app stores long-lived OAuth tokens and enables Events API subscriptions and custom workflow steps, giving persistent programmatic access to each workspace.",
+            "step_mitre_technique": "T1078.004",
+            "step_mitre_tactic": "Persistence"
+          },
+          {
+            "step_name": "Bulk-harvest Slack content via Web API, Events API, and workflows",
+            "step_description": "The app enumerates channels, reads histories, downloads files, and logs workflow inputs and AI prompts across all installed workspaces, building a comprehensive dataset per tenant.",
+            "step_mitre_technique": "T1119",
+            "step_mitre_tactic": "Collection"
+          },
+          {
+            "step_name": "Stream and stage data to attacker infrastructure",
+            "step_description": "Collected content is periodically compressed and exfiltrated from the app backend to attacker-controlled cloud storage or C2 over HTTPS, blending with normal integration traffic.",
+            "step_mitre_technique": "T1567",
+            "step_mitre_tactic": "Exfiltration"
+          }
+        ]
+      },
+      "adversarial_methods": [
+        {
+          "tactic_name": "Initial Access",
+          "method_steps": [
+            "Register a new Slack app under an attacker-controlled publisher account and enable OAuth 2.0 with redirect URIs pointing to the attacker’s SaaS backend.",
+            "Select broad but plausibly-justified read scopes (e.g., for channels, DMs where installed, files, canvases, workflow usage, and potentially search) plus minimal write scopes required to interact in channels.",
+            "Implement OAuth handling on the backend to exchange authorization codes for access tokens and store tokens, team IDs, and installer information in a multi-tenant database.",
+            "Subscribe in advance to message and file-related events via the Events API so that, immediately after installation, Slack will start POSTing workspace activity to attacker endpoints.",
+            "Produce a polished marketplace listing (branding, screenshots, docs) that advertises AI summarisation, workflow automation, or analytics, explicitly justifying the broad scopes as needed for cross-channel assistance.",
+            "Submit the app to the Slack App Marketplace and iterate if Slack reviewers push back on requested scopes, tuning descriptions until the app is accepted with powerful read access intact.",
+            "Market the app to target organisations (website, email campaigns, partner channels), always linking to the official Slack marketplace listing so the install flow appears fully trusted.",
+            "Rely on permissive app-governance settings so that a workspace or org admin clicks “Add to Slack,” is shown Slack’s consent screen with requested scopes, and approves installation.",
+            "Handle the OAuth callback, exchange the code for tokens using Slack’s OAuth endpoints, and persist the tokens and workspace metadata for later use.",
+            "Perform a small number of low-noise Web API calls (e.g., auth.test, team.info) using the new token to confirm validity and establish that Initial Access to that workspace is complete."
+          ],
+          "capabilities_used": [
+            "Slack App Marketplace and Third-party Integrations",
+            "Slack App Platform – Web API and Surfaces",
+            "Auth and identity behaviours for apps (OAuth-based sign-in and token scopes)",
+            "Events API, Slash Commands, and Interactivity",
+            "Slack AI & Agentforce developer platform (for AI-style app positioning)",
+            "Workspace and Organisation Administration (app installation and approval flows)"
+          ],
+          "interfaces_used": [
+            "Slack App Marketplace – https://slack.com/marketplace",
+            "Web API – https://docs.slack.dev/apis/web-api",
+            "Events API – https://docs.slack.dev/apis/events-api/",
+            "Interactivity & Slash Commands – https://docs.slack.dev/interactivity/implementing-slash-commands",
+            "AI apps docs – https://api.slack.com/docs/apps/ai",
+            "Admins docs – https://docs.slack.dev/admins"
+          ],
+          "data_accessed": [
+            "OAuth tokens and associated workspace IDs obtained via Slack’s OAuth flow",
+            "App installation metadata such as installing user, scopes granted, and enterprise/workspace identifiers",
+            "Basic workspace profile metadata (team.info, auth.test outputs) used to verify access"
+          ],
+          "preconditions_required": [
+            "Attacker controls a Slack app publisher account and can host HTTPS endpoints.",
+            "Slack Marketplace continues to allow third-party apps that request broad read scopes when plausibly justified.",
+            "Target organisations permit installation of some marketplace apps (not a strict allowlist-only regime)."
+          ],
+          "constraints_encountered": [
+            "Marketplace review may reject or question apps with very broad scopes and no clear justification.",
+            "Some enterprises restrict app installation to a short allowlist or require security review, limiting install base.",
+            "Admins may notice unusually broad scopes on the consent screen and abort installation."
+          ],
+          "evasion_considerations": [
+            "Align requested scopes with the marketed AI/analytics features so they appear necessary.",
+            "Host the app on reputable cloud infrastructure with proper TLS and branding so the OAuth flow looks professional.",
+            "Deliver genuinely useful features so early adopters advocate for the app, reducing scrutiny of permissions.",
+            "Limit initial API calls per tenant to appear similar to a legitimate productivity integration."
+          ]
+        },
+        {
+          "tactic_name": "Persistence",
+          "method_steps": [
+            "Store each workspace’s OAuth tokens, scopes, and metadata in durable backend storage keyed by workspace and (if available) enterprise IDs.",
+            "Configure global Events API subscriptions for message and membership events so Slack continually sends activity from all installed workspaces to a single attacker-controlled endpoint.",
+            "Implement scheduled jobs that periodically iterate over all stored tokens, calling lightweight Web API methods to confirm that tokens remain valid and to refresh channel and user inventories.",
+            "Register custom workflow steps (e.g., “Summarise channel,” “Send to knowledge hub”) and aggressively promote templates that embed these steps into recurring or scheduled workflows.",
+            "Encourage admins to enable the app org-wide (Enterprise Grid) by advertising centralised analytics or AI features; where admin scopes exist, programmatically roll the app out to additional workspaces.",
+            "Implement App Home configuration and slash-command-driven settings pages that can also trigger reauthorization flows when scopes are reduced or tokens revoked.",
+            "Detect tokens_revoked and app_uninstalled events, mark those tenants as dormant, but retain tenant metadata and historical data for potential re-entry via new installs or reauthorization campaigns."
+          ],
+          "capabilities_used": [
+            "Slack App Platform – Web API and Surfaces",
+            "Events API, Slash Commands, and Interactivity",
+            "Workflow Automation APIs and Custom Steps",
+            "Workflow Execution and Scheduling Engine",
+            "Slack App Marketplace and Third-party Integrations",
+            "Workspace and Organisation Administration (org-wide app approval)"
+          ],
+          "interfaces_used": [
+            "Web API – https://docs.slack.dev/apis/web-api",
+            "Events API – https://docs.slack.dev/apis/events-api/",
+            "Workflow & custom steps – https://docs.slack.dev/workflows/comparing-workflows-apps",
+            "Slack App Marketplace – https://slack.com/marketplace",
+            "Admin docs – https://docs.slack.dev/admins"
+          ],
+          "data_accessed": [
+            "Long-lived OAuth tokens and refresh tokens for each tenant",
+            "Workspace, org, user, and channel identifiers used to track tenants and scope of access",
+            "Workflow definitions referencing the malicious app’s custom steps"
+          ],
+          "preconditions_required": [
+            "Initial installation completed in at least one target workspace with useful read scopes.",
+            "Backend storage and scheduling components exist to manage tokens and jobs.",
+            "Events API subscriptions and workflow custom steps are correctly configured in the app."
+          ],
+          "constraints_encountered": [
+            "Admins can revoke tokens or uninstall the app at any time, cutting persistence in specific tenants.",
+            "Org-level governance may prevent org-wide rollouts or restrict workflows/custom steps.",
+            "Rate limits bound how aggressively history or configuration can be polled to test token liveness."
+          ],
+          "evasion_considerations": [
+            "Throttle periodic Web API calls to remain within normal traffic patterns for legitimate apps.",
+            "Provide visible, helpful features (dashboards, summaries) to make tenants dependent on the app.",
+            "Gracefully degrade capabilities if scopes shrink, to avoid obvious failures that prompt removal.",
+            "Maintain multiple tokens per tenant (bot + user tokens) where possible for redundancy."
+          ]
+        },
+        {
+          "tactic_name": "Collection",
+          "method_steps": [
+            "Enumerate all accessible channels and DMs for each workspace token using conversations/list-style methods, recording IDs and metadata.",
+            "Perform time-bounded history retrieval for each channel/DM (e.g., recent months), saving message bodies, threads, reactions, and metadata to attacker storage while observing rate limits.",
+            "Use Events API streams to ingest new messages and reactions in near real time, appending them to the same per-tenant datastore so that future collection is incremental.",
+            "Identify messages referencing files and then call file-related APIs (where scopes allow) to fetch file metadata and selectively download sensitive types such as documents, spreadsheets, archives, and source code.",
+            "Instrument the app in canvases and other surfaces so that when users invoke AI/assistant features inside long-form documents, associated context snippets and user inputs are logged and correlated with underlying documents.",
+            "Offer workflow custom steps that accept messages, channel IDs, and file/canvas references as inputs (e.g., “summarise thread” or “export decision log”), and log each invocation payload as curated, high-signal collection artifacts.",
+            "If AI/agent features are enabled, capture all prompts, Slack-provided context blocks, and AI-generated answers passing through the app’s streaming interfaces to obtain summarised views of sensitive discussions and documents."
+          ],
+          "capabilities_used": [
+            "Slack App Platform – Web API and Surfaces",
+            "Events API, Slash Commands, and Interactivity",
+            "Channel and Direct Message-based Collaboration",
+            "Canvases and Rich Surfaces for Knowledge Capture",
+            "Slack AI End-user Features",
+            "AI and Agentforce Developer Platform",
+            "Workflow Automation APIs and Custom Steps"
+          ],
+          "interfaces_used": [
+            "Web API – https://docs.slack.dev/apis/web-api",
+            "Events API – https://docs.slack.dev/apis/events-api/",
+            "Surfaces & canvases – https://docs.slack.dev/surfaces/canvases",
+            "Block Kit – https://docs.slack.dev/block-kit",
+            "AI apps & streaming – https://api.slack.com/docs/apps/ai, https://docs.slack.dev/reference/methods/chat.startstream",
+            "Workflow automation – https://slack.com/features/workflow-automation, https://docs.slack.dev/workflows/comparing-workflows-apps"
+          ],
+          "data_accessed": [
+            "Messages, threads, and reactions in channels and DMs",
+            "File metadata and, where scopes allow, file contents stored in Slack",
+            "Canvas content and associated context gathered through surfaces",
+            "Workflow inputs referencing messages, files, and canvases",
+            "AI prompts, context snippets, and generated summaries",
+            "Workspace and channel metadata for correlation and search"
+          ],
+          "preconditions_required": [
+            "Persistent OAuth tokens for each targeted workspace with read scopes for messages and files.",
+            "Events API subscriptions actively delivering message and file-related events.",
+            "Backend storage and indexing in place to hold and query large volumes of collected data."
+          ],
+          "constraints_encountered": [
+            "Access limited to channels/DMs and files covered by granted scopes and bot membership.",
+            "Web API rate limits require phased, incremental history sweeps.",
+            "Canvas APIs may expose only partial content in some configurations.",
+            "Locked-down tenants may disable Slack AI, workflows, or some app features, reducing collection channels."
+          ],
+          "evasion_considerations": [
+            "Prioritise collection from channels where the app is visibly present, matching user expectations.",
+            "Shape collection traffic to appear as normal analytics or assistant behaviour rather than bulk scraping.",
+            "Limit bulk file downloads to the most promising types to keep bandwidth and API usage low.",
+            "Use AI/assistant UX to justify occasional heavy reads of conversation history (e.g., for summarisation requests)."
+          ]
+        },
+        {
+          "tactic_name": "Exfiltration",
+          "method_steps": [
+            "Maintain a per-tenant data lake in the attacker’s cloud environment that aggregates collected Slack content (messages, files, canvases, workflow artifacts, AI summaries).",
+            "On a recurring schedule, compress and encrypt high-value slices of each tenant’s dataset (e.g., executive channels, incident channels, legal canvases) into exfiltration bundles.",
+            "Transmit these bundles from the app backend to attacker-controlled cloud storage or C2 endpoints over HTTPS, using standard cloud provider APIs so traffic looks like normal SaaS-to-cloud synchronisation.",
+            "Optionally configure the malicious app to “integrate” with attacker-owned Box/Dropbox/other cloud accounts so that, under the guise of backup or archiving, it syncs selected Slack content directly into those external tenants (Transfer Data to Cloud Account).",
+            "For ongoing trickle exfiltration, embed sensitive snippets inside normal-looking telemetry or logging payloads from the app backend to attacker infrastructure, blending data theft with operational logging.",
+            "Monitor for anomalies (blocked outbound connections, unusual errors) and adjust exfiltration rate or routing (e.g., different cloud region or domain) to avoid triggering network or CASB alerts in the victim environment."
+          ],
+          "capabilities_used": [
+            "Slack App Platform – Web API and Surfaces (to pull data that will be exfiltrated)",
+            "Events API and workflow custom steps (continuous ingestion feeding exfiltration pipeline)",
+            "Slack App Marketplace and Third-party Integrations (trusted relationship enabling high-volume data movement)",
+            "Workflow Execution and Scheduling Engine (to trigger export-like workflows that send data to external connectors)",
+            "Slack App Marketplace integrations with cloud storage apps (for plausible ‘backup’ destinations)"
+          ],
+          "interfaces_used": [
+            "Web API – https://docs.slack.dev/apis/web-api (source of data to be exfiltrated)",
+            "Events API – https://docs.slack.dev/apis/events-api/ (real-time feed for incremental exfiltration)",
+            "Workflow automation – https://slack.com/features/workflow-automation (for workflows that push data to connectors)",
+            "Slack App Marketplace – https://slack.com/marketplace (for integrating with additional cloud storage endpoints)",
+            "Attacker-controlled HTTPS APIs/Cloud storage endpoints outside Slack"
+          ],
+          "data_accessed": [
+            "Aggregated datasets of Slack messages, files, canvases, and AI/search-derived summaries per tenant",
+            "High-value subsets such as executive communications, security/incident channels, and legal or deal-related canvases",
+            "Derived indices and metadata that make it easier to search exfiltrated content offline"
+          ],
+          "preconditions_required": [
+            "Sufficient Slack data has already been collected and stored in the attacker’s backend.",
+            "The attacker’s infrastructure has unobstructed outbound connectivity to chosen exfiltration destinations.",
+            "No detection or throttling controls have yet forced the attacker to disable or slow the exfil pipeline."
+          ],
+          "constraints_encountered": [
+            "Defender monitoring of the attacker’s SaaS infrastructure (e.g., via bug bounty or supply chain audits) may reveal unusual data volumes or destinations.",
+            "Enterprise monitoring (CASB, DLP, proxy logs) may flag large or unusual transfers from the app’s IP addresses or cloud tenants.",
+            "Slack or customers may review the app’s privacy posture and detect that more data is leaving than advertised."
+          ],
+          "evasion_considerations": [
+            "Use standard cloud providers and regions whose traffic patterns resemble legitimate SaaS operations.",
+            "Throttle exfiltration by volume and time-of-day to blend into typical integration and backup windows.",
+            "Randomise bundle sizes and timings across tenants so no single workspace shows a sharp, repeated spike.",
+            "Label external storage buckets and endpoints with innocuous or vendor-aligned names in case of partial discovery.",
+            "Optionally send only summarised or filtered content off-platform to reduce volume and make inspection harder."
+          ]
+        }
+      ],
+      "attack_chain_summary_steps": [
+        "Attacker publishes a seemingly legitimate AI/assistant Slack app in the Slack App Marketplace with broad read scopes.",
+        "Admins in many organisations install the app, granting OAuth tokens and event subscriptions that create persistent, multi-tenant footholds.",
+        "The app quietly harvests channel/DM histories, files, canvases, workflow inputs, and AI prompts/summaries via the Web API, Events API, and custom steps.",
+        "Collected data per tenant is periodically compressed and exfiltrated from the app backend to attacker-controlled cloud storage over HTTPS.",
+        "If detected or partially revoked in some tenants, the attacker relies on remaining tokens, workflows, and reauthorization prompts to maintain access elsewhere."
+      ]
+    },
+    {
+      "scenario_name": "T1078/T1213 – Compromised Workspace Admin Exploits Enterprise Search & Slack AI",
+      "hypothesis": {
+        "scenario_name": "T1078/T1213 – Compromised Workspace Admin Exploits Enterprise Search & Slack AI",
+        "attack_target": "Use a compromised Slack workspace/org admin account to enable and abuse enterprise search and Slack AI to quickly locate, aggregate, and exfiltrate sensitive data from Slack and connected SaaS systems.",
+        "starting_tactic": "Initial Access",
+        "objective_tactic": "Exfiltration",
+        "preconditions": "Target organisation uses Slack Enterprise Grid or higher-tier plans with enterprise search and Slack AI available, and has at least one admin with broad configuration privileges.",
+        "attack_flow_hypothesis": [
+          {
+            "step_name": "Steal admin credentials for target Slack org",
+            "step_description": "Attacker phishes or otherwise steals workspace/org admin credentials or tokens, then logs into Slack as that admin.",
+            "step_mitre_technique": "T1078",
+            "step_mitre_tactic": "Initial Access"
+          },
+          {
+            "step_name": "Enable or relax governance on search, AI, and apps",
+            "step_description": "Using admin settings, attacker enables enterprise search and Slack AI broadly, loosens app and workflow governance, and connects more external data sources.",
+            "step_mitre_technique": "T1098",
+            "step_mitre_tactic": "Privilege Escalation"
+          },
+          {
+            "step_name": "Use enterprise search and AI to map and locate sensitive data",
+            "step_description": "Attacker issues wide-ranging enterprise search and AI queries across Slack and connected apps to discover sensitive channels, files, canvases, and records.",
+            "step_mitre_technique": "T1213",
+            "step_mitre_tactic": "Discovery"
+          },
+          {
+            "step_name": "Aggregate high-value information via search, AI, and workflows",
+            "step_description": "Attacker uses AI summaries, saved searches, and admin-driven workflows to collect and stage sensitive documents and discussions.",
+            "step_mitre_technique": "T1119",
+            "step_mitre_tactic": "Collection"
+          },
+          {
+            "step_name": "Export or synchronise data out of Slack",
+            "step_description": "Attacker downloads data via UI, leverages admin/export tooling or workflows, and pushes results to external systems they control.",
+            "step_mitre_technique": "T1567",
+            "step_mitre_tactic": "Exfiltration"
+          }
+        ]
+      },
+      "adversarial_methods": [
+        {
+          "tactic_name": "Initial Access",
+          "method_steps": [
+            "Identify Slack admins via open-source intelligence (e.g., LinkedIn job titles, public Slack community profiles) and by analysing Slack messages if any account is already partially compromised.",
+            "Craft spearphishing content delivered via email or Slack DMs (e.g., fake security alerts, support tickets, or app-approval requests) pointing to a phishing site that mimics Slack’s login or SSO provider.",
+            "Harvest admin credentials and MFA tokens (e.g., via adversary-in-the-middle proxy), then log into Slack’s web client or admin console as the compromised admin.",
+            "Alternatively, abuse a previously compromised device with a valid Slack admin session or steal admin-scoped OAuth tokens from a local browser/profile.",
+            "Verify the account’s administrative scope by navigating to workspace/org administration sections and confirming ability to manage apps, workflows, search, and Slack AI settings."
+          ],
+          "capabilities_used": [
+            "Core Channel and Direct Message-based Collaboration (as a phishing delivery channel if using Slack DMs)",
+            "Support, Incident Management, and Status (for pretexts impersonating Slack/Salesforce support or incident notifications)",
+            "Workspace and Organisation Administration (target environment where stolen credentials are valuable)"
+          ],
+          "interfaces_used": [
+            "Slack web or desktop admin UI (workspace/org settings pages)",
+            "Slack DMs and channels for spearphishing via service (T1566.002)",
+            "Help/Support portal – https://slack.com/help/requests/new as a social-engineering pretext"
+          ],
+          "data_accessed": [
+            "Admin account credentials or tokens",
+            "Existing admin session cookies or tokens on compromised endpoints",
+            "Basic information on workspace/org structure once logged in as admin"
+          ],
+          "preconditions_required": [
+            "Target uses Slack with at least one human admin who logs in via browser or desktop client.",
+            "Attacker can reach admins by email or via Slack messaging (internal or external shared channels)."
+          ],
+          "constraints_encountered": [
+            "Strong phishing defences, SSO with phishing-resistant MFA, or hardware tokens may block account takeover.",
+            "Some orgs split duties so the user targeted may not have all the security/search configuration rights desired."
+          ],
+          "evasion_considerations": [
+            "Use highly tailored spearphishing pretexts aligned with real Slack incidents or vendor messages.",
+            "Time login as admin to typical working hours and from plausible IP ranges/geos to avoid anomaly alerts."
+          ]
+        },
+        {
+          "tactic_name": "Privilege Escalation",
+          "method_steps": [
+            "As the compromised admin, review existing app, workflow, and search governance in the admin UI and in admin docs to understand current restrictions.",
+            "Enable or broaden enterprise search and Slack AI features for as many workspaces and user groups as possible, including cross-application search over connected SaaS (e.g., Box, Asana).",
+            "Relax app and workflow governance where possible (e.g., allow more apps, enable Workflow Builder broadly, permit custom steps) to facilitate later collection and automation.",
+            "Approve or install additional apps/agents that the attacker controls or that provide rich access to data (e.g., enterprise search or archiving tools) and grant them elevated scopes.",
+            "If org-level roles permit, add the attacker’s own user or bot accounts to privileged groups or channels, and if feasible, create new service accounts for later use (T1098, T1136)."
+          ],
+          "capabilities_used": [
+            "Workspace and Organisation Administration",
+            "Enterprise Search Across Slack and Connected Applications",
+            "Slack AI End-user Features",
+            "Slack App Marketplace and Third-party Integrations",
+            "Workflow Builder and No-code Workflow Automation"
+          ],
+          "interfaces_used": [
+            "Admin settings UI in Slack clients",
+            "Enterprise search configuration UI – https://slack.com/help/articles/39044407124755-Set-up-and-manage-Slack-enterprise-search",
+            "AI features configuration/help – https://slack.com/help/articles/25076892548883-Guide-to-AI-features-in-Slack",
+            "Admin docs – https://docs.slack.dev/admins"
+          ],
+          "data_accessed": [
+            "Workspace/org policy configuration for apps, workflows, search, and AI",
+            "Lists of installed apps, workflows, and connected external search sources",
+            "User and group membership information, including admin and privileged groups"
+          ],
+          "preconditions_required": [
+            "Successful login as a user with workspace or org admin privileges.",
+            "Org’s plan tier actually supports enterprise search and Slack AI or can be upgraded by this admin/billing role."
+          ],
+          "constraints_encountered": [
+            "Some settings may be locked at higher enterprise levels or require security/compliance co-approval.",
+            "Aggressive changes (e.g., suddenly enabling many connectors) can raise suspicion among security teams."
+          ],
+          "evasion_considerations": [
+            "Make configuration changes incrementally and tie them to plausible initiatives (e.g., “AI pilot” or “search rollout”).",
+            "Prefer enabling features that appear recommended in Slack’s own resources to reduce pushback."
+          ]
+        },
+        {
+          "tactic_name": "Discovery",
+          "method_steps": [
+            "Use enterprise search UI to issue broad queries for sensitive themes (e.g., “password reset”, “legal hold”, “M&A”, “production incident”, “VPN”) across Slack and connected apps.",
+            "Review search facets and filters to identify which external apps (e.g., Box, Asana, Salesforce) are indexed and which workspaces/channels contribute most sensitive hits.",
+            "Leverage Slack AI’s summarisation and Q&A over enterprise search results to quickly understand contents of long channels or canvases without manually reading every message.",
+            "Identify executive, security, legal, finance, and incident-related channels/canvases by inspecting search results, channel naming conventions, and frequent authors.",
+            "Note locations of high-value repositories (e.g., canvases containing runbooks or deal docs, channels with incident retrospectives) and prepare target lists for focused collection."
+          ],
+          "capabilities_used": [
+            "Enterprise Search Across Slack and Connected Applications",
+            "Slack AI End-user Features",
+            "Canvases and Rich Surfaces for Knowledge Capture",
+            "Core Channel and Direct Message-based Collaboration"
+          ],
+          "interfaces_used": [
+            "Search bar and enterprise search UI in Slack clients",
+            "Enterprise search docs – https://slack.com/help/articles/38693462131219-Search-across-your-applications-with-enterprise-search",
+            "Slack AI feature surfaces – https://slack.com/features/ai"
+          ],
+          "data_accessed": [
+            "Search indices spanning Slack messages, files, canvases, and connected SaaS data",
+            "Search results and snippets revealing sensitive content and its location",
+            "AI-generated summaries and answers based on those indices"
+          ],
+          "preconditions_required": [
+            "Enterprise search and Slack AI have been enabled and scoped broadly via admin actions.",
+            "Admin account has permission to query across the full enterprise corpus and connected apps."
+          ],
+          "constraints_encountered": [
+            "Search results may still be filtered by per-user permissions; admin may not see every private DM or locked-down resource.",
+            "Some external systems may not be indexed due to customer configuration choices."
+          ],
+          "evasion_considerations": [
+            "Use search and AI within normal-looking hours and volumes for an admin performing legitimate investigations.",
+            "Avoid obviously malicious queries; instead, pivot from innocuous terms to sensitive areas gradually."
+          ]
+        },
+        {
+          "tactic_name": "Collection",
+          "method_steps": [
+            "For each identified high-value channel or canvas, use admin access to join or open it (where permitted) and then use Slack AI to generate summaries, timelines, or extracted action items that condense key information.",
+            "Leverage enterprise search saved searches and exports (if available) to collect lists of documents and messages matching sensitive criteria, then open and capture them via the Slack UI or APIs.",
+            "If admin export tooling or e-discovery-style exports are available (depending on plan and EKM), initiate exports of selected channels or time ranges covering legal, finance, incident, and executive discussions.",
+            "Configure or modify workflows that run in sensitive channels to send copies of messages, form submissions, or file links to an attacker-controlled app or external connector (e.g., a fake archiving or analytics service).",
+            "Stage collected information in a small number of admin-accessible channels or canvases (e.g., “audit workspace”) and use AI to produce final condensed reports that dramatically reduce exfiltration volume."
+          ],
+          "capabilities_used": [
+            "Enterprise Search Across Slack and Connected Applications",
+            "Slack AI End-user Features",
+            "Workflow Builder and No-code Workflow Automation",
+            "Workspace and Organisation Administration"
+          ],
+          "interfaces_used": [
+            "Slack client UI for channels, canvases, and AI actions",
+            "Workflow Builder UI – https://slack.com/features/workflow-automation",
+            "Admin/export tooling referenced from trust & security docs – https://slack.com/trust/security"
+          ],
+          "data_accessed": [
+            "Full message histories and files from sensitive channels or workspaces",
+            "Canvas documents used for documentation, deal rooms, or incident reports",
+            "AI-generated summaries and reports that condense multiple sources",
+            "Export archives (if admin-level export features are used)"
+          ],
+          "preconditions_required": [
+            "Admin has sufficient rights to join or export the targeted channels and canvases.",
+            "Export/e-discovery or equivalent features are enabled for the organisation, or workflows/apps exist to relay data."
+          ],
+          "constraints_encountered": [
+            "Use of formal export tools may leave explicit audit logs or generate user-facing notices.",
+            "EKM or strict legal/compliance controls may limit which admins can run exports and how often."
+          ],
+          "evasion_considerations": [
+            "Prefer AI summaries and targeted downloads over full exports to reduce volume and visibility.",
+            "Spread collection over days/weeks to avoid unusual spikes in admin exports or downloads."
+          ]
+        },
+        {
+          "tactic_name": "Exfiltration",
+          "method_steps": [
+            "Download condensed AI reports, key files, and exported archives from Slack to a compromised admin workstation or a cloud VM under attacker control.",
+            "Use secure outbound channels (e.g., attacker-operated HTTPS APIs, cloud storage, or TOR) from that system to transfer stolen content to long-term attacker infrastructure.",
+            "Where workflows or apps are used, configure them to POST staged data directly from Slack to attacker-controlled HTTPS endpoints, framing this as integration with “external archive” or “SIEM” systems.",
+            "If possible, leverage existing integrations (e.g., Box, custom archiving apps) by reconfiguring them to copy or synchronise sensitive Slack content into attacker-owned third-party tenants.",
+            "Remove or minimise local traces on the compromised workstation (browser history, local downloads) after successful exfiltration."
+          ],
+          "capabilities_used": [
+            "Enterprise Search and Slack AI (to minimise volume by summarising before exfiltration)",
+            "Workflow Builder and external connectors",
+            "Slack App Marketplace and Third-party Integrations"
+          ],
+          "interfaces_used": [
+            "Slack web/desktop client download mechanisms",
+            "Workflow outbound HTTP connectors and custom steps",
+            "Third-party archiving/storage app configuration in Slack Marketplace"
+          ],
+          "data_accessed": [
+            "Condensed AI reports and summaries of sensitive Slack and connected-app content",
+            "Original underlying documents, messages, and export archives",
+            "Any additional metadata required for offline analysis (channel names, timestamps, authors)"
+          ],
+          "preconditions_required": [
+            "Sensitive data has been located and staged via discovery and collection steps.",
+            "Compromised admin or their environment has some unmonitored outbound network path."
+          ],
+          "constraints_encountered": [
+            "DLP or CASB tooling may monitor file downloads and outbound transfers from admin endpoints.",
+            "Reconfiguring existing integrations may be logged and noticed by defenders."
+          ],
+          "evasion_considerations": [
+            "Prefer exfiltration of AI summaries and key documents rather than entire archives to stay below DLP thresholds.",
+            "Throttle direct connector-based exfiltration and label endpoints as benign-sounding services.",
+            "Use existing trusted integration channels where possible rather than introducing obviously new destinations."
+          ]
+        }
+      ],
+      "attack_chain_summary_steps": [
+        "Attacker steals a Slack workspace/org admin account via phishing or token theft and logs in as that admin.",
+        "Using admin privileges, the attacker enables or broadens enterprise search, Slack AI, workflows, and app usage to maximise data visibility.",
+        "They issue targeted enterprise search and AI queries to discover where the most sensitive data resides across Slack and connected SaaS tools.",
+        "They then collect high-value messages, files, canvases, and AI-generated summaries, staging them via admin exports or workflows.",
+        "Finally, the attacker exfiltrates condensed reports and selected raw data through downloads, workflows, or reconfigured integrations to attacker-controlled infrastructure."
+      ]
+    },
+    {
+      "scenario_name": "T1053/T1546 – Malicious Slack Workflows for Persistent Exfiltration and Lateral Movement",
+      "hypothesis": {
+        "scenario_name": "T1053/T1546 – Malicious Slack Workflows for Persistent Exfiltration and Lateral Movement",
+        "attack_target": "Use Workflow Builder and custom steps to establish persistent automated exfiltration of Slack data and to spread access laterally across users and channels without continuous direct attacker interaction.",
+        "starting_tactic": "Initial Access",
+        "objective_tactic": "Exfiltration",
+        "preconditions": "Target workspace allows some users to create workflows and to install or use apps that expose custom workflow steps or HTTP connectors. At least one such user account can be compromised.",
+        "attack_flow_hypothesis": [
+          {
+            "step_name": "Compromise a user with Workflow Builder access",
+            "step_description": "Attacker obtains credentials for a user permitted to create workflows and potentially install low-risk apps.",
+            "step_mitre_technique": "T1078",
+            "step_mitre_tactic": "Initial Access"
+          },
+          {
+            "step_name": "Create scheduled and event-triggered workflows with malicious steps",
+            "step_description": "Using the compromised account, attacker defines workflows that fire on events or schedules and call attacker-controlled custom steps or HTTP endpoints.",
+            "step_mitre_technique": "T1053",
+            "step_mitre_tactic": "Persistence"
+          },
+          {
+            "step_name": "Use workflows to spread and deepen access",
+            "step_description": "Malicious workflows automatically message other users, invite the attacker/bot into additional channels, or solicit sensitive inputs, achieving lateral movement and expanded visibility.",
+            "step_mitre_technique": "T1546",
+            "step_mitre_tactic": "Lateral Movement"
+          },
+          {
+            "step_name": "Continuously exfiltrate collected data from workflows to attacker infrastructure",
+            "step_description": "Workflow steps and connectors send captured messages, file metadata, and form inputs to attacker-controlled endpoints or cloud accounts.",
+            "step_mitre_technique": "T1020",
+            "step_mitre_tactic": "Exfiltration"
+          }
+        ]
+      },
+      "adversarial_methods": [
+        {
+          "tactic_name": "Initial Access",
+          "method_steps": [
+            "Identify Slack users likely to have Workflow Builder privileges (e.g., team leads, operations, IT, or automation champions) via internal org charts or Slack channel membership if any low-level access already exists.",
+            "Deliver phishing content (email or Slack DM) that lures such a user to a credential-harvesting site or to approve a malicious OAuth app that will later be used to drive workflows.",
+            "Steal credentials or tokens and sign into Slack as the victim user, ensuring access to the Workflow Builder UI and any relevant app install privileges.",
+            "Survey existing workflows owned by the account to understand current automation patterns and to identify opportunities to piggyback on trusted processes."
+          ],
+          "capabilities_used": [
+            "Core Channel and Direct Message-based Collaboration",
+            "Workflow Builder and No-code Workflow Automation"
+          ],
+          "interfaces_used": [
+            "Slack client UI (Workflow Builder entry points)",
+            "Workflow Builder help – https://slack.com/help/articles/17542172840595-Create-a-new-workflow-in-Slack"
+          ],
+          "data_accessed": [
+            "Victim user’s Slack account and workflow definitions they own",
+            "Information on channels and users targeted by existing workflows"
+          ],
+          "preconditions_required": [
+            "At least one user in the target workspace has Workflow Builder access and can create workflows.",
+            "Attacker can credphish or otherwise compromise that account."
+          ],
+          "constraints_encountered": [
+            "Some organisations restrict Workflow Builder to admins or a small automation team.",
+            "SSO/MFA may limit straightforward credential theft."
+          ],
+          "evasion_considerations": [
+            "Pick a user whose workflow-related activity is already high so new automations look normal.",
+            "Avoid noticeable changes to the user’s profile or behaviour outside workflow creation."
+          ]
+        },
+        {
+          "tactic_name": "Persistence",
+          "method_steps": [
+            "From the Workflow Builder UI, create one or more scheduled workflows (e.g., hourly/daily) that run under the compromised user or an associated app identity.",
+            "Define these workflows to operate in multiple channels (especially those the user can access) and include steps that read message context and channel history or that accept user-submitted forms.",
+            "If permitted, install or use an app that provides custom workflow steps backed by attacker-controlled infrastructure, or configure generic HTTP/webhook steps pointing at attacker endpoints.",
+            "Create additional workflows triggered on message events (e.g., when a message is posted in a specific channel) so that every relevant event automatically invokes the attacker-controlled step.",
+            "Ensure workflows are saved and enabled, then minimise overt signs (e.g., avoid posting visible messages unless needed) so they continue running in the background for long periods.",
+            "Optionally transfer workflow ownership to a service account or integration user (if allowed) to survive remediation of the original human account."
+          ],
+          "capabilities_used": [
+            "Workflow Builder and No-code Workflow Automation",
+            "Workflow Automation APIs and Custom Steps",
+            "Workflow Execution and Scheduling Engine"
+          ],
+          "interfaces_used": [
+            "Workflow Builder UI – https://slack.com/features/workflow-automation",
+            "Custom steps docs – https://docs.slack.dev/tools/bolt-js/concepts/custom-steps"
+          ],
+          "data_accessed": [
+            "Workflow definitions (triggers, steps, schedules)",
+            "Channel and user IDs referenced by workflows",
+            "User inputs accepted by workflow forms"
+          ],
+          "preconditions_required": [
+            "Compromised user can create event- and schedule-based workflows and add steps that call external endpoints or custom steps.",
+            "Any required app or custom step is installable in the workspace."
+          ],
+          "constraints_encountered": [
+            "Admins may restrict which connectors or custom step providers can be used in workflows.",
+            "Very noisy or frequent workflow activity could draw user complaints or admin attention."
+          ],
+          "evasion_considerations": [
+            "Use neutral naming for workflows (e.g., “Daily metrics sync”) and reuse existing naming conventions.",
+            "Limit visible side effects in channels; perform most operations silently or via back-end calls.",
+            "Distribute logic across multiple small workflows instead of a single large, obviously suspicious one."
+          ]
+        },
+        {
+          "tactic_name": "Lateral Movement",
+          "method_steps": [
+            "Configure workflows to automatically DM new joiners in key channels, encouraging them to run specific slash commands or fill forms that route through attacker-controlled steps (phishing or data capture).",
+            "Create workflows that, on certain triggers (e.g., specific keywords in channels), automatically invite the compromised user or an attacker-controlled bot/app into additional channels.",
+            "Set up approval-style workflows where managers or admins ‘approve’ requests by clicking buttons or submitting forms that actually cause the workflow to grant the attacker or their app additional access (e.g., adding them to private channels).",
+            "Use workflows tied to external connectors (e.g., Asana, incident tools) to auto-create or modify entries in other systems, adding attacker identities into on-call rotations, project teams, or privileged groups.",
+            "Leverage these expanded presences in more channels and systems to harvest further data and potentially pivot into external SaaS environments."
+          ],
+          "capabilities_used": [
+            "Workflow Builder and No-code Workflow Automation",
+            "Events API, Slash Commands, and Interactivity",
+            "Slack App Marketplace and Third-party Integrations"
+          ],
+          "interfaces_used": [
+            "Workflow Builder UI and templates",
+            "Slash commands & interactivity – https://docs.slack.dev/interactivity/implementing-slash-commands",
+            "Marketplace app configuration – https://slack.com/marketplace"
+          ],
+          "data_accessed": [
+            "Membership and activity information for additional channels and users contacted via workflows",
+            "Approvals and form submissions indicating user intent or granting additional access",
+            "External system identifiers and records touched by connectors"
+          ],
+          "preconditions_required": [
+            "Workflows can post DMs, manage channel invites, or act via apps with adequate scopes.",
+            "External connectors (e.g., Asana, incident tools) are available or installable."
+          ],
+          "constraints_encountered": [
+            "Users may question unsolicited DMs or seemingly odd workflow prompts.",
+            "Changes to channel membership or external tools may appear in admin or audit logs."
+          ],
+          "evasion_considerations": [
+            "Make workflow communications look like standard onboarding or operations messages.",
+            "Throttle invitations and requests so they occur slowly and blend into normal workflow volume.",
+            "Tie external actions to real events (e.g., real incidents) to avoid obviously spurious changes."
+          ]
+        },
+        {
+          "tactic_name": "Exfiltration",
+          "method_steps": [
+            "Design workflow steps or HTTP connectors that package selected message content, form inputs, and file metadata into JSON payloads on each trigger.",
+            "Send these payloads from Slack workflows to attacker-controlled HTTPS endpoints, which store them in a central exfiltration datastore.",
+            "For larger data pulls, create scheduled workflows that iterate over recent channel activity (e.g., via built-in search or channel history steps) and batch-export results to attacker endpoints.",
+            "If allowed, configure workflows to push data into attacker-owned cloud storage or SaaS accounts (e.g., Box, Google Drive) by connecting those as generic file or archiving connectors.",
+            "Monitor workflow run history to ensure exfiltration runs are succeeding and adjust trigger conditions or throttling if failures or anomalies appear."
+          ],
+          "capabilities_used": [
+            "Workflow Builder and No-code Workflow Automation",
+            "Workflow Automation APIs and Custom Steps",
+            "Workflow Execution and Scheduling Engine",
+            "Slack App Marketplace and Third-party Integrations"
+          ],
+          "interfaces_used": [
+            "Workflow Builder UI and HTTP/connector steps",
+            "Custom steps APIs – https://docs.slack.dev/workflows/comparing-workflows-apps",
+            "External HTTPS APIs and cloud storage endpoints"
+          ],
+          "data_accessed": [
+            "Messages, threads, and attachments that workflows see as inputs",
+            "User-submitted form data collected by workflows (e.g., incident reports, approvals)",
+            "Channel and user identifiers used to correlate exfiltrated content"
+          ],
+          "preconditions_required": [
+            "At least one workflow can reach external endpoints or connectors with network access to attacker-controlled infrastructure.",
+            "Workflows are enabled and continue to run over time without admin intervention."
+          ],
+          "constraints_encountered": [
+            "Security teams may monitor workflow usage and external destinations for anomalies.",
+            "Rate limits or connector-specific quotas may restrict throughput of automated exports."
+          ],
+          "evasion_considerations": [
+            "Use existing, legitimate-looking connectors and destinations where possible (e.g., “analytics” or “archiving” tools).",
+            "Limit per-run payload sizes and frequency to remain under detection thresholds.",
+            "Name workflows and connectors in ways that imply benign business functions (e.g., “Weekly KPI sync”)."
+          ]
+        }
+      ],
+      "attack_chain_summary_steps": [
+        "Attacker compromises a Slack user who can create workflows and possibly install certain apps.",
+        "Using that account, they define scheduled and event-triggered workflows that call attacker-controlled custom steps or HTTP endpoints.",
+        "These workflows quietly message additional users, join more channels, and interact with external tools, broadening the attacker’s reach.",
+        "On every trigger, workflows package and send captured messages, form inputs, and metadata to attacker infrastructure or cloud accounts.",
+        "Persistence is maintained as long as the malicious workflows remain enabled, even if the original user account is later remediated."
+      ]
+    },
+    {
+      "scenario_name": "T1078.004/T1199 – Pivot into Salesforce via Compromised Agentforce Slack Agent",
+      "hypothesis": {
+        "scenario_name": "T1078.004/T1199 – Pivot into Salesforce via Compromised Agentforce Slack Agent",
+        "attack_target": "Abuse a Slack-based Agentforce/Salesforce agent to gain ongoing access to CRM data and actions from within Slack, then exfiltrate Salesforce records without directly breaching the Salesforce tenant.",
+        "starting_tactic": "Initial Access",
+        "objective_tactic": "Exfiltration",
+        "preconditions": "Target organisation uses Slack with Salesforce Agentforce or custom AI agents integrated, and allows agents to access business data and act in Salesforce via Slack.",
+        "attack_flow_hypothesis": [
+          {
+            "step_name": "Get a malicious or compromised Agentforce-based Slack agent installed",
+            "step_description": "Attacker controls an AI agent integration (or compromises an existing one) that connects Slack to Salesforce/Agentforce and is installed in the target workspace.",
+            "step_mitre_technique": "T1199",
+            "step_mitre_tactic": "Initial Access"
+          },
+          {
+            "step_name": "Maintain persistent agent presence and tokens",
+            "step_description": "Agent remains installed in Slack and connected to Salesforce, with long-lived credentials and streaming channels enabling ongoing access.",
+            "step_mitre_technique": "T1078.004",
+            "step_mitre_tactic": "Persistence"
+          },
+          {
+            "step_name": "Abuse agent to query and act across Salesforce",
+            "step_description": "Attacker-driven prompts and hidden logic cause the agent to enumerate and retrieve records, and potentially modify roles or data inside Salesforce from Slack.",
+            "step_mitre_technique": "T1133",
+            "step_mitre_tactic": "Lateral Movement"
+          },
+          {
+            "step_name": "Exfiltrate CRM data via agent backends",
+            "step_description": "Salesforce data passing through the agent’s backend (prompts, context, results) is stored and forwarded to attacker infrastructure.",
+            "step_mitre_technique": "T1567",
+            "step_mitre_tactic": "Exfiltration"
+          }
+        ]
+      },
+      "adversarial_methods": [
+        {
+          "tactic_name": "Initial Access",
+          "method_steps": [
+            "Develop a Slack AI agent integration that uses the Agentforce platform or similar to connect Slack channels to Salesforce data and actions, under attacker control.",
+            "Request necessary scopes and permissions so the agent can read and write a wide range of Salesforce objects (e.g., accounts, opportunities, cases) and access Slack channel context.",
+            "Publish and market the agent as a productivity or sales-assistant tool in relevant channels (Slack Marketplace, Salesforce AppExchange, internal app catalogues), emphasising legitimate use cases.",
+            "Convince target organisations’ admins or business owners to install and configure the agent in their Slack workspace, binding it to their Salesforce org with OAuth or connected-app credentials.",
+            "Verify, via test prompts in Slack, that the agent can see Salesforce records and act on them as expected, confirming that the attacker now has a bridge from Slack into the victim’s CRM."
+          ],
+          "capabilities_used": [
+            "Agentic Collaboration and Embedded AI Agents",
+            "AI and Agentforce Developer Platform",
+            "Slack App Marketplace and Third-party Integrations",
+            "Salesforce Platform and Agentforce external system integration"
+          ],
+          "interfaces_used": [
+            "Agentic Platform page – https://slack.com/intl/en-au/features/agentic-platform",
+            "AI/agents developer docs – https://docs.slack.dev/ai/",
+            "AI apps docs – https://api.slack.com/docs/apps/ai",
+            "Salesforce Agentforce docs – https://help.salesforce.com/s/articleView?id=ai.copilot_intro.htm&type=5",
+            "Slack App Marketplace – https://slack.com/marketplace"
+          ],
+          "data_accessed": [
+            "Slack channel context and user prompts sent to the agent",
+            "Salesforce object data accessed by the agent during legitimate operations",
+            "Agent configuration linking Slack workspaces to specific Salesforce orgs"
+          ],
+          "preconditions_required": [
+            "Target organisation uses Slack and Salesforce and is open to installing AI agents that operate across both.",
+            "Attacker can publish an agent app or compromise an existing one at the vendor side."
+          ],
+          "constraints_encountered": [
+            "Enterprise security teams may subject Salesforce-connected agents to more rigorous review.",
+            "Some orgs restrict or prohibit agents from acting on sensitive Salesforce objects."
+          ],
+          "evasion_considerations": [
+            "Advertise the agent narrowly (e.g., as a deal-desk or support-assistant) to justify access to high-value objects without appearing over-scoped.",
+            "Adhere closely to Salesforce and Slack best-practice docs so configuration appears standard."
+          ]
+        },
+        {
+          "tactic_name": "Persistence",
+          "method_steps": [
+            "Store and manage long-lived Salesforce and Slack OAuth tokens in the agent backend so it can operate continuously as a bot identity in Slack and as an integration user in Salesforce.",
+            "Configure the agent to be present in relevant Slack channels (e.g., sales, support) and as an always-available slash command or mentionable user so it is routinely invoked.",
+            "Implement streaming chat interfaces so the agent maintains long-lived sessions where multiple Slack prompts result in numerous Salesforce API calls within a single conversation.",
+            "Encourage admins to enable the agent across multiple workspaces or channels, increasing the number of contexts where it can be used and thereby the stability of its presence.",
+            "Set up backend monitoring and automatic reconnection flows so that if Salesforce or Slack tokens expire, the agent prompts admins or users to reauthorize, restoring persistence."
+          ],
+          "capabilities_used": [
+            "Agentic Collaboration and Embedded AI Agents",
+            "AI and Agentforce Developer Platform (chat.startstream and related methods)",
+            "Events API and Interactivity (for mentions and slash commands)",
+            "Workspace and Organisation Administration (for deploying agents across channels/workspaces)"
+          ],
+          "interfaces_used": [
+            "Streaming chat methods – https://docs.slack.dev/reference/methods/chat.startstream",
+            "AI/agents docs – https://docs.slack.dev/ai/",
+            "Slack admin/app deployment interfaces",
+            "Salesforce connected-app configuration and Agentforce settings"
+          ],
+          "data_accessed": [
+            "Persistent tokens linking Slack and Salesforce to the agent",
+            "Ongoing conversations between users and the agent, including prompts and results",
+            "Channel membership and configuration indicating where the agent can operate"
+          ],
+          "preconditions_required": [
+            "Agent has been installed and configured at least once with valid Slack and Salesforce credentials.",
+            "Backend has secure storage and token lifecycle management in place."
+          ],
+          "constraints_encountered": [
+            "Admins may periodically review and revoke unused or high-privilege integrations.",
+            "Token lifetimes, IP allowlists, or conditional access policies may limit persistence."
+          ],
+          "evasion_considerations": [
+            "Provide real value to users so the agent becomes a routine part of workflows and less likely to be removed.",
+            "Silently handle token refresh and permissions drops, only prompting reauth when absolutely necessary."
+          ]
+        },
+        {
+          "tactic_name": "Lateral Movement",
+          "method_steps": [
+            "From an attacker-controlled Slack account (or via compromised user accounts), issue natural-language prompts to the agent that cause it to query increasingly broad sets of Salesforce data (e.g., “list all open opportunities above $X”, “show all support cases for customer Y”).",
+            "Abuse agent skills that allow updates by asking it to change fields or statuses in Salesforce that expand its own access or that of attacker-aligned identities (e.g., switching owners to an integration user or adding users to teams).",
+            "Leverage any agent capabilities to call Salesforce admin-like actions (e.g., run playbooks, invoke flows) to indirectly manipulate roles, permissions, or sharing rules where misconfigurations allow.",
+            "Use Salesforce object relationships observed in agent responses (e.g., linked contacts, accounts, or cases) to pivot to additional data sets and customer segments not originally in scope.",
+            "If the agent exposes access to other external systems via Salesforce (e.g., integrations from Salesforce to other SaaS), chain those capabilities to move laterally into further environments."
+          ],
+          "capabilities_used": [
+            "Agentic Collaboration and Embedded AI Agents",
+            "AI and Agentforce Developer Platform (agent skills and action execution)",
+            "Salesforce Platform and Agentforce integration",
+            "Enterprise Search Across Slack and Connected Applications (if Salesforce data is indexed)"
+          ],
+          "interfaces_used": [
+            "Slack agent invocation surfaces (mentions, slash commands, message shortcuts)",
+            "Agentforce configuration and skill/action definitions",
+            "Salesforce APIs called indirectly via the agent"
+          ],
+          "data_accessed": [
+            "Salesforce records returned via agent responses (accounts, contacts, opportunities, cases, etc.)",
+            "Metadata on Salesforce objects and relationships, revealing structure of the CRM",
+            "Potentially updated fields or configuration where agent can act with elevated rights"
+          ],
+          "preconditions_required": [
+            "Agent has sufficient Salesforce permissions to read and potentially update targeted objects.",
+            "Attacker can issue prompts to the agent (via their own or compromised Slack accounts)."
+          ],
+          "constraints_encountered": [
+            "Agent skills may be intentionally limited to a subset of objects and restricted from admin actions.",
+            "Salesforce may log agent actions with an integration user identity that can be reviewed by defenders."
+          ],
+          "evasion_considerations": [
+            "Phrase prompts as plausible business questions and updates a real user might ask.",
+            "Distribute queries and updates over time and across different channels/users to avoid clear patterns.",
+            "Avoid obviously suspicious actions such as bulk permission changes unless absolutely necessary."
+          ]
+        },
+        {
+          "tactic_name": "Exfiltration",
+          "method_steps": [
+            "Instrument the agent backend to log all prompts, Salesforce queries, and results (including record fields and summaries) to an attacker-controlled datastore.",
+            "Run automated or semi-automated prompt campaigns from Slack to have the agent summarise or export CRM segments (e.g., “export all accounts and emails for region Z”, “summarise top 100 customers by revenue”).",
+            "Where the agent exposes file-generation or export capabilities (e.g., generating CSVs or reports), direct it to create such artefacts and inspect/store the download links in the backend.",
+            "Periodically compress and encrypt logged CRM data and generated reports, and transfer them from the agent backend to long-term attacker storage over HTTPS.",
+            "Optionally, configure the agent (or a secondary integration) to replicate Salesforce data into attacker-owned cloud storage or secondary Salesforce instances under the guise of backup, testing, or analytics."
+          ],
+          "capabilities_used": [
+            "AI and Agentforce Developer Platform",
+            "Agentic Collaboration and Embedded AI Agents",
+            "Salesforce Platform and Agentforce integration",
+            "Slack App Platform – Web API and Surfaces (for Slack-side control and telemetry)"
+          ],
+          "interfaces_used": [
+            "Agent backend APIs and logging",
+            "Slack AI/agent streaming interfaces – chat.startstream and related",
+            "Salesforce APIs indirectly invoked by the agent",
+            "Attacker-controlled HTTPS APIs/cloud storage for final exfiltration"
+          ],
+          "data_accessed": [
+            "Detailed Salesforce CRM records, including customer PII and commercial data",
+            "Agent-generated summaries and reports, which condense large CRM segments",
+            "Any exported files or reports generated at the agent’s instruction"
+          ],
+          "preconditions_required": [
+            "Agent backend already logs or can be modified to log Salesforce interactions.",
+            "Network egress from agent infrastructure to attacker storage is possible without blocking."
+          ],
+          "constraints_encountered": [
+            "Customers may have data residency or logging requirements that increase scrutiny on agent-side storage.",
+            "Large or frequent exports could be noticed in Salesforce audit logs or billing metrics."
+          ],
+          "evasion_considerations": [
+            "Focus on exfiltrating summaries and key fields (e.g., contact info, revenue) rather than entire object dumps.",
+            "Space out export-related prompts and keep them within what might be expected of heavy power users.",
+            "Label internal logs and storage paths in a way that matches benign observability or analytics naming."
+          ]
+        }
+      ],
+      "attack_chain_summary_steps": [
+        "Attacker controls or compromises a Slack-based Agentforce/Salesforce agent and gets it installed in the target workspace.",
+        "The agent maintains long-lived tokens and is routinely used in Slack channels, giving the attacker a persistent bridge into Salesforce.",
+        "Through crafted prompts and hidden logic, the agent is induced to query and sometimes modify Salesforce records across customers and objects.",
+        "All CRM responses, summaries, and reports passing through the agent backend are logged, aggregated, and periodically exfiltrated to attacker infrastructure."
+      ]
+    },
+    {
+      "scenario_name": "T1528/T1552 – Stolen Slack App OAuth Tokens Used for Stealthy Data Theft",
+      "hypothesis": {
+        "scenario_name": "T1528/T1552 – Stolen Slack App OAuth Tokens Used for Stealthy Data Theft",
+        "attack_target": "Exploit a compromise of a legitimate Slack app vendor to steal stored OAuth tokens for many customer workspaces, then use those tokens off-platform to harvest Slack data without touching the customers’ infrastructure directly.",
+        "starting_tactic": "Initial Access",
+        "objective_tactic": "Exfiltration",
+        "preconditions": "A popular, legitimate Slack app exists with broad read scopes in many workspaces. Its backend stores OAuth tokens and workspace metadata in cloud infrastructure that might be compromised.",
+        "attack_flow_hypothesis": [
+          {
+            "step_name": "Compromise third-party Slack app backend",
+            "step_description": "Attacker breaches the infrastructure of a widely deployed Slack app provider and gains access to databases, logs, or secrets containing app tokens.",
+            "step_mitre_technique": "T1190",
+            "step_mitre_tactic": "Initial Access"
+          },
+          {
+            "step_name": "Harvest and normalise Slack OAuth tokens and workspace metadata",
+            "step_description": "Attacker extracts tokens, scopes, workspace IDs, and user IDs from the vendor systems and prepares them for reuse as valid accounts.",
+            "step_mitre_technique": "T1528",
+            "step_mitre_tactic": "Credential Access"
+          },
+          {
+            "step_name": "Use tokens as headless clients for persistent access",
+            "step_description": "Using stolen tokens, attacker operates headless scripts that call Slack Web API as if they were the legitimate app, maintaining long-term access across many tenants.",
+            "step_mitre_technique": "T1078.004",
+            "step_mitre_tactic": "Persistence"
+          },
+          {
+            "step_name": "Harvest and exfiltrate Slack data from affected tenants",
+            "step_description": "Scripts enumerate channels, read histories, and download files from each tenant and exfiltrate the data over HTTPS to attacker infrastructure.",
+            "step_mitre_technique": "T1567",
+            "step_mitre_tactic": "Exfiltration"
+          }
+        ]
+      },
+      "adversarial_methods": [
+        {
+          "tactic_name": "Initial Access",
+          "method_steps": [
+            "Identify high-value Slack apps (via Marketplace popularity, scopes requested, and marketing) whose vendors operate multi-tenant backends storing OAuth tokens.",
+            "Perform reconnaissance on the vendor’s cloud infrastructure (DNS records, IP ranges, tech stack) to identify attack surfaces such as web apps, CI/CD pipelines, or misconfigured storage.",
+            "Exploit vulnerabilities in the vendor environment (e.g., web app RCE, leaked CI credentials, exposed S3 buckets) to gain admin-level access to application servers or databases.",
+            "Establish a covert foothold (e.g., web shell, cloud IAM role) that allows long-term access to the vendor’s token stores and logs without immediately disrupting normal app operation."
+          ],
+          "capabilities_used": [
+            "Slack App Marketplace and Third-party Integrations (to select a high-value integration target)",
+            "Slack App Platform – Web API and Surfaces (context on scopes and app behaviour, though not directly used for the backend breach)"
+          ],
+          "interfaces_used": [
+            "Slack App Marketplace – https://slack.com/marketplace",
+            "Vendor’s public web UI and APIs for their Slack app",
+            "Cloud provider consoles/APIs (outside Slack)"
+          ],
+          "data_accessed": [
+            "Vendor’s application code, configuration, and secrets",
+            "Databases and logs likely to contain Slack OAuth tokens and workspace metadata"
+          ],
+          "preconditions_required": [
+            "A widely installed Slack app stores tokens in a compromiseable environment.",
+            "Attacker has capability to exploit typical web/cloud misconfigurations or vulns."
+          ],
+          "constraints_encountered": [
+            "Vendor may use strong secrets management, encryption, and network segmentation limiting direct token access.",
+            "Cloud provider and vendor monitoring may detect intrusion attempts quickly."
+          ],
+          "evasion_considerations": [
+            "Use ‘living off the land’ techniques within the cloud provider to minimise new binaries and obvious changes.",
+            "Access data during low-activity windows and throttle queries to avoid triggering anomaly alarms."
+          ]
+        },
+        {
+          "tactic_name": "Credential Access",
+          "method_steps": [
+            "Once inside the vendor environment, locate databases or key-value stores where Slack OAuth tokens, refresh tokens, and workspace metadata are stored.",
+            "Dump relevant tables/collections, taking care to filter to fields containing tokens, team IDs, enterprise IDs, and scopes.",
+            "Search application logs and debug traces for tokens or secrets that may have been inadvertently logged during OAuth flows or error conditions.",
+            "Decrypt any encrypted tokens or secrets using keys accessible in the compromised environment (e.g., KMS keys available via the app’s IAM role).",
+            "Normalise the extracted data into an attacker-controlled inventory mapping each token to workspace ID, scopes, and last-seen time, tagging especially high-privilege or high-value tenants."
+          ],
+          "capabilities_used": [
+            "Slack App Platform – OAuth-based authentication model",
+            "Vendor’s storage of ‘OAuth tokens and app credentials’ for Slack apps"
+          ],
+          "interfaces_used": [
+            "Vendor’s database consoles or direct DB connections",
+            "Cloud KMS or secrets management service (if encryption is used)",
+            "Internal logging/monitoring systems"
+          ],
+          "data_accessed": [
+            "Slack OAuth access and refresh tokens for many customer workspaces",
+            "Workspace/team IDs, possibly enterprise IDs, and scopes for each token",
+            "Any user-level tokens if the app uses user tokens in addition to bot tokens"
+          ],
+          "preconditions_required": [
+            "Successful privileged access to vendor infrastructure where token stores reside.",
+            "Decryption keys or methods are accessible from the compromised context."
+          ],
+          "constraints_encountered": [
+            "Tokens may be rotated frequently or stored only ephemerally, reducing usable lifetime.",
+            "Some tokens may be limited in scope or tied to specific functions that are not useful for broad data theft."
+          ],
+          "evasion_considerations": [
+            "Exfiltrate only subsets of tokens at a time to avoid large, suspicious data transfers.",
+            "Prefer tokens for tenants whose usage patterns match plausible high-volume API activity.",
+            "Avoid altering token records or metadata, which could tip off the vendor."
+          ]
+        },
+        {
+          "tactic_name": "Persistence",
+          "method_steps": [
+            "Set up attacker-controlled infrastructure (e.g., headless clients or serverless functions) that can call Slack Web API using stolen tokens without relying on the vendor’s environment further.",
+            "For each token, run lightweight auth.test or equivalent API calls to confirm validity and capture additional metadata such as workspace name and bot user ID.",
+            "Create a token inventory that periodically probes tokens (on a slow, randomised schedule) to confirm they still work and to classify them by scope and tenant importance.",
+            "Where refresh tokens are available, implement refresh logic to obtain new access tokens from Slack before expiry, mimicking the legitimate app’s token lifecycle.",
+            "Keep the legitimate app operating normally from the vendor’s environment so customers are less likely to revoke tokens, while the attacker quietly uses duplicates from their own infrastructure."
+          ],
+          "capabilities_used": [
+            "Slack App Platform – Web API and OAuth tokens",
+            "Auth and identity behaviours for apps (long-lived tokens, refresh flows)"
+          ],
+          "interfaces_used": [
+            "Web API – https://docs.slack.dev/apis/web-api",
+            "Slack OAuth token endpoints",
+            "Attacker-operated servers or serverless platforms"
+          ],
+          "data_accessed": [
+            "Validation responses confirming token linkage to specific workspaces and scopes",
+            "Ongoing access to Slack resources permitted by stolen tokens"
+          ],
+          "preconditions_required": [
+            "A pool of stolen tokens that are still valid and unrevoked.",
+            "Network connectivity from attacker infrastructure to Slack APIs."
+          ],
+          "constraints_encountered": [
+            "Customers may revoke or rotate tokens following vendor breach disclosure, shrinking the usable pool.",
+            "Slack may force token invalidation or app reinstallation across tenants once compromise is known."
+          ],
+          "evasion_considerations": [
+            "Limit API calls per tenant to small increments above normal usage, staying within plausible bounds for the legitimate app.",
+            "Randomise call timing and endpoints so patterns do not obviously correlate to a single attacker-controlled client.",
+            "Cease use of tokens from tenants that begin to show errors or signs of remediation."
+          ]
+        },
+        {
+          "tactic_name": "Exfiltration",
+          "method_steps": [
+            "For each still-valid token with useful scopes, enumerate channels, users, and files using Web API methods, prioritising tenants and scopes likely to yield sensitive data.",
+            "Retrieve message histories from key channels and DMs (where permitted) and selectively download files, focusing on executive, legal, finance, and incident-related content where naming conventions suggest high value.",
+            "Store harvested data in attacker-controlled storage, grouped by tenant, and enrich it with metadata from auth.test/team.info/users.list for later correlation.",
+            "Compress and encrypt tenant datasets and transfer them from the scraping infrastructure into long-term attacker storage over HTTPS or other covert channels.",
+            "Optionally sell, ransom, or otherwise monetise exfiltrated Slack data while continuing low-rate collection from any tokens that remain valid and undetected."
+          ],
+          "capabilities_used": [
+            "Slack App Platform – Web API and Surfaces",
+            "Channel and Direct Message-based Collaboration (as the underlying data source)",
+            "Message and File Storage"
+          ],
+          "interfaces_used": [
+            "Web API – https://docs.slack.dev/apis/web-api",
+            "Attacker-controlled HTTPS APIs and cloud storage endpoints"
+          ],
+          "data_accessed": [
+            "Messages, threads, and reactions from channels and DMs covered by stolen tokens’ scopes",
+            "Files and attachments accessible to the app identity in each workspace",
+            "Workspace, user, and channel metadata used to interpret the data"
+          ],
+          "preconditions_required": [
+            "Persistent usable tokens with scopes allowing reading of messages and files.",
+            "Scraping infrastructure able to call Slack APIs at scale without immediate blocking."
+          ],
+          "constraints_encountered": [
+            "API rate limits constrain how quickly histories and files can be scraped per tenant.",
+            "Anomalous traffic patterns or Slack’s own security monitoring may flag mass scraping behaviour."
+          ],
+          "evasion_considerations": [
+            "Throttle scraping to stay under rate limits and to mimic normal application usage patterns.",
+            "Avoid scraping all channels; prioritise a subset that provides high value with limited footprint.",
+            "Spread requests across multiple IP ranges and cloud regions to dilute anomaly signals."
+          ]
+        }
+      ],
+      "attack_chain_summary_steps": [
+        "Attacker compromises the backend of a popular Slack integration vendor.",
+        "They dump and decrypt stored Slack OAuth tokens and workspace metadata for many customer tenants.",
+        "Using these tokens from their own infrastructure, they quietly validate and maintain long-lived access to affected workspaces.",
+        "They then systematically harvest messages, files, and metadata from each tenant and exfiltrate the data to attacker-controlled storage while the legitimate app continues to function normally."
+      ]
+    }
+  ],
+  "summary": "The analysis identifies several realistic, high-impact attack paths against the Slack Collaboration Platform that are tightly grounded in documented capabilities:\n\n1) A malicious marketplace app scenario shows how an attacker can exploit Slack’s trusted app ecosystem, OAuth-based Web API access, and Events API to achieve multi-tenant persistence, large-scale automated collection, and exfiltration (T1199, T1078.004, T1119, T1567).\n\n2) A compromised workspace/org admin attack illustrates how Valid Accounts at the admin level can be used to enable and abuse enterprise search, Slack AI, workflows, and integrations to rapidly discover, aggregate, and exfiltrate sensitive data from Slack and connected SaaS tools (T1078, T1098, T1213, T1567).\n\n3) Malicious Workflow Builder usage demonstrates that user-configurable automation (including custom steps and HTTP connectors) can function as an internal scheduled/job and event-triggered execution layer for persistence, lateral movement, and automated exfiltration (T1053, T1546, T1020).\n\n4) An Agentforce-based scenario shows how Slack’s agentic collaboration features and Salesforce integration can become a bridge for pivoting into CRM data and actions, with AI agents providing a powerful abstraction layer over sensitive external systems (T1199, T1078.004, T1133, T1567).\n\n5) Finally, a supply-chain style compromise of a legitimate Slack app vendor highlights the systemic risk of OAuth token theft: stolen app tokens across many tenants can be reused as Valid Accounts to silently scrape and exfiltrate Slack data at scale (T1528, T1552, T1078.004, T1567).\n\nKey defensive themes across these paths include: strict app and workflow governance; least-privilege scoping for apps, agents, and workflows; rigorous review and monitoring of AI/search and enterprise connectors; strong admin account protection (phishing-resistant MFA, behaviour analytics); and close monitoring of integration behaviour (API usage, unusual exports, high-volume history reads, and outbound connector traffic). Prioritising controls and monitoring around the app platform, workflow engine, AI/agent integrations, and admin actions will provide the highest leverage in reducing Slack’s attack surface across these scenarios."
+}

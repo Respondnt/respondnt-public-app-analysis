@@ -22,9 +22,6 @@ function Home() {
   return (
     <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16 lg:py-24">
       <div className="text-center mb-16">
-        <h1 className="text-display-lg font-bold text-gray-900 dark:text-white mb-6">
-          App Analysis
-        </h1>
         <p className="text-body-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
           This website showcases the power of agentic security analysis tools. Our agents automatically break down complex applications into their component parts, then use an intelligent workflow to generate hypotheses and emulate adversary behavior to discover attack paths that could achieve security objectives. We think this is just the beginning, incorporating context, better engineering and more real world data is going to provide the fuel to re-write defensive operations. Reach out to <a href="mailto:wes@respondnt.io" className="text-accent-primary hover:underline">wes@respondnt.com</a> to learn more
         </p>

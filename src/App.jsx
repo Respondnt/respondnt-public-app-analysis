@@ -8,8 +8,9 @@ function App() {
       <div className="min-h-screen bg-white dark:bg-gray-950">
         <header className="fixed top-0 left-0 right-0 z-40 bg-white/80 dark:bg-gray-950/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
           <nav className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-            <Link to="/" className="text-h4 font-semibold text-gray-900 dark:text-white hover:text-accent-primary transition-colors">
-              Respondnt App Analysis
+            <Link to="/" className="flex items-center gap-3 text-h4 font-semibold text-gray-900 dark:text-white hover:text-accent-primary transition-colors">
+              <img src="/logo.png" alt="Respondnt Logo" className="h-8 w-8 object-contain" />
+              Respondnt
             </Link>
             <div className="flex items-center gap-4">
               <button
