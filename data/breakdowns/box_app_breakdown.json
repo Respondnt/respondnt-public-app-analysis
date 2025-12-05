@@ -1,0 +1,2516 @@
+{
+    "application_name": "Box Intelligent Content Management Platform",
+    "generated_at": "2025-12-05T00:00:00Z",
+    "coverage_overview": {
+        "sources_analysed": [
+            {
+                "name": "Box Security & compliance overview",
+                "url": "https://www.box.com/security-compliance",
+                "description": "Marketing and high-level product page describing Box security architecture, zero-trust controls, Shield, Governance, compliance certifications, and Box Archive."
+            },
+            {
+                "name": "Box Governance and information governance pages",
+                "url": "https://www.box.com/security/governance-and-compliance",
+                "description": "Product pages covering Box Governance, retention, legal holds, compliance posture, and information governance concepts."
+            },
+            {
+                "name": "Box Data Loss Prevention, eDiscovery, and KeySafe pages",
+                "url": "https://www.box.com/security/data-loss-prevention/",
+                "description": "Product pages for DLP, eDiscovery & Legal Holds, and Box KeySafe (customer-managed keys), including high-level capabilities and use cases."
+            },
+            {
+                "name": "Box ECM / Enterprise Content Management and Document Management pages",
+                "url": "https://www.box.com/content-management/enterprise/",
+                "description": "Pages describing Box’s Intelligent Content Management vision, ECM replacement story, document management and AI-powered features such as Box AI, Box Extract, Box Automate, and Box Apps."
+            },
+            {
+                "name": "Box Digital Asset Library page",
+                "url": "https://www.box.com/content-management/digital-assets/",
+                "description": "Product page describing the digital asset library use case, metadata-driven organization, workflows, and analytics for media assets."
+            },
+            {
+                "name": "Box Relay product page",
+                "url": "https://www.box.com/collaboration/relay-workflow/",
+                "description": "Marketing page for Box Relay explaining workflow automation, triggers, templates, audit history, and security integrations."
+            },
+            {
+                "name": "Box AI marketing and Content + AI resources",
+                "url": "https://www.box.com/ai",
+                "description": "Box AI product page and related content+AI resource article describing agents, extract agents, content portals, content generation, and responsible AI posture."
+            },
+            {
+                "name": "Box Sign product page",
+                "url": "https://www.box.com/esignature",
+                "description": "Product page describing Box Sign, unlimited e-signatures, templates, integrations, compliance and security features."
+            },
+            {
+                "name": "Box Admin Console / IT & Admin controls page",
+                "url": "https://www.box.com/security/it-admin-controls/",
+                "description": "Product page describing Box Admin Console, reporting, Box Shuttle migration, Content Manager and admin visibility and control features."
+            },
+            {
+                "name": "Box Platform app development overview",
+                "url": "https://www.box.com/platform/app-development/",
+                "description": "Marketing page summarizing Box Platform capabilities, APIs, embeddable UI, security and compliance benefits for custom apps."
+            },
+            {
+                "name": "Developer Box Platform 101",
+                "url": "https://developer.box.com/platform/box-platform-101/",
+                "description": "Conceptual overview of Box, Box Platform, application lifecycle, developer console, and high-level concepts such as user types and auth methods."
+            },
+            {
+                "name": "Developer Box Platform use cases, application types, authentication methods, and user types",
+                "url": "https://developer.box.com/platform/use-cases/",
+                "description": "Series of platform pages covering suitable use cases, application types (Platform, Limited Access, Custom Skills, Web App Integrations), auth methods (OAuth2, JWT, CCG, App Token), and Box user types."
+            },
+            {
+                "name": "Developer guides: Authentication, Authorization, Security, API Calls",
+                "url": "https://developer.box.com/guides/authentication/",
+                "description": "Core guides describing how access tokens work, which auth methods are supported, admin authorization flows, scopes, app access modes, and enterprise controls over custom apps."
+            },
+            {
+                "name": "Developer guides: Files, Folders, Collaborations, Shared Links, Comments, Collections, Tasks",
+                "url": "https://developer.box.com/guides/files/",
+                "description": "Object model documentation for core content objects (files, folders) and collaboration artifacts (collaborations, shared links, comments, collections, tasks)."
+            },
+            {
+                "name": "Developer guides: Metadata, Search, Events, Webhooks, Uploads, Users",
+                "url": "https://developer.box.com/guides/metadata/",
+                "description": "Guides explaining metadata templates and instances, metadata queries vs search, event streams, webhook versions, upload methods, and user provisioning/deprovisioning."
+            },
+            {
+                "name": "Developer guides: Retention Policies and Legal Holds",
+                "url": "https://developer.box.com/guides/retention-policies/",
+                "description": "Guides for Box Governance APIs, including retention policies, assignments, file version retentions, and legal hold policies and assignments."
+            },
+            {
+                "name": "Developer guides: File Requests and Integration Mappings",
+                "url": "https://developer.box.com/guides/file-requests/",
+                "description": "Documentation for Box File Request API and Integration Mappings for routing partner app content into Box."
+            },
+            {
+                "name": "Developer guides: Box Relay, Box Sign, Box AI, Box AI Studio, Box MCP, Box Skills",
+                "url": "https://developer.box.com/guides/box-relay/",
+                "description": "Vertical guides for workflow automation, e-signature APIs, Box AI question/answer and generation APIs, AI Studio agents, MCP server integration, and custom Skills processing."
+            },
+            {
+                "name": "Developer tooling guides: CLI, Tooling, Embed Box, UI Elements",
+                "url": "https://developer.box.com/guides/cli/",
+                "description": "Documentation on Box CLI, SDKs, Postman collections, and embedding Box UI (preview, Box AI UI element) in other applications."
+            }
+        ],
+        "likely_uncovered_areas_or_ambiguities": [
+            "Full end-user knowledge base on support.box.com (detailed UI behavior, edge cases for every feature) was not exhaustively crawled; the analysis instead relies on higher-level product and developer documentation.",
+            "Exact internal implementation details of Box Shield’s detection logic, classification engines, and AI models are not documented publicly and thus not covered in depth.",
+            "Operational details of Box Archive (e.g., exact archival storage tiers, retrieval SLAs, and cost models) are only described at a high level; low-level behavior remains unclear.",
+            "Desktop (Box Drive, legacy Box Sync) and mobile client internals, including local caching strategies and offline behavior, are only indirectly referenced via platform docs.",
+            "Detailed configuration surfaces for Box Hubs, Box Canvas, Box Apps, Box Automate, and Box Extract are referenced in marketing content but lack currently published developer or admin deep dives in the explored docs.",
+            "Data residency mechanisms (Box Zones) and how they interact with AI features (e.g., which zones are supported by which models) are mentioned but not fully specified in accessible docs.",
+            "How AI usage, prompts, and responses are logged, redacted, or retained beyond high-level mentions in Box AI Trust and privacy content is not fully specified.",
+            "Exact semantics of event delivery guarantees (ordering, at-least-once vs at-most-once) for every webhook trigger are described only at a pattern level (duplication and out-of-order possible) without per-event SLAs."
+        ],
+        "assumptions_made": [
+            "Capabilities described in marketing product pages (e.g., that Box Shield uses machine learning for DLP and malware detection) are assumed to reflect actual platform behavior, even though low-level algorithms are not detailed.",
+            "Where developer documentation states that APIs follow the same permissions model as the Box web app, the analysis assumes no hidden bypasses and that authorization checks are consistently enforced across all interfaces.",
+            "The analysis treats Box content storage as a logically centralized content repository with separate metadata, search, and logging layers, without assuming specific cloud providers or storage technologies beyond explicitly documented KeySafe integrations with AWS and GCP.",
+            "Features labeled as part of Box Governance or Box Shield are assumed to require the corresponding paid add-on licenses and appropriate admin scopes, even when pricing SKUs are not exhaustively listed.",
+            "Box AI’s behavior around respecting existing permissions and not training on customer content is taken as authoritative from the product and trust documentation, without independently verifying the underlying vendor contracts.",
+            "Event and webhook behavior is modeled as at-least-once delivery with possible duplication and out-of-order events, as stated in documentation, and higher-level workflows are assumed to be designed to cope with this."
+        ]
+    },
+    "capability_map": {
+        "core_product_capabilities": [
+            {
+                "name": "Core File and Folder Storage",
+                "description": "Stores files and folders in Box’s cloud content repository with versioning, metadata, and preview support as the foundation for all other features.",
+                "primary_actors": [
+                    "end user",
+                    "content owner",
+                    "enterprise admin",
+                    "developer"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Box web application \"All Files\" view, folder tree, file preview and version history.",
+                        "url": "https://www.box.com/content-management/enterprise/"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "Files and Folders resources in the Box REST API.",
+                        "url": "https://developer.box.com/guides/files/"
+                    }
+                ],
+                "key_data_involved": [
+                    "Files",
+                    "Folders",
+                    "File versions",
+                    "File content streams",
+                    "File and folder metadata (name, description, size, timestamps)",
+                    "Ownership and permissions references"
+                ],
+                "security_relevant_traits": [
+                    "All file and folder access is enforced through Box’s permission model (collaborations and shared links) and cannot bypass the web-app permissions.",
+                    "Each file and folder operation is associated with an authenticated user or app identity via an access token.",
+                    "Unlimited version history can be enabled through Box Governance, affecting what content is preserved and recoverable.",
+                    "Large file uploads use separate upload domains and chunked transfer, which may impact network-level controls and logging."
+                ],
+                "evidence": [
+                    {
+                        "title": "Developer guide: Files",
+                        "url": "https://developer.box.com/guides/files/",
+                        "summary": null,
+                        "notes": null
+                    },
+                    {
+                        "title": "Developer guide: Folders",
+                        "url": "https://developer.box.com/guides/folders/",
+                        "summary": null,
+                        "notes": null
+                    },
+                    {
+                        "title": "Developer guide: Uploads",
+                        "url": "https://developer.box.com/guides/uploads/",
+                        "summary": null,
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Collaboration on Content (Collaborations, Shared Links, Comments, Tasks)",
+                "description": "Enables fine-grained collaboration on files and folders via collaborator roles, shared links, inline comments, and review/approval tasks.",
+                "primary_actors": [
+                    "end user",
+                    "content owner",
+                    "external collaborator",
+                    "enterprise admin"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Box web and mobile UIs for inviting collaborators, configuring shared links, adding comments and tasks.",
+                        "url": "https://www.box.com/collaboration/document-management/"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "Collaborations, Shared Links, Comments, Tasks, and Collections endpoints.",
+                        "url": "https://developer.box.com/guides/collaborations/"
+                    }
+                ],
+                "key_data_involved": [
+                    "Collaborations (user/group-to-item ACL entries)",
+                    "Shared link URLs and access settings",
+                    "Comments and replies on files",
+                    "Tasks, assignees and resolution states",
+                    "Collections (Favorites) membership"
+                ],
+                "security_relevant_traits": [
+                    "Collaboration roles (owner, co-owner, editor, viewer, uploader variants) determine read/write/delete capabilities on content.",
+                    "Shared links can be open, company-only or collaborators-only; admins can restrict link settings globally.",
+                    "Download restrictions, password protection, and expiration on shared links help limit exfiltration paths.",
+                    "Tasks and comments are bound to file permissions; users without access cannot see or act on them."
+                ],
+                "evidence": [
+                    {
+                        "title": "Developer guide: Collaborations",
+                        "url": "https://developer.box.com/guides/collaborations/",
+                        "summary": null,
+                        "notes": null
+                    },
+                    {
+                        "title": "Developer guide: Shared Links",
+                        "url": "https://developer.box.com/guides/shared-links/",
+                        "summary": null,
+                        "notes": null
+                    },
+                    {
+                        "title": "Developer guide: Comments and Tasks",
+                        "url": "https://developer.box.com/guides/comments/",
+                        "summary": null,
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Enterprise Content Management & Document Management",
+                "description": "Provides a unified Intelligent Content Management platform to replace legacy ECM, combining storage, collaboration, workflows, e-signature, AI, and publishing.",
+                "primary_actors": [
+                    "business user",
+                    "content owner",
+                    "information manager",
+                    "enterprise admin"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Box web application features for document management, Box Notes, Box Hubs, Canvas, and related ECM-style experiences.",
+                        "url": "https://www.box.com/content-management/enterprise/"
+                    }
+                ],
+                "key_data_involved": [
+                    "Business documents and records",
+                    "Knowledge content (wikis, Notes, Hubs, Canvas boards)",
+                    "Unstructured data and associated metadata",
+                    "Workflow state associated with document processes"
+                ],
+                "security_relevant_traits": [
+                    "Document management is tightly integrated with Box Governance for retention, archival, and disposition.",
+                    "Box AI and metadata extraction can expose additional data attributes that must be governed.",
+                    "AI agents and no-code apps can be configured by admins or power users, creating additional automation surfaces that must be reviewed for least privilege.",
+                    "Consolidating content on a single platform centralizes both security controls and blast radius in case of misconfiguration."
+                ],
+                "evidence": [
+                    {
+                        "title": "Enterprise Content Management page",
+                        "url": "https://www.box.com/content-management/enterprise/",
+                        "summary": null,
+                        "notes": null
+                    },
+                    {
+                        "title": "Document Management page",
+                        "url": "https://www.box.com/collaboration/document-management/",
+                        "summary": null,
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Digital Asset Library Management",
+                "description": "Centralizes rich media such as images and video, enabling secure storage, metadata tagging, review workflows, and usage analytics for marketing and media teams.",
+                "primary_actors": [
+                    "marketing user",
+                    "creative team member",
+                    "media operations",
+                    "enterprise admin"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Digital Asset Library views in Box, including preview, commenting, and usage insights.",
+                        "url": "https://www.box.com/content-management/digital-assets/"
+                    }
+                ],
+                "key_data_involved": [
+                    "Media files (images, video, design files)",
+                    "Metadata tags (campaign, rights, usage, products)",
+                    "Workflow tasks and approvals",
+                    "Access statistics and analytics"
+                ],
+                "security_relevant_traits": [
+                    "Watermarking and granular permission levels protect unreleased or confidential assets.",
+                    "Metadata-based access and retention rules may be used to enforce brand or rights management policies.",
+                    "External agencies and partners are often collaborated in, increasing need for strict link and collaboration policies.",
+                    "Activity analytics can help detect unusual access patterns to valuable creative IP."
+                ],
+                "evidence": [
+                    {
+                        "title": "Digital Asset Library page",
+                        "url": "https://www.box.com/content-management/digital-assets/",
+                        "summary": null,
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Metadata and Classification for Content",
+                "description": "Allows admins and apps to define metadata templates and fields, attach instances to files and folders, cascade metadata, and query content using metadata conditions.",
+                "primary_actors": [
+                    "enterprise admin",
+                    "information architect",
+                    "developer",
+                    "governance officer"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Metadata templates and classification UI in Box web app for tagging files and folders.",
+                        "url": "https://www.box.com/security/information-governance/"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "Metadata templates, instances, cascade policies, and query APIs.",
+                        "url": "https://developer.box.com/guides/metadata/"
+                    }
+                ],
+                "key_data_involved": [
+                    "Metadata templates and fields",
+                    "Metadata instances per item (up to template limits)",
+                    "Cascade policies scoped to folders",
+                    "Metadata query definitions and query results"
+                ],
+                "security_relevant_traits": [
+                    "Classification labels can drive Box Shield policies, DLP, and access restrictions.",
+                    "Metadata queries can efficiently find content that falls under specific regulations or legal matters, which can then be locked down or exported.",
+                    "Cascade policies automatically apply metadata to entire folder trees, making misconfiguration potentially widespread.",
+                    "Metadata-based retention policies connect descriptive fields to lifecycle management."
+                ],
+                "evidence": [
+                    {
+                        "title": "Developer guide: Metadata",
+                        "url": "https://developer.box.com/guides/metadata/",
+                        "summary": null,
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Search and Discovery",
+                "description": "Provides full-text search across file names, content, descriptions and metadata, plus metadata-specific queries to power discovery and reporting.",
+                "primary_actors": [
+                    "end user",
+                    "knowledge worker",
+                    "developer",
+                    "eDiscovery team"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Search bar and filters in Box web and mobile apps.",
+                        "url": "https://www.box.com/content-management/enterprise/"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "Search API and metadata query API.",
+                        "url": "https://developer.box.com/guides/search/"
+                    }
+                ],
+                "key_data_involved": [
+                    "Search index over file names, metadata and content",
+                    "Search queries and operators",
+                    "Result sets (files, folders, web links)",
+                    "Metadata query definitions"
+                ],
+                "security_relevant_traits": [
+                    "Search results are always constrained by the caller’s permissions, preventing discovery of inaccessible content.",
+                    "Search indexing introduces a delay; security-sensitive workflows must account for a window where new content may not be discoverable via search.",
+                    "Enterprises can disable full-text content indexing (e.g., with KeySafe), which affects searchability but increases confidentiality.",
+                    "Metadata queries provide precise, SQL-like filtering that can be used to identify regulated or sensitive documents programmatically."
+                ],
+                "evidence": [
+                    {
+                        "title": "Developer guide: Search",
+                        "url": "https://developer.box.com/guides/search/",
+                        "summary": null,
+                        "notes": null
+                    },
+                    {
+                        "title": "Developer guide: Metadata Queries",
+                        "url": "https://developer.box.com/guides/metadata/queries/",
+                        "summary": null,
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Workflow Automation with Box Relay",
+                "description": "Lets power users and admins design content-centric workflows (e.g., approvals, onboarding, contract routing) and run them with no-code templates or via APIs.",
+                "primary_actors": [
+                    "business process owner",
+                    "enterprise admin",
+                    "developer"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Box Relay UI for building and managing workflows, tasks, and forms.",
+                        "url": "https://www.box.com/collaboration/relay-workflow/"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "Workflows endpoints for listing and starting manual-start flows.",
+                        "url": "https://developer.box.com/guides/box-relay/"
+                    }
+                ],
+                "key_data_involved": [
+                    "Workflow definitions (triggers, conditions, outcomes)",
+                    "Workflow instances and execution state",
+                    "Tasks, assignees, and audit history",
+                    "Form data, generated documents, and routing metadata"
+                ],
+                "security_relevant_traits": [
+                    "Relay workflows can automatically perform privileged actions such as copying files, changing metadata, or routing for signature, based on user-defined rules.",
+                    "Event-triggered workflows react to Box events, so robustness to duplicated or out-of-order events is important.",
+                    "Workflows can apply Box Shield classifications and watermarking as outcomes, directly impacting security posture.",
+                    "Enterprise Advanced plans unlock large-scale automation (unlimited no-code apps) which can significantly expand the automation attack surface if misconfigured."
+                ],
+                "evidence": [
+                    {
+                        "title": "Box Relay product page",
+                        "url": "https://www.box.com/collaboration/relay-workflow/",
+                        "summary": null,
+                        "notes": null
+                    },
+                    {
+                        "title": "Developer guide: Box Relay",
+                        "url": "https://developer.box.com/guides/box-relay/",
+                        "summary": null,
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "E-signatures with Box Sign",
+                "description": "Provides native e-signature capabilities integrated into Box, including unlimited signature requests, templates, batch sending, and APIs for embedding e-sign in apps.",
+                "primary_actors": [
+                    "end user",
+                    "legal user",
+                    "sales user",
+                    "enterprise admin",
+                    "developer",
+                    "external signer"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Box Sign experience in Box web app for sending and signing documents.",
+                        "url": "https://www.box.com/esignature"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "Sign Requests and Sign Templates APIs.",
+                        "url": "https://developer.box.com/guides/box-sign/"
+                    }
+                ],
+                "key_data_involved": [
+                    "Signature requests and templates",
+                    "Signer identities and authentication factors",
+                    "Executed documents and associated audit trails",
+                    "Signature workflow configuration (routing order, roles, reminders)"
+                ],
+                "security_relevant_traits": [
+                    "Box Sign inherits Box’s security and compliance posture (e.g., SOC, ISO, HIPAA, FedRAMP) and can be configured to meet 21 CFR Part 11 for regulated signatures.",
+                    "Signer authentication options (including smart cards and MFA) help ensure identity assurance appropriate for higher-risk transactions.",
+                    "Signature requests and executed documents are subject to Box retention, legal holds, and Shield policies, ensuring consistent lifecycle control.",
+                    "APIs allow embedding e-signatures into custom apps; misuse could allow unintended or unauthorized signature flows if scopes and app access are too broad."
+                ],
+                "evidence": [
+                    {
+                        "title": "Box Sign product page",
+                        "url": "https://www.box.com/esignature",
+                        "summary": null,
+                        "notes": null
+                    },
+                    {
+                        "title": "Developer guide: Box Sign",
+                        "url": "https://developer.box.com/guides/box-sign/",
+                        "summary": null,
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "External File Intake via File Requests",
+                "description": "Enables secure collection of files and associated metadata from external parties via hosted upload forms without making them collaborators.",
+                "primary_actors": [
+                    "end user",
+                    "case manager",
+                    "project manager",
+                    "external contributor",
+                    "enterprise admin"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "File Request configuration UI in Box for creating drag-and-drop upload forms.",
+                        "url": "https://support.box.com/"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "File Request APIs for copying, updating, activating, and deleting requests.",
+                        "url": "https://developer.box.com/guides/file-requests/"
+                    }
+                ],
+                "key_data_involved": [
+                    "File request definitions (title, description, fields)",
+                    "Uploaded files and associated metadata fields",
+                    "Request activation/deactivation status",
+                    "Target folders for uploads"
+                ],
+                "security_relevant_traits": [
+                    "Uploaders do not need Box accounts, reducing account sprawl but introducing anonymous input into the system.",
+                    "Admins can enforce link settings and integrate requests with Relay to validate, classify, and route inbound content.",
+                    "Metadata captured with file requests may include sensitive PII or financial data and should be governed accordingly.",
+                    "Misconfigured file requests could expose internal folder structure or accept unwanted file types if governance rules are lax."
+                ],
+                "evidence": [
+                    {
+                        "title": "Developer guide: File Requests",
+                        "url": "https://developer.box.com/guides/file-requests/",
+                        "summary": null,
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Box AI for Content Q&A and Generation",
+                "description": "Provides AI-powered question answering, summarization, and text generation over Box content, respecting existing permissions and governance policies.",
+                "primary_actors": [
+                    "end user",
+                    "knowledge worker",
+                    "developer",
+                    "enterprise admin"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Box AI experiences within Box Notes, document preview, Hubs, and other Box UI surfaces.",
+                        "url": "https://www.box.com/ai"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "Box AI APIs for asking questions and generating text (e.g., POST /ai/ask, /ai/text-gen).",
+                        "url": "https://developer.box.com/guides/box-ai/"
+                    }
+                ],
+                "key_data_involved": [
+                    "User prompts and questions",
+                    "Referenced Box files and collections used as context",
+                    "AI-generated summaries and content",
+                    "Agent configuration parameters and overrides"
+                ],
+                "security_relevant_traits": [
+                    "Box AI enforces Box’s permission model, so AI cannot access or leak content a user could not otherwise see.",
+                    "Documentation states Box AI does not train on customer content; third-party LLM usage is governed through Box’s AI Trust program.",
+                    "Admins can monitor AI queries via User Activity Reports, providing visibility into AI usage and potential data exposure attempts.",
+                    "Agent configuration and overrides (ai_agent parameter) can significantly change AI behavior; misconfiguration could increase risk of overexposure if scope is set too broadly."
+                ],
+                "evidence": [
+                    {
+                        "title": "Box AI product page",
+                        "url": "https://www.box.com/ai",
+                        "summary": null,
+                        "notes": null
+                    },
+                    {
+                        "title": "Developer guide: Box AI",
+                        "url": "https://developer.box.com/guides/box-ai/",
+                        "summary": null,
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Box AI Metadata Extraction and Agents",
+                "description": "Uses Extract Agents and extraction APIs to convert unstructured content into structured metadata, driving automation and downstream integration.",
+                "primary_actors": [
+                    "enterprise admin",
+                    "data engineer",
+                    "developer"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "api",
+                        "details": "Box AI extraction APIs (freeform and structured) and Enhanced Extract Agent.",
+                        "url": "https://developer.box.com/guides/box-ai/ai-tutorials/extract-metadata-structured/"
+                    },
+                    {
+                        "channel": "ui",
+                        "details": "Box Preview, Box Apps, and Automate surfaces that expose Extract Agents.",
+                        "url": "https://www.box.com/ai"
+                    }
+                ],
+                "key_data_involved": [
+                    "Source documents (contracts, forms, invoices, records)",
+                    "Extracted key–value pairs and schema definitions",
+                    "Metadata templates and fields",
+                    "Agent configurations and reasoning outputs"
+                ],
+                "security_relevant_traits": [
+                    "Extracted metadata may include highly sensitive attributes (e.g., SSNs, account numbers) and must be protected via metadata governance.",
+                    "Enhanced Extract Agent uses advanced LLM reasoning; explainability information (reasoning) could reveal internal decision processes that should be handled carefully.",
+                    "Automated extraction and population of metadata can drive retention and DLP rules, making correctness and scope of extraction security-critical.",
+                    "Integration with Box Automate and external systems can create end-to-end automated pipelines for sensitive data; security must be considered across the pipeline."
+                ],
+                "evidence": [
+                    {
+                        "title": "Box AI marketing / Content + AI article",
+                        "url": "https://www.box.com/resources/content-ai/",
+                        "summary": null,
+                        "notes": null
+                    },
+                    {
+                        "title": "Developer guide: Box AI (metadata extraction)",
+                        "url": "https://developer.box.com/guides/box-ai/",
+                        "summary": null,
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Collections and Favorites",
+                "description": "Allows users to group files, folders, and links into personal collections, with the API exposing the Favorites collection for automation.",
+                "primary_actors": [
+                    "end user",
+                    "developer"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Collections/Favorites functionality in Box web and mobile apps.",
+                        "url": "https://www.box.com/"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "Collections API (Favorites collection) for programmatic management.",
+                        "url": "https://developer.box.com/guides/collections/"
+                    }
+                ],
+                "key_data_involved": [
+                    "Collection identifiers (per user)",
+                    "Membership (file, folder, web link references)",
+                    "User-level preferences"
+                ],
+                "security_relevant_traits": [
+                    "Collections do not change permissions; they re-use existing ACLs and are primarily a usability surface.",
+                    "Automations that manipulate Favorites via API must still respect access checks, but favorites lists could reveal user-interest patterns.",
+                    "Collections metadata could be used in user behavior analytics or personalization pipelines."
+                ],
+                "evidence": [
+                    {
+                        "title": "Developer guide: Collections",
+                        "url": "https://developer.box.com/guides/collections/",
+                        "summary": null,
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Embedded Content Experiences (Embed Box and UI Elements)",
+                "description": "Provides embeddable UI components (e.g., Content Preview with Box AI, file pickers) that developers can integrate into their own applications.",
+                "primary_actors": [
+                    "developer",
+                    "ISV partner",
+                    "enterprise admin"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "integration",
+                        "details": "Embed Box and Box UI Elements JavaScript widgets, including Preview with Box AI UI element.",
+                        "url": "https://developer.box.com/guides/embed/"
+                    }
+                ],
+                "key_data_involved": [
+                    "Embedded file and folder views",
+                    "Access tokens or session contexts used by embedded widgets",
+                    "AI interactions within embedded preview (prompts and responses)"
+                ],
+                "security_relevant_traits": [
+                    "Embedded widgets rely on host application to supply appropriate tokens and enforce framing restrictions (e.g., allowed origins).",
+                    "Embedding Box AI through UI Elements extends AI access into third-party contexts; developers must ensure they pass correct user identity and scoping.",
+                    "Cross-origin considerations (iframing, postMessage) can affect clickjacking and token-leak risk if not configured correctly."
+                ],
+                "evidence": [
+                    {
+                        "title": "Developer guide: Embed Box",
+                        "url": "https://developer.box.com/guides/embed/",
+                        "summary": null,
+                        "notes": null
+                    },
+                    {
+                        "title": "Developer guide: Preview UI Element (Box AI section)",
+                        "url": "https://developer.box.com/guides/embed/ui-elements/preview/",
+                        "summary": null,
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            }
+        ],
+        "administrative_and_operational_capabilities": [
+            {
+                "name": "Admin Console and Content Manager",
+                "description": "Centralizes enterprise administration including user management, app controls, reporting, content search, and petabyte-scale migration.",
+                "primary_actors": [
+                    "enterprise admin",
+                    "co-admin",
+                    "security admin",
+                    "support engineer"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Box Admin Console, including Content Manager, User & Groups, Reports, and Platform Apps Manager.",
+                        "url": "https://www.box.com/security/it-admin-controls/"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "Admin-only APIs (users, groups, events, reports).",
+                        "url": "https://developer.box.com/reference/get-users/"
+                    }
+                ],
+                "key_data_involved": [
+                    "User and group accounts",
+                    "Enterprise-wide content index via Content Manager",
+                    "Audit logs and reports for 300+ actions",
+                    "Migration jobs and mappings (Box Shuttle)"
+                ],
+                "security_relevant_traits": [
+                    "Admin Console actions map to privileged admin-only APIs; access is typically constrained via admin roles and SSO.",
+                    "Content Manager provides global search and impersonation capabilities (log in as user), which are highly sensitive operations.",
+                    "Platform Apps Manager controls creation, approval, and enablement of custom and third-party apps, acting as a gate for API access.",
+                    "Reports and audit data are themselves sensitive, revealing user behavior and content access patterns."
+                ],
+                "evidence": [
+                    {
+                        "title": "IT & Admin Console product page",
+                        "url": "https://www.box.com/security/it-admin-controls/",
+                        "summary": null,
+                        "notes": null
+                    },
+                    {
+                        "title": "Developer guide: Security (admin & scopes)",
+                        "url": "https://developer.box.com/guides/security/",
+                        "summary": null,
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Information Governance and Compliance Management",
+                "description": "Provides high-level governance capabilities to manage data lifecycle, ensure regulatory compliance, and enforce policies across content.",
+                "primary_actors": [
+                    "governance officer",
+                    "compliance officer",
+                    "records manager",
+                    "enterprise admin",
+                    "legal"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Information Governance setup in Box Admin Console, including policies and classifications.",
+                        "url": "https://www.box.com/security/information-governance/"
+                    }
+                ],
+                "key_data_involved": [
+                    "Policy definitions (retention, classification, legal hold rules)",
+                    "Mappings between policies and content (folders, users, enterprises)",
+                    "Compliance configuration (industry and regional standards)"
+                ],
+                "security_relevant_traits": [
+                    "Governance rules directly influence retention, deletion, and preservation of content, with legal and regulatory consequences.",
+                    "Misconfiguration can either over-preserve data (increasing exposure) or prematurely delete data required for compliance or litigation.",
+                    "Policies are enforced at scale via background jobs and depend on correct metadata and event capture.",
+                    "Governance features are deeply intertwined with Shield and DLP, as classification labels often determine protection levels."
+                ],
+                "evidence": [
+                    {
+                        "title": "Information Governance overview",
+                        "url": "https://www.box.com/security/information-governance/",
+                        "summary": null,
+                        "notes": null
+                    },
+                    {
+                        "title": "Box Governance product page",
+                        "url": "https://www.box.com/security/governance-and-compliance/",
+                        "summary": null,
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Retention Policies and Content Lifecycle (Box Governance)",
+                "description": "Allows admins to define retention policies and assignments to folders or the enterprise, controlling when content can be deleted and by whom.",
+                "primary_actors": [
+                    "governance officer",
+                    "records manager",
+                    "enterprise admin",
+                    "developer"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Retention policy management in Box Governance UI.",
+                        "url": "https://www.box.com/security/governance-and-compliance/"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "Retention Policies, Assignments, and Files-under-retention APIs.",
+                        "url": "https://developer.box.com/guides/retention-policies/"
+                    }
+                ],
+                "key_data_involved": [
+                    "Retention policy objects (disposition action, duration, modifiability)",
+                    "Retention assignments (to folders or enterprise)",
+                    "File versions under retention and disposition dates"
+                ],
+                "security_relevant_traits": [
+                    "Retention blocks permanent deletion until disposition, interacting tightly with trash behavior and user delete actions.",
+                    "Event-based retention ties lifecycle to business events (e.g., employee departure), making event data correctness critical.",
+                    "The ability to extend disposition dates is security-relevant and one-way; once extended, dates cannot be shortened.",
+                    "APIs require special scopes (GCM and Manage Retention Policies) not exposed by default, reflecting their privileged nature."
+                ],
+                "evidence": [
+                    {
+                        "title": "Developer guide: Retention Policies",
+                        "url": "https://developer.box.com/guides/retention-policies/",
+                        "summary": null,
+                        "notes": null
+                    },
+                    {
+                        "title": "Box Governance product page (key features)",
+                        "url": "https://www.box.com/security/governance-and-compliance/",
+                        "summary": null,
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Legal Holds and eDiscovery",
+                "description": "Preserves content relevant to litigation or investigations via legal holds and supports eDiscovery workflows and integrations.",
+                "primary_actors": [
+                    "legal",
+                    "eDiscovery team",
+                    "governance officer",
+                    "enterprise admin"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Legal holds management in Box Governance UI and eDiscovery features in Box web app.",
+                        "url": "https://www.box.com/security/ediscovery/"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "Legal Hold Policies, Assignments, File-version legal holds, and export APIs.",
+                        "url": "https://developer.box.com/guides/legal-holds/"
+                    }
+                ],
+                "key_data_involved": [
+                    "Legal hold policies (scope and conditions)",
+                    "Assignments (users, folders, files, file versions)",
+                    "File-version holds and export logs"
+                ],
+                "security_relevant_traits": [
+                    "Legal holds prevent deletion even if users attempt to delete content, which is critical to legal defensibility.",
+                    "Improper removal of assignments or policies can lead to spoliation and sanctions.",
+                    "APIs require explicit governance-related scopes, and only admins can manage holds and retrieve hold-related inventories.",
+                    "Integrations with third-party eDiscovery tools expand the security boundary and must be managed carefully."
+                ],
+                "evidence": [
+                    {
+                        "title": "eDiscovery and Legal Holds product page",
+                        "url": "https://www.box.com/security/ediscovery/",
+                        "summary": null,
+                        "notes": null
+                    },
+                    {
+                        "title": "Developer guide: Legal Holds",
+                        "url": "https://developer.box.com/guides/legal-holds/",
+                        "summary": null,
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Security & Compliance Controls (Zero-Trust, Shield, Governance, Zones)",
+                "description": "Implements zero-trust security with strong auth, device trust, encryption, DLP, threat detection, and broad compliance certifications.",
+                "primary_actors": [
+                    "security admin",
+                    "CISO",
+                    "compliance officer",
+                    "enterprise admin"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Security & Compliance section in Box product site and Admin Console security settings.",
+                        "url": "https://www.box.com/security-compliance"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "Security-relevant APIs like Shield information barriers, malware detection signals, and classification.",
+                        "url": "https://developer.box.com/reference/get-shield-information-barriers/"
+                    }
+                ],
+                "key_data_involved": [
+                    "User accounts and auth factors",
+                    "Device and IP trust lists",
+                    "Content classifications and Shield policies",
+                    "Audit logs, alerts, and malware/ransomware signals",
+                    "Data residency rules (Zones mappings)"
+                ],
+                "security_relevant_traits": [
+                    "Zero-trust controls include SSO and MFA, IP allow-lists, device pinning and trust, and granular sharing roles.",
+                    "Box Shield provides native DLP and threat detection based on classification and behavioral analytics, with AI-enhanced Box Shield Pro capabilities.",
+                    "Customer-managed encryption keys with KeySafe add another layer of control over decryption, acting as a kill switch.",
+                    "Box maintains broad compliance (SOC, ISO, HIPAA, FedRAMP, FINRA, GDPR, etc.), which constrains how features can be designed and operated."
+                ],
+                "evidence": [
+                    {
+                        "title": "Security & compliance overview",
+                        "url": "https://www.box.com/security-compliance",
+                        "summary": null,
+                        "notes": null
+                    },
+                    {
+                        "title": "Data Loss Prevention product page",
+                        "url": "https://www.box.com/security/data-loss-prevention/",
+                        "summary": null,
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Data Loss Prevention and Threat Detection (Box Shield and DLP)",
+                "description": "Provides native DLP, malware and ransomware detection, classification-based controls, and threat alerts to protect content from exfiltration and compromise.",
+                "primary_actors": [
+                    "security admin",
+                    "SOC analyst",
+                    "enterprise admin"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Box Shield configuration and alerts in Admin Console and security dashboards.",
+                        "url": "https://www.box.com/security-compliance"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "Shield information barrier, reports, and classification APIs.",
+                        "url": "https://developer.box.com/reference/get-shield-information-barrier-reports/"
+                    }
+                ],
+                "key_data_involved": [
+                    "Content classification labels",
+                    "Access and sharing events",
+                    "Malware and ransomware detection events",
+                    "Alert configurations and dispositions"
+                ],
+                "security_relevant_traits": [
+                    "Classification-based controls can prevent sharing or downloading of sensitive content, including through apps and shared links.",
+                    "Threat detection looks for unusual download patterns and suspect collaborators, generating alerts for security teams.",
+                    "Shield Pro extends capabilities with AI classification agents and richer insights, expanding both detection power and complexity.",
+                    "Alerts and events are integrated with SIEM and CASB tools, propagating Box signals into broader security operations."
+                ],
+                "evidence": [
+                    {
+                        "title": "Data Loss Prevention product page",
+                        "url": "https://www.box.com/security/data-loss-prevention/",
+                        "summary": null,
+                        "notes": null
+                    },
+                    {
+                        "title": "Security & compliance overview (Shield section)",
+                        "url": "https://www.box.com/security-compliance",
+                        "summary": null,
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Customer-Managed Encryption Keys (Box KeySafe)",
+                "description": "Enables customers to control their own encryption keys using AWS KMS or GCP KMS/HSM, with Box never directly accessing customer keys.",
+                "primary_actors": [
+                    "security admin",
+                    "cloud engineer",
+                    "CISO"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "KeySafe setup and monitoring in Box admin and cloud provider consoles.",
+                        "url": "https://www.box.com/security/keysafe/"
+                    }
+                ],
+                "key_data_involved": [
+                    "Customer master keys in AWS or GCP KMS/HSM",
+                    "Box encryption keys wrapped by customer keys",
+                    "Key usage audit logs and reason codes"
+                ],
+                "security_relevant_traits": [
+                    "Customer keys are hosted in dedicated cloud HSMs; Box cannot see or access raw keys, strengthening separation of duties.",
+                    "Key usage is logged with reason codes that correlate to Box actions, allowing detailed key-access auditing.",
+                    "Customers can cut off key access (kill switch), immediately blocking decryption of Box content.",
+                    "Key rotation is supported via coordinated re-encryption of all content, requiring careful operational planning."
+                ],
+                "evidence": [
+                    {
+                        "title": "Box KeySafe product page",
+                        "url": "https://www.box.com/security/keysafe/",
+                        "summary": null,
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Archive and Long-Term Preservation (Box Archive)",
+                "description": "Provides compliant long-term archival of content with administrative control and integration into Box’s lifecycle management, from creation through preservation and disposal.",
+                "primary_actors": [
+                    "records manager",
+                    "compliance officer",
+                    "enterprise admin"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Box Archive configuration and archived content management in Admin Console.",
+                        "url": "https://www.box.com/security-compliance"
+                    }
+                ],
+                "key_data_involved": [
+                    "Archived content and metadata",
+                    "Preservation policies and durations",
+                    "Access control configuration for archival stores"
+                ],
+                "security_relevant_traits": [
+                    "Archive ensures content remains preserved for regulatory or business reasons even when active use ends.",
+                    "Centralized archival controls must integrate with governance and retention rules to avoid conflicting lifecycles.",
+                    "Archived content may be subject to different access and performance characteristics, impacting eDiscovery and access reviews."
+                ],
+                "evidence": [
+                    {
+                        "title": "Security & compliance page (Box Archive section)",
+                        "url": "https://www.box.com/security-compliance",
+                        "summary": null,
+                        "notes": null
+                    }
+                ],
+                "notes": "Low-level storage tier and retrieval characteristics are not fully documented; behavior is inferred from product descriptions."
+            },
+            {
+                "name": "User Provisioning, SSO, and Identity Management",
+                "description": "Handles managed and external users, service and app users for platform apps, and supports SSO integration with common identity providers.",
+                "primary_actors": [
+                    "identity engineer",
+                    "enterprise admin",
+                    "developer"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "User & Groups admin screens and SSO configuration for the Box web application.",
+                        "url": "https://support.box.com/hc/en-us/articles/360043696514-Setting-Up-Single-Sign-On-SSO-for-your-Enterprise"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "Users API and identity-focused platform guides, including SSO & App Users.",
+                        "url": "https://developer.box.com/guides/users/"
+                    }
+                ],
+                "key_data_involved": [
+                    "Managed and external user accounts",
+                    "Service accounts and app users",
+                    "SSO identities and mappings",
+                    "Group memberships and roles"
+                ],
+                "security_relevant_traits": [
+                    "Service Accounts and App Users enable apps to act on content at scale; their scopes and app-access settings dictate reach.",
+                    "As-user impersonation requires explicit scopes and is typically restricted to admins, enabling powerful admin automation.",
+                    "SSO and SCIM integration centralizes identity lifecycle, reducing orphaned accounts but increasing importance of IdP configuration.",
+                    "SSO & App Users patterns allow end-users to access Box-backed capabilities without knowing they have Box accounts, which shifts some trust to the embedding application."
+                ],
+                "evidence": [
+                    {
+                        "title": "Developer guide: User Types",
+                        "url": "https://developer.box.com/platform/user-types/",
+                        "summary": null,
+                        "notes": null
+                    },
+                    {
+                        "title": "Developer guide: SSO & App Users",
+                        "url": "https://developer.box.com/guides/sso-identities-and-app-users/",
+                        "summary": null,
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Platform Insights and API Monitoring",
+                "description": "Provides dashboards and reports showing API usage per app, top applications, pending approvals, and other platform-level metrics.",
+                "primary_actors": [
+                    "platform owner",
+                    "enterprise admin",
+                    "security admin"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Platform Insights dashboard in Admin Console.",
+                        "url": "https://support.box.com/hc/en-us/articles/20738406915219-Platform-Insights"
+                    }
+                ],
+                "key_data_involved": [
+                    "Per-app API call counts and rates",
+                    "Application approval and enablement status",
+                    "Historical usage metrics for custom apps"
+                ],
+                "security_relevant_traits": [
+                    "Platform Insights helps detect abusive or compromised apps based on unusual API volume or patterns.",
+                    "Visibility into pending app approvals surfaces potential shadow IT or unreviewed integrations.",
+                    "Insights data can be used to rationalize app inventories and enforce least-privilege across custom and third-party apps."
+                ],
+                "evidence": [
+                    {
+                        "title": "Developer guide: Applications (Platform App Insights)",
+                        "url": "https://developer.box.com/guides/applications/",
+                        "summary": null,
+                        "notes": null
+                    },
+                    {
+                        "title": "Developer guide: API Calls",
+                        "url": "https://developer.box.com/guides/api-calls/",
+                        "summary": null,
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            }
+        ],
+        "api_surface_and_integrations": [
+            {
+                "name": "Core REST Content API (Files, Folders, Users, Metadata)",
+                "description": "Exposes RESTful endpoints for CRUD operations on files, folders, users, metadata, search, and most other Box resources.",
+                "primary_actors": [
+                    "developer",
+                    "ISV partner",
+                    "automation engineer"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "api",
+                        "details": "Box REST API documented in developer.box.com/reference and aligned guides.",
+                        "url": "https://developer.box.com/reference/"
+                    }
+                ],
+                "key_data_involved": [
+                    "Files, Folders, Web Links",
+                    "Users, Groups, Collections",
+                    "Metadata templates and instances",
+                    "Comments, Tasks, Collaborations",
+                    "Search queries and results"
+                ],
+                "security_relevant_traits": [
+                    "Every request must include a valid access token whose scopes and associated user identity determine what content can be accessed.",
+                    "Admin-only endpoints (e.g., users, groups, enterprise events) require admin tokens and often additional scopes.",
+                    "Rate limits are enforced per user and per enterprise; some APIs (e.g., metadata queries, Relay) also have per-API limits.",
+                    "Uploads use a dedicated upload domain and support both direct and chunked flows; developers must handle token secrecy carefully."
+                ],
+                "evidence": [
+                    {
+                        "title": "Developer API Reference",
+                        "url": "https://developer.box.com/reference/",
+                        "summary": null,
+                        "notes": null
+                    },
+                    {
+                        "title": "Developer guide: API Calls",
+                        "url": "https://developer.box.com/guides/api-calls/",
+                        "summary": null,
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Application Models and User Types for Platform Apps",
+                "description": "Defines how developers can build Platform Apps, Limited Access Apps, Custom Skills, and Web App Integrations, each with different capabilities and supported auth methods.",
+                "primary_actors": [
+                    "developer",
+                    "enterprise admin",
+                    "platform owner"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Box Developer Console for creating and managing apps.",
+                        "url": "https://app.box.com/developers/console"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "App-related management via Developer Console plus limited APIs; user-types details in platform docs.",
+                        "url": "https://developer.box.com/platform/application-types/"
+                    }
+                ],
+                "key_data_involved": [
+                    "App configuration (app type, redirect URIs, scopes, app-access settings)",
+                    "Service account and app user identities",
+                    "Integration marketplace metadata for published apps"
+                ],
+                "security_relevant_traits": [
+                    "Platform Apps can access wide sets of endpoints and act as users; Limited Access Apps are restricted to preview-related endpoints.",
+                    "Custom Skills applications receive event payloads and Access Tokens with pre-set scopes for content processing.",
+                    "App-access setting (app only vs app + enterprise) constrains whether an app can interact with managed users’ content.",
+                    "Admins must explicitly approve and enable many app types; enterprise settings can disable unpublished or third-party apps by default."
+                ],
+                "evidence": [
+                    {
+                        "title": "Developer guide: Application Types",
+                        "url": "https://developer.box.com/platform/application-types/",
+                        "summary": null,
+                        "notes": null
+                    },
+                    {
+                        "title": "Developer guide: User Types",
+                        "url": "https://developer.box.com/platform/user-types/",
+                        "summary": null,
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Authentication Methods and Token Management",
+                "description": "Supports OAuth 2.0, JWT server authentication, Client Credentials Grant, and App Token for different app scenarios, all issuing short-lived access tokens.",
+                "primary_actors": [
+                    "developer",
+                    "identity engineer",
+                    "enterprise admin"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "api",
+                        "details": "OAuth2 token endpoints and auth flows documented in authentication guides.",
+                        "url": "https://developer.box.com/guides/authentication/"
+                    }
+                ],
+                "key_data_involved": [
+                    "OAuth2 client IDs and secrets",
+                    "JWT key pairs",
+                    "Access tokens and refresh tokens",
+                    "App Token configurations"
+                ],
+                "security_relevant_traits": [
+                    "Access tokens are valid for about 60 minutes; refresh tokens for OAuth2 are single-use and have long but finite lifetimes.",
+                    "JWT and CCG server-auth apps require explicit admin authorization and are represented by a Service Account, often with broad access.",
+                    "App Token auth creates long-lived tokens tied to a Service Account with limited endpoint access, mainly for Box View use cases.",
+                    "Scopes on apps and tokens restrict which endpoints can be used; tokens can be downscoped for least privilege in specific flows."
+                ],
+                "evidence": [
+                    {
+                        "title": "Developer guide: Authentication Methods",
+                        "url": "https://developer.box.com/platform/authentication-methods/",
+                        "summary": null,
+                        "notes": null
+                    },
+                    {
+                        "title": "Developer guide: Authentication (Access Tokens)",
+                        "url": "https://developer.box.com/guides/authentication/tokens/",
+                        "summary": null,
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Events and Webhooks",
+                "description": "Exposes user and enterprise event streams and configurable webhooks so apps can react to Box activity in near real time or with historical queries.",
+                "primary_actors": [
+                    "developer",
+                    "security admin",
+                    "automation engineer"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "api",
+                        "details": "Events API (user and admin logs) and Webhooks v2 APIs.",
+                        "url": "https://developer.box.com/guides/events/"
+                    },
+                    {
+                        "channel": "webhook",
+                        "details": "Webhook endpoints hosted by integrators to receive Box event notifications.",
+                        "url": null
+                    }
+                ],
+                "key_data_involved": [
+                    "Event records (file operations, user actions, security events, Shield alerts, Sign events)",
+                    "Webhook definitions (target URLs, triggers, scopes)",
+                    "Delivery attempts and retry metadata"
+                ],
+                "security_relevant_traits": [
+                    "Enterprise event streams are admin-only and expose detailed actions across all users; they must be carefully protected.",
+                    "User event streams are optimized for near real time but can produce duplicates and out-of-order events; consumers must handle idempotency.",
+                    "Webhooks v2 require HTTPS, support payload verification signatures, and automatically retry on transient failure, improving reliability but requiring secure endpoint design.",
+                    "Webhook payloads often contain full object representations; handlers must treat them as sensitive and authenticate payloads."
+                ],
+                "evidence": [
+                    {
+                        "title": "Developer guide: Events",
+                        "url": "https://developer.box.com/guides/events/",
+                        "summary": null,
+                        "notes": null
+                    },
+                    {
+                        "title": "Developer guide: Webhooks",
+                        "url": "https://developer.box.com/guides/webhooks/",
+                        "summary": null,
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Box CLI, SDKs, and Tooling",
+                "description": "Provides official SDKs, a command-line interface, Postman collections, and other tools to make API usage and automation easier.",
+                "primary_actors": [
+                    "developer",
+                    "DevOps engineer",
+                    "admin scripting user"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "cli",
+                        "details": "Box CLI commands for managing users, content, and configuration.",
+                        "url": "https://developer.box.com/guides/cli/"
+                    },
+                    {
+                        "channel": "other",
+                        "details": "Language-specific SDKs and Postman collections for interacting with Box APIs.",
+                        "url": "https://developer.box.com/guides/tooling/"
+                    }
+                ],
+                "key_data_involved": [
+                    "Access tokens and app configurations in local environment configs",
+                    "Automation scripts for bulk operations",
+                    "Command outputs including sensitive metadata"
+                ],
+                "security_relevant_traits": [
+                    "CLI configuration stores app configs and tokens; mismanagement can leak long-lived credentials.",
+                    "Bulk scripts can perform wide-ranging operations (e.g., mass deletion, permissions changes), magnifying impact of errors.",
+                    "SDKs encapsulate best-practice security (e.g., correct auth flows, upload domain routing) when used properly, but still rely on correct app configuration.",
+                    "CLI and SDKs can run from anywhere, so environment hardening and secret management (e.g., vaults) remain critical."
+                ],
+                "evidence": [
+                    {
+                        "title": "Developer guide: CLI",
+                        "url": "https://developer.box.com/guides/cli/",
+                        "summary": null,
+                        "notes": null
+                    },
+                    {
+                        "title": "Developer guide: Tooling",
+                        "url": "https://developer.box.com/guides/tooling/",
+                        "summary": null,
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Box Relay APIs",
+                "description": "Enables programmatic interaction with Box Relay workflows, particularly listing workflows and starting manual-start workflows from external systems.",
+                "primary_actors": [
+                    "developer",
+                    "automation engineer"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "api",
+                        "details": "Workflow endpoints for Box Relay.",
+                        "url": "https://developer.box.com/reference/get-workflows/"
+                    }
+                ],
+                "key_data_involved": [
+                    "Workflow definitions and their IDs",
+                    "Workflow start payloads (context variables and targets)"
+                ],
+                "security_relevant_traits": [
+                    "APIs require manage Relay scopes alongside file read/write scopes, reflecting their ability to change content and state.",
+                    "Kicking off workflows from external applications moves business logic outside of Box UI, making auditing and traceability important.",
+                    "Misuse of workflow APIs could trigger large automated operations (e.g., mass moves, auto-sharing) if not constrained."
+                ],
+                "evidence": [
+                    {
+                        "title": "Developer guide: Box Relay",
+                        "url": "https://developer.box.com/guides/box-relay/",
+                        "summary": null,
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Box Sign APIs",
+                "description": "Provides REST endpoints to create, list, resend, and cancel sign requests, as well as manage templates and integrate webhooks and events.",
+                "primary_actors": [
+                    "developer",
+                    "ISV partner",
+                    "enterprise admin"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "api",
+                        "details": "Sign Requests, Sign Templates, and related webhook and event APIs.",
+                        "url": "https://developer.box.com/guides/box-sign/"
+                    }
+                ],
+                "key_data_involved": [
+                    "Sign request objects and status",
+                    "Signer details and authentication methods",
+                    "Webhook notifications and events for sign status"
+                ],
+                "security_relevant_traits": [
+                    "Sign APIs use dedicated scopes (Manage signature requests) in addition to read/write file scopes.",
+                    "Webhooks and events can be used to update downstream systems, so verifying authenticity and handling retries is crucial.",
+                    "APIs interact with documents that may carry legal obligations; implementing idempotent and traceable integrations is important.",
+                    "Volume-heavy features such as batch send and ready-sign links can escalate the blast radius of a misconfigured integration."
+                ],
+                "evidence": [
+                    {
+                        "title": "Developer guide: Box Sign",
+                        "url": "https://developer.box.com/guides/box-sign/",
+                        "summary": null,
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Box AI APIs and AI Studio",
+                "description": "Exposes Box AI capabilities via APIs and provides AI Studio for building custom agents that can be invoked programmatically or through UI surfaces.",
+                "primary_actors": [
+                    "developer",
+                    "data engineer",
+                    "enterprise admin"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "api",
+                        "details": "Box AI endpoints for ask, text generation, and extraction, with ai_agent configuration overrides.",
+                        "url": "https://developer.box.com/reference/post-ai-ask/"
+                    },
+                    {
+                        "channel": "ui",
+                        "details": "Box AI Studio UI for configuring AI agents and their capabilities.",
+                        "url": "https://developer.box.com/guides/ai-studio/"
+                    }
+                ],
+                "key_data_involved": [
+                    "AI agents and their configuration (instructions, capabilities, scope)",
+                    "Prompt and response logs",
+                    "Model provider choices and parameters"
+                ],
+                "security_relevant_traits": [
+                    "AI APIs rely on Box’s permission and governance model for context access, but misconfigured agents could still surface more data than users expect.",
+                    "Using ai_agent overrides can adjust behavior per API call; untrusted clients should not be allowed to override sensitive agent settings.",
+                    "Agents configured around compliance or policy interpretation may influence user decisions; ensuring their configuration is reviewed and tested is critical.",
+                    "AI Studio is only available on higher-tier plans, centralizing agent control among a smaller admin group."
+                ],
+                "evidence": [
+                    {
+                        "title": "Developer guide: Box AI",
+                        "url": "https://developer.box.com/guides/box-ai/",
+                        "summary": null,
+                        "notes": null
+                    },
+                    {
+                        "title": "Developer guide: Box AI Studio",
+                        "url": "https://developer.box.com/guides/ai-studio/",
+                        "summary": null,
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Box Skills Custom Processing Framework",
+                "description": "Allows custom or third-party machine learning services to process uploaded files and write back metadata via a Skills app.",
+                "primary_actors": [
+                    "developer",
+                    "ML engineer",
+                    "enterprise admin"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "api",
+                        "details": "Custom Skills app configuration and Box Skills metadata endpoints.",
+                        "url": "https://developer.box.com/guides/skills/"
+                    },
+                    {
+                        "channel": "webhook",
+                        "details": "Skill invocation URLs that receive payloads when target content is uploaded or modified.",
+                        "url": null
+                    }
+                ],
+                "key_data_involved": [
+                    "Skill invocation payloads (file IDs, access tokens)",
+                    "Third-party ML inputs and outputs",
+                    "Box Skills cards metadata on files"
+                ],
+                "security_relevant_traits": [
+                    "Skill endpoints receive tokens capable of reading and writing metadata on specific files; signature verification is critical.",
+                    "Linking Box files to third-party ML services expands data exposure; privacy and compliance of those services must be vetted.",
+                    "Skills often automate tagging of sensitive attributes (objects in images, speech transcripts), increasing metadata surface area.",
+                    "Misconfigured Skills that run on wide folder scopes can process and annotate much more content than intended."
+                ],
+                "evidence": [
+                    {
+                        "title": "Developer guide: Box Skills",
+                        "url": "https://developer.box.com/guides/skills/",
+                        "summary": null,
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Integration Mappings and Partner Integrations",
+                "description": "Provides configuration for where content from partner apps (such as Slack or Teams) is stored in Box, and an ecosystem of integrations with SaaS tools.",
+                "primary_actors": [
+                    "enterprise admin",
+                    "IT integration engineer",
+                    "developer"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "api",
+                        "details": "Integration Mappings APIs for Slack and Teams.",
+                        "url": "https://developer.box.com/guides/integration-mappings/"
+                    },
+                    {
+                        "channel": "integration",
+                        "details": "Partner app marketplaces and Box Integrations gallery for configuring connectors.",
+                        "url": "https://www.box.com/integrations"
+                    }
+                ],
+                "key_data_involved": [
+                    "Mapping definitions (source workspace/channel to Box folder)",
+                    "Partner app access tokens and OAuth grants",
+                    "Transferred content and metadata"
+                ],
+                "security_relevant_traits": [
+                    "Integration mappings determine where partner-generated content lands in Box, influencing access, retention, and classification.",
+                    "Connectors often have broad scopes on both sides (partner and Box); least-privilege configuration and review are essential.",
+                    "Misconfigured mappings could inadvertently centralize sensitive partner content in overly permissive Box locations.",
+                    "Integration events and API usage should be monitored via Platform Insights and security tooling."
+                ],
+                "evidence": [
+                    {
+                        "title": "Developer guide: Integration Mappings",
+                        "url": "https://developer.box.com/guides/integration-mappings/",
+                        "summary": null,
+                        "notes": null
+                    },
+                    {
+                        "title": "Box integrations product page",
+                        "url": "https://www.box.com/integrations",
+                        "summary": null,
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Box MCP Server for External AI Agents",
+                "description": "Implements a Model Context Protocol (MCP) server that exposes Box content and actions to external AI platforms like Anthropic Claude, Microsoft Copilot Studio, and Mistral Le Chat.",
+                "primary_actors": [
+                    "developer",
+                    "AI platform engineer",
+                    "enterprise admin"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "integration",
+                        "details": "Remote and self-hosted MCP servers configured via Admin Console or community projects.",
+                        "url": "https://developer.box.com/guides/box-mcp/"
+                    }
+                ],
+                "key_data_involved": [
+                    "MCP tool definitions and capabilities",
+                    "Access tokens and scopes entrusted to external agents",
+                    "Agent plans and sequences of Box actions"
+                ],
+                "security_relevant_traits": [
+                    "MCP exposes Box as a toolset to LLM agents; tool definitions determine what agents can do (read, search, update, etc.).",
+                    "Remote MCP is hosted by Box; self-hosted MCP is open source and runs in customer infrastructure, altering the trust boundary.",
+                    "Agent prompts and tool calls executed via MCP must be monitored and constrained to prevent unexpected mass operations.",
+                    "Integrating Box with multiple AI platforms expands the attack surface; consistent identity, scopes, and logging are key."
+                ],
+                "evidence": [
+                    {
+                        "title": "Developer guide: Box MCP server",
+                        "url": "https://developer.box.com/guides/box-mcp/",
+                        "summary": null,
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            }
+        ],
+        "background_jobs_and_automation": [
+            {
+                "name": "Automated Workflows and Approvals via Box Relay",
+                "description": "Executes content-centric workflows triggered by events, schedules, or manual starts, automating approvals, routing, and document generation.",
+                "primary_actors": [
+                    "business process owner",
+                    "enterprise admin",
+                    "developer"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Relay workflow designer and dashboard in Box web app.",
+                        "url": "https://www.box.com/collaboration/relay-workflow/"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "Workflows API used to start manual workflows from external systems.",
+                        "url": "https://developer.box.com/reference/post-workflows-id-start/"
+                    }
+                ],
+                "key_data_involved": [
+                    "Workflow definitions and execution state",
+                    "Routing variables and form inputs",
+                    "Generated documents and routing history"
+                ],
+                "security_relevant_traits": [
+                    "Workflows can modify content structure and permissions at scale, so changes to definitions should be carefully governed.",
+                    "Automation must be robust to duplicated and delayed events, or it may mis-handle critical content actions.",
+                    "Relay integrates with Sign, Shield, Governance, and AI, making it a central orchestrator of sensitive operations."
+                ],
+                "evidence": [
+                    {
+                        "title": "Box Relay product page",
+                        "url": "https://www.box.com/collaboration/relay-workflow/",
+                        "summary": null,
+                        "notes": null
+                    },
+                    {
+                        "title": "Developer guide: Box Relay",
+                        "url": "https://developer.box.com/guides/box-relay/",
+                        "summary": null,
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Automated Governance Enforcement (Retention, Trash Controls, Archive)",
+                "description": "Runs background jobs to enforce retention policies, empty trash when allowed, and manage archival lifecycles based on governance configuration.",
+                "primary_actors": [
+                    "governance officer",
+                    "enterprise admin"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Retention and trash control settings in Box Governance UI.",
+                        "url": "https://www.box.com/security/governance-and-compliance/"
+                    }
+                ],
+                "key_data_involved": [
+                    "Retention and trash policies",
+                    "Content and version metadata including disposition dates",
+                    "Archive state indicators"
+                ],
+                "security_relevant_traits": [
+                    "Background enforcement determines when content is permanently deleted vs retained; a misconfigured job could mass-delete or retain beyond legal needs.",
+                    "Advanced trash controls determine who can permanently delete content; enforcement jobs reflect these permissions.",
+                    "Archival jobs might move content into different storage tiers; access and logging must remain consistent."
+                ],
+                "evidence": [
+                    {
+                        "title": "Box Governance product page",
+                        "url": "https://www.box.com/security/governance-and-compliance/",
+                        "summary": null,
+                        "notes": null
+                    },
+                    {
+                        "title": "Developer guide: Retention Policies",
+                        "url": "https://developer.box.com/guides/retention-policies/",
+                        "summary": null,
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Automated Legal Holds and eDiscovery Preservation",
+                "description": "Applies and maintains legal holds across user accounts, folders, and files, ensuring that preserved content remains undeleted while matters are active.",
+                "primary_actors": [
+                    "legal",
+                    "eDiscovery team",
+                    "enterprise admin"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Legal Hold management and eDiscovery configuration in Governance UI.",
+                        "url": "https://www.box.com/security/ediscovery/"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "Legal hold policies and assignments APIs.",
+                        "url": "https://developer.box.com/guides/legal-holds/"
+                    }
+                ],
+                "key_data_involved": [
+                    "Hold policy definitions and scopes",
+                    "Assignment objects and file-version hold lists",
+                    "Preservation reports for discovery"
+                ],
+                "security_relevant_traits": [
+                    "Background enforcement ensures files under hold remain preserved, even when users attempt deletion or when retention might purge them.",
+                    "Automated coordination between holds, retention, and trash is complex; race conditions or misconfigurations must be avoided.",
+                    "eDiscovery exports often move large sets of sensitive documents to external tools; those pipelines must be secured."
+                ],
+                "evidence": [
+                    {
+                        "title": "eDiscovery product page",
+                        "url": "https://www.box.com/security/ediscovery/",
+                        "summary": null,
+                        "notes": null
+                    },
+                    {
+                        "title": "Developer guide: Legal Holds",
+                        "url": "https://developer.box.com/guides/legal-holds/",
+                        "summary": null,
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Background Metadata Cascading and Indexing",
+                "description": "Automatically applies metadata templates to child items via cascade policies and updates search indices as content and metadata change.",
+                "primary_actors": [
+                    "information architect",
+                    "developer",
+                    "enterprise admin"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "api",
+                        "details": "Metadata cascade policy APIs and search indexing behavior.",
+                        "url": "https://developer.box.com/guides/metadata/cascades/"
+                    }
+                ],
+                "key_data_involved": [
+                    "Cascade policy definitions and scopes",
+                    "File and folder metadata instances",
+                    "Search index entries"
+                ],
+                "security_relevant_traits": [
+                    "Automatic cascading can tag entire folder trees with classifications or retention, with both positive and negative security implications.",
+                    "Search indexing updates are asynchronous; data visibility in search is delayed and must be considered in security workflows.",
+                    "Incorrectly configured cascades may misclassify content, impacting both DLP and governance enforcement."
+                ],
+                "evidence": [
+                    {
+                        "title": "Developer guide: Metadata (cascade policies)",
+                        "url": "https://developer.box.com/guides/metadata/cascades/",
+                        "summary": null,
+                        "notes": null
+                    },
+                    {
+                        "title": "Developer guide: Search Indexing",
+                        "url": "https://developer.box.com/guides/search/indexing/",
+                        "summary": null,
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Automated Content Processing via Box Skills",
+                "description": "Runs background Skills jobs when files are uploaded or modified, invoking external ML services and writing back enriched metadata.",
+                "primary_actors": [
+                    "developer",
+                    "ML engineer",
+                    "enterprise admin"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "webhook",
+                        "details": "Skill invocation URLs receive event payloads when content changes in monitored folders.",
+                        "url": null
+                    }
+                ],
+                "key_data_involved": [
+                    "Skill invocation payloads with file references",
+                    "Skill processing outputs (labels, transcripts, insights)",
+                    "Skills Cards metadata stored on files"
+                ],
+                "security_relevant_traits": [
+                    "Skills may process sensitive documents at scale; external ML providers must be treated as processors under data protection law.",
+                    "Background execution means errors or misconfigurations can propagate quickly; monitoring and alerting are necessary.",
+                    "Skill tokens allow file download and metadata write-back; compromised Skill endpoints could exfiltrate content or corrupt metadata."
+                ],
+                "evidence": [
+                    {
+                        "title": "Developer guide: Box Skills",
+                        "url": "https://developer.box.com/guides/skills/",
+                        "summary": null,
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "AI-Driven Automation (Box Automate, Extract Agents, AI Agents)",
+                "description": "Uses Box AI agents and Box Automate to drive automated workflows such as metadata extraction, routing, and content generation in the background.",
+                "primary_actors": [
+                    "enterprise admin",
+                    "business process owner",
+                    "developer"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Box Automate and AI configuration experiences referenced in ECM and Box AI marketing content.",
+                        "url": "https://www.box.com/content-management/enterprise/"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "Box AI extraction and agent APIs used as part of automated flows.",
+                        "url": "https://developer.box.com/guides/box-ai/"
+                    }
+                ],
+                "key_data_involved": [
+                    "AI agent definitions and rules",
+                    "Extracted metadata and downstream workflow parameters",
+                    "Task and routing state generated by AI decisions"
+                ],
+                "security_relevant_traits": [
+                    "AI automations can reduce manual checks and therefore must be carefully validated to avoid mis-routing or mislabeling sensitive content.",
+                    "Agents may use multiple LLM providers; configuration must ensure that only approved providers receive specific data types.",
+                    "Background AI tasks may be invisible to end users; transparency via logging and reporting is important."
+                ],
+                "evidence": [
+                    {
+                        "title": "ECM page (Box Extract and Box Automate)",
+                        "url": "https://www.box.com/content-management/enterprise/",
+                        "summary": null,
+                        "notes": null
+                    },
+                    {
+                        "title": "Developer guide: Box AI",
+                        "url": "https://developer.box.com/guides/box-ai/",
+                        "summary": null,
+                        "notes": null
+                    }
+                ],
+                "notes": "Detailed Box Automate product documentation was not directly analyzed; behavior is inferred from high-level product descriptions."
+            },
+            {
+                "name": "Security Monitoring and Threat Detection Pipelines",
+                "description": "Runs background analysis of user and content activity to detect malware, ransomware, data exfiltration, and other threats, generating alerts and enforcing policies.",
+                "primary_actors": [
+                    "security admin",
+                    "SOC analyst"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Shield and security dashboards highlighting DLP, malware, and anomaly alerts.",
+                        "url": "https://www.box.com/security-compliance"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "Shield report and classification APIs exposed to security tooling.",
+                        "url": "https://developer.box.com/reference/get-shield-information-barrier-reports/"
+                    }
+                ],
+                "key_data_involved": [
+                    "Access logs and activity patterns",
+                    "Malware and ransomware detection signals",
+                    "Classification rules and DLP policies",
+                    "Security alerts and incident metadata"
+                ],
+                "security_relevant_traits": [
+                    "Threat detection relies on continuous background processing of events; latency and tuning affect detection timeliness.",
+                    "Classification-driven DLP policies automatically block or quarantine content, altering normal workflows.",
+                    "Integration with CASB and SIEM tools extends visibility but adds integration security challenges.",
+                    "Box Shield Pro introduces AI Classification Agents and richer analytics, increasing reliance on ML correctness."
+                ],
+                "evidence": [
+                    {
+                        "title": "Security & compliance overview (Shield and DLP)",
+                        "url": "https://www.box.com/security-compliance",
+                        "summary": null,
+                        "notes": null
+                    },
+                    {
+                        "title": "Data Loss Prevention product page",
+                        "url": "https://www.box.com/security/data-loss-prevention/",
+                        "summary": null,
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Notification and Webhook Delivery System",
+                "description": "Continuously dispatches webhook notifications for configured triggers, with retries and payload signing, acting as a core infrastructure for event-driven integrations.",
+                "primary_actors": [
+                    "developer",
+                    "integration engineer"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "webhook",
+                        "details": "HTTPS endpoints owned by integrators, receiving Box webhook payloads.",
+                        "url": null
+                    },
+                    {
+                        "channel": "api",
+                        "details": "Webhook management endpoints for configuring triggers and targets.",
+                        "url": "https://developer.box.com/guides/webhooks/"
+                    }
+                ],
+                "key_data_involved": [
+                    "Webhook configurations and event types",
+                    "Delivery attempts and retry state",
+                    "Payloads containing resource data and signatures"
+                ],
+                "security_relevant_traits": [
+                    "Webhook payloads need to be verified for authenticity using signatures; failure to do so can allow spoofing.",
+                    "Retries up to 10 times on failure mean that transient errors will not immediately break automations, but also require idempotent handlers.",
+                    "Webhook endpoints can become exfiltration vectors if compromised; TLS and hardened endpoints are required."
+                ],
+                "evidence": [
+                    {
+                        "title": "Developer guide: Webhooks",
+                        "url": "https://developer.box.com/guides/webhooks/",
+                        "summary": null,
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            }
+        ]
+    },
+    "technical_components_and_data_flows": {
+        "services_or_modules": [
+            {
+                "name": "Box Web Application (Content Cloud UI)",
+                "description": "Primary user-facing web UI for managing files, collaboration, workflows, governance, AI, and admin controls."
+            },
+            {
+                "name": "Content Storage and Metadata Service",
+                "description": "Stores file and folder objects, their versions, and associated metadata templates and instances."
+            },
+            {
+                "name": "Collaboration & Sharing Service",
+                "description": "Manages collaborations, shared links, comments, tasks, and collections, mediating access to content."
+            },
+            {
+                "name": "Search and Discovery Service",
+                "description": "Maintains search indices and responds to full-text and metadata-driven queries."
+            },
+            {
+                "name": "Governance & Compliance Service (Box Governance and Archive)",
+                "description": "Implements retention, legal holds, trash controls, and archival behavior across content."
+            },
+            {
+                "name": "Security and DLP Service (Box Shield)",
+                "description": "Classifies content, enforces DLP and threat detection policies, and integrates with CASB/SIEM tools."
+            },
+            {
+                "name": "Key Management Integration (Box KeySafe)",
+                "description": "Brokers customer-managed encryption keys with AWS KMS and GCP KMS/HSM for content encryption."
+            },
+            {
+                "name": "Workflow Automation Engine (Box Relay)",
+                "description": "Executes no-code workflows triggered by events, schedules, or API calls, orchestrating actions across Box features."
+            },
+            {
+                "name": "E-signature Service (Box Sign)",
+                "description": "Manages signature requests, signer flows, executed documents, and associated audit trails."
+            },
+            {
+                "name": "AI Platform and Agents (Box AI, Box AI Studio, Box Extract, Box Automate)",
+                "description": "Provides AI capabilities for Q&A, summarization, generation, extraction, and configurable AI agents."
+            },
+            {
+                "name": "Developer API Gateway and Authentication Services",
+                "description": "Fronts REST APIs, validates access tokens, enforces scopes, and mediates OAuth2, JWT, CCG, and App Token flows."
+            },
+            {
+                "name": "Eventing and Webhook Service",
+                "description": "Captures user and enterprise events, supports historical queries, and dispatches webhooks with retries."
+            },
+            {
+                "name": "Admin Console & Reporting Service",
+                "description": "Provides admin-facing views for users, content, apps, reports, and Platform Insights."
+            },
+            {
+                "name": "Integration & MCP Services",
+                "description": "Implements Integration Mappings for partner apps and the Box MCP server for interoperability with external AI agents."
+            },
+            {
+                "name": "Skills Execution Service",
+                "description": "Receives Skill invocation events, coordinates with custom Skill endpoints, and records Skills Cards metadata."
+            },
+            {
+                "name": "CLI and SDK Distribution",
+                "description": "Provides packaged command-line tools and SDKs that wrap Box APIs for easier use."
+            }
+        ],
+        "storage_and_logs": [
+            {
+                "name": "Content Repository",
+                "description": "Logical storage for file objects and versions; encrypted at rest with AES-256 and optionally wrapped by customer keys via KeySafe."
+            },
+            {
+                "name": "Metadata Store",
+                "description": "Holds metadata templates, instances, classifications, Skills Cards, and policy metadata used across governance and search."
+            },
+            {
+                "name": "Search Index",
+                "description": "Inverted index of file names, content, descriptions, and metadata used for full-text search."
+            },
+            {
+                "name": "Governance State Store",
+                "description": "Tracks retention policies, assignments, legal hold policies and assignments, and disposition state."
+            },
+            {
+                "name": "Workflow State Store",
+                "description": "Persists Relay workflow definitions, run-time instances, tasks, and history."
+            },
+            {
+                "name": "Signature Store",
+                "description": "Stores Box Sign requests, signer state, executed agreements, and associated audit metadata."
+            },
+            {
+                "name": "Audit and Event Logs",
+                "description": "Captures user, admin, and app activities; powers Events APIs, reports, and User Activity Reports including AI usage."
+            },
+            {
+                "name": "Key Vaults (Customer KMS/HSM)",
+                "description": "Hosted in AWS or GCP for customers using KeySafe, storing CMKs and key-wrapped Box encryption keys."
+            }
+        ],
+        "external_systems": [
+            {
+                "name": "Cloud KMS Providers (AWS KMS, GCP Cloud KMS/HSM)",
+                "description": "Store and manage customer encryption keys used by Box KeySafe to wrap content keys."
+            },
+            {
+                "name": "Identity Providers (Okta, Azure AD, others)",
+                "description": "Provide SSO and IAM control for Box users and sometimes for custom app identities."
+            },
+            {
+                "name": "Third-Party eDiscovery Platforms",
+                "description": "Tools such as Logikcull, Exterro, and others that ingest preserved Box content for discovery."
+            },
+            {
+                "name": "SaaS Integrations (Slack, Microsoft Teams, Salesforce, SAP, NetSuite, ServiceNow, etc.)",
+                "description": "Integrate with Box for content sharing, storage of records, and workflow automation."
+            },
+            {
+                "name": "LLM and AI Providers (OpenAI, Anthropic, Google, AWS, others)",
+                "description": "Provide underlying models used by Box AI, Box Extract Agents, and Box AI Studio agents."
+            },
+            {
+                "name": "AI Agent Platforms (Anthropic Claude, Microsoft Copilot Studio, Mistral Le Chat)",
+                "description": "Consume Box MCP server tools to perform content-related actions in Box from external AI agents."
+            },
+            {
+                "name": "Custom and Third-Party ML Services (Skills Integrations)",
+                "description": "External processing services called by Box Skills integrations on file ingestion."
+            },
+            {
+                "name": "Security Tooling (CASB, SIEM, EDR Vendors)",
+                "description": "Integrate with Box via Shield, events, and reporting to include Box telemetry in broader security operations."
+            }
+        ],
+        "data_flows": [
+            {
+                "name": "Content Ingestion and Storage Pipeline",
+                "description": "Users or apps upload files using direct or chunked uploads. The Content service stores encrypted objects, records metadata, and triggers search indexing, events, and relevant Skills or Relay workflows."
+            },
+            {
+                "name": "Collaboration and Sharing Flow",
+                "description": "Content owners grant access via collaborations or shared links. The Collaboration service updates ACLs; events are emitted, Shield policies evaluated, and changes reflected in search and admin views."
+            },
+            {
+                "name": "Workflow and Signature Orchestration",
+                "description": "Relay workflows and Box Sign orchestrate sequences of actions (review tasks, metadata updates, approvals, signatures) triggered by user input, events, or external API calls, recording state in workflow and signature stores."
+            },
+            {
+                "name": "Governance and Retention Enforcement",
+                "description": "Governance background jobs periodically evaluate retention policies, legal holds, and trash state to determine whether items remain accessible, move to trash, or are permanently deleted or archived."
+            },
+            {
+                "name": "AI Query and Metadata Extraction Flow",
+                "description": "When a user or app calls Box AI, the AI Platform fetches relevant content within the caller’s permissions, assembles context, calls configured LLMs, and returns answers or structured metadata, which may then update metadata and trigger workflows."
+            },
+            {
+                "name": "Skills Processing Flow",
+                "description": "Upon file upload or movement into a monitored folder, Box sends a Skill invocation payload with access tokens to the configured Skill endpoint, which fetches the file, processes it through ML services, and stores insights as metadata back into Box."
+            },
+            {
+                "name": "Event and Webhook Delivery",
+                "description": "User and admin actions are written to the event log and made available via Events APIs. Webhook subscriptions on items or folders cause the Eventing service to dispatch signed HTTP callbacks to subscriber endpoints with retries on failure."
+            },
+            {
+                "name": "Integration and MCP Agent Flow",
+                "description": "Partner apps (e.g., Slack) or MCP-based AI agents initiate operations using tokens and mappings configured in Box, which route content into Box folders or perform actions (e.g., search, read, update) under the constraints of app scopes and policies."
+            }
+        ]
+    },
+    "security_relevant_behaviours": {
+        "privileged_operations": [
+            "Creating, updating, and deleting users and groups, including Service Accounts and App Users, are restricted to admin users and require admin-scoped access tokens.",
+            "Accessing enterprise-wide event streams (admin_logs and admin_logs_streaming) is limited to admins with report permissions, as these expose detailed activity across all users.",
+            "Managing retention policies, legal holds, and related assignments requires specialized governance scopes (Global Content Manager and Manage Retention/Legal Hold), which must be enabled via support.",
+            "Authorizing and enabling server-auth apps (JWT, CCG, Custom Skills) in the Developer Console and Platform Apps Manager is an admin-only operation and a gate to high-privilege automation.",
+            "Configuring and managing Box Shield policies, information barriers, and classification rules are privileged security admin operations with cross-tenant effects.",
+            "Enabling and configuring KeySafe, including binding to AWS or GCP KMS, is a privileged operation that directly affects access to encrypted content.",
+            "Impersonating users using the as-user feature in APIs requires explicit scopes and is typically only available to admins or server-auth apps with app+enterprise access.",
+            "Configuring Box MCP servers (remote or self-hosted) and granting them access to Box content is a privileged integration action that effectively extends operational control to external AI agents."
+        ],
+        "user_configurable_logic": [
+            "Relay workflows allow admins and power users to define multi-step content workflows with triggers, conditional branches, and actions such as moving files, setting metadata, sending for signature, or applying Shield policies.",
+            "Governance admins can define retention rules, event-based retention triggers, legal hold policies, and associated assignments that govern content lifecycle automatically.",
+            "Security admins configure Shield classification and DLP rules, malware and ransomware detection thresholds, and integration behavior with SIEM and CASB tools.",
+            "Box AI Studio enables configuration of AI agents with custom instructions, scopes, and capabilities (answering questions, generating content) which influence AI behavior across the tenant.",
+            "Box Skills apps let developers embed custom ML pipelines into the content ingestion path by defining invocation scopes and how outputs are written back as metadata.",
+            "Integration Mappings allow admins to specify how Slack, Teams, and similar partner content flows into Box folder structures, effectively encoding routing rules in configuration.",
+            "File Request forms enable users to define metadata fields and validation requirements on inbound files, shaping how external contributions are captured.",
+            "Box Sign templates and routing rules define how documents move through signature workflows, including roles, parallel vs serial routing, and post-signature actions."
+        ],
+        "auth_and_identity_behaviours": [
+            "All API access requires an access token whose associated user or service account and scopes determine which endpoints and content are reachable; the API enforces the same permission model as the web app.",
+            "Tokens are short-lived and cannot be reused indefinitely; OAuth2 refresh tokens allow renewing user tokens, while JWT and CCG flows re-issue tokens based on app credentials and admin-approved configuration.",
+            "Service Accounts and App Users provide non-human identities for server-auth apps; their content access is constrained by app scopes and app-access mode (app-only vs app+enterprise).",
+            "SSO integration with identity providers centralizes user authentication and lifecycle; Box supports SAML-based SSO and patterns where app users are provisioned on-the-fly from IdP identities.",
+            "Downscoped tokens can be used to create per-request, least-privilege access tokens for specific operations (e.g., sharing a single file), reducing exposure if tokens are leaked.",
+            "Box AI enforces caller permissions for context access; AI cannot read documents the requesting user does not have access to, and models are not trained on customer content according to trust documentation.",
+            "Enterprise settings allow disabling unpublished or third-party apps by default and requiring manual admin authorization for Limited Access Apps, shaping the auth surface for applications."
+        ],
+        "logging_and_audit_behaviours": [
+            "Box records detailed audit logs for a large set of actions (300+), including file operations, collaboration changes, admin actions, and many security-relevant events.",
+            "User and enterprise Events APIs provide programmatic access to activity logs, with specific stream types for live monitoring vs historical querying.",
+            "Platform Insights exposes per-application API usage statistics and pending app approvals, allowing admins to audit integration behavior over time.",
+            "User Activity Reports capture Box AI usage events (e.g., AI query, failed AI query) so admins can review and investigate AI interactions.",
+            "Box Sign maintains detailed audit trails for signature requests and executed documents, including signer actions and timestamps.",
+            "KeySafe logs key usage with reason codes that correlate to Box events, supporting detailed audit of cryptographic operations.",
+            "Webhooks deliver near-real-time notifications that can be ingested into external logging and observability systems for additional monitoring.",
+            "Governance components (Retention and Legal Holds) support reporting APIs for files under retention or hold, aiding in compliance audits."
+        ],
+        "failure_modes": [
+            "Search indexing is asynchronous; newly uploaded or updated content may not appear in search results for several minutes, affecting workflows that depend solely on search visibility.",
+            "User and admin event streams explicitly allow out-of-order and duplicated events; consumers must deduplicate by event ID and not rely on strict ordering.",
+            "If a server-auth app is used before admin authorization, API calls will fail with unauthorized_client-style errors indicating the app is not yet authorized by the enterprise.",
+            "Webhooks V2 will retry delivery up to a fixed limit; if endpoints remain down, notifications may be dropped after retries, potentially missing triggers unless other monitoring is in place.",
+            "Misconfigured scopes on apps can lead to permission errors when calling endpoints, or worse, over-privileged apps that can access more content than intended.",
+            "Overly broad retention or legal hold policies can lead to storage growth and difficulty in data minimization, while too restrictive settings can cause premature deletion.",
+            "KeySafe configuration errors or revocation of customer keys will prevent decryption of affected content, effectively making it inaccessible until key issues are resolved.",
+            "Errors or logic bugs in Relay workflows or AI-driven automations can mass-move, reclassify, or share content incorrectly, requiring careful testing and the ability to roll back changes where possible.",
+            "Box AI or external LLM providers may occasionally produce incorrect or hallucinated outputs; when used for summarization or decision support, this can affect business or legal decisions if not reviewed."
+        ]
+    },
+    "open_questions": [
+        {
+            "question": "How exactly are Box Archive storage tiers architected (e.g., separate physical storage, retrieval times, isolation from primary content stores)?",
+            "context": "Box’s Security & compliance page mentions Box Archive and long-term preservation but does not go into low-level implementation details.",
+            "related_capabilities": [
+                "Archive and Long-Term Preservation (Box Archive)",
+                "Governance & Compliance Service (Box Governance and Archive)"
+            ]
+        },
+        {
+            "question": "What are the precise guarantees and SLAs for event and webhook delivery latency across all event types, especially for Shield and Box Sign events?",
+            "context": "Docs emphasize near real-time delivery, possible duplication, and out-of-order behavior, but do not specify per-event or per-tenant SLAs.",
+            "related_capabilities": [
+                "Events and Webhooks",
+                "Notification and Webhook Delivery System",
+                "Security Monitoring and Threat Detection Pipelines"
+            ]
+        },
+        {
+            "question": "How are Box Shield Pro AI Classification Agents configured in detail, and how do they interact with existing classification labels and manual classifications?",
+            "context": "Product pages describe AI Classification Agents but do not provide deep admin or developer documentation in the explored sources.",
+            "related_capabilities": [
+                "Security & Compliance Controls (Zero-Trust, Shield, Governance, Zones)",
+                "Data Loss Prevention and Threat Detection (Box Shield and DLP)",
+                "AI-Driven Automation (Box Automate, Extract Agents, AI Agents)"
+            ]
+        },
+        {
+            "question": "What are the default and configurable retention periods for audit logs, events, and AI usage records (User Activity Reports), and can customers control or export them comprehensively?",
+            "context": "Documentation confirms the existence of events APIs and reports but does not explicitly state log retention horizons for different data classes.",
+            "related_capabilities": [
+                "Admin Console and Content Manager",
+                "Security Monitoring and Threat Detection Pipelines",
+                "Box AI for Content Q&A and Generation"
+            ]
+        },
+        {
+            "question": "How do Box Hubs, Canvas, and Box Apps (no-code apps) expose configuration surfaces for permissions, AI access, and retention that might differ from standard folders and files?",
+            "context": "These features are referenced in ECM marketing content, but dedicated admin or developer docs were not covered in the explored sources.",
+            "related_capabilities": [
+                "Enterprise Content Management & Document Management",
+                "Box AI for Content Q&A and Generation",
+                "AI-Driven Automation (Box Automate, Extract Agents, AI Agents)"
+            ]
+        },
+        {
+            "question": "To what extent can customers configure which LLM providers and models are used for specific Box AI agents or use cases, particularly around data residency and compliance constraints?",
+            "context": "Box AI documentation mentions support for multiple providers (OpenAI, Anthropic, Google, AWS) but does not detail fine-grained model selection or per-agent provider mapping.",
+            "related_capabilities": [
+                "Box AI APIs and AI Studio",
+                "AI-Driven Automation (Box Automate, Extract Agents, AI Agents)"
+            ]
+        },
+        {
+            "question": "How are Box desktop (Box Drive) and mobile clients constrained or configurable with respect to Shield, DLP, and governance rules (e.g., offline cache policies, local encryption, selective sync)?",
+            "context": "While events and governance apply to all clients, detailed documentation on client-specific behaviors and controls was not in the reviewed set.",
+            "related_capabilities": [
+                "Core File and Folder Storage",
+                "Security & Compliance Controls (Zero-Trust, Shield, Governance, Zones)"
+            ]
+        },
+        {
+            "question": "What mechanisms and controls exist for customers to perform large-scale rollback or remediation (e.g., after a misconfigured Relay workflow or AI agent mass-changed classifications)?",
+            "context": "Documentation covers how to configure workflows and agents but not how to systematically revert or remediate large volumes of unintended changes.",
+            "related_capabilities": [
+                "Workflow Automation with Box Relay",
+                "AI-Driven Automation (Box Automate, Extract Agents, AI Agents)",
+                "Metadata and Classification for Content"
+            ]
+        }
+    ],
+    "evidence_index": [
+        {
+            "title": "Security & compliance overview",
+            "url": "https://www.box.com/security-compliance",
+            "summary": "Describes Box’s zero-trust security model, encryption, Box Shield, Box Governance, Box Zones, and compliance posture, including references to Box Archive.",
+            "notes": null
+        },
+        {
+            "title": "Box Governance product page",
+            "url": "https://www.box.com/security/governance-and-compliance/",
+            "summary": "Explains content lifecycle management, retention policies, legal holds, advanced trash controls, and key governance features and benefits.",
+            "notes": null
+        },
+        {
+            "title": "Information Governance overview",
+            "url": "https://www.box.com/security/information-governance/",
+            "summary": "Provides high-level description of information governance, automated retention, classification, compliance standards, and benefits of cloud-based governance.",
+            "notes": null
+        },
+        {
+            "title": "Data Loss Prevention product page",
+            "url": "https://www.box.com/security/data-loss-prevention/",
+            "summary": "Covers DLP strategy, prevention of data loss and breaches, device controls, quarantine of sensitive data, encryption, and industry-specific use cases.",
+            "notes": null
+        },
+        {
+            "title": "eDiscovery and Legal Holds product page",
+            "url": "https://www.box.com/security/ediscovery/",
+            "summary": "Explains how Box centralizes content for eDiscovery, legal holds, search, audit reports, and integrations with eDiscovery partners.",
+            "notes": null
+        },
+        {
+            "title": "Box KeySafe product page",
+            "url": "https://www.box.com/security/keysafe/",
+            "summary": "Describes customer-managed encryption key capabilities, AWS/GCP KMS integration, HSM use, key usage logs, and key rotation.",
+            "notes": null
+        },
+        {
+            "title": "IT & Admin Console product page",
+            "url": "https://www.box.com/security/it-admin-controls/",
+            "summary": "Outlines admin features such as visibility into content usage, security monitoring, Box Shuttle migrations, and Content Manager.",
+            "notes": null
+        },
+        {
+            "title": "Enterprise Content Management page",
+            "url": "https://www.box.com/content-management/enterprise/",
+            "summary": "Presents Box as an Intelligent Content Management platform, emphasizing consolidation of ECM, workflows, e-sign, AI, and integrations.",
+            "notes": null
+        },
+        {
+            "title": "Document Management page",
+            "url": "https://www.box.com/collaboration/document-management/",
+            "summary": "Focuses on AI-powered document management, secure storage, governance, retention, and compliance across industries.",
+            "notes": null
+        },
+        {
+            "title": "Digital Asset Library page",
+            "url": "https://www.box.com/content-management/digital-assets/",
+            "summary": "Describes centralized library for rich media, real-time collaboration, metadata tagging with Box Skills, Relay-based workflows, and analytics.",
+            "notes": null
+        },
+        {
+            "title": "Box Relay product page",
+            "url": "https://www.box.com/collaboration/relay-workflow/",
+            "summary": "Explains workflow automation, AI-enhanced triggers, conditional logic, templates, audit history, and integration with Shield, Sign, and Governance.",
+            "notes": null
+        },
+        {
+            "title": "Box Sign product page",
+            "url": "https://www.box.com/esignature",
+            "summary": "Describes native e-signatures in Box, unlimited signature requests, integrations, compliance and security (including 21 CFR Part 11 support).",
+            "notes": null
+        },
+        {
+            "title": "Box AI product page",
+            "url": "https://www.box.com/ai",
+            "summary": "Presents Box AI Agents, single-document queries, AI-powered content portals, content generation, extract agents, and responsible AI messaging.",
+            "notes": null
+        },
+        {
+            "title": "Content + AI resource article",
+            "url": "https://www.box.com/resources/content-ai/",
+            "summary": "Provides conceptual overview of Content + AI, underlying technologies (ML, NLP, LLMs, RAG), and content AI best practices and use cases.",
+            "notes": null
+        },
+        {
+            "title": "Develop Better App Experiences (Box Platform marketing page)",
+            "url": "https://www.box.com/platform/app-development/",
+            "summary": "Market-facing overview highlighting Box Platform content APIs, secure apps, compliance benefits, and developer documentation entry points.",
+            "notes": null
+        },
+        {
+            "title": "Developer guide: Box Platform 101",
+            "url": "https://developer.box.com/platform/box-platform-101/",
+            "summary": "Introduces Box, Box Platform, developer site and console, and high-level concepts including user types, app types, and auth methods.",
+            "notes": null
+        },
+        {
+            "title": "Developer guide: Application Types",
+            "url": "https://developer.box.com/platform/application-types/",
+            "summary": "Documents Platform Apps, Limited Access Apps, Custom Skills, Web App Integrations, and publication to the Box Integrations gallery.",
+            "notes": null
+        },
+        {
+            "title": "Developer guide: Authentication Methods",
+            "url": "https://developer.box.com/platform/authentication-methods/",
+            "summary": "Explains OAuth2, JWT, Client Credentials Grant, App Token, and how each maps to application types and use cases.",
+            "notes": null
+        },
+        {
+            "title": "Developer guide: Security",
+            "url": "https://developer.box.com/guides/security/",
+            "summary": "Describes access tokens, scopes, admin-restricted endpoints, app access settings, and enterprise controls for custom apps.",
+            "notes": null
+        },
+        {
+            "title": "Developer guide: Files and Folders",
+            "url": "https://developer.box.com/guides/files/",
+            "summary": "Gives high-level description of file and folder resources, their operations, and their centrality in Box’s object model.",
+            "notes": null
+        },
+        {
+            "title": "Developer guide: Collaborations and Shared Links",
+            "url": "https://developer.box.com/guides/collaborations/",
+            "summary": "Defines collaboration roles, how permissions work, and how shared links expose content with different access levels.",
+            "notes": null
+        },
+        {
+            "title": "Developer guide: Metadata",
+            "url": "https://developer.box.com/guides/metadata/",
+            "summary": "Covers metadata templates, fields, instances, cascade policies, and queries and how they relate to content.",
+            "notes": null
+        },
+        {
+            "title": "Developer guide: Search",
+            "url": "https://developer.box.com/guides/search/",
+            "summary": "Documents the Search API, query operators, indexing behavior, and comparison with metadata queries.",
+            "notes": null
+        },
+        {
+            "title": "Developer guide: Events",
+            "url": "https://developer.box.com/guides/events/",
+            "summary": "Explains user vs enterprise events, stream types, live monitoring vs historical querying, and deduplication requirements.",
+            "notes": null
+        },
+        {
+            "title": "Developer guide: Webhooks",
+            "url": "https://developer.box.com/guides/webhooks/",
+            "summary": "Compares Webhooks V1 and V2, describes event triggers, payloads, retries, and verification.",
+            "notes": null
+        },
+        {
+            "title": "Developer guide: Retention Policies",
+            "url": "https://developer.box.com/guides/retention-policies/",
+            "summary": "Details retention policies, assignments, and file version retentions, including required scopes and governance behavior.",
+            "notes": null
+        },
+        {
+            "title": "Developer guide: Legal Holds",
+            "url": "https://developer.box.com/guides/legal-holds/",
+            "summary": "Describes legal hold policies, assignments, and file version legal holds, plus example use cases and scope requirements.",
+            "notes": null
+        },
+        {
+            "title": "Developer guide: File Requests",
+            "url": "https://developer.box.com/guides/file-requests/",
+            "summary": "Explains how Box File Requests work, use cases, and API operations for copying, updating, and deleting file requests.",
+            "notes": null
+        },
+        {
+            "title": "Developer guide: Box Sign",
+            "url": "https://developer.box.com/guides/box-sign/",
+            "summary": "Describes enablement, required scopes, relevant events and webhooks, rate limits, and testing guidance for Box Sign APIs.",
+            "notes": null
+        },
+        {
+            "title": "Developer guide: Box Relay",
+            "url": "https://developer.box.com/guides/box-relay/",
+            "summary": "Introduces Box Relay, workflow APIs, required scopes, rate limits, and recommended testing approaches.",
+            "notes": null
+        },
+        {
+            "title": "Developer guide: Box AI",
+            "url": "https://developer.box.com/guides/box-ai/",
+            "summary": "Documents Box AI API capabilities, including Q&A, text generation, metadata extraction, configuration overrides, and supported languages.",
+            "notes": null
+        },
+        {
+            "title": "Developer guide: Box AI Studio",
+            "url": "https://developer.box.com/guides/ai-studio/",
+            "summary": "Explains AI Studio’s function in creating AI agents, supported capabilities, and language support, limited to certain account tiers.",
+            "notes": null
+        },
+        {
+            "title": "Developer guide: Box MCP server",
+            "url": "https://developer.box.com/guides/box-mcp/",
+            "summary": "Describes Box MCP server concept, remote vs self-hosted options, and how it enables external AI agents to interact with Box.",
+            "notes": null
+        },
+        {
+            "title": "Developer guide: Box Skills",
+            "url": "https://developer.box.com/guides/skills/",
+            "summary": "Outlines the Box Skills pipeline, including invocation URLs, payload parsing, token usage, metadata writing, and Skills Kit.",
+            "notes": null
+        },
+        {
+            "title": "Developer guide: Integration Mappings",
+            "url": "https://developer.box.com/guides/integration-mappings/",
+            "summary": "Covers Integration Mapping concept and APIs, initially focused on Slack (and Teams) integration mappings.",
+            "notes": null
+        },
+        {
+            "title": "Developer guide: CLI",
+            "url": "https://developer.box.com/guides/cli/",
+            "summary": "Introduces Box CLI, setup with different auth methods, bulk actions, sample scripts, and advanced configuration options.",
+            "notes": null
+        },
+        {
+            "title": "Developer guide: Tooling",
+            "url": "https://developer.box.com/guides/tooling/",
+            "summary": "Summarizes available tooling such as the CLI, Postman collections, Salesforce Developer Toolkit, and SDKs.",
+            "notes": null
+        },
+        {
+            "title": "Developer guide: Users",
+            "url": "https://developer.box.com/guides/users/",
+            "summary": "Provides an overview of user types, provisioning and deprovisioning patterns, and content transfer between accounts.",
+            "notes": null
+        }
+    ]
+}

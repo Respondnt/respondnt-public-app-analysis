@@ -1,0 +1,2468 @@
+{
+    "application_name": "Okta Identity Platform",
+    "generated_at": "2025-12-03T00:00:00Z",
+    "coverage_overview": {
+        "sources_analysed": [
+            {
+                "name": "Okta Marketing Homepage",
+                "url": "https://www.okta.com/",
+                "description": "Top-level marketing site describing Okta’s identity security fabric and high-level product families (Workforce Identity, Customer Identity, AI agent security)."
+            },
+            {
+                "name": "Okta Developer Portal Home",
+                "url": "https://developer.okta.com/",
+                "description": "Landing page for developer resources, including guides, concepts, API docs, SDKs, and release notes."
+            },
+            {
+                "name": "Okta Docs Home",
+                "url": "https://help.okta.com/",
+                "description": "Central documentation hub linking to Identity Engine, Classic Engine, Access Gateway, Advanced Server Access, Workflows, Identity Security Posture Management, and Aerial."
+            },
+            {
+                "name": "Okta Identity Engine Docs Landing",
+                "url": "https://help.okta.com/okta_help.htm?type=oie&id=csh-oie",
+                "description": "Identity Engine documentation entry point, with featured products like Okta Personal for Workforce, Identity Threat Protection with Okta AI, Privileged Access, Device Access, Identity Governance, and Okta FastPass."
+            },
+            {
+                "name": "Okta Classic Engine Docs Landing",
+                "url": "https://help.okta.com/en-us/content/index-admin.htm",
+                "description": "Classic Engine documentation entry point with references to Okta Verify, Identity Governance, ThreatInsight, Multifactor Authentication, and HealthInsight."
+            },
+            {
+                "name": "Okta Access Gateway Docs Landing",
+                "url": "https://help.okta.com/okta_help.htm?type=oag&id=ext_oag_main",
+                "description": "Access Gateway documentation hub covering getting started, deployment, app integration, operations, troubleshooting, and reference architectures."
+            },
+            {
+                "name": "Get started with Okta Access Gateway",
+                "url": "https://help.okta.com/oag/en-us/content/topics/access-gateway/get-started.htm",
+                "description": "Introductory guide listing core Access Gateway admin tasks: deploying the appliance, configuring IdPs, HA, app integration, and security best practices."
+            },
+            {
+                "name": "Okta Advanced Server Access Docs Landing",
+                "url": "https://help.okta.com/okta_help.htm?type=asa&id=adv_server_access",
+                "description": "Landing page for Advanced Server Access documentation, linking to getting started, server agents, clients, gateways, AD-joined, and team management."
+            },
+            {
+                "name": "Get started with Advanced Server Access",
+                "url": "https://help.okta.com/asa/en-us/content/topics/adv_server_access/docs/start-here.htm",
+                "description": "Overview of Advanced Server Access as zero-trust SSH/RDP management with Okta as source of truth and tasks to set up teams, SCIM, and group sync."
+            },
+            {
+                "name": "Okta Workflows Docs Landing",
+                "url": "https://help.okta.com/okta_help.htm?type=wf&id=ext-Okta-workflows",
+                "description": "Landing page for Okta Workflows with links to overview, build flows, run flows, Connector Builder, connectors, functions, templates, and limits."
+            },
+            {
+                "name": "Okta Workflows Overview",
+                "url": "https://help.okta.com/wf/en-us/content/topics/workflows/learn/learn-workflows.htm",
+                "description": "Detailed overview of Workflows as a no-code automation platform, describing the console, flows, cards, connections, access control, execution limits, and helper/delegated flows."
+            },
+            {
+                "name": "Identity Security Posture Management Docs Landing",
+                "url": "https://help.okta.com/okta_help.htm?type=ispm&id=csh-ispm-home",
+                "description": "Entry page for Identity Security Posture Management (ISPM), linking to overview, integration guides, and supported detections."
+            },
+            {
+                "name": "Identity Security Posture Management Overview",
+                "url": "https://help.okta.com/ispm/en-us/content/topics/ispm/overview.htm",
+                "description": "Explains ISPM’s purpose, use cases, and how it integrates with IdPs, SaaS, and cloud infrastructure to detect misconfigurations and identity risks."
+            },
+            {
+                "name": "Okta Aerial Overview",
+                "url": "https://help.okta.com/okta_help.htm?type=aerial&id=aerial-overview",
+                "description": "Describes Okta Aerial as a central multi-org management layer with Aerial account, Aerial org, and Aerial Console for org visibility and time-bound access requests."
+            },
+            {
+                "name": "Okta Architecture Center",
+                "url": "https://help.okta.com/en/programs/arch/content/topics/arch/architecture-center.htm",
+                "description": "Architecture Center outlining fundamentals, scenarios, and reference architectures for deploying Okta-based solutions."
+            },
+            {
+                "name": "How Okta works (concepts)",
+                "url": "https://developer.okta.com/docs/concepts/how-okta-works/",
+                "description": "Conceptual introduction to Okta, its authN/authZ services, SSO, MFA, user management, and example use cases for apps and APIs."
+            },
+            {
+                "name": "Identity and Access Management (IAM) overview",
+                "url": "https://developer.okta.com/docs/concepts/iam-overview/",
+                "description": "Explains IAM concepts, workforce vs customer identity, solution features across UX, security, and infrastructure, and a CIAM design example."
+            },
+            {
+                "name": "OAuth 2.0 and OpenID Connect overview",
+                "url": "https://developer.okta.com/docs/concepts/oauth-openid/",
+                "description": "Details OAuth 2.0 and OIDC roles, tokens, supported flows (Auth Code + PKCE, Interaction Code, Client Credentials, ROPC, SAML Assertion, Implicit), and guidance on choosing flows."
+            },
+            {
+                "name": "Okta API Reference Overview",
+                "url": "https://developer.okta.com/docs/reference/",
+                "description": "Reference overview for core Okta APIs, error codes, event types, expression language, rate limits, System Log query options, and user query options."
+            },
+            {
+                "name": "Okta Integration Network Guide",
+                "url": "https://developer.okta.com/docs/guides/okta-integration-network/",
+                "description": "Developer guide to building and publishing OIN integrations for SSO, lifecycle management (SCIM), and API service integrations."
+            },
+            {
+                "name": "Identity Governance Overview (Identity Engine)",
+                "url": "https://help.okta.com/oie/en-us/content/topics/identity-governance/iga.htm",
+                "description": "Defines Okta Identity Governance, its benefits, how Lifecycle Management, Workflows, and Access Governance combine, and components like Access Certifications, Access Requests, Entitlement Management, and SOD rules."
+            },
+            {
+                "name": "Identity Governance Overview (Classic Engine)",
+                "url": "https://help.okta.com/en-us/content/topics/identity-governance/iga.htm",
+                "description": "Classic Engine version of Identity Governance overview with the same conceptual components and capabilities."
+            },
+            {
+                "name": "Okta FastPass Overview",
+                "url": "https://help.okta.com/oie/en-us/content/topics/identity-engine/devices/fp/fp-main.htm",
+                "description": "Describes Okta FastPass as a phishing-resistant, passwordless authenticator tied to Okta Verify, including benefits and high-level auth flow steps."
+            },
+            {
+                "name": "Okta Device Access Overview",
+                "url": "https://help.okta.com/oie/en-us/content/topics/oda/oda-overview.htm",
+                "description": "Explains how Okta Device Access extends MFA, password sync, and account lifecycle controls to device login on Windows and macOS."
+            },
+            {
+                "name": "Okta Workflows Main Landing",
+                "url": "https://help.okta.com/wf/en-us/content/topics/workflows/workflows-main.htm",
+                "description": "High-level entry for Workflows topics such as building and running flows, connectors, functions, templates, and best practices."
+            },
+            {
+                "name": "Okta Verify Overview",
+                "url": "https://help.okta.com/en-us/content/topics/mobile/okta-verify-overview.htm",
+                "description": "Classic Engine description of Okta Verify as an MFA app supporting push and one-time codes, plus risk scoring integration."
+            },
+            {
+                "name": "Multifactor Authentication Landing (Classic Engine)",
+                "url": "https://help.okta.com/en-us/content/topics/security/mfa/mfa-home.htm",
+                "description": "MFA overview describing MFA as an added layer for org and app sign-in and linking to factor configuration, enrollment policies, and risk scoring."
+            },
+            {
+                "name": "Identity Threat Protection with Okta AI Overview (Docs)",
+                "url": "https://help.okta.com/oie/en-us/content/topics/itp/overview.htm",
+                "description": "Describes Identity Threat Protection (ITP) as a continuous identity threat solution that aggregates risk signals and triggers automated mitigations."
+            },
+            {
+                "name": "Identity Threat Protection with Okta AI Product Page",
+                "url": "https://www.okta.com/products/identity-threat-protection/",
+                "description": "Marketing page emphasizing always-on protection, automated threat response, and connected security intelligence with integrations to other security tools."
+            },
+            {
+                "name": "Okta Customer Identity Product Page",
+                "url": "https://www.okta.com/products/okta-customer-identity/",
+                "description": "Describes Okta Customer Identity CIAM capabilities such as SSO, Adaptive MFA, passwordless, ThreatInsight, and social login."
+            },
+            {
+                "name": "Okta Workflows Templates and Connectors (root page)",
+                "url": "https://help.okta.com/wf/en-us/content/topics/workflows/connector-reference/connector-reference.htm",
+                "description": "Catalog of Workflows connectors and cards for third-party integrations (only high-level structure inspected)."
+            },
+            {
+                "name": "Okta Customer Identity & Cross App Access Nav (Press Release)",
+                "url": "https://www.okta.com/newsroom/press-releases/okta-introduces-cross-app-access-to-help-secure-ai-agents-in-the/",
+                "description": "Press release whose global nav exposes the official product taxonomy (Single Sign-On, Adaptive MFA, Device Access, API Access Management, Privileged Access, ISPM, ITP, Customer Identity, Lifecycle Management, Identity Governance, OIN, Cross App Access, etc.)."
+            }
+        ],
+        "likely_uncovered_areas_or_ambiguities": [
+            "Detailed sub-guides under Identity Engine and Classic Engine (for example, every factor type, policy option, and app template) weren’t exhaustively reviewed; many fine-grained behaviors and exceptions remain unanalysed.",
+            "Customer Identity Cloud / Auth0 technical documentation is only referenced via links and not deeply read; CIAM capabilities are described mainly from the Okta Customer Identity marketing page and IAM concepts.",
+            "Full REST API surface (users, groups, apps, policies, hooks, logs, etc.) was not enumerated endpoint-by-endpoint; only high-level categories and example operations are covered.",
+            "Admin Console UI behavior, tenant lifecycle (org creation, deletion, migration), and data residency options are not fully mapped from documentation.",
+            "Newer capabilities like Cross App Access (XAA) and broader AI-agent features are only covered at press-release / blog level; protocol and data model specifics are unclear.",
+            "Some products mentioned in navigation, such as Secure Partner Access, API Access Management, Secure Identity Integrations, and certain training/roadmap features, were not independently opened or analysed.",
+            "Classic Engine vs Identity Engine behavioral differences are only visible at high level; per-feature differences, migration paths, and edge-case compatibility are not fully captured."
+        ],
+        "assumptions_made": [
+            "Okta orgs are treated as multi-tenant identity domains with logically isolated identity data, even though the internal multi-tenancy model and data isolation implementation weren’t explicitly detailed.",
+            "Core IAM capabilities like user, group, and app management, SSO, MFA, and lifecycle management are assumed to be available across both Classic and Identity Engine, with Identity Engine adding more granular, flow-based controls.",
+            "REST APIs referenced from external examples (e.g., Users, Groups, Apps, System Log) are assumed to be current and representative of the main API surface, despite not reading each dedicated reference page.",
+            "Customer Identity capabilities are assumed to be primarily backed by the Auth0 platform where the docs link to Auth0 developer resources, though only Okta-side overview material was read.",
+            "Capabilities like event-based automation, System Log streaming, and security integration via shared signals are assumed to behave like typical webhook/event-driven systems, based on high-level descriptions but without protocol-level detail.",
+            "Okta Privileged Access (OPA) is assumed to expand privileged access management beyond the earlier Advanced Server Access product, but only the ASA docs were analysed in depth."
+        ]
+    },
+    "capability_map": {
+        "core_product_capabilities": [
+            {
+                "name": "Workforce Identity Core Authentication and Single Sign-On",
+                "description": "Provides centralized authentication and Single Sign-On (SSO) for workforce users across cloud and on-premises applications, using Okta-hosted or embedded sign-in experiences.",
+                "primary_actors": [
+                    "Workforce end users",
+                    "Workforce administrators",
+                    "Application owners"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Okta-hosted sign-in pages and end-user dashboard for accessing Okta-protected SaaS and on-prem apps.",
+                        "url": "https://developer.okta.com/docs/concepts/how-okta-works/"
+                    },
+                    {
+                        "channel": "ui",
+                        "details": "Admin Console (Identity Engine and Classic Engine) sections for configuring applications, SSO methods, and sign-on policies.",
+                        "url": "https://help.okta.com/okta_help.htm?type=oie&id=csh-oie"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "OAuth 2.0 / OpenID Connect and SAML endpoints exposed by Okta authorization servers for browser, SPA, native, and server-side clients.",
+                        "url": "https://developer.okta.com/docs/concepts/oauth-openid/"
+                    }
+                ],
+                "key_data_involved": [
+                    "User identities and profiles",
+                    "Authentication credentials",
+                    "Session identifiers and tokens",
+                    "ID, access, and refresh tokens",
+                    "Application assignments",
+                    "Sign-on policies and rules"
+                ],
+                "security_relevant_traits": [
+                    "Central point of authentication and SSO for all workforce apps in an org",
+                    "Supports federation via OIDC and SAML to and from external IdPs and service providers",
+                    "Sign-on policies can enforce MFA, contextual access, and device posture checks across apps"
+                ],
+                "evidence": [
+                    {
+                        "title": "How Okta works",
+                        "url": "https://developer.okta.com/docs/concepts/how-okta-works/",
+                        "summary": "Describes how apps can delegate authentication to Okta, use SSO, and retrieve user profiles to enforce authorization.",
+                        "notes": null
+                    },
+                    {
+                        "title": "Okta Identity Engine Docs Landing",
+                        "url": "https://help.okta.com/okta_help.htm?type=oie&id=csh-oie",
+                        "summary": "Identity Engine overview referencing flexible components and architecture models for deployment.",
+                        "notes": null
+                    },
+                    {
+                        "title": "OAuth 2.0 and OpenID Connect overview",
+                        "url": "https://developer.okta.com/docs/concepts/oauth-openid/",
+                        "summary": "Explains how Okta acts as an authorization server and OpenID Provider for client apps.",
+                        "notes": null
+                    }
+                ],
+                "notes": "This capability underlies most other features such as MFA, FastPass, and app integrations."
+            },
+            {
+                "name": "Customer Identity and Access Management (Okta Customer Identity)",
+                "description": "Provides CIAM capabilities for external users (customers, citizens, students, partners), including secure login, adaptive MFA, passwordless, ThreatInsight, and social login across multiple applications.",
+                "primary_actors": [
+                    "External end users (customers, partners, citizens, students)",
+                    "Product teams",
+                    "Security and IAM teams"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Customer-facing login and registration pages integrated with Okta Customer Identity and/or Auth0-hosted login.",
+                        "url": "https://www.okta.com/products/okta-customer-identity/"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "OIDC/OAuth 2.0 endpoints and CIAM APIs for sign-up, login, passwordless, and session management.",
+                        "url": "https://developer.okta.com/docs/concepts/oauth-openid/"
+                    },
+                    {
+                        "channel": "integration",
+                        "details": "Integrations with social identity providers (e.g., Google, Facebook) and external IdPs for B2B scenarios.",
+                        "url": "https://developer.okta.com/docs/guides/add-an-external-idp/"
+                    }
+                ],
+                "key_data_involved": [
+                    "Customer identity profiles",
+                    "Credentials and authenticator enrollments",
+                    "Social login identities",
+                    "Consent and preference attributes",
+                    "Fraud and risk indicators",
+                    "Application and tenant context"
+                ],
+                "security_relevant_traits": [
+                    "Controls external access to customer-facing applications and APIs",
+                    "Adaptive MFA and passwordless can be enforced based on risk and context",
+                    "ThreatInsight and fraud detection features help reduce credential stuffing and bot attacks"
+                ],
+                "evidence": [
+                    {
+                        "title": "Okta Customer Identity Product Page",
+                        "url": "https://www.okta.com/products/okta-customer-identity/",
+                        "summary": "Summarizes CIAM capabilities like SSO, Adaptive MFA, passwordless, ThreatInsight, and social login.",
+                        "notes": null
+                    },
+                    {
+                        "title": "IAM overview",
+                        "url": "https://developer.okta.com/docs/concepts/iam-overview/",
+                        "summary": "Discusses customer identity concepts, CIAM architectures, and features such as social auth and self-service onboarding.",
+                        "notes": null
+                    }
+                ],
+                "notes": "Developer docs for Customer Identity frequently route to Auth0, indicating that Auth0 is the primary developer platform for many CIAM scenarios."
+            },
+            {
+                "name": "Universal Directory and Profile Management",
+                "description": "Stores and manages user, group, and device identities and attributes as a central directory for authentication, authorization, and lifecycle management.",
+                "primary_actors": [
+                    "IAM administrators",
+                    "HR/IT operators",
+                    "Application owners"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Admin Console directory and profile management screens for users, groups, and profile mappings.",
+                        "url": "https://help.okta.com/en-us/content/topics/miscellaneous/reference-main.htm"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "Users and Groups REST APIs for listing, searching, and managing directory objects.",
+                        "url": "https://developer.okta.com/docs/reference/api/users/"
+                    }
+                ],
+                "key_data_involved": [
+                    "User profiles and attributes",
+                    "Group memberships and types",
+                    "Device and authenticator associations",
+                    "Profile mappings and schemas",
+                    "Directory integration metadata"
+                ],
+                "security_relevant_traits": [
+                    "Authoritative source of identity attributes used in access policies and entitlement decisions",
+                    "Profile mappings and expression language can affect what attributes apps and policies see",
+                    "Incorrect mappings or group memberships can lead to overprovisioning or unintended access"
+                ],
+                "evidence": [
+                    {
+                        "title": "IAM overview – Identity management factors",
+                        "url": "https://developer.okta.com/docs/concepts/iam-overview-identity-management-factors/",
+                        "summary": "Discusses identity storage, processing, and administration as core IAM design areas.",
+                        "notes": null
+                    },
+                    {
+                        "title": "Identity Governance Overview",
+                        "url": "https://help.okta.com/oie/en-us/content/topics/identity-governance/iga.htm",
+                        "summary": "States that Lifecycle Management manages users, groups, apps, rules, and associated attributes, including directory integration and profile mapping.",
+                        "notes": null
+                    }
+                ],
+                "notes": "Universal Directory underpins Lifecycle Management, Identity Governance, and many policy conditions."
+            },
+            {
+                "name": "Multifactor Authentication Framework and Okta Verify",
+                "description": "Provides MFA across org and application sign-ins using multiple factor types, including Okta Verify push and one-time codes, with policy-based enrollment and risk scoring.",
+                "primary_actors": [
+                    "End users",
+                    "Security administrators",
+                    "Support/helpdesk staff"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Sign-in flows prompting users for additional factors (Okta Verify, SMS, email, etc.) during authentication.",
+                        "url": "https://help.okta.com/en-us/content/topics/security/mfa/mfa-home.htm"
+                    },
+                    {
+                        "channel": "ui",
+                        "details": "Admin Console MFA configuration pages for factors, enrollment policies, and risk-based rules.",
+                        "url": "https://help.okta.com/en-us/content/topics/security/mfa/mfa-home.htm"
+                    },
+                    {
+                        "channel": "integration",
+                        "details": "Okta Verify mobile and desktop apps for push approvals and OTPs.",
+                        "url": "https://help.okta.com/en-us/content/topics/mobile/okta-verify-overview.htm"
+                    }
+                ],
+                "key_data_involved": [
+                    "User factor enrollments",
+                    "Device identifiers and push tokens",
+                    "One-time passcodes and challenge state",
+                    "Risk scores for sign-in attempts",
+                    "Policy rules controlling factor requirements"
+                ],
+                "security_relevant_traits": [
+                    "Critical control for phishing, credential stuffing, and account takeover mitigation",
+                    "Risk scoring engine can dynamically enforce MFA based on context",
+                    "Reset and recovery flows must be carefully governed to avoid bypassing MFA"
+                ],
+                "evidence": [
+                    {
+                        "title": "Multifactor Authentication Landing",
+                        "url": "https://help.okta.com/en-us/content/topics/security/mfa/mfa-home.htm",
+                        "summary": "Defines MFA and links to factor configuration, enrollment policies, and risk scoring.",
+                        "notes": null
+                    },
+                    {
+                        "title": "Okta Verify Overview",
+                        "url": "https://help.okta.com/en-us/content/topics/mobile/okta-verify-overview.htm",
+                        "summary": "Describes Okta Verify as an MFA app supporting push notifications and one-time codes, with risk scoring integration.",
+                        "notes": null
+                    }
+                ],
+                "notes": "Identity Engine also exposes an \"authenticators\" abstraction that generalizes factor types, but that detail is spread across separate guides not fully read here."
+            },
+            {
+                "name": "Okta FastPass Passwordless and Phishing-Resistant Authentication",
+                "description": "Implements passwordless, phishing-resistant authentication using Okta Verify with device-bound keys and device posture evaluation for managed and unmanaged devices.",
+                "primary_actors": [
+                    "End users",
+                    "Security administrators",
+                    "Endpoint management teams"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "integration",
+                        "details": "Okta Verify app with FastPass capability on Android, iOS, macOS, and Windows devices.",
+                        "url": "https://help.okta.com/oie/en-us/content/topics/identity-engine/devices/fp/fp-main.htm"
+                    },
+                    {
+                        "channel": "ui",
+                        "details": "Okta-hosted and embedded sign-in experiences that initiate FastPass challenges instead of passwords.",
+                        "url": "https://developer.okta.com/docs/concepts/how-okta-works/"
+                    },
+                    {
+                        "channel": "ui",
+                        "details": "Admin policy configuration for phishing-resistant sign-on rules and device assurance policies.",
+                        "url": "https://help.okta.com/oie/en-us/content/topics/oda/oda-overview.htm"
+                    }
+                ],
+                "key_data_involved": [
+                    "Device-bound cryptographic keys",
+                    "Device posture attributes (OS, screen lock, assurance signals)",
+                    "User-device binding records and enrollment state",
+                    "Authentication challenges and signed responses"
+                ],
+                "security_relevant_traits": [
+                    "Phishing-resistant by verifying the origin of the authentication request and using public key cryptography",
+                    "Evaluates device assurance policies for each sign-in, enabling Zero Trust-style access decisions",
+                    "Reduces reliance on passwords and associated attack surface"
+                ],
+                "evidence": [
+                    {
+                        "title": "Okta FastPass",
+                        "url": "https://help.okta.com/oie/en-us/content/topics/identity-engine/devices/fp/fp-main.htm",
+                        "summary": "Defines FastPass as a phishing-resistant, passwordless authenticator and explains the high-level challenge/response flow.",
+                        "notes": null
+                    },
+                    {
+                        "title": "Okta Device Access",
+                        "url": "https://help.okta.com/oie/en-us/content/topics/oda/oda-overview.htm",
+                        "summary": "Describes device posture evaluation and device assurance policies used during authentication.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "External Identity Providers and Federation",
+                "description": "Allows users to authenticate using external identity providers (enterprise directories, SAML IdPs, social providers) while Okta handles SSO and downstream app access.",
+                "primary_actors": [
+                    "External users (partners, contractors, B2B customers)",
+                    "IAM administrators",
+                    "Application owners"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Admin Console identity provider configuration pages (SAML, OIDC, social, AD/LDAP).",
+                        "url": "https://developer.okta.com/docs/guides/identity-providers/"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "OIDC and SAML endpoints acting as Service Provider or OpenID Relying Party to external IdPs.",
+                        "url": "https://developer.okta.com/docs/concepts/oauth-openid/"
+                    }
+                ],
+                "key_data_involved": [
+                    "Federated identity assertions (SAML, OIDC ID tokens)",
+                    "External directory identifiers (AD, LDAP)",
+                    "Attribute mappings between external IdPs and Okta profiles",
+                    "Account linking state and federation metadata"
+                ],
+                "security_relevant_traits": [
+                    "Shifts primary authentication to external IdPs while centralizing access control in Okta",
+                    "Improper attribute mappings or trust configurations can lead to privilege escalation or account confusion",
+                    "Supports federated SSO and SLO scenarios across organizational boundaries"
+                ],
+                "evidence": [
+                    {
+                        "title": "IAM overview",
+                        "url": "https://developer.okta.com/docs/concepts/iam-overview/",
+                        "summary": "Explains external IdP and federated SSO concepts for workforce and customer identity.",
+                        "notes": null
+                    },
+                    {
+                        "title": "Identity Providers Guides (index)",
+                        "url": "https://developer.okta.com/docs/guides/identity-providers/",
+                        "summary": "Guide index for configuring external IdPs (SAML, OIDC, social) for Okta.",
+                        "notes": "Only the index reference was used; individual IdP guides were not reviewed."
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "API Access Management and OAuth/OIDC Authorization Server",
+                "description": "Secures APIs and backend services by acting as an OAuth 2.0 / OIDC authorization server, issuing access and ID tokens with scopes and claims governed by policies.",
+                "primary_actors": [
+                    "API clients and services",
+                    "Developers",
+                    "Security and platform teams"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "api",
+                        "details": "OAuth 2.0 / OIDC endpoints such as /authorize and /token for standard flows (Auth Code + PKCE, Client Credentials, etc.).",
+                        "url": "https://developer.okta.com/docs/concepts/oauth-openid/"
+                    },
+                    {
+                        "channel": "ui",
+                        "details": "Admin Console authorization server, scopes, claims, and policy configuration pages.",
+                        "url": "https://developer.okta.com/docs/guides/customize-authz-server/main/"
+                    }
+                ],
+                "key_data_involved": [
+                    "Client registrations (OAuth clients)",
+                    "Scopes and custom scopes",
+                    "Claims definitions and mappings",
+                    "Access and refresh tokens",
+                    "User and service principal identities",
+                    "Policy rules for token issuance"
+                ],
+                "security_relevant_traits": [
+                    "Central enforcement point for API authorization, controlling what scopes and claims are issued",
+                    "Misconfigured scopes or overly broad claims can lead to privilege escalation in downstream APIs",
+                    "Supports high-trust and low-trust clients via recommended flows (Auth Code + PKCE, Interaction Code)"
+                ],
+                "evidence": [
+                    {
+                        "title": "OAuth 2.0 and OpenID Connect overview",
+                        "url": "https://developer.okta.com/docs/concepts/oauth-openid/",
+                        "summary": "Describes OAuth roles, tokens, and flows and notes that Okta acts as the authorization server and OIDC provider.",
+                        "notes": null
+                    },
+                    {
+                        "title": "How Okta works",
+                        "url": "https://developer.okta.com/docs/concepts/how-okta-works/",
+                        "summary": "Provides examples of securing APIs with scopes, claims, and access policies using Okta.",
+                        "notes": null
+                    }
+                ],
+                "notes": "API Access Management is also called out as a discrete product in the Okta product navigation."
+            },
+            {
+                "name": "Lifecycle Management and Provisioning",
+                "description": "Automates user lifecycle events (onboarding, changes, offboarding) across multiple systems through directory integration, SCIM connectors, Okta Integration Network apps, and provisioning rules.",
+                "primary_actors": [
+                    "IAM administrators",
+                    "HR/IT operators",
+                    "Application owners"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Admin Console lifecycle and provisioning settings for apps, group rules, and directory integrations.",
+                        "url": "https://help.okta.com/oie/en-us/content/topics/identity-governance/iga.htm"
+                    },
+                    {
+                        "channel": "integration",
+                        "details": "SCIM and OIN-based connectors to SaaS applications for automatic account provisioning and deprovisioning.",
+                        "url": "https://developer.okta.com/docs/guides/okta-integration-network/"
+                    }
+                ],
+                "key_data_involved": [
+                    "User lifecycle state (provisioned, active, suspended, deprovisioned)",
+                    "Application accounts and entitlements",
+                    "Directory and HR system attributes",
+                    "Group assignment rules and policies",
+                    "Provisioning logs and error events"
+                ],
+                "security_relevant_traits": [
+                    "Controls creation and removal of access across applications; failures can cause orphaned access or outages",
+                    "Group rules and entitlement policies encode business logic about who should have what access",
+                    "Supports SCIM integrations with entitlements, which if misconfigured can overprovision users"
+                ],
+                "evidence": [
+                    {
+                        "title": "Identity Governance Overview",
+                        "url": "https://help.okta.com/oie/en-us/content/topics/identity-governance/iga.htm",
+                        "summary": "States that Lifecycle Management handles users, groups, apps, rules, and connectors including SCIM and on-prem provisioning.",
+                        "notes": null
+                    },
+                    {
+                        "title": "Okta Integration Network Guide",
+                        "url": "https://developer.okta.com/docs/guides/okta-integration-network/",
+                        "summary": "Explains lifecycle management integrations, including SCIM and Workflows connectors.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Identity Governance (Access Governance, Requests, and Certifications)",
+                "description": "Implements governance over access through campaigns, on-demand access requests, entitlement management, resource collections, resource ownership, labels, and separation of duties rules.",
+                "primary_actors": [
+                    "Governance and compliance teams",
+                    "Line-of-business managers and approvers",
+                    "IAM administrators",
+                    "Auditors"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Admin Console Identity Governance area for configuring Access Certifications, Access Requests, entitlements, resource owners, labels, and SOD rules.",
+                        "url": "https://help.okta.com/oie/en-us/content/topics/identity-governance/iga.htm"
+                    },
+                    {
+                        "channel": "ui",
+                        "details": "End-User Dashboard where users can request access to apps, entitlements, and groups.",
+                        "url": "https://help.okta.com/oie/en-us/content/topics/identity-governance/iga.htm"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "Identity Governance APIs for managing entitlements, access requests, campaigns, and reports.",
+                        "url": "https://developer.okta.com/"
+                    }
+                ],
+                "key_data_involved": [
+                    "Certification campaigns and decisions",
+                    "Access request workflows and approvals",
+                    "Entitlement definitions and policies",
+                    "Resource collections and bundles",
+                    "Resource labels and ownership metadata",
+                    "SOD rules and detected conflicts"
+                ],
+                "security_relevant_traits": [
+                    "Provides periodic attestation of access to meet compliance requirements (e.g., SOX, SOC 2)",
+                    "SOD rules explicitly encode conflict-of-interest controls for critical business processes",
+                    "Integrates with Workflows and System Log events, enabling automated remediation on governance outcomes"
+                ],
+                "evidence": [
+                    {
+                        "title": "Identity Governance Overview (Identity Engine)",
+                        "url": "https://help.okta.com/oie/en-us/content/topics/identity-governance/iga.htm",
+                        "summary": "Lists Access Certifications, Access Requests, Entitlement Management, resource collections, owners, labels, SOD, and reporting as components of Access Governance.",
+                        "notes": null
+                    }
+                ],
+                "notes": "Classic Engine Identity Governance mirrors the same conceptual model according to its overview page."
+            },
+            {
+                "name": "Okta Workflows No-Code Automation Platform",
+                "description": "Enables admins and builders to create no-code flows that automate identity-centric and business processes using cards, connectors, and functions, with execution history and access control.",
+                "primary_actors": [
+                    "IAM administrators",
+                    "IT operations and automation engineers",
+                    "Line-of-business admins"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Workflows Console for managing folders, flows, tables, connections, templates, and execution history.",
+                        "url": "https://help.okta.com/wf/en-us/content/topics/workflows/learn/learn-workflows.htm"
+                    },
+                    {
+                        "channel": "integration",
+                        "details": "Connectors and Workflows Connector Builder for integrating with Okta and third-party SaaS apps.",
+                        "url": "https://help.okta.com/wf/en-us/content/topics/workflows/connector-builder/connector-builder.htm"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "Flow client token and API endpoint flows that can be invoked programmatically.",
+                        "url": "https://help.okta.com/wf/en-us/content/topics/workflows/learn/learn-workflows.htm"
+                    }
+                ],
+                "key_data_involved": [
+                    "Flow definitions and versions",
+                    "Connection configurations (credentials, tokens)",
+                    "Input/output data for each step (identity data, app metadata, tickets, etc.)",
+                    "Execution logs and flow run history",
+                    "Helper/delegated flow metadata"
+                ],
+                "security_relevant_traits": [
+                    "Flows can perform privileged operations such as provisioning, deprovisioning, and group assignment changes across many systems",
+                    "Execution limits and access control govern who can edit or run sensitive flows",
+                    "Delegated flows enable non-admins to trigger privileged actions through controlled entry points"
+                ],
+                "evidence": [
+                    {
+                        "title": "Okta Workflows Overview",
+                        "url": "https://help.okta.com/wf/en-us/content/topics/workflows/learn/learn-workflows.htm",
+                        "summary": "States that Workflows is a no-code automation platform and lists elements such as cards, connections, Access Control, execution limits, flow execution history, and delegated flows.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Okta Integration Network (OIN) and Enterprise App Integrations",
+                "description": "Offers a catalog of thousands of OIDC, SAML, SCIM, and API service integrations that customers and partners can use to connect apps for SSO and lifecycle management, or publish their own integrations.",
+                "primary_actors": [
+                    "Application vendors and integrators",
+                    "Customer IAM teams",
+                    "Developers building OIN apps"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "integration",
+                        "details": "Okta Integration Network catalog of pre-built workforce integrations.",
+                        "url": "https://www.okta.com/integrations"
+                    },
+                    {
+                        "channel": "ui",
+                        "details": "OIN Wizard and associated submission flows for getting an app Okta-verified and published.",
+                        "url": "https://developer.okta.com/docs/guides/okta-integration-network/"
+                    }
+                ],
+                "key_data_involved": [
+                    "Integration metadata (protocol, endpoints, app logo, configuration)",
+                    "SCIM schema mappings",
+                    "SSO settings (SAML metadata, OIDC configuration)",
+                    "Customer orgs’ app assignments and provisioning settings"
+                ],
+                "security_relevant_traits": [
+                    "Standardized templates reduce misconfiguration risk for common SaaS applications",
+                    "SCIM connectors automate provisioning and deprovisioning, impacting least-privilege enforcement",
+                    "API service integrations allow service-to-service access to Okta APIs using OAuth 2.0 credentials"
+                ],
+                "evidence": [
+                    {
+                        "title": "Okta Integration Network Guide",
+                        "url": "https://developer.okta.com/docs/guides/okta-integration-network/",
+                        "summary": "Defines OIN, describes SSO, lifecycle, and API service integration types and steps to build and publish integrations.",
+                        "notes": null
+                    },
+                    {
+                        "title": "Okta Identity Engine Docs Landing – Featured products",
+                        "url": "https://help.okta.com/okta_help.htm?type=oie&id=csh-oie",
+                        "summary": "Mentions Okta Integration Network connectors in the context of Lifecycle Management and integrations.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Okta Access Gateway (On-Premises Application Access)",
+                "description": "Extends Okta SSO and access controls to on-premises web applications via a gateway appliance, supporting high availability, multiple deployment models, and secure integration with Okta as IdP.",
+                "primary_actors": [
+                    "Network and infrastructure teams",
+                    "IAM administrators",
+                    "Application owners"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Access Gateway admin console for configuring apps, IdPs, policies, and managing day-to-day operations.",
+                        "url": "https://help.okta.com/oag/en-us/content/topics/access-gateway/daytoday.htm"
+                    },
+                    {
+                        "channel": "integration",
+                        "details": "Virtual appliance deployed in customer virtual environments to front on-prem web applications.",
+                        "url": "https://help.okta.com/oag/en-us/content/topics/access-gateway/get-started.htm"
+                    }
+                ],
+                "key_data_involved": [
+                    "Application definitions and routing rules",
+                    "Session and cookie settings for proxied apps",
+                    "Certificates and keys for TLS and SSO protocols",
+                    "HA cluster configuration and health state"
+                ],
+                "security_relevant_traits": [
+                    "Acts as a security boundary between Okta and on-prem apps; misconfiguration can expose internal resources",
+                    "Supports high availability clustering, whose failure modes must be considered for business continuity",
+                    "Security best practices guide covers hardening recommendations for the appliance"
+                ],
+                "evidence": [
+                    {
+                        "title": "Okta Access Gateway Docs Landing",
+                        "url": "https://help.okta.com/okta_help.htm?type=oag&id=ext_oag_main",
+                        "summary": "Lists get started, deployment, app integration, day-to-day management, troubleshooting, and reference architectures.",
+                        "notes": null
+                    },
+                    {
+                        "title": "Get started with Okta Access Gateway",
+                        "url": "https://help.okta.com/oag/en-us/content/topics/access-gateway/get-started.htm",
+                        "summary": "Describes tutorials for deploying Access Gateway, configuring IdPs, HA clusters, applications, and security best practices.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Advanced Server Access (ASA) for Zero Trust SSH/RDP",
+                "description": "Provides zero-trust SSH and RDP access to Linux and Windows servers, reconciling server accounts with Okta identities and eliminating static credentials.",
+                "primary_actors": [
+                    "Infrastructure and platform teams",
+                    "Security and compliance teams",
+                    "Developers and administrators who access servers"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "ASA web dashboard for managing teams, projects, and groups.",
+                        "url": "https://help.okta.com/asa/en-us/content/topics/adv_server_access/docs/manage-groups-and-projects.htm"
+                    },
+                    {
+                        "channel": "integration",
+                        "details": "ASA server agents installed on servers to enroll them and manage account lifecycles.",
+                        "url": "https://help.okta.com/asa/en-us/content/topics/adv_server_access/docs/sftd.htm"
+                    },
+                    {
+                        "channel": "integration",
+                        "details": "ASA clients and gateways for connecting users to servers via Okta-authenticated sessions.",
+                        "url": "https://help.okta.com/asa/en-us/content/topics/adv_server_access/docs/connect-team-servers.htm"
+                    }
+                ],
+                "key_data_involved": [
+                    "Server enrollment metadata (host identity, labels, projects)",
+                    "User-to-server access mappings",
+                    "Ephemeral SSH/RDP credentials or certificates",
+                    "SCIM-sourced user and group memberships"
+                ],
+                "security_relevant_traits": [
+                    "Automates lifecycle of privileged server accounts, helping remove standing credentials",
+                    "Uses Okta as source of truth, so compromise of Okta accounts or policies directly impacts server access",
+                    "Supports AD-joined scenarios, introducing additional trust relationships to consider"
+                ],
+                "evidence": [
+                    {
+                        "title": "Get started with Advanced Server Access",
+                        "url": "https://help.okta.com/asa/en-us/content/topics/adv_server_access/docs/start-here.htm",
+                        "summary": "Describes ASA as zero-trust access for SSH/RDP with Okta as source of truth and steps to configure teams and provisioning.",
+                        "notes": null
+                    },
+                    {
+                        "title": "Advanced Server Access Docs Landing",
+                        "url": "https://help.okta.com/okta_help.htm?type=asa&id=adv_server_access",
+                        "summary": "Lists server agents, clients, gateways, AD-joined, and team management as main ASA components.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Okta Device Access (Desktop MFA, Password Sync, and Device Logout)",
+                "description": "Extends identity and access management to the device sign-in experience, offering desktop MFA, password sync, password autofill, just-in-time local account creation, and remote logout.",
+                "primary_actors": [
+                    "Endpoint and workspace teams",
+                    "Security administrators",
+                    "End users"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "integration",
+                        "details": "Desktop MFA and Password Sync integrations with Windows and macOS login flows.",
+                        "url": "https://help.okta.com/oie/en-us/content/topics/oda/oda-overview.htm"
+                    },
+                    {
+                        "channel": "ui",
+                        "details": "Admin configuration for desktop MFA, password autofill, recovery, and device logout policies.",
+                        "url": "https://help.okta.com/oie/en-us/content/topics/oda/oda-overview.htm"
+                    }
+                ],
+                "key_data_involved": [
+                    "Device registration and Okta Verify accounts",
+                    "Local account credentials synchronized with Okta",
+                    "Device attributes and assurance signals",
+                    "Device logout and recovery PIN state"
+                ],
+                "security_relevant_traits": [
+                    "Controls initial device access, not just app access, tying endpoint security into identity policies",
+                    "Self-service password reset and desktop MFA recovery must be properly governed to avoid bypass",
+                    "Device Logout can be triggered by ITP risk policies or account deactivation, enforcing Zero Trust principles"
+                ],
+                "evidence": [
+                    {
+                        "title": "Okta Device Access",
+                        "url": "https://help.okta.com/oie/en-us/content/topics/oda/oda-overview.htm",
+                        "summary": "Explains desktop MFA, password sync, password autofill, JIT account creation, and device logout capabilities.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Identity Threat Protection with Okta AI",
+                "description": "Continuously evaluates user and session risk using Okta’s risk engine and signals from external security tools, triggering automated mitigation like MFA challenges, session termination, or group changes.",
+                "primary_actors": [
+                    "Security operations teams",
+                    "IAM administrators",
+                    "Risk and compliance teams"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Identity Threat Protection dashboards and configuration screens for detections and adaptive actions.",
+                        "url": "https://help.okta.com/oie/en-us/content/topics/itp/overview.htm"
+                    },
+                    {
+                        "channel": "integration",
+                        "details": "Shared signals pipeline integrating with EDR, CASB, MDM, and other security products.",
+                        "url": "https://www.okta.com/products/identity-threat-protection/"
+                    }
+                ],
+                "key_data_involved": [
+                    "User risk scores (login, session, entity)",
+                    "Events and signals from Okta and third-party tools",
+                    "Mappings from risk conditions to adaptive actions",
+                    "Session identifiers and app-scoped tokens for universal logout"
+                ],
+                "security_relevant_traits": [
+                    "Extends security beyond initial authentication into ongoing session monitoring",
+                    "Automated actions (quarantine, universal logout, MFA prompts) have significant impact and must be carefully tuned",
+                    "Acts as a central correlation layer for identity-centric threat detection across the tech stack"
+                ],
+                "evidence": [
+                    {
+                        "title": "Identity Threat Protection Overview (Docs)",
+                        "url": "https://help.okta.com/oie/en-us/content/topics/itp/overview.htm",
+                        "summary": "Describes ITP as a continuous identity threat solution integrating identity security features and triggering automated mitigation.",
+                        "notes": null
+                    },
+                    {
+                        "title": "Identity Threat Protection Product Page",
+                        "url": "https://www.okta.com/products/identity-threat-protection/",
+                        "summary": "Highlights continuous monitoring, automated threat response, universal session termination, and partner integrations.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Identity Security Posture Management (ISPM)",
+                "description": "Provides agentless discovery and analysis of identities, permissions, and misconfigurations across identity providers, SaaS, and cloud infrastructure to reduce the identity attack surface and enforce least privilege.",
+                "primary_actors": [
+                    "Security and risk teams",
+                    "IAM teams",
+                    "Cloud and SaaS owners",
+                    "Compliance officers"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "ISPM console for viewing detections, prioritised risks, and recommendations, with filtering and reporting.",
+                        "url": "https://help.okta.com/ispm/en-us/content/topics/ispm/overview.htm"
+                    },
+                    {
+                        "channel": "integration",
+                        "details": "Agentless integrations with IdPs, SaaS apps, and cloud infrastructure providers.",
+                        "url": "https://help.okta.com/ispm/en-us/content/topics/ispm/guides.htm"
+                    }
+                ],
+                "key_data_involved": [
+                    "Identity inventories (users, service accounts, groups)",
+                    "Permission and role assignments",
+                    "Detection results (e.g., MFA bypass, overprivileged users, improper offboarding)",
+                    "Risk classifications and priorities",
+                    "Compliance mappings (NIST, CIS, ISO, SOX, PCI-DSS)"
+                ],
+                "security_relevant_traits": [
+                    "Identifies structural misconfigurations and privilege accumulation that may not appear in day-to-day operations",
+                    "Supports least privilege and Zero Trust enforcement across heterogeneous systems",
+                    "Exports reports and integrates with workflows/ticketing, influencing remediation processes"
+                ],
+                "evidence": [
+                    {
+                        "title": "Identity Security Posture Management overview",
+                        "url": "https://help.okta.com/ispm/en-us/content/topics/ispm/overview.htm",
+                        "summary": "Explains ISPM’s role in discovering hidden threats, prioritizing vulnerabilities, and enforcing least privilege.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Okta Aerial Multi-Org Management",
+                "description": "Centralizes management of multiple Okta orgs via an Aerial account and Aerial org, providing a console to view orgs, request time-bound access, and manage multi-org environments.",
+                "primary_actors": [
+                    "Central IAM platform teams",
+                    "Regional org admins",
+                    "Security and audit teams"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Aerial Console within the Aerial org for viewing associated and managed orgs and initiating access requests.",
+                        "url": "https://help.okta.com/okta_help.htm?type=aerial&id=aerial-overview"
+                    }
+                ],
+                "key_data_involved": [
+                    "List of associated and managed Okta orgs",
+                    "Org metadata (status, cell, domain)",
+                    "Access request conditions and approvals",
+                    "Time-bound access tokens or session grants"
+                ],
+                "security_relevant_traits": [
+                    "Provides a high-privilege vantage point over multiple orgs; misuse could impact an entire environment",
+                    "Time-bound access requests enforce just-in-time admin access patterns",
+                    "Policies in the Aerial org govern who can request and approve privileged access to downstream orgs"
+                ],
+                "evidence": [
+                    {
+                        "title": "Okta Aerial",
+                        "url": "https://help.okta.com/okta_help.htm?type=aerial&id=aerial-overview",
+                        "summary": "Explains Aerial account, Aerial org, and Aerial Console and the ability to request time-bound access to managed orgs.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "End-User Dashboards, Self-Service, and Okta Personal for Workforce",
+                "description": "Provides workforce users with a centralized dashboard to access work and optionally personal apps, request access, and perform self-service actions like password resets.",
+                "primary_actors": [
+                    "Workforce end users",
+                    "Workforce admins",
+                    "Governance teams"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "End-User Dashboard for launching apps, requesting access, and managing personal/work app separation (Okta Personal for Workforce).",
+                        "url": "https://help.okta.com/oie/en-us/content/topics/okta-personal/okta-personal-for-workforce/get-started.htm"
+                    },
+                    {
+                        "channel": "ui",
+                        "details": "Identity Governance-enabled Self-Service Access Requests initiated from the dashboard.",
+                        "url": "https://help.okta.com/oie/en-us/content/topics/identity-governance/iga.htm"
+                    }
+                ],
+                "key_data_involved": [
+                    "User app assignments and bookmarks",
+                    "Access requests and approvals",
+                    "Personal vs work app categorizations",
+                    "Self-service password reset and factor management data"
+                ],
+                "security_relevant_traits": [
+                    "Self-service capabilities reduce admin workload but can increase risk if not bounded by strong policies",
+                    "Okta Personal for Workforce introduces personal app access in the same UX, requiring careful separation and policy controls",
+                    "Access Requests from the dashboard connect end users directly into governance workflows"
+                ],
+                "evidence": [
+                    {
+                        "title": "Okta Identity Engine Docs Landing – Featured products",
+                        "url": "https://help.okta.com/okta_help.htm?type=oie&id=csh-oie",
+                        "summary": "Lists Okta Personal for Workforce as a featured product offering a single interface for work and personal apps.",
+                        "notes": null
+                    },
+                    {
+                        "title": "Identity Governance Overview",
+                        "url": "https://help.okta.com/oie/en-us/content/topics/identity-governance/iga.htm",
+                        "summary": "Notes that users can request access from their End-User Dashboard.",
+                        "notes": null
+                    }
+                ],
+                "notes": "The dedicated Okta Personal docs were not fully read; behavior is inferred from the featured-product description."
+            },
+            {
+                "name": "Cross App Access (XAA) for AI Agents and App-to-App Interactions",
+                "description": "Introduces an open protocol and integration pattern to secure AI agent and app-to-app interactions by shifting control to the identity layer and enforcing policy-driven access for non-human identities.",
+                "primary_actors": [
+                    "Developers building AI agents and automations",
+                    "Security architects",
+                    "SaaS platform teams"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "integration",
+                        "details": "Agent-to-app and app-to-app OAuth-style flows defined by Cross App Access, integrated with Okta and, in future, Auth0.",
+                        "url": "https://www.okta.com/newsroom/press-releases/okta-introduces-cross-app-access-to-help-secure-ai-agents-in-the/"
+                    }
+                ],
+                "key_data_involved": [
+                    "Agent and application identities",
+                    "Access tokens and delegated permissions between agents and apps",
+                    "Policies defining allowable app-to-app and agent-to-app connections",
+                    "Audit trails of agent actions and decisions"
+                ],
+                "security_relevant_traits": [
+                    "Targets non-human identity risk, particularly in AI agent ecosystems",
+                    "Standardizes agent connections via the identity fabric, enabling centralized policy and monitoring",
+                    "Press materials state that Okta Privileged Access and Identity Governance will govern agent actions and permissions"
+                ],
+                "evidence": [
+                    {
+                        "title": "Cross App Access Press Release (nav and description)",
+                        "url": "https://www.okta.com/newsroom/press-releases/okta-introduces-cross-app-access-to-help-secure-ai-agents-in-the/",
+                        "summary": "Introduces Cross App Access as part of the product taxonomy and describes it as an integration for securing AI agents and app-to-app connections.",
+                        "notes": "Protocol-level spec not reviewed; behavior is described at conceptual level only."
+                    }
+                ],
+                "notes": "The detailed protocol specification for XAA was not available in the reviewed docs; details such as token formats, endpoints, and revocation semantics remain open questions."
+            }
+        ],
+        "administrative_and_operational_capabilities": [
+            {
+                "name": "Okta Admin Console (Identity Engine and Classic Engine)",
+                "description": "Web-based administrative interface for configuring identity, access, security, governance, and integrations across Identity Engine and Classic Engine orgs.",
+                "primary_actors": [
+                    "Org administrators",
+                    "Security admins",
+                    "App and integration owners"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Identity Engine admin areas for flows, policies, Identity Governance, FastPass, Device Access, and Threat Protection.",
+                        "url": "https://help.okta.com/okta_help.htm?type=oie&id=csh-oie"
+                    },
+                    {
+                        "channel": "ui",
+                        "details": "Classic Engine admin areas for MFA, ThreatInsight, HealthInsight, Okta Verify, and legacy configuration.",
+                        "url": "https://help.okta.com/en-us/content/index-admin.htm"
+                    }
+                ],
+                "key_data_involved": [
+                    "Org-wide configuration and policies",
+                    "Admin role assignments",
+                    "Application definitions and SSO settings",
+                    "Lifecycle and governance settings",
+                    "Security and risk configurations"
+                ],
+                "security_relevant_traits": [
+                    "Primary control plane for an org; compromise of admin accounts can impact all identities and apps",
+                    "Supports different admin roles with varying permissions; proper segregation of duties is critical",
+                    "Configuration changes in Identity Engine (e.g., flows, authenticators) can significantly change security posture"
+                ],
+                "evidence": [
+                    {
+                        "title": "Okta Identity Engine Docs Landing",
+                        "url": "https://help.okta.com/okta_help.htm?type=oie&id=csh-oie",
+                        "summary": "Shows Identity Engine as a documentation category with links to flows, architecture, and featured products.",
+                        "notes": null
+                    },
+                    {
+                        "title": "Okta Classic Engine Docs Landing",
+                        "url": "https://help.okta.com/en-us/content/index-admin.htm",
+                        "summary": "Classic Engine documentation index highlighting featured products like MFA, ThreatInsight, Okta Verify, and Identity Governance.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "System Log, Event Types, and Reporting",
+                "description": "Provides a centralized System Log of security and operational events, with defined event types, query options, and APIs for analysis and monitoring.",
+                "primary_actors": [
+                    "Security operations teams",
+                    "Audit and compliance teams",
+                    "IAM administrators",
+                    "Developers building monitoring integrations"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "System Log views in the Admin Console for filtering and searching events.",
+                        "url": "https://help.okta.com/en-us/"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "System Log API with query parameters for searching, filtering, and exporting events.",
+                        "url": "https://developer.okta.com/docs/reference/api/system-log/"
+                    }
+                ],
+                "key_data_involved": [
+                    "Authentication and MFA events",
+                    "Lifecycle and provisioning events",
+                    "Governance campaign and access-request events",
+                    "Admin actions and configuration changes",
+                    "ITP and ISPM-related signals (via specific log events)"
+                ],
+                "security_relevant_traits": [
+                    "System of record for security-relevant actions and identity events",
+                    "Feeds governance (OIG) and automation (Workflows) for detection and remediation",
+                    "API rate limits and query options affect how logs can be retrieved for incident response"
+                ],
+                "evidence": [
+                    {
+                        "title": "Reference Overview – Event types and System Log query options",
+                        "url": "https://developer.okta.com/docs/reference/",
+                        "summary": "Lists event types and System Log query options as reference topics.",
+                        "notes": null
+                    },
+                    {
+                        "title": "Identity Governance Overview",
+                        "url": "https://help.okta.com/oie/en-us/content/topics/identity-governance/iga.htm",
+                        "summary": "Mentions Identity Governance-specific System Log events used for automation.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "API Rate Limits and Error Handling",
+                "description": "Enforces rate limits on Okta APIs to protect service availability, with defined error codes and guidance for client-side backoff and pagination.",
+                "primary_actors": [
+                    "Developers and integrators",
+                    "Platform and SRE teams"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "api",
+                        "details": "Management and authentication APIs subject to per-tenant and org-specific rate limits.",
+                        "url": "https://developer.okta.com/docs/reference/"
+                    }
+                ],
+                "key_data_involved": [
+                    "API request metadata (endpoints invoked, rate counters)",
+                    "Rate limit buckets and quotas",
+                    "Error codes and messages indicating throttling or other failures"
+                ],
+                "security_relevant_traits": [
+                    "Rate limits mitigate denial-of-service and abusive behavior, but also constrain bulk operations and monitoring",
+                    "Improper error handling could lead to fragile integrations or data inconsistency during high load",
+                    "Rate-limited operations affecting security-critical tasks (e.g., provisioning) must be designed to retry safely"
+                ],
+                "evidence": [
+                    {
+                        "title": "Reference Overview – Rate limits and Error codes",
+                        "url": "https://developer.okta.com/docs/reference/",
+                        "summary": "Includes rate limits and error codes as core reference topics for Okta APIs.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "ThreatInsight and HealthInsight Security Recommendations",
+                "description": "Classic Engine features that provide analysis and recommendations to detect credential-based attacks and improve org security posture.",
+                "primary_actors": [
+                    "Security administrators",
+                    "IAM teams"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "ThreatInsight configuration and dashboards in the Classic Engine Admin Console.",
+                        "url": "https://help.okta.com/en-us/content/topics/security/threat-insight/ti-index.htm"
+                    },
+                    {
+                        "channel": "ui",
+                        "details": "HealthInsight tasks and recommendations to strengthen org security configurations.",
+                        "url": "https://help.okta.com/en-us/content/topics/security/healthinsight/healthinsight-security-task-recomendations.htm"
+                    }
+                ],
+                "key_data_involved": [
+                    "Aggregated sign-in and attack patterns",
+                    "Security configuration status and deviations",
+                    "Recommendations and tasks for admins"
+                ],
+                "security_relevant_traits": [
+                    "Provides baseline detection of credential-based attacks, complementing newer ITP capabilities",
+                    "HealthInsight flags insecure settings and can influence hardening roadmaps",
+                    "Some signals and logic feed into other products like Identity Threat Protection"
+                ],
+                "evidence": [
+                    {
+                        "title": "Okta Classic Engine Docs Landing – Featured products",
+                        "url": "https://help.okta.com/en-us/content/index-admin.htm",
+                        "summary": "Highlights ThreatInsight, Multifactor Authentication, and HealthInsight as Classic Engine security features.",
+                        "notes": null
+                    }
+                ],
+                "notes": "ThreatInsight and HealthInsight docs are only referenced; specifics of detection algorithms weren’t reviewed."
+            },
+            {
+                "name": "Access Gateway Deployment and Operations",
+                "description": "Operational lifecycle management for the Access Gateway appliance, including deployment in virtual environments, HA configuration, app onboarding, and troubleshooting.",
+                "primary_actors": [
+                    "Network and infrastructure teams",
+                    "IAM administrators"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Access Gateway administrative UI for managing nodes, clusters, and application integrations.",
+                        "url": "https://help.okta.com/oag/en-us/content/topics/access-gateway/manage-deployment.htm"
+                    },
+                    {
+                        "channel": "ui",
+                        "details": "Troubleshooting and reference architecture documentation for operational guidance.",
+                        "url": "https://help.okta.com/oag/en-us/content/topics/access-gateway/troubleshooting.htm"
+                    }
+                ],
+                "key_data_involved": [
+                    "Gateway node configuration",
+                    "Cluster membership and health",
+                    "Application routing and SSO configuration",
+                    "Operational logs and metrics"
+                ],
+                "security_relevant_traits": [
+                    "Misconfigured gateway deployment can expose on-prem apps directly to the internet or bypass SSO/MFA",
+                    "Reference architectures influence network segmentation and trust boundaries",
+                    "Troubleshooting guides likely include guidance for safe debug access to sensitive logs"
+                ],
+                "evidence": [
+                    {
+                        "title": "Okta Access Gateway Docs Landing",
+                        "url": "https://help.okta.com/okta_help.htm?type=oag&id=ext_oag_main",
+                        "summary": "Lists operations topics including managing deployment, daily administration, troubleshooting, and reference architectures.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Advanced Server Access Team and Project Administration",
+                "description": "Provides administrative capabilities to define ASA teams, projects, and group mappings, and to manage SCIM provisioning and group synchronization from Okta.",
+                "primary_actors": [
+                    "Platform and infra teams",
+                    "IAM administrators"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "ASA dashboard for team creation, project definitions, group mapping, and role assignment.",
+                        "url": "https://help.okta.com/asa/en-us/content/topics/adv_server_access/docs/manage-groups-and-projects.htm"
+                    },
+                    {
+                        "channel": "integration",
+                        "details": "SCIM provisioning and group sync from Okta to ASA.",
+                        "url": "https://help.okta.com/asa/en-us/content/topics/adv_server_access/docs/ad-overview.htm"
+                    }
+                ],
+                "key_data_involved": [
+                    "ASA team and project metadata",
+                    "User and group assignments within ASA",
+                    "SCIM provisioning state and mapping rules"
+                ],
+                "security_relevant_traits": [
+                    "ASA teams act as scope boundaries; misconfiguration can broaden privileged access to many servers",
+                    "Group sync determines which Okta groups map to server-level privileges",
+                    "Admin actions in ASA directly affect server login authorization"
+                ],
+                "evidence": [
+                    {
+                        "title": "Get started with Advanced Server Access",
+                        "url": "https://help.okta.com/asa/en-us/content/topics/adv_server_access/docs/start-here.htm",
+                        "summary": "Explains teams as ASA tenants and points to SCIM and group sync configuration topics.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Workflows Administration, Access Control, and Limits",
+                "description": "Controls who can create, modify, and run flows in Okta Workflows, manages flow organization, and enforces execution limits and performance constraints.",
+                "primary_actors": [
+                    "Workflows administrators",
+                    "IAM and automation teams"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Workflows Console sections for Access Control, execution limits, parent/helper/delegated flows, backup, and flow aliases.",
+                        "url": "https://help.okta.com/wf/en-us/content/topics/workflows/learn/learn-workflows.htm"
+                    }
+                ],
+                "key_data_involved": [
+                    "Folder and flow-level ACLs",
+                    "Execution throttles and limits",
+                    "Backup/export artifacts of flows",
+                    "Audit logs of flow changes and executions"
+                ],
+                "security_relevant_traits": [
+                    "Access Control determines who can operate powerful flows that may manipulate identities and entitlements",
+                    "Execution limits protect the platform and integrated systems from excessive automation load",
+                    "Backup and migration capabilities influence change control and disaster recovery for critical workflows"
+                ],
+                "evidence": [
+                    {
+                        "title": "Okta Workflows Overview",
+                        "url": "https://help.okta.com/wf/en-us/content/topics/workflows/learn/learn-workflows.htm",
+                        "summary": "Lists Access Control, execution limits, helper flows, delegated flows, backup, and flow aliases among core topics.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Identity Governance Operations and Reporting",
+                "description": "Operational capabilities for running Access Certification campaigns, reviewing results, managing Access Requests, and consuming governance reports and APIs.",
+                "primary_actors": [
+                    "Governance teams",
+                    "Business reviewers",
+                    "Auditors",
+                    "IAM admins"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Admin UI for launching and monitoring certification campaigns, reviewing requests, and examining reports.",
+                        "url": "https://help.okta.com/oie/en-us/content/topics/identity-governance/iga.htm"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "Identity Governance APIs for campaign data, requests, entitlements, and reports.",
+                        "url": "https://developer.okta.com/"
+                    }
+                ],
+                "key_data_involved": [
+                    "Campaign configuration and schedules",
+                    "Decision logs and evidence for approvals/revocations",
+                    "Access request histories and outcomes",
+                    "Governance reports for auditors"
+                ],
+                "security_relevant_traits": [
+                    "Campaign frequency and coverage affect how quickly over-entitlements are detected and removed",
+                    "APIs allow external GRC tools to automate governance operations, with associated privilege implications",
+                    "Integration with Workflows and System Log can enable auto-remediation or follow-up processes"
+                ],
+                "evidence": [
+                    {
+                        "title": "Identity Governance Overview",
+                        "url": "https://help.okta.com/oie/en-us/content/topics/identity-governance/iga.htm",
+                        "summary": "Describes Access Certifications, Access Requests, reports, and governance APIs.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Okta Aerial Access Requests and Time-Bound Authentication",
+                "description": "Operationalizes Aerial’s ability to grant just-in-time, time-limited access for Aerial owners to managed orgs, based on configurable request conditions.",
+                "primary_actors": [
+                    "Central platform admins",
+                    "Regional org admins",
+                    "Security and audit teams"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Aerial Console and Aerial org policies for configuring access request conditions and processing approvals.",
+                        "url": "https://help.okta.com/okta_help.htm?type=aerial&id=aerial-overview"
+                    }
+                ],
+                "key_data_involved": [
+                    "Access request records (who, what org, duration)",
+                    "Approval workflows and outcomes",
+                    "Audit logs of access grants and revocations"
+                ],
+                "security_relevant_traits": [
+                    "Institutionalizes just-in-time admin access to multiple orgs, reducing standing privileges",
+                    "Request conditions can be tuned to enforce least privilege and separation of duties at a multi-org level",
+                    "Auditability of cross-org admin actions is essential for compliance and incident response"
+                ],
+                "evidence": [
+                    {
+                        "title": "Okta Aerial",
+                        "url": "https://help.okta.com/okta_help.htm?type=aerial&id=aerial-overview",
+                        "summary": "Mentions time-bound access requests that Aerial owners can use to sign in to managed orgs.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Developer Sandbox (Integrator Free Plan) and Developer Support",
+                "description": "Provides free developer orgs for building integrations and applications, plus supporting resources like guides, forums, and release notes.",
+                "primary_actors": [
+                    "Application developers",
+                    "Integration partners",
+                    "Solution architects"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Sign-up flow for Integrator Free Plan orgs and associated admin experience.",
+                        "url": "https://developer.okta.com/signup/"
+                    },
+                    {
+                        "channel": "other",
+                        "details": "Developer documentation, guides, concepts, SDKs, and release notes via the developer portal.",
+                        "url": "https://developer.okta.com/"
+                    },
+                    {
+                        "channel": "other",
+                        "details": "Developer forum for Q&A and troubleshooting.",
+                        "url": "https://devforum.okta.com/"
+                    }
+                ],
+                "key_data_involved": [
+                    "Developer org configuration and sample data",
+                    "API tokens and client registrations used during development",
+                    "Forum posts and community knowledge"
+                ],
+                "security_relevant_traits": [
+                    "Integrator Free Plan orgs are separate from production but still require secure handling of test credentials and data",
+                    "Developer docs guide recommended patterns (e.g., redirect auth vs embedded) that materially affect security posture",
+                    "Forums sometimes contain code snippets and configuration patterns that may be adopted in production"
+                ],
+                "evidence": [
+                    {
+                        "title": "Okta Developer Portal Home",
+                        "url": "https://developer.okta.com/",
+                        "summary": "Announces Integrator Free Plan orgs and links to docs, references, and forum.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            }
+        ],
+        "api_surface_and_integrations": [
+            {
+                "name": "Core Okta Management REST APIs (Users, Groups, Apps, Policies, Logs)",
+                "description": "REST APIs that manage core Okta resources such as users, groups, applications, sessions, and system logs, forming the primary programmable surface of the platform.",
+                "primary_actors": [
+                    "Developers",
+                    "Platform and automation engineers",
+                    "Integration partners"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "api",
+                        "details": "REST endpoints documented in the Okta API reference; includes Users, Groups, Apps, System Log, and related resources.",
+                        "url": "https://developer.okta.com/docs/reference/"
+                    }
+                ],
+                "key_data_involved": [
+                    "User and group records",
+                    "Application definitions and assignments",
+                    "Sessions and tokens",
+                    "System Log events",
+                    "Policy and configuration objects"
+                ],
+                "security_relevant_traits": [
+                    "Enables high-privilege operations such as creating users, assigning apps, and updating policies programmatically",
+                    "Protected by API tokens or OAuth 2.0 service accounts; misuse can fully compromise an org",
+                    "Rate limits and pagination govern safe bulk operations and log retrieval"
+                ],
+                "evidence": [
+                    {
+                        "title": "Reference Overview",
+                        "url": "https://developer.okta.com/docs/reference/",
+                        "summary": "States that this section provides reference information for Okta API endpoints and related topics such as error codes and rate limits.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "System Log API",
+                "description": "Specialized API for querying the System Log with flexible filters, search parameters, and pagination to support monitoring, SIEM integration, and forensics.",
+                "primary_actors": [
+                    "Security operations teams",
+                    "SIEM and monitoring engineers",
+                    "Incident responders"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "api",
+                        "details": "System Log endpoint with query options for filtering by event types, time ranges, actors, and more.",
+                        "url": "https://developer.okta.com/docs/reference/api/system-log/"
+                    }
+                ],
+                "key_data_involved": [
+                    "Structured event records",
+                    "Query parameters and filters",
+                    "Pagination cursors (for large result sets)"
+                ],
+                "security_relevant_traits": [
+                    "Feeds SIEMs and detection tools with identity events, bridging Okta and broader security monitoring",
+                    "Improperly secured API tokens used for log access could leak sensitive audit data",
+                    "Query limits and rate limits affect how quickly incident responders can pull historical events"
+                ],
+                "evidence": [
+                    {
+                        "title": "Reference Overview – System Log query options",
+                        "url": "https://developer.okta.com/docs/reference/",
+                        "summary": "Calls out System Log query options as a reference topic tied to the System Log API.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Identity Governance APIs",
+                "description": "APIs for interacting with Identity Governance objects such as entitlements, campaigns, access requests, resource collections, and reports.",
+                "primary_actors": [
+                    "Governance tools and GRC platforms",
+                    "Automation engineers",
+                    "IAM teams"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "api",
+                        "details": "Identity Governance API endpoints for programmatic management of access certifications, requests, entitlements, and governance reports.",
+                        "url": "https://developer.okta.com/"
+                    }
+                ],
+                "key_data_involved": [
+                    "Campaign definitions and status",
+                    "Access request objects and decisions",
+                    "Entitlement and resource metadata",
+                    "Governance reports and summaries"
+                ],
+                "security_relevant_traits": [
+                    "APIs can be used to bypass or trigger governance processes at scale; their use should be tightly controlled",
+                    "Access Governance-specific System Log events link API actions to audit trails",
+                    "Integration with Workflows or external GRC tools can further automate privileged operations"
+                ],
+                "evidence": [
+                    {
+                        "title": "Identity Governance Overview",
+                        "url": "https://help.okta.com/oie/en-us/content/topics/identity-governance/iga.htm",
+                        "summary": "Mentions Identity Governance APIs used to manage entitlements, access requests, campaigns, and reports.",
+                        "notes": null
+                    }
+                ],
+                "notes": "The dedicated API reference for Identity Governance endpoints was not reviewed; only their existence and high-level purpose are known."
+            },
+            {
+                "name": "OAuth 2.0 / OIDC and SAML Endpoints",
+                "description": "Standards-based authorization and authentication endpoints used by applications and APIs for login, token issuance, and SSO using OAuth 2.0, OpenID Connect, and SAML 2.0.",
+                "primary_actors": [
+                    "Application developers",
+                    "Security architects",
+                    "Client-side and server-side apps"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "api",
+                        "details": "OAuth 2.0 and OIDC endpoints (/authorize, /token, discovery endpoints) and SAML endpoints for SSO.",
+                        "url": "https://developer.okta.com/docs/concepts/oauth-openid/"
+                    }
+                ],
+                "key_data_involved": [
+                    "Authorization requests and responses",
+                    "Authorization codes and tokens",
+                    "SAML assertions and metadata",
+                    "Client registrations and redirect URIs"
+                ],
+                "security_relevant_traits": [
+                    "Correct choice of flow (e.g., Auth Code + PKCE for SPAs) is critical to prevent token leakage",
+                    "Token lifetimes, scopes, and claims impact downstream authorization decisions",
+                    "OIDC discovery and dynamic client registration must be handled securely to avoid misconfigured clients"
+                ],
+                "evidence": [
+                    {
+                        "title": "OAuth 2.0 and OpenID Connect overview",
+                        "url": "https://developer.okta.com/docs/concepts/oauth-openid/",
+                        "summary": "Defines OAuth and OIDC roles, token types, and various flows and gives guidance on choosing the right flow.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Okta Workflows Connectors and Connector Builder",
+                "description": "Integration layer within Workflows that exposes event and action cards for Okta and third-party SaaS apps and allows customers to build custom connectors.",
+                "primary_actors": [
+                    "Workflows builders",
+                    "Integration teams",
+                    "SaaS owners"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "integration",
+                        "details": "Built-in connectors and cards representing operations on Okta and other SaaS APIs.",
+                        "url": "https://help.okta.com/wf/en-us/content/topics/workflows/connector-reference/connector-reference.htm"
+                    },
+                    {
+                        "channel": "integration",
+                        "details": "Connector Builder UI for building and deploying custom connectors.",
+                        "url": "https://help.okta.com/wf/en-us/content/topics/workflows/connector-builder/connector-builder.htm"
+                    }
+                ],
+                "key_data_involved": [
+                    "Connector configuration (auth, endpoints, schemas)",
+                    "Event subscriptions and trigger definitions",
+                    "Input/output schemas for connector actions"
+                ],
+                "security_relevant_traits": [
+                    "Connectors encapsulate credentials and API access to external systems; misconfiguration can leak or misuse credentials",
+                    "Event-based flows may propagate sensitive data between systems; data minimization and masking are important",
+                    "Connector Builder allows arbitrary API calls, effectively extending Okta’s trusted execution environment"
+                ],
+                "evidence": [
+                    {
+                        "title": "Okta Workflows Landing and Overview",
+                        "url": "https://help.okta.com/okta_help.htm?type=wf&id=ext-Okta-workflows",
+                        "summary": "Highlights Connectors and Connector Builder as core components of Workflows.",
+                        "notes": null
+                    },
+                    {
+                        "title": "Workflows Overview",
+                        "url": "https://help.okta.com/wf/en-us/content/topics/workflows/learn/learn-workflows.htm",
+                        "summary": "References connections, action/function cards, and flow execution behaviors.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Okta Integration Network (SSO, Lifecycle, and API Service Integrations)",
+                "description": "Provides integration templates for SSO (OIDC/SAML), lifecycle management (SCIM), and API service integrations, enabling standardized connectivity between Okta and partner apps.",
+                "primary_actors": [
+                    "Application vendors",
+                    "Customer IAM teams",
+                    "Partner integration engineers"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "integration",
+                        "details": "OIN catalog for discovering and configuring app integrations.",
+                        "url": "https://www.okta.com/integrations"
+                    },
+                    {
+                        "channel": "other",
+                        "details": "OIN developer guides and OIN Wizard for designing and publishing integrations.",
+                        "url": "https://developer.okta.com/docs/guides/okta-integration-network/"
+                    }
+                ],
+                "key_data_involved": [
+                    "Integration metadata and configuration parameters",
+                    "SSO bindings and endpoints",
+                    "SCIM provisioning endpoints and schemas"
+                ],
+                "security_relevant_traits": [
+                    "Based on open standards (OIDC, SAML, SCIM), but misconfigured integrations can still cause SSO or provisioning issues",
+                    "Service integrations allow apps to call Okta APIs with client credentials, creating powerful non-human identities",
+                    "OIN verification process provides some quality assurance for catalog integrations"
+                ],
+                "evidence": [
+                    {
+                        "title": "Okta Integration Network Guide",
+                        "url": "https://developer.okta.com/docs/guides/okta-integration-network/",
+                        "summary": "Explains integration types and publishing process for OIN apps.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Security Signals and Shared Signals Integrations for Identity Threat Protection",
+                "description": "Integrates Identity Threat Protection with third-party security tools (EDR, CASB, MDM, etc.) to exchange risk signals and coordinate automated responses.",
+                "primary_actors": [
+                    "Security operations teams",
+                    "Security platform engineers",
+                    "Vendor integration teams"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "integration",
+                        "details": "Shared signals pipeline and partner integrations connecting Okta ITP with tools like EDR, CASB, and MDM.",
+                        "url": "https://www.okta.com/products/identity-threat-protection/"
+                    }
+                ],
+                "key_data_involved": [
+                    "Risk events and context from external tools",
+                    "Mappings between external events and Okta entity risk updates",
+                    "Actions triggered in both Okta and partner systems"
+                ],
+                "security_relevant_traits": [
+                    "Extends identity-centric risk decisions beyond Okta’s boundary, coordinating cross-tool responses",
+                    "Misconfiguration could either suppress needed signals or cause over-triggering of disruptive remediation (e.g., mass logouts)",
+                    "Integrations may use standard frameworks (e.g., shared signals) but details were not fully examined"
+                ],
+                "evidence": [
+                    {
+                        "title": "Identity Threat Protection Product Page",
+                        "url": "https://www.okta.com/products/identity-threat-protection/",
+                        "summary": "Mentions connected security intelligence and integrations with external security solutions.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Terraform Provider and Infrastructure-as-Code Integration",
+                "description": "Allows Okta configuration and resources (users, groups, apps, policies) to be managed declaratively via Terraform, enabling GitOps-style workflows.",
+                "primary_actors": [
+                    "DevOps and platform engineers",
+                    "IAM teams adopting IaC"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "other",
+                        "details": "Okta Terraform Provider and associated documentation and GitHub repository.",
+                        "url": "https://github.com/okta/terraform-provider-okta"
+                    }
+                ],
+                "key_data_involved": [
+                    "Terraform configuration files representing Okta resources",
+                    "State files tracking observed Okta configuration",
+                    "Okta API tokens used by Terraform"
+                ],
+                "security_relevant_traits": [
+                    "Drifts between Terraform state and actual Okta configuration impact predictability and security posture",
+                    "Terraform pipelines run with privileged Okta tokens; CI/CD security is critical",
+                    "Provider upgrades and OIE migrations may change behavior of resource definitions"
+                ],
+                "evidence": [
+                    {
+                        "title": "Okta Developer Portal – Automation and Orchestration section",
+                        "url": "https://developer.okta.com/",
+                        "summary": "Promotes the Okta Terraform Provider and references partner resources and documentation.",
+                        "notes": null
+                    }
+                ],
+                "notes": "Specific Terraform resource schemas are defined in the provider’s docs and code, which were not fully reviewed."
+            }
+        ],
+        "background_jobs_and_automation": [
+            {
+                "name": "Automated Provisioning and Deprovisioning via Lifecycle Management and SCIM",
+                "description": "Background operations that synchronize accounts and entitlements across systems based on lifecycle events, rules, and SCIM connectors.",
+                "primary_actors": [
+                    "IAM administrators",
+                    "HR/IT operations"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "integration",
+                        "details": "Scheduled and event-driven provisioning tasks triggered by Okta and SCIM connectors.",
+                        "url": "https://help.okta.com/oie/en-us/content/topics/identity-governance/iga.htm"
+                    }
+                ],
+                "key_data_involved": [
+                    "User lifecycle events (hire, move, leave)",
+                    "SCIM payloads and provisioning events",
+                    "Assignment and entitlement changes",
+                    "Provisioning error logs"
+                ],
+                "security_relevant_traits": [
+                    "Ensures timely account creation and removal; failures can leave orphaned access or disrupt business",
+                    "Rules and mappings encode implicit authorization logic across many systems",
+                    "Bulk or scheduled operations should be monitored to catch misconfigurations quickly"
+                ],
+                "evidence": [
+                    {
+                        "title": "Identity Governance Overview – Lifecycle Management",
+                        "url": "https://help.okta.com/oie/en-us/content/topics/identity-governance/iga.htm",
+                        "summary": "Describes Lifecycle Management capabilities including SCIM integrations and directory integration.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Workflows Event-Driven and Scheduled Automation",
+                "description": "Flows triggered by events (such as user lifecycle changes, app assignments, or external webhooks) or schedules to perform automated tasks across Okta and integrated systems.",
+                "primary_actors": [
+                    "Automation engineers",
+                    "IAM teams"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Workflows Console for configuring event cards, schedules, and flow run behavior.",
+                        "url": "https://help.okta.com/wf/en-us/content/topics/workflows/build/build-flows.htm"
+                    }
+                ],
+                "key_data_involved": [
+                    "Trigger conditions and schedules",
+                    "Workflow execution state and histories",
+                    "Data payloads passing between steps"
+                ],
+                "security_relevant_traits": [
+                    "Flows can propagate changes automatically at scale; bugs can cause widespread access changes or data leaks",
+                    "Execution limits and error handling determine how failures propagate or get retried",
+                    "Delegated flows allow non-admins to initiate privileged flows via controlled interfaces"
+                ],
+                "evidence": [
+                    {
+                        "title": "Workflows Overview",
+                        "url": "https://help.okta.com/wf/en-us/content/topics/workflows/learn/learn-workflows.htm",
+                        "summary": "Highlights events, action/function cards, execution history, and low-latency mode.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Identity Governance Campaigns and Requests Automation",
+                "description": "Background processes that manage recurring Access Certification campaigns and route Access Requests through configured approval workflows and delegated flows.",
+                "primary_actors": [
+                    "Governance teams",
+                    "Business approvers",
+                    "IAM admins"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Campaign scheduling and Access Requests workflows in the Identity Governance UI, with optional integration to Workflows for extended actions.",
+                        "url": "https://help.okta.com/oie/en-us/content/topics/identity-governance/iga.htm"
+                    }
+                ],
+                "key_data_involved": [
+                    "Campaign instances and schedules",
+                    "Notification and reminder events",
+                    "Automated revocation or grant actions based on review decisions",
+                    "Access Request routing rules"
+                ],
+                "security_relevant_traits": [
+                    "Campaign automation ensures continuous governance but must be configured carefully to avoid incomplete coverage or reviewer fatigue",
+                    "Automatic revocations or grants triggered by decisions are powerful and should be auditable",
+                    "Delegated and Workflows-based actions can extend these processes into external systems (e.g., revoking privileged roles)"
+                ],
+                "evidence": [
+                    {
+                        "title": "Identity Governance Overview",
+                        "url": "https://help.okta.com/oie/en-us/content/topics/identity-governance/iga.htm",
+                        "summary": "Describes Access Certifications, Access Requests, and integration with Workflows and System Log events.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Identity Threat Protection Continuous Risk Evaluation and Automated Response",
+                "description": "Background risk engine and workflows that continuously update user and session risk based on signals, then trigger configured mitigations such as MFA prompts, group changes, or universal logout.",
+                "primary_actors": [
+                    "Security operations",
+                    "IAM teams"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "ITP configuration of policies and actions mapped to risk changes.",
+                        "url": "https://help.okta.com/oie/en-us/content/topics/itp/overview.htm"
+                    },
+                    {
+                        "channel": "integration",
+                        "details": "Shared signals ingestion from security partners that update risk scores.",
+                        "url": "https://www.okta.com/products/identity-threat-protection/"
+                    }
+                ],
+                "key_data_involved": [
+                    "Dynamic risk scores for users and sessions",
+                    "Event streams from external security tools",
+                    "Policy-action mappings for mitigations"
+                ],
+                "security_relevant_traits": [
+                    "Automated responses can be disruptive (e.g., mass logout, quarantine) and must be tuned and tested",
+                    "Continuous evaluation ensures that post-login threats (session hijacking, stolen tokens) are mitigated",
+                    "Risk classification logic is a core part of the org’s security posture"
+                ],
+                "evidence": [
+                    {
+                        "title": "Identity Threat Protection Overview",
+                        "url": "https://help.okta.com/oie/en-us/content/topics/itp/overview.htm",
+                        "summary": "Describes continuous evaluation of users and sessions and launching automated remediation actions.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Identity Security Posture Management Continuous Analysis",
+                "description": "Ongoing, agentless scanning of identity, permissions, and usage patterns to surface misconfigurations and risky privileges, with periodic updates and reporting.",
+                "primary_actors": [
+                    "Security and IAM teams"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "integration",
+                        "details": "ISPM connectors to IdPs, SaaS apps, and cloud providers that periodically ingest and analyze identity data.",
+                        "url": "https://help.okta.com/ispm/en-us/content/topics/ispm/overview.htm"
+                    }
+                ],
+                "key_data_involved": [
+                    "Snapshots of identities and entitlements",
+                    "Risk classifications and prioritized issues",
+                    "Historical trends and reports"
+                ],
+                "security_relevant_traits": [
+                    "Agentless approach reduces deployment friction but depends on proper API permissions and connectivity",
+                    "Continuous analysis ensures new misconfigurations or drifts are quickly surfaced",
+                    "Supports ongoing compliance checks against frameworks like NIST and CIS"
+                ],
+                "evidence": [
+                    {
+                        "title": "Identity Security Posture Management overview",
+                        "url": "https://help.okta.com/ispm/en-us/content/topics/ispm/overview.htm",
+                        "summary": "Mentions ongoing risk-based monitoring and continuous analysis of identity security exposure.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Okta Device Access Automatic Logout and Password Sync",
+                "description": "Automated actions that sign users out from protected devices on risk or lifecycle events and keep local passwords synchronized with Okta credentials.",
+                "primary_actors": [
+                    "Endpoint teams",
+                    "IAM and security teams"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "integration",
+                        "details": "Desktop MFA and password sync agents that receive logout and password update commands.",
+                        "url": "https://help.okta.com/oie/en-us/content/topics/oda/oda-overview.htm"
+                    }
+                ],
+                "key_data_involved": [
+                    "Device registration state",
+                    "Password synchronization state",
+                    "Device logout triggers from Okta or ITP"
+                ],
+                "security_relevant_traits": [
+                    "Automatic device logout on deactivation, suspension, or high risk helps enforce Zero Trust at the device layer",
+                    "Password synchronization ensures consistent credentials across Okta and local devices, reducing password sprawl",
+                    "Mistakes in logout or sync logic can lock users out or leave stale access on devices"
+                ],
+                "evidence": [
+                    {
+                        "title": "Okta Device Access",
+                        "url": "https://help.okta.com/oie/en-us/content/topics/oda/oda-overview.htm",
+                        "summary": "Describes Desktop Password Sync, self-service password reset, recovery, and Device Logout features.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Aerial Time-Bound Org Access Workflows",
+                "description": "Automated workflows in Aerial that create, approve, and expire time-bound access to managed orgs.",
+                "primary_actors": [
+                    "Central platform admins",
+                    "Org owners"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Aerial Console flows for requesting and granting temporary access to managed orgs.",
+                        "url": "https://help.okta.com/okta_help.htm?type=aerial&id=aerial-overview"
+                    }
+                ],
+                "key_data_involved": [
+                    "Access request objects and expirations",
+                    "Org access tokens or SSO links",
+                    "Approval status and audit records"
+                ],
+                "security_relevant_traits": [
+                    "Implements a just-in-time pattern for powerful cross-org admin access",
+                    "Improper configuration of durations and conditions could lead to excessive or lingering access",
+                    "Auditability is essential for multi-org environments and regulated sectors"
+                ],
+                "evidence": [
+                    {
+                        "title": "Okta Aerial",
+                        "url": "https://help.okta.com/okta_help.htm?type=aerial&id=aerial-overview",
+                        "summary": "Notes that time-bound authentication through Access Requests is a core capability.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            }
+        ]
+    },
+    "technical_components_and_data_flows": {
+        "services_or_modules": [
+            {
+                "name": "Okta Identity Engine",
+                "description": "Modern policy and flow engine for authentication, authorization, and identity journeys, underpinning newer capabilities like FastPass, Device Access, Identity Governance, and ITP."
+            },
+            {
+                "name": "Okta Classic Engine",
+                "description": "Legacy but still-supported engine with core SSO and MFA capabilities and features like ThreatInsight and HealthInsight."
+            },
+            {
+                "name": "Universal Directory",
+                "description": "Directory service storing users, groups, and profile attributes used across policies, governance, and provisioning."
+            },
+            {
+                "name": "Authorization Server / OIDC Provider",
+                "description": "Token-issuing component implementing OAuth 2.0 and OIDC flows, issuing access, refresh, and ID tokens."
+            },
+            {
+                "name": "System Log Service",
+                "description": "Centralized logging service storing structured events for security, operations, and governance."
+            },
+            {
+                "name": "Okta Workflows Engine",
+                "description": "No-code execution engine that runs flows based on events or schedules using connectors and cards."
+            },
+            {
+                "name": "Identity Governance Engine",
+                "description": "Subsystem implementing campaigns, access requests, entitlements, and SOD rules on top of Lifecycle Management and Workflows."
+            },
+            {
+                "name": "Okta Access Gateway Appliance",
+                "description": "Virtual appliance deployed in customer environments to broker SSO and access from Okta to on-prem web apps."
+            },
+            {
+                "name": "Advanced Server Access Platform",
+                "description": "Cloud service plus agents and clients that manage Zero Trust SSH/RDP access to servers based on Okta identities."
+            },
+            {
+                "name": "Identity Threat Protection Risk Engine",
+                "description": "Continuous risk evaluation engine that aggregates signals from Okta and external tools and drives adaptive actions."
+            },
+            {
+                "name": "Identity Security Posture Management Engine",
+                "description": "Agentless analysis engine that ingests identity and permission data from multiple systems to surface risks and misconfigurations."
+            },
+            {
+                "name": "Okta Aerial",
+                "description": "Multi-org management service with Aerial org and Aerial Console for cross-org visibility and access requests."
+            },
+            {
+                "name": "Okta Integration Network Catalog",
+                "description": "Service hosting catalog data and templates for SSO, SCIM provisioning, and API service integrations."
+            }
+        ],
+        "storage_and_logs": [
+            {
+                "name": "Core Identity Store",
+                "description": "Stores user, group, and app assignment data that drives authentication, authorization, and lifecycle processes."
+            },
+            {
+                "name": "System Log Store",
+                "description": "Persists detailed audit events for logins, admin actions, provisioning, governance, and security outcomes."
+            },
+            {
+                "name": "Workflows Tables and Execution History",
+                "description": "Optional tables in Workflows that persist state between flow executions and logs of past runs."
+            },
+            {
+                "name": "Governance Campaign and Request Records",
+                "description": "Stores configuration and status for certifications, requests, decisions, and governance reports."
+            },
+            {
+                "name": "ISPM Risk and Detection Repository",
+                "description": "Persists normalized identity and permission data, detections, and risk classifications across integrated systems."
+            }
+        ],
+        "external_systems": [
+            {
+                "name": "External Identity Providers and Directories",
+                "description": "AD/LDAP directories, SAML IdPs, OIDC IdPs, and social providers used for federated authentication into Okta."
+            },
+            {
+                "name": "SaaS and On-Prem Applications",
+                "description": "Cloud and on-prem apps integrated via OIN for SSO and lifecycle management."
+            },
+            {
+                "name": "Cloud Infrastructure Providers",
+                "description": "IaaS platforms (e.g., public clouds) integrated with ISPM for identity and permission analysis."
+            },
+            {
+                "name": "Security Tools (EDR, CASB, MDM, SIEM)",
+                "description": "Third-party products integrated via shared signals and APIs for Identity Threat Protection and ISPM."
+            },
+            {
+                "name": "Ticketing and Messaging Systems",
+                "description": "External workflow tools (e.g., ticketing, chat) that ISPM and Workflows can integrate with for remediation and notifications."
+            }
+        ],
+        "data_flows": [
+            {
+                "name": "Authentication and SSO Flow",
+                "description": "User accesses an app, is redirected to Okta (or uses embedded auth), completes primary auth and MFA, Okta issues tokens/assertions, and the app uses them to authorize access."
+            },
+            {
+                "name": "Provisioning and Deprovisioning Flow",
+                "description": "Lifecycle events and group rules in Okta trigger SCIM or API calls to create, update, or delete accounts and entitlements in connected applications."
+            },
+            {
+                "name": "Governance Campaign and Request Flow",
+                "description": "Campaign configurations schedule reviews; notifications go to reviewers; decisions lead to automated changes in Okta and downstream systems via LCM and Workflows."
+            },
+            {
+                "name": "Workflows Automation Flow",
+                "description": "Events (e.g., System Log events, webhooks) trigger flows that call Okta APIs and third-party connectors to orchestrate identity-centric tasks."
+            },
+            {
+                "name": "Identity Threat Protection Signal and Response Flow",
+                "description": "Signals from Okta and external security tools update user/session risk; policies then trigger actions such as MFA prompts, group moves, universal logout, or Workflows executions."
+            },
+            {
+                "name": "ISPM Data Ingestion and Analysis Flow",
+                "description": "ISPM connects to IdPs, SaaS, and cloud providers via APIs, normalizes identity and permission data, runs risk classification, and surfaces prioritized issues and reports."
+            },
+            {
+                "name": "Aerial Cross-Org Access Flow",
+                "description": "Aerial owners use Aerial Console to request time-bound access; after approval, they can sign into managed orgs for the specified duration, with actions logged centrally."
+            },
+            {
+                "name": "Access Gateway SSO Flow",
+                "description": "User authenticates with Okta, then Access Gateway uses the Okta session/assertion to establish a session with an on-prem web app via the gateway."
+            },
+            {
+                "name": "Advanced Server Access Login Flow",
+                "description": "User authenticates to ASA using Okta; ASA issues short-lived credentials or certificates allowing SSH/RDP to enrolled servers, with activity tied back to Okta identities."
+            }
+        ]
+    },
+    "security_relevant_behaviours": {
+        "privileged_operations": [
+            "Admin Console operations that create, modify, or delete users, groups, apps, policies, and governance configurations.",
+            "Lifecycle Management actions that provision or deprovision accounts, groups, and entitlements across connected systems.",
+            "Identity Governance actions such as campaign creation, bulk revoke decisions, and entitlement policy changes.",
+            "Workflows flows that perform high-privilege tasks (e.g., assigning admin roles, resetting MFA, disabling users).",
+            "Access Gateway administrative tasks including deploying nodes, configuring HA, and onboarding on-prem applications.",
+            "Advanced Server Access configuration of teams, projects, and access rules that govern privileged server access.",
+            "Aerial operations that grant time-bound admin access to managed orgs.",
+            "Identity Threat Protection policy changes that define when sessions are terminated or users are quarantined.",
+            "ISPM configuration of connectors and the acceptance or dismissal of findings that drive remediation."
+        ],
+        "user_configurable_logic": [
+            "Sign-on and authentication policies in Identity Engine and Classic Engine, including MFA, device assurance, and contextual access rules.",
+            "Lifecycle Management group rules and entitlement policies defining automatic app and role assignments.",
+            "Identity Governance SOD rules, campaign scopes, access request types, and routing logic.",
+            "Workflows flows defined graphically using events, conditions, and actions, including helper and delegated flows.",
+            "Device Access policies controlling desktop MFA behavior, password sync, recovery flows, and device logout.",
+            "Identity Threat Protection risk policies mapping risk changes to adaptive actions (MFA prompts, logouts, group changes)."
+        ],
+        "auth_and_identity_behaviours": [
+            "Support for multiple authentication protocols (OIDC, OAuth 2.0, SAML, WS-Fed) and flows (Auth Code + PKCE, Interaction Code, Client Credentials, etc.).",
+            "Phishing-resistant authentication via Okta FastPass and device posture evaluation.",
+            "Multifactor Authentication across numerous factors including Okta Verify push/OTP, with risk-based enforcement.",
+            "Federated SSO with external IdPs (enterprise and social) and support for B2B and B2C access patterns.",
+            "Self-service capabilities for registration, password reset, and factor management, particularly in CIAM scenarios.",
+            "Zero Trust-aligned behaviors like continuous session risk evaluation (ITP), device logout, and least-privilege enforcement (ISPM + Identity Governance)."
+        ],
+        "logging_and_audit_behaviours": [
+            "Comprehensive System Log capturing authentication events, admin activity, provisioning operations, governance decisions, and security detections.",
+            "Defined event types and query options allowing fine-grained filtering for monitoring and incident response.",
+            "Identity Governance-specific System Log events for campaigns, access requests, and entitlements changes.",
+            "Workflows execution history that logs flow runs, inputs/outputs, and errors.",
+            "ITP and ISPM dashboards and reports that summarize detections and responses but are ultimately backed by stored events.",
+            "Support for exporting data to external SIEM and analytics tools via APIs."
+        ],
+        "failure_modes": [
+            "Misconfigured sign-on or MFA policies can lock out users or weaken authentication, depending on error paths and fallbacks.",
+            "Provisioning and deprovisioning failures or misconfigurations can leave orphaned accounts or prematurely remove critical access.",
+            "Workflows with bugs or mis-specified logic can propagate incorrect changes quickly across systems.",
+            "Identity Governance campaign design flaws (e.g., missed scopes, reviewer overload) can leave access unreviewed or rubber-stamped.",
+            "Access Gateway or ASA outages or misconfigurations can block access to critical apps or servers or, conversely, expose them if bypassed.",
+            "Overly aggressive Identity Threat Protection or Device Access policies may trigger mass logouts or device lockouts, impacting availability.",
+            "API rate limits, if not handled correctly, can cause partial updates, inconsistent automation, or monitoring blind spots."
+        ]
+    },
+    "open_questions": [
+        {
+            "question": "How is tenant isolation and data residency implemented internally across Okta orgs, and how do customers configure region-specific data storage and processing?",
+            "context": "Docs reference multi-tenant architecture and compliance frameworks but do not deeply describe the isolation model or configuration options for data residency.",
+            "related_capabilities": [
+                "Workforce Identity Core Authentication and Single Sign-On",
+                "Universal Directory and Profile Management",
+                "Identity Security Posture Management (ISPM)"
+            ]
+        },
+        {
+            "question": "What are the protocol and data model details of Cross App Access (XAA), including token formats, endpoints, and revocation semantics?",
+            "context": "Press-release and marketing material introduce Cross App Access for AI agents and app-to-app interactions, but no detailed spec was reviewed.",
+            "related_capabilities": [
+                "Cross App Access (XAA) for AI Agents and App-to-App Interactions",
+                "API Access Management and OAuth/OIDC Authorization Server"
+            ]
+        },
+        {
+            "question": "How do Identity Engine and Classic Engine differ for each product area (MFA, SSO, Governance, Threat Protection), and what are the supported migration paths and caveats?",
+            "context": "High-level docs distinguish Identity Engine and Classic Engine but don’t enumerate all behavioral differences or migration edge cases.",
+            "related_capabilities": [
+                "Workforce Identity Core Authentication and Single Sign-On",
+                "Multifactor Authentication Framework and Okta Verify",
+                "Identity Governance (Access Governance, Requests, and Certifications)"
+            ]
+        },
+        {
+            "question": "What is the full scope of Identity Threat Protection’s detection logic, signal formats, and integration contracts with third-party tools?",
+            "context": "Overview docs describe continuous risk evaluation and shared signals but do not document all tactics, techniques, and procedures or integration schemas.",
+            "related_capabilities": [
+                "Identity Threat Protection with Okta AI",
+                "Security Signals and Shared Signals Integrations for Identity Threat Protection"
+            ]
+        },
+        {
+            "question": "To what extent can governance and workflow logic be expressed purely declaratively (via APIs or IaC) versus requiring UI-driven configuration?",
+            "context": "Governance and Workflows docs emphasize UI-based authorship, but API and Terraform integration details for these subsystems are sparse in the reviewed material.",
+            "related_capabilities": [
+                "Identity Governance (Access Governance, Requests, and Certifications)",
+                "Okta Workflows No-Code Automation Platform",
+                "Terraform Provider and Infrastructure-as-Code Integration"
+            ]
+        },
+        {
+            "question": "How are high-privilege operations audited end-to-end across Aerial, Identity Governance, Workflows, and downstream apps, and what are best practices for correlating those logs?",
+            "context": "Individual subsystems describe their logs and reports, but cross-cutting guidance for forensic tracing of complex workflows was not found.",
+            "related_capabilities": [
+                "Okta Aerial Multi-Org Management",
+                "Identity Governance Operations and Reporting",
+                "System Log, Event Types, and Reporting"
+            ]
+        }
+    ],
+    "evidence_index": [
+        {
+            "title": "Okta Marketing Homepage",
+            "url": "https://www.okta.com/",
+            "summary": "Marketing overview of Okta’s identity security fabric and high-level positioning around securing AI agents, employees, and customers.",
+            "notes": null
+        },
+        {
+            "title": "Okta Developer Portal Home",
+            "url": "https://developer.okta.com/",
+            "summary": "Landing page listing Guides, Concepts, API References, SDKs, and announcements like the Integrator Free Plan.",
+            "notes": null
+        },
+        {
+            "title": "Okta Docs Home",
+            "url": "https://help.okta.com/",
+            "summary": "Root documentation hub highlighting Identity Engine, Classic Engine, Access Gateway, Advanced Server Access, Workflows, ISPM, and Aerial.",
+            "notes": null
+        },
+        {
+            "title": "Okta Identity Engine Docs Landing",
+            "url": "https://help.okta.com/okta_help.htm?type=oie&id=csh-oie",
+            "summary": "Entry point for Identity Engine docs and featured products like Okta Personal for Workforce, ITP with Okta AI, Privileged Access, Device Access, Identity Governance, and FastPass.",
+            "notes": null
+        },
+        {
+            "title": "Okta Classic Engine Docs Landing",
+            "url": "https://help.okta.com/en-us/content/index-admin.htm",
+            "summary": "Classic Engine documentation index highlighting Release Notes, Resources, upgrade guidance, and featured products such as Okta Verify, Identity Governance, ThreatInsight, MFA, and HealthInsight.",
+            "notes": null
+        },
+        {
+            "title": "Okta Access Gateway Docs Landing",
+            "url": "https://help.okta.com/okta_help.htm?type=oag&id=ext_oag_main",
+            "summary": "Landing page describing Access Gateway and linking to getting started, deployment, integration, admin, troubleshooting, and reference architectures.",
+            "notes": null
+        },
+        {
+            "title": "Get started with Okta Access Gateway",
+            "url": "https://help.okta.com/oag/en-us/content/topics/access-gateway/get-started.htm",
+            "summary": "Introduction to Access Gateway administration activities such as deployment, one-day admin tutorial, HA configuration, and app integration.",
+            "notes": null
+        },
+        {
+            "title": "Okta Advanced Server Access Docs Landing",
+            "url": "https://help.okta.com/okta_help.htm?type=asa&id=adv_server_access",
+            "summary": "Landing page listing ASA topics including getting started, server agents, clients, gateways, AD-joined, and team management.",
+            "notes": null
+        },
+        {
+            "title": "Get started with Advanced Server Access",
+            "url": "https://help.okta.com/asa/en-us/content/topics/adv_server_access/docs/start-here.htm",
+            "summary": "Explains ASA as Zero Trust access for cloud and on-prem infrastructure using Okta as source of truth and outlines initial setup tasks.",
+            "notes": null
+        },
+        {
+            "title": "Okta Workflows Docs Landing",
+            "url": "https://help.okta.com/okta_help.htm?type=wf&id=ext-Okta-workflows",
+            "summary": "Landing page introducing Okta Workflows and linking to overview, building/running flows, connectors, functions, templates, tutorials, and best practices.",
+            "notes": null
+        },
+        {
+            "title": "Okta Workflows Overview",
+            "url": "https://help.okta.com/wf/en-us/content/topics/workflows/learn/learn-workflows.htm",
+            "summary": "Detailed overview of Workflows concepts, console organization, workflow elements (cards, connections, events), and administrative topics like Access Control and execution limits.",
+            "notes": null
+        },
+        {
+            "title": "Identity Security Posture Management Docs Landing",
+            "url": "https://help.okta.com/okta_help.htm?type=ispm&id=csh-ispm-home",
+            "summary": "ISPM landing page linking to overview, integration guides, and supported detections.",
+            "notes": null
+        },
+        {
+            "title": "Identity Security Posture Management overview",
+            "url": "https://help.okta.com/ispm/en-us/content/topics/ispm/overview.htm",
+            "summary": "Explains ISPM’s purpose, the problems it solves, solution capabilities, and its agentless integration and analysis approach.",
+            "notes": null
+        },
+        {
+            "title": "Okta Aerial",
+            "url": "https://help.okta.com/okta_help.htm?type=aerial&id=aerial-overview",
+            "summary": "Describes Okta Aerial’s multi-org management, components (Aerial account, Aerial org, Aerial Console), and time-bound Access Requests.",
+            "notes": null
+        },
+        {
+            "title": "Okta Architecture Center",
+            "url": "https://help.okta.com/en/programs/arch/content/topics/arch/architecture-center.htm",
+            "summary": "Architecture Center home pointing to fundamentals, scenarios, and reference architectures for Okta-based solutions.",
+            "notes": null
+        },
+        {
+            "title": "How Okta works",
+            "url": "https://developer.okta.com/docs/concepts/how-okta-works/",
+            "summary": "Conceptual doc explaining Okta’s role in adding authentication and authorization to apps and APIs, including SSO and MFA.",
+            "notes": null
+        },
+        {
+            "title": "IAM overview",
+            "url": "https://developer.okta.com/docs/concepts/iam-overview/",
+            "summary": "Overview of IAM concepts, workforce vs customer identity, typical IAM features, and a sample CIAM architecture.",
+            "notes": null
+        },
+        {
+            "title": "OAuth 2.0 and OpenID Connect overview",
+            "url": "https://developer.okta.com/docs/concepts/oauth-openid/",
+            "summary": "Explains OAuth 2.0 vs OIDC, token types, roles, and recommended flows including Authorization Code with PKCE and Interaction Code.",
+            "notes": null
+        },
+        {
+            "title": "Reference Overview",
+            "url": "https://developer.okta.com/docs/reference/",
+            "summary": "API reference overview listing error codes, event types, expression language, rate limits, System Log query options, and user query options.",
+            "notes": null
+        },
+        {
+            "title": "Okta Integration Network Guide",
+            "url": "https://developer.okta.com/docs/guides/okta-integration-network/",
+            "summary": "Guide to building and publishing OIN integrations for SSO, lifecycle management, and API services.",
+            "notes": null
+        },
+        {
+            "title": "Identity Governance Overview (Identity Engine)",
+            "url": "https://help.okta.com/oie/en-us/content/topics/identity-governance/iga.htm",
+            "summary": "Describes Okta Identity Governance, its benefits, relationship to LCM and Workflows, and components like Access Certifications, Access Requests, Entitlement Management, resource collections, owners, labels, SOD rules, and reports.",
+            "notes": null
+        },
+        {
+            "title": "Identity Governance Overview (Classic Engine)",
+            "url": "https://help.okta.com/en-us/content/topics/identity-governance/iga.htm",
+            "summary": "Classic Engine variant of the Identity Governance overview with similar conceptual content.",
+            "notes": null
+        },
+        {
+            "title": "Okta FastPass",
+            "url": "https://help.okta.com/oie/en-us/content/topics/identity-engine/devices/fp/fp-main.htm",
+            "summary": "Explains FastPass as a phishing-resistant, passwordless authenticator using Okta Verify and device posture evaluation.",
+            "notes": null
+        },
+        {
+            "title": "Okta Device Access",
+            "url": "https://help.okta.com/oie/en-us/content/topics/oda/oda-overview.htm",
+            "summary": "Overview of extending Okta security to device sign-in, detailing desktop MFA, password sync, autofill, self-service reset, JIT local account creation, and Device Logout.",
+            "notes": null
+        },
+        {
+            "title": "Okta Verify Overview",
+            "url": "https://help.okta.com/en-us/content/topics/mobile/okta-verify-overview.htm",
+            "summary": "Classic Engine description of Okta Verify as an MFA app with push and OTP, plus risk scoring integration.",
+            "notes": null
+        },
+        {
+            "title": "Multifactor Authentication Landing",
+            "url": "https://help.okta.com/en-us/content/topics/security/mfa/mfa-home.htm",
+            "summary": "Introduces MFA and links to topics about factors, enrollment policies, resets, third-party agents, and risk scoring.",
+            "notes": null
+        },
+        {
+            "title": "Identity Threat Protection Overview (Docs)",
+            "url": "https://help.okta.com/oie/en-us/content/topics/itp/overview.htm",
+            "summary": "Describes Identity Threat Protection with Okta AI as a continuous identity threat solution that integrates risk signals and triggers automated mitigations.",
+            "notes": null
+        },
+        {
+            "title": "Identity Threat Protection Product Page",
+            "url": "https://www.okta.com/products/identity-threat-protection/",
+            "summary": "Marketing page describing ITP’s benefits, continuous monitoring, automated response, and partner integrations.",
+            "notes": null
+        },
+        {
+            "title": "Okta Customer Identity Product Page",
+            "url": "https://www.okta.com/products/okta-customer-identity/",
+            "summary": "Product overview for Okta Customer Identity, summarizing CIAM features like SSO, Adaptive MFA, passwordless, ThreatInsight, and social login.",
+            "notes": null
+        },
+        {
+            "title": "Cross App Access Press Release and Product Nav",
+            "url": "https://www.okta.com/newsroom/press-releases/okta-introduces-cross-app-access-to-help-secure-ai-agents-in-the/",
+            "summary": "Press release announcing Cross App Access and exposing the product taxonomy (IAM, Privileged Access, Threat Detection & Response, CIAM, Governance, Integrations).",
+            "notes": null
+        }
+    ]
+}

@@ -16,6 +16,16 @@ const apps = [
     displayName: 'Miro',
     description: 'AI Innovation Workspace / Online Visual Collaboration Platform',
   },
+  {
+    name: 'Okta',
+    displayName: 'Okta',
+    description: 'Identity and Access Management Platform',
+  },
+  {
+    name: 'box',
+    displayName: 'Box',
+    description: 'Content Collaboration Platform',
+  },
 ]
 
 function Home() {
