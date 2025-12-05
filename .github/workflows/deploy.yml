@@ -37,8 +37,10 @@ jobs:
         run: |
           mkdir -p dist/data/breakdowns
           mkdir -p dist/data/attack_paths
+          mkdir -p dist/data/initial_access
           cp -r data/breakdowns/*.json dist/data/breakdowns/
           cp -r data/attack_paths/*.json dist/data/attack_paths/
+          cp -r data/initial_access/*.json dist/data/initial_access/ 2>/dev/null || true
       
       - name: Setup Pages
         uses: actions/configure-pages@v4
