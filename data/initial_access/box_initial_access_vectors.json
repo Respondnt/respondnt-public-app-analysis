@@ -1,0 +1,1014 @@
+{
+  "application_name": "Box Intelligent Content Management Platform",
+  "initial_access_vectors": [
+    {
+      "can_achieve": true,
+      "technique_name": "Cloud Accounts (Compromised SSO-Backed User Account)",
+      "technique_stix_id": "T1078.004",
+      "method_steps": [
+        {
+          "step_id": 1,
+          "description": "From a host or network path that is already on the enterprise IP allowlist (for example, a compromised corporate workstation or VPN endpoint), the attacker browses to the organization’s Box SSO login entry point and initiates SAML SSO to Box using previously compromised IdP credentials and second-factor capability.",
+          "related_capabilities": [
+            "User Provisioning, SSO, and Identity Management",
+            "Security & Compliance Controls (Zero-Trust, Shield, Governance, Zones)",
+            "Authentication Methods and Token Management"
+          ],
+          "related_interfaces": [
+            "SSO configuration and enterprise identity setup guide: https://support.box.com/hc/en-us/articles/360043696514-Setting-Up-Single-Sign-On-SSO-for-your-Enterprise",
+            "Box web application \"All Files\" view and core UI: https://www.box.com/content-management/enterprise/"
+          ],
+          "related_data": [
+            "SSO identities and mappings between the IdP and Box managed user accounts",
+            "User accounts and auth factors subject to MFA",
+            "Device and IP trust lists used for zero-trust decisions"
+          ],
+          "notes": "MFA, SSO-only, IP allowlisting, and CAPTCHA are all enforced here; the attacker must already have sufficient control to satisfy them."
+        },
+        {
+          "step_id": 2,
+          "description": "After successful SSO and MFA, Box issues an authenticated web session and underlying access tokens for the compromised managed user; the attacker lands in the Box web UI as that user.",
+          "related_capabilities": [
+            "Authentication Methods and Token Management",
+            "Core File and Folder Storage"
+          ],
+          "related_interfaces": [
+            "Authentication and token behavior docs: https://developer.box.com/guides/authentication/tokens/",
+            "Core content UI and APIs: https://developer.box.com/guides/files/"
+          ],
+          "related_data": [
+            "Short-lived OAuth2 access tokens bound to the managed user",
+            "Session cookies for the Box web application"
+          ],
+          "notes": "From Box’s perspective this is an entirely legitimate, policy-compliant login."
+        },
+        {
+          "step_id": 3,
+          "description": "Using the Box web UI, the attacker browses the \"All Files\" view and any folders or files the user can access, optionally using the search bar to quickly discover sensitive content within the user’s existing permissions.",
+          "related_capabilities": [
+            "Core File and Folder Storage",
+            "Search and Discovery"
+          ],
+          "related_interfaces": [
+            "Box web application content views: https://www.box.com/content-management/enterprise/",
+            "Search UI and API: https://developer.box.com/guides/search/"
+          ],
+          "related_data": [
+            "Files, folders, and file versions owned by or shared with the compromised user",
+            "Search index entries for those items"
+          ],
+          "notes": "No additional privileges are required beyond what the compromised user already has; this is often sufficient initial access for many objectives."
+        },
+        {
+          "step_id": 4,
+          "description": "If programmatic access is desired, the attacker extracts the user’s access token from the browser session (or leverages an application they control) and starts making Box REST API calls as that user (for example, GET /folders/0 to enumerate root content).",
+          "related_capabilities": [
+            "Core REST Content API (Files, Folders, Users, Metadata)",
+            "Authentication Methods and Token Management"
+          ],
+          "related_interfaces": [
+            "REST API reference: https://developer.box.com/reference/",
+            "API calls guide: https://developer.box.com/guides/api-calls/"
+          ],
+          "related_data": [
+            "Access tokens representing the compromised user",
+            "Folder and file metadata returned by Core REST endpoints"
+          ],
+          "notes": "Rate limiting will constrain very aggressive enumeration, but normal user-like API usage will blend in."
+        }
+      ],
+      "capabilities_used": [
+        "User Provisioning, SSO, and Identity Management",
+        "Security & Compliance Controls (Zero-Trust, Shield, Governance, Zones)",
+        "Authentication Methods and Token Management",
+        "Core File and Folder Storage",
+        "Search and Discovery",
+        "Core REST Content API (Files, Folders, Users, Metadata)"
+      ],
+      "interfaces_used": [
+        "https://support.box.com/hc/en-us/articles/360043696514-Setting-Up-Single-Sign-On-SSO-for-your-Enterprise",
+        "https://www.box.com/content-management/enterprise/",
+        "https://developer.box.com/guides/authentication/tokens/",
+        "https://developer.box.com/guides/files/",
+        "https://developer.box.com/guides/search/",
+        "https://developer.box.com/reference/",
+        "https://developer.box.com/guides/api-calls/"
+      ],
+      "data_accessed": [
+        "Managed user Box account and associated permissions",
+        "User’s files, folders, and file versions",
+        "Collaborations and shared links attached to those items",
+        "Search index entries for content visible to the user",
+        "Access tokens and session cookies for that user"
+      ],
+      "preconditions_required": [
+        "Attacker has already compromised the enterprise IdP credentials for a target managed Box user and can satisfy MFA (for example, via SIM swap, device compromise, token theft, or session hijack).",
+        "Attacker can originate traffic from an IP address within the enterprise IP allowlist (for example, through a compromised VPN, proxy, or on-prem host).",
+        "The target user has an active Box account in the tenant and can normally authenticate via SSO."
+      ],
+      "constraints_encountered": [
+        "MFA Required – attacker must either possess or bypass the second factor for SSO.",
+        "IP Allowlisting – Box access is only permitted from approved networks; attacker must pivot through an allowlisted path.",
+        "SSO-Only Authentication – there are no local Box passwords; all logins must go through the IdP.",
+        "Rate Limiting – aggressive API enumeration could trigger throttling or bans, so attacker must keep activity modest.",
+        "CAPTCHA Protection – may apply to repeated interactive login attempts, constraining brute-force approaches."
+      ],
+      "evasion_considerations": [
+        "Reuse the victim’s existing device or VPN endpoint so logins appear from familiar IPs and device fingerprints.",
+        "Limit activity volume and operate primarily through the normal web UI to resemble ordinary user behavior.",
+        "Avoid triggering large search or download bursts that might stand out in Shield anomaly detection or SIEM alerts.",
+        "Schedule activity during the victim’s usual working hours to reduce temporal anomalies."
+      ],
+      "resulting_access": "Full interactive and API access to Box as a legitimate managed user (non-admin), constrained only by that user’s existing collaborations, shared links, and enterprise policies.",
+      "comments": "This is the canonical initial access path for Box: compromise of the SSO-backed cloud account. Environmental controls make direct brute forcing unrealistic; the practical path is phishing or device/IdP compromise outside of Box."
+    },
+    {
+      "can_achieve": true,
+      "technique_name": "Cloud Accounts (Compromised Admin / Platform Owner Account)",
+      "technique_stix_id": "T1078.004",
+      "method_steps": [
+        {
+          "step_id": 1,
+          "description": "Using compromised IdP credentials and MFA for an enterprise admin, co-admin, or platform owner account and originating traffic from an allowlisted IP, the attacker completes the SSO flow into Box as that admin user.",
+          "related_capabilities": [
+            "User Provisioning, SSO, and Identity Management",
+            "Security & Compliance Controls (Zero-Trust, Shield, Governance, Zones)",
+            "Authentication Methods and Token Management",
+            "Admin Console and Content Manager"
+          ],
+          "related_interfaces": [
+            "SSO configuration guide: https://support.box.com/hc/en-us/articles/360043696514-Setting-Up-Single-Sign-On-SSO-for-your-Enterprise",
+            "IT & Admin controls overview (Admin Console entry): https://www.box.com/security/it-admin-controls/"
+          ],
+          "related_data": [
+            "Admin user identity and roles (enterprise admin, co-admin, security admin, platform owner)",
+            "Admin-scoped access tokens issued after SSO"
+          ],
+          "notes": "All environment constraints that apply to user logins also apply here; the account is simply more privileged."
+        },
+        {
+          "step_id": 2,
+          "description": "Once authenticated, the attacker opens the Box Admin Console from the Box web UI, gaining centralized visibility into users, groups, content, applications, and reports.",
+          "related_capabilities": [
+            "Admin Console and Content Manager",
+            "Platform Insights and API Monitoring"
+          ],
+          "related_interfaces": [
+            "Admin Console UI and Content Manager: https://www.box.com/security/it-admin-controls/",
+            "Platform Insights dashboard: https://support.box.com/hc/en-us/articles/20738406915219-Platform-Insights"
+          ],
+          "related_data": [
+            "User and group lists for the entire enterprise",
+            "Enterprise-wide content index presented through Content Manager",
+            "Per-app API usage metrics and app approval status"
+          ],
+          "notes": "Simply opening the Admin Console constitutes privileged initial access to the tenant’s control plane."
+        },
+        {
+          "step_id": 3,
+          "description": "If desired for automation, the attacker uses the compromised admin account’s credentials within Box CLI or SDK tooling to obtain admin-scoped access tokens and begin issuing admin-only API calls (for example, listing all users or enterprise events).",
+          "related_capabilities": [
+            "Core REST Content API (Files, Folders, Users, Metadata)",
+            "Box CLI, SDKs, and Tooling"
+          ],
+          "related_interfaces": [
+            "Users API reference (admin-only endpoints): https://developer.box.com/reference/get-users/",
+            "Events API (admin_logs/admin_logs_streaming): https://developer.box.com/guides/events/",
+            "Box CLI docs: https://developer.box.com/guides/cli/"
+          ],
+          "related_data": [
+            "Enterprise-wide user directory and group memberships",
+            "Enterprise event logs including admin actions and app behavior",
+            "Admin-scoped OAuth2 or JWT/CCG tokens stored in CLI/SDK configuration"
+          ],
+          "notes": "Concrete admin-level actions beyond token acquisition are out of scope here; the key point is that the attacker now controls the admin surface."
+        }
+      ],
+      "capabilities_used": [
+        "User Provisioning, SSO, and Identity Management",
+        "Security & Compliance Controls (Zero-Trust, Shield, Governance, Zones)",
+        "Authentication Methods and Token Management",
+        "Admin Console and Content Manager",
+        "Platform Insights and API Monitoring",
+        "Core REST Content API (Files, Folders, Users, Metadata)",
+        "Box CLI, SDKs, and Tooling"
+      ],
+      "interfaces_used": [
+        "https://support.box.com/hc/en-us/articles/360043696514-Setting-Up-Single-Sign-On-SSO-for-your-Enterprise",
+        "https://www.box.com/security/it-admin-controls/",
+        "https://support.box.com/hc/en-us/articles/20738406915219-Platform-Insights",
+        "https://developer.box.com/reference/get-users/",
+        "https://developer.box.com/guides/events/",
+        "https://developer.box.com/guides/cli/"
+      ],
+      "data_accessed": [
+        "Full enterprise user and group directory",
+        "Global view of content locations and access via Content Manager",
+        "Platform app inventory and usage metrics via Platform Insights",
+        "Admin-scoped access tokens and CLI/SDK configuration",
+        "Enterprise event logs including admin, app, and security events"
+      ],
+      "preconditions_required": [
+        "Attacker has compromised an SSO identity that holds an admin-level role in Box (enterprise admin, co-admin with relevant privileges, security admin, or platform owner) and can satisfy MFA.",
+        "Attacker can originate requests from an IP range on the tenant’s IP allowlist.",
+        "The admin account is not disabled and still has Admin Console access."
+      ],
+      "constraints_encountered": [
+        "MFA Required – the attacker must control or bypass the admin’s second factor.",
+        "IP Allowlisting – access to the Admin Console is only possible from allowed networks.",
+        "SSO-Only Authentication – the attacker must own/abuse the IdP identity rather than a Box-local password.",
+        "Rate Limiting – extremely high-volume admin API usage (for example, enumerating all content repeatedly) could be throttled and draw attention.",
+        "CAPTCHA Protection – applies at SSO entry and may complicate automated attempts to replay credentials."
+      ],
+      "evasion_considerations": [
+        "Reuse the admin’s usual VPN or corporate workstation to avoid new IP/device anomalies.",
+        "Access the Admin Console sparingly and avoid bulk operations that would spike audit logs or Shield alerts.",
+        "Blend API usage into existing approved admin tooling such as Box CLI patterns.",
+        "Leave SSO and security configuration apparently unchanged on initial entry to avoid immediately tipping defenders."
+      ],
+      "resulting_access": "Privileged administrative access to the Box tenant, including the Admin Console, Content Manager, Platform Apps Manager, and admin-only APIs, enabling full visibility into and indirect control over users, apps, and content.",
+      "comments": "This vector is the highest-value initial access for an adversary because it provides immediate entry into Box’s control plane. Environmental controls primarily affect how hard it is to compromise the admin’s SSO account; once that is done, Box faithfully honors the resulting admin session."
+    },
+    {
+      "can_achieve": true,
+      "technique_name": "Cloud Accounts (Compromised Server-Auth / Integration App Credentials)",
+      "technique_stix_id": "T1078.004",
+      "method_steps": [
+        {
+          "step_id": 1,
+          "description": "On a compromised server, CI/CD environment, or administrator workstation, the attacker locates Box Platform app configuration for a JWT, Client Credentials Grant (CCG), or App Token–based application, including client ID, client secret, and/or JWT private key.",
+          "related_capabilities": [
+            "Application Models and User Types for Platform Apps",
+            "Authentication Methods and Token Management",
+            "Box CLI, SDKs, and Tooling"
+          ],
+          "related_interfaces": [
+            "Developer guide: Application Types – https://developer.box.com/platform/application-types/",
+            "Authentication methods guide – https://developer.box.com/platform/authentication-methods/",
+            "Box CLI configuration guidance – https://developer.box.com/guides/cli/"
+          ],
+          "related_data": [
+            "OAuth2 client IDs and secrets",
+            "JWT private keys registered for Box apps",
+            "App Token configurations or static App Tokens",
+            "CLI/SDK config files containing these credentials"
+          ],
+          "notes": "Obtaining these secrets typically results from compromising infrastructure or developer endpoints outside Box."
+        },
+        {
+          "step_id": 2,
+          "description": "From an IP address that is normally used by the app (and therefore likely allowlisted), the attacker uses the stolen credentials to call Box’s token endpoint via the appropriate auth flow (JWT assertion, CCG, or App Token) and obtains an access token for the app’s Service Account or App User.",
+          "related_capabilities": [
+            "Authentication Methods and Token Management",
+            "Application Models and User Types for Platform Apps"
+          ],
+          "related_interfaces": [
+            "Authentication guides and token endpoints – https://developer.box.com/guides/authentication/",
+            "Token behavior documentation – https://developer.box.com/guides/authentication/tokens/"
+          ],
+          "related_data": [
+            "Short-lived access tokens for the Service Account or App User backing the integration",
+            "Optional refresh or long-lived tokens depending on auth method"
+          ],
+          "notes": "MFA and SSO do not apply here; these are non-human cloud identities authenticated purely by app credentials."
+        },
+        {
+          "step_id": 3,
+          "description": "The attacker verifies access by issuing low-noise API calls such as GET /users/me and GET /folders/0, discovering what content the integration identity can reach.",
+          "related_capabilities": [
+            "Core REST Content API (Files, Folders, Users, Metadata)"
+          ],
+          "related_interfaces": [
+            "REST API reference – https://developer.box.com/reference/",
+            "API calls guide – https://developer.box.com/guides/api-calls/"
+          ],
+          "related_data": [
+            "Identity and role of the Service Account/App User (via /users/me)",
+            "Root-level folder structure and metadata (via /folders/0)"
+          ],
+          "notes": "Subsequent large-scale enumeration or modification would fall under later tactics; initial access is achieved once the attacker can make authenticated API calls."
+        }
+      ],
+      "capabilities_used": [
+        "Application Models and User Types for Platform Apps",
+        "Authentication Methods and Token Management",
+        "Core REST Content API (Files, Folders, Users, Metadata)",
+        "Box CLI, SDKs, and Tooling"
+      ],
+      "interfaces_used": [
+        "https://developer.box.com/platform/application-types/",
+        "https://developer.box.com/platform/authentication-methods/",
+        "https://developer.box.com/guides/authentication/",
+        "https://developer.box.com/guides/authentication/tokens/",
+        "https://developer.box.com/reference/",
+        "https://developer.box.com/guides/api-calls/",
+        "https://developer.box.com/guides/cli/"
+      ],
+      "data_accessed": [
+        "Service Account or App User identity associated with the compromised app",
+        "Any files, folders, metadata, and collaborations accessible under that identity’s scopes and app-access mode",
+        "Application credentials and stored access/refresh tokens"
+      ],
+      "preconditions_required": [
+        "A Box Platform app (JWT, CCG, or App Token) has been created and authorized in the target tenant with non-trivial scopes and app-access mode (for example, app+enterprise).",
+        "The attacker has compromised infrastructure or developer tooling that stores the app’s credentials (client secret, JWT private key, or App Token).",
+        "The attacker can originate traffic from IP space that is permitted by the tenant’s IP allowlist for API calls (ideally from the same environment where the app normally runs)."
+      ],
+      "constraints_encountered": [
+        "IP Allowlisting – API calls from new or untrusted IP ranges may be blocked; the attacker typically needs to stay on the integration’s usual infrastructure.",
+        "Rate Limiting – high-volume enumeration with the stolen token may be throttled or logged.",
+        "Admin Approval of apps – the app must already have been approved and authorized; the attacker cannot self-authorize a new high-privilege app without prior compromise."
+      ],
+      "evasion_considerations": [
+        "Reuse the same infrastructure, IP ranges, and user agents that the legitimate integration uses so activity blends into normal API traffic.",
+        "Limit initial API calls to light discovery until defender monitoring and rate limits are better understood.",
+        "Avoid changing app configuration in the Developer Console; operate solely via tokens to reduce administrative audit noise."
+      ],
+      "resulting_access": "Programmatic API-level access to the tenant through a legitimate server-auth integration identity (Service Account or App User), with privileges defined by the app’s scopes and app-access mode.",
+      "comments": "This vector bypasses MFA and SSO entirely by abusing non-human cloud identities. It is one of the most realistic high-impact initial access paths in environments that rely heavily on custom apps, CLI, or integrations."
+    },
+    {
+      "can_achieve": true,
+      "technique_name": "Spearphishing Link (OAuth Consent Phishing for a Malicious Box App)",
+      "technique_stix_id": "T1566.002",
+      "method_steps": [
+        {
+          "step_id": 1,
+          "description": "The attacker creates or controls a Box Platform OAuth2 application in their own Box Developer Console and configures it with attractive but over-privileged scopes (for example, read/write all files, manage collaborations) and a redirect URI to an attacker-controlled HTTPS endpoint.",
+          "related_capabilities": [
+            "Application Models and User Types for Platform Apps",
+            "Authentication Methods and Token Management"
+          ],
+          "related_interfaces": [
+            "Box Developer Console – https://app.box.com/developers/console",
+            "Application Types documentation – https://developer.box.com/platform/application-types/",
+            "Authentication methods guide – https://developer.box.com/platform/authentication-methods/"
+          ],
+          "related_data": [
+            "OAuth2 client ID and client secret for the malicious app",
+            "Configured redirect URIs and requested scopes"
+          ],
+          "notes": "Whether this app can be used against the target tenant depends on enterprise app-approval settings; in some tenants admin approval will be required."
+        },
+        {
+          "step_id": 2,
+          "description": "The attacker crafts a Box OAuth2 authorization URL that requests offline access and the chosen scopes and embeds it in a spearphishing email or message sent to target users, using social engineering to make the consent request appear legitimate.",
+          "related_capabilities": [
+            "Authentication Methods and Token Management"
+          ],
+          "related_interfaces": [
+            "OAuth2 authorization flow documentation – https://developer.box.com/guides/authentication/",
+            "Token behavior – https://developer.box.com/guides/authentication/tokens/"
+          ],
+          "related_data": [
+            "OAuth2 authorization request parameters (client_id, redirect_uri, scope, state, response_type=code)"
+          ],
+          "notes": "This mirrors real-world consent phishing campaigns against other SaaS platforms, but targets Box’s OAuth2 layer."
+        },
+        {
+          "step_id": 3,
+          "description": "A targeted user, already able to authenticate to Box via SSO and MFA from an allowlisted IP, clicks the link, completes any required SSO login, and is presented with Box’s standard OAuth consent screen for the attacker’s app; they are tricked into approving it.",
+          "related_capabilities": [
+            "User Provisioning, SSO, and Identity Management",
+            "Authentication Methods and Token Management"
+          ],
+          "related_interfaces": [
+            "SSO configuration guide – https://support.box.com/hc/en-us/articles/360043696514-Setting-Up-Single-Sign-On-SSO-for-your-Enterprise",
+            "Box OAuth consent UI driven by the authentication endpoints"
+          ],
+          "related_data": [
+            "User’s SSO-backed Box identity and session",
+            "Consent record binding the user to the malicious application and its scopes"
+          ],
+          "notes": "MFA, SSO, CAPTCHA, and IP allowlisting are all satisfied legitimately by the victim; they do not block this technique."
+        },
+        {
+          "step_id": 4,
+          "description": "Box redirects back to the attacker-controlled redirect URI with an authorization code; the attacker’s server exchanges this code for access and refresh tokens using the Box token endpoint.",
+          "related_capabilities": [
+            "Authentication Methods and Token Management"
+          ],
+          "related_interfaces": [
+            "Token endpoint behavior – https://developer.box.com/guides/authentication/tokens/"
+          ],
+          "related_data": [
+            "Short-lived access token and long-lived, single-use refresh token bound to the victim’s Box account and the app’s scopes"
+          ],
+          "notes": "The attacker now holds application access tokens for the user without ever seeing their SSO credentials directly."
+        },
+        {
+          "step_id": 5,
+          "description": "From infrastructure located on the enterprise IP allowlist or via a compromised corporate host, the attacker uses the stolen tokens to call Box’s REST APIs as the victim user, staying within the scopes granted to the malicious app.",
+          "related_capabilities": [
+            "Core REST Content API (Files, Folders, Users, Metadata)"
+          ],
+          "related_interfaces": [
+            "REST API reference – https://developer.box.com/reference/",
+            "API calls guide – https://developer.box.com/guides/api-calls/"
+          ],
+          "related_data": [
+            "User’s accessible files, folders, and metadata within the granted scopes",
+            "Any additional downscoped tokens the app chooses to mint"
+          ],
+          "notes": "Subsequent use of these tokens for discovery or exfiltration is beyond initial access; at this point, the attacker has a durable foothold via the malicious app."
+        }
+      ],
+      "capabilities_used": [
+        "Application Models and User Types for Platform Apps",
+        "Authentication Methods and Token Management",
+        "User Provisioning, SSO, and Identity Management",
+        "Core REST Content API (Files, Folders, Users, Metadata)"
+      ],
+      "interfaces_used": [
+        "https://app.box.com/developers/console",
+        "https://developer.box.com/platform/application-types/",
+        "https://developer.box.com/platform/authentication-methods/",
+        "https://developer.box.com/guides/authentication/",
+        "https://developer.box.com/guides/authentication/tokens/",
+        "https://support.box.com/hc/en-us/articles/360043696514-Setting-Up-Single-Sign-On-SSO-for-your-Enterprise",
+        "https://developer.box.com/reference/",
+        "https://developer.box.com/guides/api-calls/"
+      ],
+      "data_accessed": [
+        "OAuth2 client credentials for the malicious Box app",
+        "Authorization codes and access/refresh tokens tied to victim users",
+        "User-accessible files, folders, and metadata within granted scopes"
+      ],
+      "preconditions_required": [
+        "The target tenant’s enterprise settings permit user consent for the attacker-controlled app (or an admin has already approved it, intentionally or inadvertently).",
+        "The attacker can host an HTTPS redirect endpoint and craft realistic spearphishing messages.",
+        "Target users can authenticate to Box via SSO and MFA and are reachable via phishing channels.",
+        "The attacker can send API requests from IP space that will be accepted under the tenant’s IP allowlist (for example, via a compromised corporate host or VPN)."
+      ],
+      "constraints_encountered": [
+        "MFA Required – enforced for the victim user but transparently satisfied when they log in; it does not protect against malicious app consent.",
+        "SSO-Only Authentication – users must go through SSO, but the OAuth consent prompt appears after successful SSO.",
+        "IP Allowlisting – use of the resulting tokens from non-allowlisted IPs may be blocked, so attacker typically needs a foothold on an allowlisted network.",
+        "Rate Limiting – may limit high-volume API harvesting using the malicious app’s tokens.",
+        "CAPTCHA Protection – can slow automated login attempts, but does not directly address consent phishing."
+      ],
+      "evasion_considerations": [
+        "Use brand impersonation and lookalike domains in phishing emails to make the OAuth consent request appear to come from a trusted Box or IT source.",
+        "Request scopes that seem plausible for the pretext (for example, \"document management extension\") rather than obviously overbroad permissions.",
+        "Throttle API usage and align it with normal user activity patterns to avoid anomalous spikes tied to the malicious app.",
+        "Target high-value users (legal, finance, executives) where a single successful consent yields disproportionate access, minimizing the number of phishing attempts."
+      ],
+      "resulting_access": "Application-level access tokens that allow the attacker’s Box app to act on behalf of specific users within the scopes granted, providing an authenticated foothold without direct credential theft.",
+      "comments": "This is a realistic SaaS-style initial access path in environments that allow user consent to apps; it leverages Box’s standard OAuth2 implementation and survives even with strong SSO and MFA."
+    },
+    {
+      "can_achieve": true,
+      "technique_name": "Trusted Relationship (Socially Engineered External Collaboration)",
+      "technique_stix_id": "T1199",
+      "method_steps": [
+        {
+          "step_id": 1,
+          "description": "The attacker ensures they control a Box account (for example, a personal Box account) that can satisfy Box’s MFA requirements; this account is outside the target enterprise’s managed domains.",
+          "related_capabilities": [
+            "User Provisioning, SSO, and Identity Management"
+          ],
+          "related_interfaces": [
+            "Developer guide: User Types – https://developer.box.com/platform/user-types/",
+            "Users overview – https://developer.box.com/guides/users/"
+          ],
+          "related_data": [
+            "External (non-managed) Box user account identity controlled by the attacker"
+          ],
+          "notes": "Creation and management of this external account occur outside the target tenant’s domain-based registration controls."
+        },
+        {
+          "step_id": 2,
+          "description": "Via email or other communication channels, the attacker socially engineers a target employee to invite the attacker’s email address as an external collaborator to a folder or file within the enterprise’s Box tenant.",
+          "related_capabilities": [
+            "Collaboration on Content (Collaborations, Shared Links, Comments, Tasks)"
+          ],
+          "related_interfaces": [
+            "Collaboration management in Box web UI – https://www.box.com/collaboration/document-management/",
+            "Collaborations API docs – https://developer.box.com/guides/collaborations/"
+          ],
+          "related_data": [
+            "Collaboration objects mapping the attacker’s external user ID to specific files or folders with a role (viewer, editor, etc.)"
+          ],
+          "notes": "From the victim’s perspective this may appear as a normal external partner collaboration."
+        },
+        {
+          "step_id": 3,
+          "description": "The victim uses the Box web UI to add the attacker’s email address as a collaborator; Box creates a collaboration record and sends an email notification to the attacker’s Box account.",
+          "related_capabilities": [
+            "Collaboration on Content (Collaborations, Shared Links, Comments, Tasks)"
+          ],
+          "related_interfaces": [
+            "Box web UI collaboration dialogs – https://www.box.com/collaboration/document-management/"
+          ],
+          "related_data": [
+            "New collaboration ACL entries granting the external account access",
+            "Email notifications containing invite context and links"
+          ],
+          "notes": "Enterprise-wide policies must allow external collaborators for this to succeed."
+        },
+        {
+          "step_id": 4,
+          "description": "The attacker logs into Box with their own external account (satisfying MFA on that account if enforced) from an IP allowed by the tenant’s IP allowlist and accepts or uses the collaboration invitation to access the shared content via the Box web UI or APIs.",
+          "related_capabilities": [
+            "Core File and Folder Storage",
+            "Core REST Content API (Files, Folders, Users, Metadata)"
+          ],
+          "related_interfaces": [
+            "Box web application content views – https://www.box.com/content-management/enterprise/",
+            "REST API reference – https://developer.box.com/reference/"
+          ],
+          "related_data": [
+            "Files, folders, and metadata within the shared scope",
+            "Any comments or tasks on those items"
+          ],
+          "notes": "This is effectively a sanctioned external partner relationship, but initiated for malicious purposes."
+        }
+      ],
+      "capabilities_used": [
+        "User Provisioning, SSO, and Identity Management",
+        "Collaboration on Content (Collaborations, Shared Links, Comments, Tasks)",
+        "Core File and Folder Storage",
+        "Core REST Content API (Files, Folders, Users, Metadata)"
+      ],
+      "interfaces_used": [
+        "https://developer.box.com/platform/user-types/",
+        "https://developer.box.com/guides/users/",
+        "https://www.box.com/collaboration/document-management/",
+        "https://developer.box.com/guides/collaborations/",
+        "https://www.box.com/content-management/enterprise/",
+        "https://developer.box.com/reference/"
+      ],
+      "data_accessed": [
+        "Attacker-controlled external Box user account",
+        "Collaborations granting that account access to specific items",
+        "Files, folders, and versions in the shared locations",
+        "Associated comments and tasks on those items"
+      ],
+      "preconditions_required": [
+        "Enterprise configuration allows external collaborators on at least some content.",
+        "A target employee with rights over a relevant folder or file can be socially engineered to invite the attacker’s external email as a collaborator.",
+        "The attacker can log into Box using their personal account, including satisfying MFA if required, and can reach Box from an IP allowed by the tenant’s IP allowlist (if external collaborator sessions are constrained by it)."
+      ],
+      "constraints_encountered": [
+        "MFA Required – enforced on the attacker’s Box account as well, though the attacker will simply configure it.",
+        "IP Allowlisting – may restrict from where external collaborators can access content; the attacker may need to use a proxy or compromised partner network on the allowlist.",
+        "Domain-Based Registration – blocks self-registration of managed users in the tenant but does not generally prevent use of unrelated external Box accounts.",
+        "Admin Approval Required – applies to new managed users, not to being added as an external collaborator."
+      ],
+      "evasion_considerations": [
+        "Pretext the collaboration as a normal business relationship (for example, vendor, customer, legal counsel) to reduce suspicion.",
+        "Request access only to specific project folders rather than top-level or obviously sensitive repositories.",
+        "Use the external account from a geography and schedule consistent with the claimed partner role.",
+        "Limit bulk downloads or permission changes that might highlight the external collaborator as anomalous in Shield or audit reports."
+      ],
+      "resulting_access": "An attacker-controlled Box account becomes an external collaborator with viewer/uploader/editor-style access to specific enterprise content, using fully legitimate Box collaboration mechanisms.",
+      "comments": "This vector abuses normal cross-organization collaboration patterns; the risk hinges on how tightly external sharing is governed and reviewed."
+    },
+    {
+      "can_achieve": true,
+      "technique_name": "Exploit Public-Facing Application (Open Shared Links)",
+      "technique_stix_id": "T1190",
+      "method_steps": [
+        {
+          "step_id": 1,
+          "description": "An internal user creates a shared link on a file or folder and configures it with an access level that allows \"anyone with the link\" to view or download, optionally with no password or expiration; the attacker obtains this URL via prior compromise, misdirected email, or leak.",
+          "related_capabilities": [
+            "Collaboration on Content (Collaborations, Shared Links, Comments, Tasks)"
+          ],
+          "related_interfaces": [
+            "Shared Links configuration in Box web UI – https://www.box.com/collaboration/document-management/",
+            "Shared Links API docs – https://developer.box.com/guides/shared-links/"
+          ],
+          "related_data": [
+            "Shared link URL pointing to a Box-hosted resource",
+            "Link configuration (access level, password flag, expiration, download restrictions)"
+          ],
+          "notes": "Creation of the open link is legitimate but expands the tenant’s public-facing surface."
+        },
+        {
+          "step_id": 2,
+          "description": "From an IP that is permitted by any enterprise IP allowlist for link access, the attacker pastes the shared link URL into a browser; Box serves the preview or download page without requiring authentication for open links.",
+          "related_capabilities": [
+            "Core File and Folder Storage"
+          ],
+          "related_interfaces": [
+            "Box-hosted shared link pages as described in Shared Links documentation – https://developer.box.com/guides/shared-links/"
+          ],
+          "related_data": [
+            "File contents and metadata for the linked item",
+            "Folder listing if the link targets a folder"
+          ],
+          "notes": "If a password is set on the shared link, the attacker must also have acquired that password; otherwise, no credentials are needed."
+        }
+      ],
+      "capabilities_used": [
+        "Collaboration on Content (Collaborations, Shared Links, Comments, Tasks)",
+        "Core File and Folder Storage"
+      ],
+      "interfaces_used": [
+        "https://www.box.com/collaboration/document-management/",
+        "https://developer.box.com/guides/shared-links/"
+      ],
+      "data_accessed": [
+        "Any files or folders exposed through open shared links (names, metadata, content)",
+        "Potentially subfolder listings if shared link points to a folder",
+        "Optional comments or tasks visible through the link depending on configuration"
+      ],
+      "preconditions_required": [
+        "At least one file or folder in the tenant has a shared link configured with open (anyone with the link) access.",
+        "The attacker has obtained the exact shared link URL (and password, if one is set) via prior leak, phishing, compromise of email/chat, or other means.",
+        "The tenant’s IP allowlist and Shield/DLP policies permit access to open links from the attacker’s current IP or one they can control."
+      ],
+      "constraints_encountered": [
+        "IP Allowlisting – if enforced for anonymous link recipients, shared links will only be accessible from approved IP ranges.",
+        "Enterprise shared-link policies – admins can disallow open links or require passwords/expirations, which would limit or complicate this vector.",
+        "Shield/DLP – sensitive classifications may automatically block or watermark content via links."
+      ],
+      "evasion_considerations": [
+        "Use the link sparingly and avoid making repeated range or directory guesses to prevent anomaly detection.",
+        "Access content via normal browser behavior rather than scripted scraping to blend with expected external-recipient traffic.",
+        "If passwords are required, harvest them from the same compromised communication channel that revealed the link (for example, an email thread)."
+      ],
+      "resulting_access": "Unauthenticated, link-scoped read (and often download) access to specific files or folder trees in the tenant, purely by possessing a valid open shared link URL (and optional password).",
+      "comments": "This path does not create a Box identity, but it is still an initial access vector to tenant data. It is constrained entirely by how shared links are configured and distributed."
+    },
+    {
+      "can_achieve": true,
+      "technique_name": "Exploit Public-Facing Application (Anonymous File Requests for Content Ingress)",
+      "technique_stix_id": "T1190",
+      "method_steps": [
+        {
+          "step_id": 1,
+          "description": "A Box user configures a File Request on a folder, creating a hosted upload page that allows \"uploaders who do not need Box accounts\" to submit files and optional metadata; the request link is shared externally or posted on a website where the attacker can see it.",
+          "related_capabilities": [
+            "External File Intake via File Requests"
+          ],
+          "related_interfaces": [
+            "File Requests API and behavior – https://developer.box.com/guides/file-requests/"
+          ],
+          "related_data": [
+            "File Request definition including link URL, title, description, custom fields, and target folder",
+            "Activation status of the request"
+          ],
+          "notes": "This setup is typically legitimate (for example, collecting RFP responses or customer uploads) but exposes a public ingestion endpoint."
+        },
+        {
+          "step_id": 2,
+          "description": "From an IP allowed by any enterprise IP allowlist for File Request access, the attacker visits the File Request URL in a browser, fills out any required form fields with plausible data, and uploads one or more files of their choosing.",
+          "related_capabilities": [
+            "External File Intake via File Requests",
+            "Core File and Folder Storage"
+          ],
+          "related_interfaces": [
+            "Hosted File Request page described in https://developer.box.com/guides/file-requests/"
+          ],
+          "related_data": [
+            "Uploaded files (potentially containing malware, tools, or crafted content)",
+            "Metadata values supplied via the File Request form"
+          ],
+          "notes": "No Box account is necessary; CAPTCHA and rate limiting may apply to repeated submissions but not to single uploads."
+        }
+      ],
+      "capabilities_used": [
+        "External File Intake via File Requests",
+        "Core File and Folder Storage",
+        "Events and Webhooks",
+        "Automated Workflows and Approvals via Box Relay",
+        "Automated Content Processing via Box Skills",
+        "AI-Driven Automation (Box Automate, Extract Agents, AI Agents)"
+      ],
+      "interfaces_used": [
+        "https://developer.box.com/guides/file-requests/"
+      ],
+      "data_accessed": [
+        "The attacker’s uploaded files as stored in the target folder within the tenant",
+        "Any downstream metadata, workflows, or Skills processing triggered by the upload",
+        "File Request configuration (indirectly, via its visible fields and behavior)"
+      ],
+      "preconditions_required": [
+        "At least one active File Request exists in the tenant whose URL is accessible to the attacker (for example, shared on a website or sent in an email the attacker can see).",
+        "The File Request is configured to accept uploads from unauthenticated users.",
+        "The attacker’s IP is not blocked by IP allowlisting or Shield policies for accessing the File Request page."
+      ],
+      "constraints_encountered": [
+        "IP Allowlisting – may limit from where File Request pages can be accessed.",
+        "CAPTCHA Protection – can slow or complicate large-scale automated submission, but not single targeted uploads.",
+        "Rate Limiting – may restrict high-frequency submissions from a single IP.",
+        "Shield/DLP and malware detection – uploaded malicious content may be scanned, flagged, or quarantined post-ingestion."
+      ],
+      "evasion_considerations": [
+        "Disguise uploaded filenames and metadata to resemble expected submissions (for example, \"invoice_Q2.pdf\").",
+        "Use a modest volume of uploads per IP to avoid rate limiting and obvious abuse patterns.",
+        "Target File Requests linked to workflows (Relay, Sign, or AI) to maximize downstream effect with minimal visible interaction."
+      ],
+      "resulting_access": "Ability to place arbitrary files and associated metadata into specific Box folders in the tenant without any Box account, creating an initial foothold for content-based or workflow-based attacks.",
+      "comments": "This vector provides ingress into the tenant rather than read access; it is nonetheless a meaningful initial access path, especially when files trigger automations, Skills, or AI processing."
+    },
+    {
+      "can_achieve": true,
+      "technique_name": "Trusted Relationship (Compromised Slack/Teams or Other Partner Integration Mappings)",
+      "technique_stix_id": "T1199",
+      "method_steps": [
+        {
+          "step_id": 1,
+          "description": "The enterprise has configured Slack or Microsoft Teams Integration Mappings so that content from specific workspaces/channels is stored in designated Box folders using a Box integration app and associated Service Account/App Users.",
+          "related_capabilities": [
+            "Integration Mappings and Partner Integrations",
+            "Application Models and User Types for Platform Apps"
+          ],
+          "related_interfaces": [
+            "Integration Mappings APIs – https://developer.box.com/guides/integration-mappings/",
+            "Box integrations gallery – https://www.box.com/integrations"
+          ],
+          "related_data": [
+            "Mapping definitions tying partner workspaces/channels to Box folder IDs",
+            "OAuth grants and client configuration for the Box integration app"
+          ],
+          "notes": "This is a normal configuration step performed by admins or integration engineers."
+        },
+        {
+          "step_id": 2,
+          "description": "The attacker compromises the external integration environment (for example, the Slack or Teams tenant or the server hosting the connector) and locates the Box integration’s stored credentials (OAuth client secrets, refresh tokens, or JWT keys) or gains control over the process that uses them.",
+          "related_capabilities": [
+            "Integration Mappings and Partner Integrations",
+            "Authentication Methods and Token Management"
+          ],
+          "related_interfaces": [
+            "Partner integration configuration surfaces referenced at https://www.box.com/integrations",
+            "Authentication methods documentation – https://developer.box.com/platform/authentication-methods/"
+          ],
+          "related_data": [
+            "Box app credentials for the Slack/Teams connector",
+            "Any cached Box access or refresh tokens used by the integration"
+          ],
+          "notes": "This compromise occurs outside Box but targets the trusted integration’s secrets."
+        },
+        {
+          "step_id": 3,
+          "description": "Using the stolen credentials from an IP and environment consistent with the integration’s normal operation, the attacker obtains valid access tokens for the integration’s Service Account or App Users and invokes Box REST APIs to enumerate or download content in the mapped Box folders.",
+          "related_capabilities": [
+            "Core REST Content API (Files, Folders, Users, Metadata)"
+          ],
+          "related_interfaces": [
+            "REST API reference – https://developer.box.com/reference/",
+            "API calls guide – https://developer.box.com/guides/api-calls/"
+          ],
+          "related_data": [
+            "Files and folders created by or synchronized from Slack/Teams into Box",
+            "Any additional content the integration’s identity can access beyond the mapped folders, depending on scopes"
+          ],
+          "notes": "From Box’s perspective, all actions are performed by the legitimate integration identity."
+        }
+      ],
+      "capabilities_used": [
+        "Integration Mappings and Partner Integrations",
+        "Application Models and User Types for Platform Apps",
+        "Authentication Methods and Token Management",
+        "Core REST Content API (Files, Folders, Users, Metadata)",
+        "Admin Console and Content Manager"
+      ],
+      "interfaces_used": [
+        "https://developer.box.com/guides/integration-mappings/",
+        "https://www.box.com/integrations",
+        "https://developer.box.com/platform/authentication-methods/",
+        "https://developer.box.com/reference/",
+        "https://developer.box.com/guides/api-calls/",
+        "https://www.box.com/security/it-admin-controls/"
+      ],
+      "data_accessed": [
+        "Box integration app credentials and tokens used by Slack/Teams connectors",
+        "Mapped Box folders receiving partner content",
+        "Any additional Box content accessible to the integration identity under its scopes and app-access settings"
+      ],
+      "preconditions_required": [
+        "A Slack, Teams, or other partner integration with Box is configured using Integration Mappings and has non-trivial access to Box content.",
+        "The attacker has compromised the partner environment or integration host to the point of accessing its stored Box credentials or processes.",
+        "The attacker can operate from the integration’s usual IP ranges so that IP allowlisting and anomaly detection are not triggered."
+      ],
+      "constraints_encountered": [
+        "IP Allowlisting – Box may only accept API calls from specific ranges; however, integrations are normally allowed, so the attacker must stay on those ranges.",
+        "MFA Required / SSO-Only – do not apply to the integration’s Service Account/App Users, which authenticate via app credentials.",
+        "Rate Limiting – constrains how quickly the attacker can harvest content with the stolen tokens."
+      ],
+      "evasion_considerations": [
+        "Throttle API requests to match the integration’s historical volume and timing as seen in Platform Insights.",
+        "Avoid modifying Integration Mapping configuration from within Box, as such changes may alert admins.",
+        "Blend access patterns with expected Slack/Teams-driven operations (for example, pulling content only from mapped folders rather than unrelated areas)."
+      ],
+      "resulting_access": "Indirect but fully authenticated access to Box as the Slack/Teams integration identity, with visibility into mapped folders and any other content permitted by the integration’s scopes.",
+      "comments": "This is a classic trusted-relationship vector: Box correctly trusts the integration, but compromise of the partner platform turns that trust into an initial access pathway."
+    },
+    {
+      "can_achieve": true,
+      "technique_name": "Trusted Relationship (Compromised Box MCP–Connected External AI Agent)",
+      "technique_stix_id": "T1199",
+      "method_steps": [
+        {
+          "step_id": 1,
+          "description": "Enterprise admins configure a Box MCP server (remote or self-hosted) and grant it access to Box using a Platform app with defined scopes and app-access mode, exposing Box content and actions as tools to external AI platforms such as Anthropic Claude, Microsoft Copilot Studio, or Mistral Le Chat.",
+          "related_capabilities": [
+            "Box MCP Server for External AI Agents",
+            "Application Models and User Types for Platform Apps",
+            "Authentication Methods and Token Management"
+          ],
+          "related_interfaces": [
+            "Box MCP server guide – https://developer.box.com/guides/box-mcp/",
+            "Developer Console – https://app.box.com/developers/console"
+          ],
+          "related_data": [
+            "MCP tool definitions describing which Box operations are allowed (search, read, update)",
+            "Access tokens and scopes bound to the MCP app’s Service Account/App Users"
+          ],
+          "notes": "This is a deliberate extension of Box capabilities into external AI ecosystems."
+        },
+        {
+          "step_id": 2,
+          "description": "The attacker compromises the external AI platform account (for example, a user’s Claude workspace or Copilot configuration) or the MCP server environment itself, obtaining the ability to issue tool calls via the Box MCP server using its existing Box credentials.",
+          "related_capabilities": [
+            "Box MCP Server for External AI Agents",
+            "Authentication Methods and Token Management"
+          ],
+          "related_interfaces": [
+            "External AI platform UIs that invoke Box MCP tools (per https://developer.box.com/guides/box-mcp/)",
+            "Box MCP server endpoints configured by admins"
+          ],
+          "related_data": [
+            "Agent prompts and plans containing Box tool invocations",
+            "Any Box access tokens or configuration stored in the MCP server environment"
+          ],
+          "notes": "This compromise is outside Box; Box continues to see only legitimate tool calls from a trusted MCP app."
+        },
+        {
+          "step_id": 3,
+          "description": "From the compromised AI platform account, the attacker instructs the MCP-connected agent to search for and read content in Box (for example, \"List all contracts in the Legal folder\" or \"Summarize files labeled confidential\"); the MCP server uses its Box tokens and tools to execute these operations and returns results via the AI platform.",
+          "related_capabilities": [
+            "Box MCP Server for External AI Agents",
+            "Core REST Content API (Files, Folders, Users, Metadata)"
+          ],
+          "related_interfaces": [
+            "Box MCP tools over REST as described in https://developer.box.com/guides/box-mcp/",
+            "Core content APIs – https://developer.box.com/reference/"
+          ],
+          "related_data": [
+            "File and folder metadata and contents within the MCP app’s scopes",
+            "AI-generated summaries or extracted information about Box content"
+          ],
+          "notes": "The attacker may never call Box APIs directly; instead, they exploit Box through the AI agent’s toolset."
+        }
+      ],
+      "capabilities_used": [
+        "Box MCP Server for External AI Agents",
+        "Box AI APIs and AI Studio",
+        "Application Models and User Types for Platform Apps",
+        "Authentication Methods and Token Management",
+        "Core REST Content API (Files, Folders, Users, Metadata)"
+      ],
+      "interfaces_used": [
+        "https://developer.box.com/guides/box-mcp/",
+        "https://app.box.com/developers/console",
+        "https://developer.box.com/platform/application-types/",
+        "https://developer.box.com/platform/authentication-methods/",
+        "https://developer.box.com/reference/"
+      ],
+      "data_accessed": [
+        "Any Box content the MCP app is permitted to access under its scopes and app-access mode",
+        "Agent prompts, plans, and responses that may contain sensitive summaries of Box content",
+        "Configuration of MCP tools that reveal what operations are allowed"
+      ],
+      "preconditions_required": [
+        "The tenant has configured a Box MCP server and authorized it with Box scopes that provide access to meaningful content.",
+        "An external AI platform account or the MCP server environment itself has been compromised by the attacker.",
+        "The MCP’s Box tokens and tool definitions remain valid and have not been revoked by admins."
+      ],
+      "constraints_encountered": [
+        "IP Allowlisting – MCP server endpoints must originate from IPs permitted by the tenant; the attacker typically leverages the existing MCP infrastructure rather than new IPs.",
+        "MFA/SSO – not directly applicable to the MCP app’s Service Account/App Users, which rely on app credentials.",
+        "Shield/DLP – may restrict certain operations (for example, blocking download of highly classified files) even when invoked via MCP tools."
+      ],
+      "evasion_considerations": [
+        "Issue prompts that resemble legitimate AI use cases (summarization, search) rather than obviously malicious queries.",
+        "Throttle the number and scope of tool calls to avoid noticeable spikes in MCP-related activity.",
+        "Avoid reconfiguring MCP tools or scopes from the Box Admin Console, which would generate conspicuous admin events."
+      ],
+      "resulting_access": "Indirect control over Box operations and visibility into content via a compromised external AI agent that is legitimately connected to Box through MCP, within the bounds of the MCP app’s scopes.",
+      "comments": "This is a modern example of trusted-relationship initial access, where a compromised AI agent becomes a proxy for interacting with Box."
+    },
+    {
+      "can_achieve": true,
+      "technique_name": "Trusted Relationship (Compromised Custom Skills or Webhook Endpoints with Box Tokens)",
+      "technique_stix_id": "T1199",
+      "method_steps": [
+        {
+          "step_id": 1,
+          "description": "Developers or admins have configured Custom Skills and/or Webhooks that cause Box to send HTTPS callbacks containing file identifiers and Box access tokens to external endpoints whenever files are uploaded, moved, or changed in certain folders.",
+          "related_capabilities": [
+            "Box Skills Custom Processing Framework",
+            "Events and Webhooks",
+            "Notification and Webhook Delivery System"
+          ],
+          "related_interfaces": [
+            "Box Skills docs – https://developer.box.com/guides/skills/",
+            "Webhooks docs – https://developer.box.com/guides/webhooks/"
+          ],
+          "related_data": [
+            "Skill invocation payloads containing file IDs and scoped access tokens",
+            "Webhook payloads with object metadata and verification signatures"
+          ],
+          "notes": "These integrations are intended to augment processing or notify external systems about Box activity."
+        },
+        {
+          "step_id": 2,
+          "description": "The attacker compromises the external service or infrastructure that hosts the Skill or webhook endpoint (for example, gaining admin rights on the server) and captures incoming Skill/webhook requests, including the Box access tokens and file references.",
+          "related_capabilities": [
+            "Box Skills Custom Processing Framework",
+            "Notification and Webhook Delivery System"
+          ],
+          "related_interfaces": [
+            "Skill invocation endpoints documented in https://developer.box.com/guides/skills/",
+            "Webhook target URLs registered via https://developer.box.com/guides/webhooks/"
+          ],
+          "related_data": [
+            "Captured HTTP request bodies containing Box access tokens and file/folder IDs",
+            "Headers with verification signatures and request metadata"
+          ],
+          "notes": "This compromise is entirely on the integrator’s infrastructure; Box continues to trust the endpoint."
+        },
+        {
+          "step_id": 3,
+          "description": "Using the captured access tokens from the compromised endpoint infrastructure (originating from IPs consistent with the integration), the attacker calls Box REST APIs to download file contents or metadata associated with the referenced IDs.",
+          "related_capabilities": [
+            "Core REST Content API (Files, Folders, Users, Metadata)",
+            "Authentication Methods and Token Management"
+          ],
+          "related_interfaces": [
+            "REST API reference – https://developer.box.com/reference/",
+            "API calls guide – https://developer.box.com/guides/api-calls/"
+          ],
+          "related_data": [
+            "File content streams and metadata for items included in Skill/webhook invocations",
+            "Any additional content reachable under the scopes associated with the tokens (if broader than single-file)"
+          ],
+          "notes": "Depending on token scoping, the attacker might be limited to specific files or have broader read/write capabilities on monitored folders."
+        }
+      ],
+      "capabilities_used": [
+        "Box Skills Custom Processing Framework",
+        "Events and Webhooks",
+        "Notification and Webhook Delivery System",
+        "Authentication Methods and Token Management",
+        "Core REST Content API (Files, Folders, Users, Metadata)"
+      ],
+      "interfaces_used": [
+        "https://developer.box.com/guides/skills/",
+        "https://developer.box.com/guides/webhooks/",
+        "https://developer.box.com/guides/events/",
+        "https://developer.box.com/reference/",
+        "https://developer.box.com/guides/api-calls/"
+      ],
+      "data_accessed": [
+        "Access tokens and file identifiers contained in Skill and webhook payloads",
+        "Files and metadata associated with those identifiers",
+        "Potentially additional content reachable by the scopes attached to these tokens"
+      ],
+      "preconditions_required": [
+        "The tenant uses Custom Skills or Webhooks that send Box-issued access tokens and file identifiers to external HTTPS endpoints.",
+        "The attacker has compromised those external endpoint environments and can intercept incoming requests.",
+        "Tokens embedded in the payloads are not strictly downscoped to one-off, single-use operations that immediately expire before the attacker can use them."
+      ],
+      "constraints_encountered": [
+        "IP Allowlisting – Box will send Skill/webhook requests to the configured endpoints; follow-on API calls using the tokens must typically originate from the same or otherwise allowlisted infrastructure.",
+        "Token scoping and lifetime – Skills and webhooks can use access tokens that are tightly scoped and short-lived, limiting what an attacker can do and for how long.",
+        "Rate Limiting – excessive API calls with intercepted tokens could trigger throttling."
+      ],
+      "evasion_considerations": [
+        "Use tokens promptly and sparingly, mimicking the volume and timing of normal Skill or webhook processing.",
+        "Avoid making API calls that diverge from the endpoint’s expected purpose (for example, writing unrelated metadata) to reduce anomalies.",
+        "If tokens are one-file scoped, focus on highly sensitive folders where Skill/webhook coverage is known to be broad."
+      ],
+      "resulting_access": "Authenticated API access to files and metadata referenced in Skill or webhook events, using legitimate Box-issued tokens that were intended for trusted external processors.",
+      "comments": "This vector again relies on compromise of an external trusted integration, leveraging Box’s own integration model and token dispatch to gain initial access to tenant content."
+    },
+    {
+      "can_achieve": false,
+      "technique_name": "Default Accounts",
+      "technique_stix_id": "T1078.001",
+      "method_steps": [],
+      "capabilities_used": [],
+      "interfaces_used": [],
+      "data_accessed": [],
+      "preconditions_required": [
+        "Box would need to expose a built-in local account (for example, a factory-set admin or guest account with a known default password) that is enabled and usable across tenants without SSO or explicit provisioning."
+      ],
+      "constraints_encountered": [
+        "SSO-Only Authentication – documentation and environment constraints state that authentication for enterprise users is via SSO, with no generic local Box passwords in use.",
+        "Domain-Based Registration – only specific email domains can be used to create managed accounts, and new registrations also require email verification and admin approval.",
+        "Admin Approval Required – even if a generic account creation flow existed, it would be subject to manual approval steps.",
+        "MFA Required – any interactive account would need a second factor, incompatible with static default credentials."
+      ],
+      "evasion_considerations": [],
+      "resulting_access": "",
+      "comments": "Public documentation for Box and the analyzed capabilities do not describe any built-in default local user accounts or factory credentials. All access is mediated through SSO-backed managed users, explicitly provisioned external users, or app/service identities created and approved by admins. Given the strong SSO-only, MFA, domain-based registration, and admin-approval constraints, exploiting a \"default account\" is not a realistic initial access method for this application."
+    }
+  ],
+  "summary": "Initial access to the Box Intelligent Content Management Platform in this environment is dominated by compromise or misuse of legitimate identities and trusted integrations rather than by software exploits or anonymous account creation. The most consequential vectors are (1) compromise of SSO-backed cloud accounts (including admin/platform owner accounts) and (2) compromise or overuse of app and service identities issued via Box Platform authentication methods (OAuth2, JWT, CCG, App Token). These yield full user- or admin-equivalent access while satisfying MFA, SSO-only, and IP-allowlisting controls.\n\nBeyond direct accounts, Box’s design intentionally exposes controlled external surfaces: open shared links provide unauthenticated read access to specific items; File Requests allow anonymous uploads into tenant folders; and a rich integration ecosystem (Slack/Teams integrations, MCP-connected AI agents, Custom Skills, and Webhooks) extends Box’s trust boundary to external services that hold powerful tokens. Compromise of these partners or mismanagement of their credentials is a realistic initial access vector into Box content and APIs.\n\nEnvironmental constraints—MFA, IP allowlisting, SSO-only auth, domain-based registration, CAPTCHA, email verification, and admin approval for new users—effectively rule out brute-force logins, self-service account creation inside the tenant, and default-account abuse. However, they do little to prevent consent phishing against Box OAuth apps, theft of app/CLI/Skill/Webhook tokens, or abuse of legitimately configured external collaborators, shared links, and file requests. Defenders should therefore prioritize hardening and monitoring around SSO identities, admin accounts, Platform apps, and integrations, and should restrict or tightly govern open links, file requests, and external AI/partner connections."
+}
