@@ -7,7 +7,7 @@ function ApplicationBreakdown({ appName }) {
   const [initialAccessData, setInitialAccessData] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
-  const [activeSection, setActiveSection] = useState('attack_paths')
+  const [activeSection, setActiveSection] = useState('attack_analysis')
   const [expandedAttackPaths, setExpandedAttackPaths] = useState(new Set())
   const [expandedMethods, setExpandedMethods] = useState(new Set())
   const [expandedInitialAccess, setExpandedInitialAccess] = useState(new Set())
@@ -251,13 +251,11 @@ function ApplicationBreakdown({ appName }) {
   )
 
   const sections = [
-    { id: 'attack_paths', label: 'Attack Paths' },
-    { id: 'initial_access', label: 'Initial Access' },
+    { id: 'attack_analysis', label: 'Attack Analysis' },
     { id: 'technical', label: 'Technical Components' },
     { id: 'admin', label: 'Admin & Operations' },
     { id: 'api', label: 'API & Integrations' },
     { id: 'automation', label: 'Background & Automation' },
-    { id: 'security', label: 'Security Behaviours' },
     { id: 'core', label: 'Core Product Capabilities' },
   ]
 
@@ -290,10 +288,10 @@ function ApplicationBreakdown({ appName }) {
               className={`
                 px-4 py-2 rounded-lg text-body-sm font-medium transition-all
                 ${activeSection === section.id
-                  ? section.id === 'attack_paths'
+                  ? section.id === 'attack_analysis'
                     ? 'bg-red-100 dark:bg-red-950/30 text-red-800 dark:text-red-300 border border-red-200 dark:border-red-900/50'
                     : 'bg-accent-primary text-white'
-                  : section.id === 'attack_paths'
+                  : section.id === 'attack_analysis'
                     ? 'bg-red-50 dark:bg-red-950/10 text-red-700 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-950/20 border border-red-100 dark:border-red-900/30'
                     : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
                 }
@@ -438,92 +436,27 @@ function ApplicationBreakdown({ appName }) {
             </div>
           )}
 
-          {/* Security Relevant Behaviours */}
-          {activeSection === 'security' && breakdownData.security_relevant_behaviours && (
-            <div className="space-y-6">
-              {breakdownData.security_relevant_behaviours.privileged_operations && (
-                <div>
-                  <h3 className="text-h3 font-semibold text-gray-900 dark:text-white mb-4">
-                    Privileged Operations
-                  </h3>
-                  <ul className="list-disc list-inside space-y-2">
-                    {breakdownData.security_relevant_behaviours.privileged_operations.map((op, idx) => (
-                      <li key={idx} className="text-body text-gray-700 dark:text-gray-300">
-                        {op}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
 
-              {breakdownData.security_relevant_behaviours.user_configurable_logic && (
-                <div>
-                  <h3 className="text-h3 font-semibold text-gray-900 dark:text-white mb-4">
-                    User Configurable Logic
-                  </h3>
-                  <ul className="list-disc list-inside space-y-2">
-                    {breakdownData.security_relevant_behaviours.user_configurable_logic.map((logic, idx) => (
-                      <li key={idx} className="text-body text-gray-700 dark:text-gray-300">
-                        {logic}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-
-              {breakdownData.security_relevant_behaviours.auth_and_identity_behaviours && (
-                <div>
-                  <h3 className="text-h3 font-semibold text-gray-900 dark:text-white mb-4">
-                    Auth and Identity Behaviours
-                  </h3>
-                  <ul className="list-disc list-inside space-y-2">
-                    {breakdownData.security_relevant_behaviours.auth_and_identity_behaviours.map((behaviour, idx) => (
-                      <li key={idx} className="text-body text-gray-700 dark:text-gray-300">
-                        {behaviour}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-
-              {breakdownData.security_relevant_behaviours.logging_and_audit_behaviours && (
-                <div>
-                  <h3 className="text-h3 font-semibold text-gray-900 dark:text-white mb-4">
-                    Logging and Audit Behaviours
-                  </h3>
-                  <ul className="list-disc list-inside space-y-2">
-                    {breakdownData.security_relevant_behaviours.logging_and_audit_behaviours.map((behaviour, idx) => (
-                      <li key={idx} className="text-body text-gray-700 dark:text-gray-300">
-                        {behaviour}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-
-              {breakdownData.security_relevant_behaviours.failure_modes && (
-                <div>
-                  <h3 className="text-h3 font-semibold text-gray-900 dark:text-white mb-4">
-                    Failure Modes
-                  </h3>
-                  <ul className="list-disc list-inside space-y-2">
-                    {breakdownData.security_relevant_behaviours.failure_modes.map((mode, idx) => (
-                      <li key={idx} className="text-body text-gray-700 dark:text-gray-300">
-                        {mode}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* Attack Paths */}
-          {activeSection === 'attack_paths' && (
+          {/* Attack Analysis - Unified view for Attack Paths or Initial Access */}
+          {activeSection === 'attack_analysis' && (
             <div>
-              <h3 className="text-h3 font-semibold text-gray-900 dark:text-white mb-6">
-                Attack Paths
-              </h3>
+              <div className="flex items-center gap-3 mb-6">
+                <h3 className="text-h3 font-semibold text-gray-900 dark:text-white">
+                  Attack Analysis
+                </h3>
+                {attackPathsData && (
+                  <span className="inline-flex items-center px-2.5 py-1 rounded-md text-body-xs font-medium bg-blue-50 dark:bg-blue-950/20 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-900/30">
+                    Full Attack Paths
+                  </span>
+                )}
+                {initialAccessData && (
+                  <span className="inline-flex items-center px-2.5 py-1 rounded-md text-body-xs font-medium bg-green-50 dark:bg-green-950/20 text-green-700 dark:text-green-300 border border-green-200 dark:border-green-900/30">
+                    Initial Access Vectors
+                  </span>
+                )}
+              </div>
+
+              {/* Render Attack Paths if available */}
               {attackPathsData && attackPathsData.attack_paths && attackPathsData.attack_paths.length > 0 ? (
                 <div className="space-y-4">
                   {attackPathsData.attack_paths.map((attackPath, idx) => {
@@ -866,22 +799,9 @@ function ApplicationBreakdown({ appName }) {
                     )
                   })}
                 </div>
-              ) : (
-                <div className="bg-gray-50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-700 rounded-lg p-8 text-center">
-                  <p className="text-body text-gray-600 dark:text-gray-400">
-                    Attack paths are not available for this application.
-                  </p>
-                </div>
-              )}
-            </div>
-          )}
+              ) : null}
 
-          {/* Initial Access */}
-          {activeSection === 'initial_access' && (
-            <div>
-              <h3 className="text-h3 font-semibold text-gray-900 dark:text-white mb-6">
-                Initial Access Vectors
-              </h3>
+              {/* Render Initial Access Vectors if available */}
               {initialAccessData && initialAccessData.initial_access_vectors && initialAccessData.initial_access_vectors.length > 0 ? (
                 <div className="space-y-4">
                   {initialAccessData.initial_access_vectors.map((vector, idx) => {
@@ -1151,10 +1071,13 @@ function ApplicationBreakdown({ appName }) {
                     )
                   })}
                 </div>
-              ) : (
+              ) : null}
+
+              {/* Show message if neither is available */}
+              {!attackPathsData && !initialAccessData && (
                 <div className="bg-gray-50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-700 rounded-lg p-8 text-center">
                   <p className="text-body text-gray-600 dark:text-gray-400">
-                    Initial access vectors are not available for this application.
+                    Attack analysis data is not available for this application.
                   </p>
                 </div>
               )}

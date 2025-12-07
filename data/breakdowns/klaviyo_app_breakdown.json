@@ -1,0 +1,1936 @@
+{
+    "application_name": "Klaviyo B2C CRM (Marketing, Data Platform, and Service)",
+    "generated_at": "2025-12-07T00:00:00Z",
+    "coverage_overview": {
+        "sources_analysed": [
+            {
+                "name": "Klaviyo main sitemap (static-sitemap.xml, level 0)",
+                "url": "https://www.klaviyo.com/static-sitemap.xml",
+                "description": "Used to identify high-value product, feature, solution, and security pages (e.g., /products, /features, /solutions, /platform, /security, /tools)."
+            },
+            {
+                "name": "Email Marketing product page",
+                "url": "https://www.klaviyo.com/products/email-marketing/",
+                "description": "Describes Klaviyo’s email marketing product, including personalization, campaigns, cross-channel flows, templates, and AI features."
+            },
+            {
+                "name": "SMS Marketing product page",
+                "url": "https://www.klaviyo.com/products/sms-marketing/",
+                "description": "Describes SMS capabilities, two-way conversations, consent/compliance, supported countries, analytics, and AI-based optimization."
+            },
+            {
+                "name": "Advanced Klaviyo Data Platform product page",
+                "url": "https://www.klaviyo.com/products/advanced-cdp/",
+                "description": "Details advanced CDP capabilities including data transformation, hosted code functions, data warehouse sync, webhooks, and advanced analytics (RFM, funnels, product analysis, audience performance, custom CLV)."
+            },
+            {
+                "name": "Customer Hub (Customer Experience Hub) product page",
+                "url": "https://www.klaviyo.com/products/customer-experience-hub/",
+                "description": "Describes Customer Hub, a signed-in customer experience for order tracking, returns, subscriptions, rewards, and support, integrated with Shopify and helpdesk tools."
+            },
+            {
+                "name": "Marketing Analytics product page",
+                "url": "https://www.klaviyo.com/products/marketing-analytics/",
+                "description": "Describes Marketing Analytics add-on, including omnichannel attribution, funnels, cohorts, RFM, product analysis, and dashboards."
+            },
+            {
+                "name": "Klaviyo Helpdesk product page",
+                "url": "https://www.klaviyo.com/products/helpdesk/",
+                "description": "Describes the Klaviyo Helpdesk product, multi-channel inbox, AI tagging/routing, macros, and tight integration with marketing to trigger flows and pause campaigns."
+            },
+            {
+                "name": "Mobile App Marketing product page",
+                "url": "https://www.klaviyo.com/products/mobile-app-marketing/",
+                "description": "Covers mobile push and in-app messaging features, SDK requirements, segmentation, predictive triggers, and cross-channel flows."
+            },
+            {
+                "name": "Klaviyo Reviews product page",
+                "url": "https://www.klaviyo.com/products/review-management/",
+                "description": "Details Reviews product: collection flows, widgets, moderation/auto-verification, custom questions, analytics, and AI-assisted reviews."
+            },
+            {
+                "name": "Social Marketing (beta) product page",
+                "url": "https://www.klaviyo.com/products/social/",
+                "description": "Describes social data ingestion (Instagram DMs, comments, tags), converting followers to subscribers, audience sync, and UGC-triggered automations."
+            },
+            {
+                "name": "WhatsApp Marketing product page",
+                "url": "https://www.klaviyo.com/products/whatsapp/",
+                "description": "Explains WhatsApp channel capabilities, types of messages (marketing, utility, service), omnichannel flows, and integration with Helpdesk and K:AI Customer Agent."
+            },
+            {
+                "name": "Customer Segmentation feature page",
+                "url": "https://www.klaviyo.com/features/segmentation/",
+                "description": "Deep dive into real-time segmentation, Segments AI, historical/all-time data usage, conditions, predictive analytics and activation across channels and ads."
+            },
+            {
+                "name": "Customer Profiles feature page",
+                "url": "https://www.klaviyo.com/features/customer-profiles/",
+                "description": "Documents profile schema, event history, predictive properties, identity resolution, anonymous activity backfill, and consent tracking."
+            },
+            {
+                "name": "Web Forms feature page",
+                "url": "https://www.klaviyo.com/features/web-forms/",
+                "description": "Covers the web form builder, templates, targeting rules, spin-to-win, Shop Pay lead capture, SMS smart opt-in, AI optimization, and A/B testing."
+            },
+            {
+                "name": "Automated Flows feature page",
+                "url": "https://www.klaviyo.com/features/flows/",
+                "description": "Explains automated flows, triggers, split logic, cross-channel automation, webhooks, performance reporting, and AI-built flows."
+            },
+            {
+                "name": "Campaigns feature page",
+                "url": "https://www.klaviyo.com/features/campaigns/",
+                "description": "Describes multi-channel campaigns (email, SMS, push), unified calendar, consent checks, AI content, and A/B testing support."
+            },
+            {
+                "name": "Reporting feature page",
+                "url": "https://www.klaviyo.com/features/reporting/",
+                "description": "Documents core reporting capabilities: dashboards, benchmarks, attribution, analytics across marketing, customer, and business metrics."
+            },
+            {
+                "name": "Klaviyo Data Platform solution page",
+                "url": "https://www.klaviyo.com/solutions/customer-data-platform/",
+                "description": "High-level CDP solution overview: unified profiles, predictive analytics, integrations, lifetime retention, scale, and compliance posture."
+            },
+            {
+                "name": "Klaviyo Marketing (Marketing Automation solution) page",
+                "url": "https://www.klaviyo.com/solutions/marketing-automation/",
+                "description": "Describes the overall marketing automation solution across channels, driven by the Data Platform and K:AI."
+            },
+            {
+                "name": "Developers site root link scan",
+                "url": "https://developers.klaviyo.com",
+                "description": "Used to identify key developer documentation entry points: API overview, getting started, SDK overview, API revisions."
+            },
+            {
+                "name": "Klaviyo API Overview",
+                "url": "https://developers.klaviyo.com/en/reference/api_overview",
+                "description": "Core reference for authentication (private/public keys, OAuth), JSON:API conventions, pagination, filtering, sorting, sparse fieldsets, rate limiting, and versioning."
+            },
+            {
+                "name": "Klaviyo Developer Get Started Guide",
+                "url": "https://developers.klaviyo.com/en/docs/get_started",
+                "description": "Intro to data model, architecture, setting up accounts, generating keys, using SDKs, and basic API usage patterns."
+            },
+            {
+                "name": "Klaviyo API Changelog / Docs index",
+                "url": "https://developers.klaviyo.com/en/docs/changelog_",
+                "description": "Comprehensive changelog describing the evolving API surface: profiles, events, campaigns, flows, segments, forms, reviews, webhooks, custom metrics, custom objects, web feeds, tracking settings, and more."
+            }
+        ],
+        "likely_uncovered_areas_or_ambiguities": [
+            "Full Help Center coverage (help.klaviyo.com): only the specific help articles linked from product pages were indirectly referenced; we did not crawl the help center holistically (e.g., admin guides, full configuration guides, role/permission docs).",
+            "Account administration and RBAC: the marketing and API docs say little about user roles, permissions, workspace structure, SSO/SCIM, or audit logging for configuration changes.",
+            "Legal/security documentation: security and legal sitemaps (e.g., SOC reports, detailed security whitepapers, DPA, data residency statements) were not crawled and may describe critical security controls and data handling guarantees.",
+            "Developers API reference detail: while we reviewed the API overview and changelog, we did not deep-dive each individual endpoint reference, so fine-grained behaviors (field-level constraints, full error modes) are only partially captured.",
+            "Legacy v1/v2 API behavior: the comparison with old APIs is referenced but not fully explored; there may be legacy integration behaviors not reflected in the new JSON:API documents.",
+            "Operational procedures: deployment practices, incident response, backup/restore, disaster recovery, SLAs, and support runbooks are not covered in the marketing and API docs reviewed.",
+            "Pricing, plan entitlements, and feature gating: exact plan-based feature availability (e.g., Advanced KDP vs standard, Marketing Analytics vs base reporting, Reviews add-on limits) is only partially noted in product pages.",
+            "Partner integrations breadth: we inferred integration patterns (ecommerce, ads, helpdesks, rewards platforms) but did not systematically enumerate all 350+ integrations and their specific capabilities."
+        ],
+        "assumptions_made": [
+            "Klaviyo operates as a multi-tenant SaaS platform where each customer account represents a tenant; this is implied by the documentation but not described formally in the reviewed pages.",
+            "User roles and permissions exist (e.g., to manage API keys, configure data warehouse sync, or edit flows), but their exact hierarchy and capabilities are not documented in the pages we analyzed.",
+            "All channels (email, SMS, push, WhatsApp, social) ultimately rely on Klaviyo’s centralized profile and event store, even when data is ingested via client SDKs, server APIs, or third-party integrations.",
+            "Where API changelog entries reference new endpoints (e.g., Custom Objects API, Forms API, Reviews APIs), we treat them as generally available or at least available in beta as of 2025-10-15, even though rollout might be staged.",
+            "Help center and academy links referenced from product pages accurately reflect how features work in the live product, but we did not validate those flows end-to-end in the UI.",
+            "Marketing copy such as ROI figures and benchmark multipliers are treated as descriptive of value but not modeled as guarantees or hard system behaviors in this capability map."
+        ]
+    },
+    "capability_map": {
+        "core_product_capabilities": [
+            {
+                "name": "Klaviyo Data Platform (Core CDP)",
+                "description": "Unifies customer data from 350+ integrations and APIs into lifetime customer profiles and events, enriching them with predictive analytics to power personalization, segmentation, and reporting across Klaviyo Marketing and Service.",
+                "primary_actors": [
+                    "Marketing managers",
+                    "Lifecycle/CRM marketers",
+                    "Data/analytics teams",
+                    "Customer service leaders",
+                    "Implementers/integrators"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Klaviyo web app – Profiles, Lists & Segments, Analytics/Reporting, CDP/Data Platform configuration and monitors.",
+                        "url": "https://www.klaviyo.com/solutions/customer-data-platform/"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "JSON:API endpoints under /api for profiles, events, metrics, segments, reporting, metrics properties, and more; plus client endpoints under /client for public event and subscription collection.",
+                        "url": "https://developers.klaviyo.com/en/reference/api_overview"
+                    },
+                    {
+                        "channel": "integration",
+                        "details": "Native integrations with ecommerce, POS, subscription, loyalty, advertising, and other platforms ingest data into the CDP.",
+                        "url": "https://www.klaviyo.com/ecommerce-integrations"
+                    }
+                ],
+                "key_data_involved": [
+                    "Customer profiles (identifiers, consent, demographics, custom properties)",
+                    "Events (web activity, purchases, reviews, support interactions, UGC, etc.)",
+                    "Product/catalog data and metrics",
+                    "Predictive analytics (CLV, churn risk, next order date, order frequency)",
+                    "Segment definitions and membership",
+                    "Integration metadata and sync states"
+                ],
+                "security_relevant_traits": [
+                    "Serves as the primary customer data store for the platform; compromise would expose or corrupt all downstream marketing and service data.",
+                    "Lifetime retention of events and profiles increases regulatory and breach impact if access controls fail.",
+                    "Supports advanced data access via data warehouse sync and APIs, which can replicate large volumes of customer data into external systems.",
+                    "Identity resolution and profile merging logic can affect data subject rights (e.g., access, deletion) and consent handling if misconfigured.",
+                    "Custom monitors and predictive analytics may be used to drive automated decisions with compliance implications (e.g., regional targeting, age gating enforcement)."
+                ],
+                "evidence": [
+                    {
+                        "title": "Klaviyo Data Platform solution overview",
+                        "url": "https://www.klaviyo.com/solutions/customer-data-platform/",
+                        "summary": "Describes unified lifetime profiles, predictive analytics, and scale/security posture of the CDP.",
+                        "notes": null
+                    },
+                    {
+                        "title": "Customer profiles feature",
+                        "url": "https://www.klaviyo.com/features/customer-profiles/",
+                        "summary": "Details profile contents, identity resolution, web tracking, and predictive properties.",
+                        "notes": null
+                    },
+                    {
+                        "title": "API Overview and JSON:API guides",
+                        "url": "https://developers.klaviyo.com/en/reference/api_overview",
+                        "summary": "Documents authentication, JSON:API modeling, rate limits, and pagination across CDP-related endpoints.",
+                        "notes": null
+                    }
+                ],
+                "notes": "Advanced KDP adds higher-end capabilities like no-code transformations, hosted code functions, RFM/funnel/product/audience analysis, and data warehouse sync; these are modeled separately under admin/operational and analytics capabilities."
+            },
+            {
+                "name": "Email Marketing",
+                "description": "Provides campaign and flow-based email sending with deep personalization, templates, AI assistance, and deliverability tools, all powered by CDP data and segmentation.",
+                "primary_actors": [
+                    "Email marketers",
+                    "Lifecycle marketers",
+                    "Marketing operations",
+                    "Agencies"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Email product area in the Klaviyo app: campaign builder, flow editor, template editor, deliverability tools, benchmarks.",
+                        "url": "https://www.klaviyo.com/products/email-marketing/"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "Campaigns, Templates, and Flows APIs for creating/updating campaigns, messages, templates, and retrieving performance.",
+                        "url": "https://developers.klaviyo.com/en/reference/campaigns_api_overview"
+                    }
+                ],
+                "key_data_involved": [
+                    "Profiles and segments (including predictive fields like CLV and churn risk)",
+                    "Email content templates and universal content blocks",
+                    "Campaign and flow metadata (schedules, audiences, channels)",
+                    "Engagement events (opens, clicks, bounces, unsubscribes, spam complaints)",
+                    "Deliverability metrics and sender reputation signals"
+                ],
+                "security_relevant_traits": [
+                    "High-volume outbound channel capable of sending to large customer populations; misconfiguration or compromise could cause spam, phishing, or regulatory violations.",
+                    "Email content may embed personalized data (e.g., names, last products viewed), so template configuration affects PII exposure.",
+                    "Deliverability and reputation repair tools may automatically alter sending patterns; incorrect tuning could mask or exacerbate abuse.",
+                    "Unsubscribe and consent handling must align with legal requirements; incorrect implementation could violate CAN-SPAM/GDPR-like rules."
+                ],
+                "evidence": [
+                    {
+                        "title": "Email Marketing product page",
+                        "url": "https://www.klaviyo.com/products/email-marketing/",
+                        "summary": "Describes personalization, cross-channel flows, AI-assisted templates and subject lines, and deliverability features.",
+                        "notes": null
+                    },
+                    {
+                        "title": "Campaigns feature",
+                        "url": "https://www.klaviyo.com/features/campaigns/",
+                        "summary": "Explains campaign orchestration, AI optimization, scheduling, A/B testing, and compliance checks.",
+                        "notes": null
+                    }
+                ],
+                "notes": "Email capabilities are tightly coupled with flows, segmentation, and reporting; those are modeled as separate but related capabilities."
+            },
+            {
+                "name": "SMS Marketing",
+                "description": "Enables global SMS/MMS messaging with two-way conversations, automated flows, compliance tooling, segmentation, and AI optimization, integrated with email and push for omnichannel experiences.",
+                "primary_actors": [
+                    "Lifecycle marketers",
+                    "Retention marketers",
+                    "CRM managers",
+                    "Compliance owners"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "SMS product area: SMS campaigns, flows, consent tools, compliance settings, reporting and benchmarks.",
+                        "url": "https://www.klaviyo.com/products/sms-marketing/"
+                    },
+                    {
+                        "channel": "ui",
+                        "details": "Forms and list growth tooling in Web Forms used to capture SMS consent and age-gated sign-ups.",
+                        "url": "https://www.klaviyo.com/features/web-forms/"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "Profiles and subscription APIs, including SMS consent fields, transactional consent, and age gating-related validation.",
+                        "url": "https://developers.klaviyo.com/en/docs/changelog_"
+                    }
+                ],
+                "key_data_involved": [
+                    "Phone numbers and associated country/region data",
+                    "Channel-specific consent and transactional consent flags",
+                    "SMS content (text, links, short codes), automated conversations, and keywords",
+                    "Engagement metrics (deliveries, clicks, replies, opt-outs)",
+                    "Compliance metadata (age-gated date of birth, country-specific rules)"
+                ],
+                "security_relevant_traits": [
+                    "Regulated channel with strict consent and content rules; misconfiguration can cause legal and deliverability risk.",
+                    "Age gating and regional availability require correct configuration; logic errors could expose minors to restricted content.",
+                    "Transactional vs marketing consent stored at profile level influences what kinds of automated messages will be sent.",
+                    "Global SMS sending and credit-based billing mean abuse or misrouting can have high financial impact."
+                ],
+                "evidence": [
+                    {
+                        "title": "SMS Marketing product page",
+                        "url": "https://www.klaviyo.com/products/sms-marketing/",
+                        "summary": "Describes SMS segmentation, automated conversations, compliance, supported countries, and multi-channel flows.",
+                        "notes": null
+                    },
+                    {
+                        "title": "API changelog – transactional SMS consent & subscribe API validations",
+                        "url": "https://developers.klaviyo.com/en/docs/changelog_",
+                        "summary": "Explains transactional consent flags, age gating, and new validation behavior in subscription APIs.",
+                        "notes": null
+                    }
+                ],
+                "notes": "WhatsApp and RCS are modeled separately but share data and consent structures with core SMS capabilities."
+            },
+            {
+                "name": "Mobile App Marketing (Push & In-App)",
+                "description": "Provides mobile push notifications and in-app messaging for iOS and Android apps, integrated with email and SMS for orchestrated multi-channel experiences.",
+                "primary_actors": [
+                    "Mobile marketers",
+                    "Lifecycle marketers",
+                    "Mobile app teams",
+                    "Developers integrating SDKs"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Mobile app marketing product UI: configure push/in-app campaigns and flows, segments, templates, and analytics.",
+                        "url": "https://www.klaviyo.com/products/mobile-app-marketing/"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "Mobile SDKs (Swift, Android, React Native) for registering push tokens and tracking app events; server APIs for managing push tokens.",
+                        "url": "https://developers.klaviyo.com/en/docs/sdk_overview"
+                    }
+                ],
+                "key_data_involved": [
+                    "Device identifiers and push tokens",
+                    "App events (opens, views, custom app actions)",
+                    "Profile linkage between app users and other channels",
+                    "Segments and predictive scores used for targeting",
+                    "Message content for push and in-app surfaces"
+                ],
+                "security_relevant_traits": [
+                    "SDK-based integration embeds keys and tracking logic in mobile apps; incorrect configuration can leak identifiers.",
+                    "Push token APIs and relationship endpoints can reveal associations between devices and profiles if misused.",
+                    "Geofencing and location-based targeting (planned) raise privacy considerations about granular location processing.",
+                    "Unlimited push volume on all plans amplifies impact of misconfigured flows or compromised accounts."
+                ],
+                "evidence": [
+                    {
+                        "title": "Mobile App Marketing product page",
+                        "url": "https://www.klaviyo.com/products/mobile-app-marketing/",
+                        "summary": "Describes push and in-app messaging, predictive segmentation, geofencing (coming soon), and SDK requirements.",
+                        "notes": null
+                    },
+                    {
+                        "title": "API changelog – Push token endpoints",
+                        "url": "https://developers.klaviyo.com/en/docs/changelog_",
+                        "summary": "Documents create/update push token, get/delete token, and profile–push token relationship endpoints.",
+                        "notes": null
+                    }
+                ],
+                "notes": "Mobile sends share segmentation, flows, and reporting with other channels; a single flow can drive email, SMS, and push steps."
+            },
+            {
+                "name": "WhatsApp Messaging",
+                "description": "Adds WhatsApp as a two-way messaging channel to Klaviyo, enabling interactive marketing, utility, and service messages integrated with other channels and support workflows.",
+                "primary_actors": [
+                    "International marketers",
+                    "Lifecycle/CRM teams",
+                    "Customer service teams using Helpdesk",
+                    "Developers configuring WhatsApp Business"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "WhatsApp product UI for configuring templates, flows, campaigns, forms/keywords, analytics, and omnichannel orchestration.",
+                        "url": "https://www.klaviyo.com/products/whatsapp/"
+                    },
+                    {
+                        "channel": "integration",
+                        "details": "Integration with WhatsApp Business via Meta, plus optional Gorgias integration and Helpdesk workspace for handling service conversations.",
+                        "url": "https://www.klaviyo.com/products/helpdesk/"
+                    }
+                ],
+                "key_data_involved": [
+                    "Phone numbers associated with WhatsApp Business accounts",
+                    "Opt-in records for WhatsApp (separate from SMS and email consent)",
+                    "Message templates and interactive content (buttons, carousels, future media types)",
+                    "Engagement and attribution metrics for WhatsApp sends",
+                    "Context from CDP profiles and past behavior for personalization"
+                ],
+                "security_relevant_traits": [
+                    "Meta currently disallows WhatsApp marketing to US numbers, so region-based enforcement is required; misconfig could violate Meta policy.",
+                    "Requires a verified WhatsApp Business account; integration security affects both Klaviyo and WhatsApp data.",
+                    "Combining WhatsApp with Helpdesk means support conversations can trigger flows and marketing; guardrails are needed to avoid messaging customers during sensitive support interactions.",
+                    "Two-way conversation logs contain potentially sensitive PII and support context."
+                ],
+                "evidence": [
+                    {
+                        "title": "WhatsApp Marketing product page",
+                        "url": "https://www.klaviyo.com/products/whatsapp/",
+                        "summary": "Explains supported message types, omnichannel flows, consent capture, analytics, and Helpdesk/Gorgias integration.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Review Management (Klaviyo Reviews)",
+                "description": "Collects, moderates, and displays product reviews across web and app channels, using flows, widgets, and AI to drive social proof and capture rich customer data.",
+                "primary_actors": [
+                    "Ecommerce managers",
+                    "Retention and CRM marketers",
+                    "Merchandising teams",
+                    "CX/support teams monitoring sentiment"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Reviews product UI: widget configuration, moderation, settings for collection flows, analytics dashboards.",
+                        "url": "https://www.klaviyo.com/products/review-management/"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "Reviews APIs (server-side and client-side) for retrieving, creating, and moderating reviews and review metrics.",
+                        "url": "https://developers.klaviyo.com/en/docs/changelog_"
+                    },
+                    {
+                        "channel": "integration",
+                        "details": "Shopify and WooCommerce apps for embedding widgets and syncing historic review data.",
+                        "url": "https://help.klaviyo.com/hc/en-us/articles/15937542819355"
+                    }
+                ],
+                "key_data_involved": [
+                    "Review content, ratings, timestamps, and verification status",
+                    "Product/catalog IDs linked to reviews and Q&A",
+                    "Customer profile attributes gathered via review forms (physical attributes, preferences, free-text answers)",
+                    "Moderation decisions and audit fields",
+                    "Conversion funnel data (viewed review → added to cart → purchased)"
+                ],
+                "security_relevant_traits": [
+                    "Review content is UGC; moderation rules and auto-verify logic affect what appears publicly.",
+                    "Review collection flows and AI-generated reply suggestions operate on potentially sensitive customer data.",
+                    "APIs for creating client reviews must be carefully authenticated and rate-limited to avoid spam or manipulation.",
+                    "Review sentiment and associated analytics may be used to drive automated decisions about offers and outreach."
+                ],
+                "evidence": [
+                    {
+                        "title": "Klaviyo Reviews product page",
+                        "url": "https://www.klaviyo.com/products/review-management/",
+                        "summary": "Describes collection flows, custom questions, flexible widgets, moderation, AI-assisted replies, and reporting.",
+                        "notes": null
+                    },
+                    {
+                        "title": "API changelog – Reviews APIs",
+                        "url": "https://developers.klaviyo.com/en/docs/changelog_",
+                        "summary": "Documents server-side and client Reviews APIs and reporting endpoints.",
+                        "notes": null
+                    }
+                ],
+                "notes": "Klaviyo Reviews is billed as an add-on; APIs and flows are still governed by the same authentication and CDP data model as other features."
+            },
+            {
+                "name": "Customer Profiles & Identity Resolution",
+                "description": "Maintains a unified, predictive profile for each customer or prospect by merging identifiers and synchronizing events across web, email, SMS, mobile, reviews, and support channels.",
+                "primary_actors": [
+                    "Marketers building segments and personalization",
+                    "Support agents in Helpdesk",
+                    "Data analysts",
+                    "Developers integrating external systems"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Profile view in the Klaviyo app showing identity, consent, events, predictive properties, custom fields, lists/segments, and support/review activity.",
+                        "url": "https://www.klaviyo.com/features/customer-profiles/"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "Profiles APIs for creating/updating profiles, bulk profile imports, merge operations, identity resolution, and predictive analytics retrieval.",
+                        "url": "https://developers.klaviyo.com/en/docs/changelog_"
+                    }
+                ],
+                "key_data_involved": [
+                    "Identifiers (email, phone, external_id, anonymous_id, device IDs)",
+                    "Demographic and behavioral custom properties",
+                    "Predictive fields (CLV, churn risk, next order date, time between orders)",
+                    "Consent and suppression metadata by channel",
+                    "Relationships to lists, segments, reviews, push tokens, and other resources"
+                ],
+                "security_relevant_traits": [
+                    "Identity resolution merges data from multiple devices and channels; errors can combine different people’s data.",
+                    "Profiles APIs can be used to import or update large numbers of contacts, so API key scopes and rate limits are critical.",
+                    "Predictive analytics may be used for segmentation that triggers differential treatment of customers (e.g., VIP vs low value).",
+                    "Unsubscribe, suppression, and deletion APIs need to respect identity resolution rules to properly enforce data subject rights."
+                ],
+                "evidence": [
+                    {
+                        "title": "Customer profiles feature page",
+                        "url": "https://www.klaviyo.com/features/customer-profiles/",
+                        "summary": "Describes unified profiles, web tracking, merging, and predictive properties.",
+                        "notes": null
+                    },
+                    {
+                        "title": "API changelog – Profiles API updates and predictive analytics fields",
+                        "url": "https://developers.klaviyo.com/en/docs/changelog_",
+                        "summary": "Shows evolution of profiles APIs, identity resolution, predictive fields, and subscription objects.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Customer Segmentation & Audience Management",
+                "description": "Lets users define real-time, condition-based audiences using any combination of profile, behavioral, predictive, and integration data, and use them across messaging and advertising channels.",
+                "primary_actors": [
+                    "Lifecycle marketers",
+                    "Performance marketers",
+                    "Data/CRM teams"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Segments builder in the Klaviyo app, including Segments AI and RFM-based segmentation.",
+                        "url": "https://www.klaviyo.com/features/segmentation/"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "Segments API for creating, retrieving, updating, deleting segments, plus reporting endpoints and membership APIs.",
+                        "url": "https://developers.klaviyo.com/en/docs/changelog_"
+                    },
+                    {
+                        "channel": "integration",
+                        "details": "Audience sync to advertising platforms (Meta, Google, TikTok, Pinterest, etc.) for lookalike and retargeting campaigns.",
+                        "url": "https://www.klaviyo.com/features/audience-sync/"
+                    }
+                ],
+                "key_data_involved": [
+                    "Segment definitions, filters, and predictive conditions (e.g., churn risk, CLV, RFM scores)",
+                    "Segment memberships and history (joins/leaves over time)",
+                    "External identifiers used for audience sync (emails, phone numbers, platform IDs)",
+                    "Performance metrics by segment (growth, engagement, conversions)"
+                ],
+                "security_relevant_traits": [
+                    "Segments may encode sensitive attributes (e.g., inferred behavior, churn risk, high-value VIP); misuse in ads or messaging could raise privacy or fairness concerns.",
+                    "Audience sync involves exporting identifiers to third parties; mis-scoped syncs can leak data or violate consent restrictions.",
+                    "Segments AI and predictive segmentation rely on CDP data; any data quality or bias issues propagate into audience definitions.",
+                    "Segment reporting APIs expose detailed membership changes and engagement, which may be sensitive if exposed broadly."
+                ],
+                "evidence": [
+                    {
+                        "title": "Customer Segmentation feature page",
+                        "url": "https://www.klaviyo.com/features/segmentation/",
+                        "summary": "Explains real-time segments, Segments AI, predictive metrics, and activation on channels and ads.",
+                        "notes": null
+                    },
+                    {
+                        "title": "API changelog – Segments and Segment Reporting APIs",
+                        "url": "https://developers.klaviyo.com/en/docs/changelog_",
+                        "summary": "Documents creation, update, and reporting endpoints for segments, plus list/segment membership enhancements.",
+                        "notes": null
+                    }
+                ],
+                "notes": "Portfolio-wide segmentation for multi-brand organizations is referenced but not fully documented in the pages reviewed."
+            },
+            {
+                "name": "Web Forms & Lead Capture",
+                "description": "Provides a highly configurable web form builder for collecting email, SMS, and other profile data via pop-ups, embedded forms, banners, and full-page experiences with targeting, A/B testing, and AI optimization.",
+                "primary_actors": [
+                    "Acquisition marketers",
+                    "CRO specialists",
+                    "Lifecycle marketers",
+                    "Front-end implementers"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Forms builder UI for creating, styling, targeting, and testing web forms, including spin-to-win and Shop Pay-enhanced forms.",
+                        "url": "https://www.klaviyo.com/features/web-forms/"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "Forms API and Form Reporting API for programmatically managing forms and querying their performance.",
+                        "url": "https://developers.klaviyo.com/en/docs/changelog_"
+                    },
+                    {
+                        "channel": "integration",
+                        "details": "On-site JavaScript and ecommerce platform integrations used to render and trigger Klaviyo forms.",
+                        "url": "https://help.klaviyo.com/hc/en-us/articles/360026474752"
+                    }
+                ],
+                "key_data_involved": [
+                    "Emails, phone numbers, and consent metadata from visitors",
+                    "Custom question responses (preferences, demographics, surveys)",
+                    "Display and trigger rules (segments, URLs, UTM, cart value, device, behavior)",
+                    "Experiment definitions and results for A/B tests and AI optimization",
+                    "Revenue attribution for leads captured via forms"
+                ],
+                "security_relevant_traits": [
+                    "Forms are a primary ingestion point for PII and consent; improper configuration or embedding on non-owned domains could leak data.",
+                    "Tap-to-text and SMS smart opt-in flows must correctly implement double opt-in and capture audit trails.",
+                    "Spin-to-win and gamified forms may collect extra data; must still respect consent and disclosure obligations.",
+                    "Forms API and reporting endpoints expose lead capture and revenue attributions; misuse can reveal sensitive performance data."
+                ],
+                "evidence": [
+                    {
+                        "title": "Web Forms feature page",
+                        "url": "https://www.klaviyo.com/features/web-forms/",
+                        "summary": "Details templates, formats, targeting, new spin-to-win and Shop Pay integrations, and AI optimization and A/B testing.",
+                        "notes": null
+                    },
+                    {
+                        "title": "API changelog – Forms and Form Reporting APIs",
+                        "url": "https://developers.klaviyo.com/en/docs/changelog_",
+                        "summary": "Describes Forms API, Form Reporting API, and related enhancements.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Automated Flows (Marketing Automation)",
+                "description": "Allows users to build automated, multi-step, multi-channel journeys (flows) triggered by real-time events and conditions, with split logic, A/B testing, webhooks, and AI-assisted creation.",
+                "primary_actors": [
+                    "Lifecycle marketers",
+                    "Marketing operations",
+                    "Agencies and consultants",
+                    "Developers wiring webhooks/custom actions"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Flows builder UI with drag-and-drop steps, triggers, conditional/trigger splits, A/B tests, and performance reporting.",
+                        "url": "https://www.klaviyo.com/features/flows/"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "Flows, Flow Actions, Flow Messages, and Reporting APIs for managing flows and querying flow performance.",
+                        "url": "https://developers.klaviyo.com/en/docs/changelog_"
+                    },
+                    {
+                        "channel": "webhook",
+                        "details": "Outgoing HTTP webhooks and custom actions executed from flows to interact with external services.",
+                        "url": "https://help.klaviyo.com/hc/en-us/articles/17760478970907"
+                    }
+                ],
+                "key_data_involved": [
+                    "Flow definitions, triggers, and decision logic (split conditions, delays)",
+                    "Referenced segments, profiles, and events",
+                    "Channel-specific message content and templates for each step",
+                    "Webhook payloads and endpoint URLs for external calls",
+                    "Performance metrics by node (open, click, revenue, unsubscribe, etc.)"
+                ],
+                "security_relevant_traits": [
+                    "Flows can send large amounts of automated email/SMS/push/WhatsApp; misconfigured triggers or loops can cause message storms or send to unintended audiences.",
+                    "Webhook and custom action steps can exfiltrate profile and event data to arbitrary endpoints, depending on user configuration.",
+                    "Flows API includes endpoints to create/update flows and actions; misuse could rewire critical automations across an account.",
+                    "Flow triggers can be based on predictive analytics and location, so incorrect segment or trigger definitions can produce unfair or non-compliant treatment across populations."
+                ],
+                "evidence": [
+                    {
+                        "title": "Automated Flows feature page",
+                        "url": "https://www.klaviyo.com/features/flows/",
+                        "summary": "Describes pre-built flows, triggers, split logic, multi-channel support, webhooks, A/B testing, and flow-level reporting.",
+                        "notes": null
+                    },
+                    {
+                        "title": "API changelog – Flows and Flow Actions APIs and reporting",
+                        "url": "https://developers.klaviyo.com/en/docs/changelog_",
+                        "summary": "Documents Get/Create/Delete Flow, Flow Actions, Flow Messages, and flow reporting endpoints.",
+                        "notes": null
+                    }
+                ],
+                "notes": "Flows operate on top of the CDP; advanced CDP features (custom metrics, custom objects) can further drive flow logic through webhooks or custom actions."
+            },
+            {
+                "name": "Campaign Orchestration (One-off Campaigns)",
+                "description": "Supports scheduled and one-off campaigns across email, SMS, and push with centralized calendaring, AI optimization, consent checks, and cross-account management.",
+                "primary_actors": [
+                    "Campaign marketers",
+                    "Performance marketers",
+                    "Brand and CRM teams"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Campaigns UI for selecting audiences, channels, templates, schedules, and monitoring results.",
+                        "url": "https://www.klaviyo.com/features/campaigns/"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "Campaigns API for managing campaigns, their messages (including push), and related images and performance.",
+                        "url": "https://developers.klaviyo.com/en/docs/changelog_"
+                    }
+                ],
+                "key_data_involved": [
+                    "Campaign definitions (channels, schedules, audiences, goals)",
+                    "Templates and associated assets (including image metadata)",
+                    "Consent and suppression status at send time",
+                    "Engagement and revenue attribution data per channel and campaign",
+                    "Optional global holdout groups and testing variants"
+                ],
+                "security_relevant_traits": [
+                    "Centralized calendar makes it easy to send large campaigns; requiring appropriate approvals and checks is important but not documented.",
+                    "Campaigns API recently added push channel support and image management endpoints, increasing the surface for misconfigured or malicious content.",
+                    "Consent/suppression enforcement is built-in, but UI or API misuse (e.g., forcing send to suppressed users) could risk non-compliance if not guarded.",
+                    "Multi-channel campaigns and attribution mean that a single campaign misfire can affect metrics and flows across channels."
+                ],
+                "evidence": [
+                    {
+                        "title": "Campaigns feature page",
+                        "url": "https://www.klaviyo.com/features/campaigns/",
+                        "summary": "Explains personalisation, management, scheduling, compliance features, and AI optimization for campaigns.",
+                        "notes": null
+                    },
+                    {
+                        "title": "API changelog – Campaigns API updates including push support and images endpoints",
+                        "url": "https://developers.klaviyo.com/en/docs/changelog_",
+                        "summary": "Describes Campaigns API additions for push, images, and structural changes.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Reporting & Analytics (Core + Marketing Analytics)",
+                "description": "Provides dashboards, reports, and attribution across campaigns, flows, forms, segments, and revenue, with an optional Marketing Analytics add-on for deeper journey analysis, RFM, product analysis, and advanced CLV.",
+                "primary_actors": [
+                    "Marketing leadership",
+                    "Analysts and BI teams",
+                    "Performance marketers",
+                    "Retention and CRM teams"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Analytics/reporting interfaces: dashboards, attribution views, RFM views, product analysis, cohorts, and funnels.",
+                        "url": "https://www.klaviyo.com/features/reporting/"
+                    },
+                    {
+                        "channel": "ui",
+                        "details": "Marketing Analytics product UI for advanced analysis of journeys, attribution, RFM, cohorts, and audience performance.",
+                        "url": "https://www.klaviyo.com/products/marketing-analytics/"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "Reporting APIs for campaigns, flows, forms, and segments; metric properties and tracking settings APIs.",
+                        "url": "https://developers.klaviyo.com/en/docs/changelog_"
+                    }
+                ],
+                "key_data_involved": [
+                    "Aggregated metrics for campaigns, flows, forms, segments, and products",
+                    "Attribution windows, models (last touch, linear multi-touch, omnichannel plans)",
+                    "RFM scores and groupings on profiles",
+                    "Custom metrics and mapped metrics definitions",
+                    "Tracking configuration (UTM parameters, URL tracking settings)"
+                ],
+                "security_relevant_traits": [
+                    "Reporting surfaces sensitive business metrics (revenue, ROI, channel performance) that should be protected from unauthorized access.",
+                    "Tracking Settings API and attribution configuration affect which parameters are appended to URLs and how conversions are credited; misconfiguration could leak identifiers or misrepresent campaign impact.",
+                    "Custom metrics and mapped metrics give users flexibility to define business KPIs; incorrectly modeling them may distort decision-making.",
+                    "Export functions, data warehouse syncs, and reverse ETL patterns provide many ways to move detailed metrics outside Klaviyo."
+                ],
+                "evidence": [
+                    {
+                        "title": "Reporting feature page",
+                        "url": "https://www.klaviyo.com/features/reporting/",
+                        "summary": "Describes dashboards, benchmarks, custom metrics, and access to data across the tech stack.",
+                        "notes": null
+                    },
+                    {
+                        "title": "Marketing Analytics product page",
+                        "url": "https://www.klaviyo.com/products/marketing-analytics/",
+                        "summary": "Explains RFM, funnels, cohorts, product analysis, CLV predictions, and advanced dashboards.",
+                        "notes": null
+                    },
+                    {
+                        "title": "API changelog – Reporting, metric properties, tracking settings",
+                        "url": "https://developers.klaviyo.com/en/docs/changelog_",
+                        "summary": "Outlines Reporting APIs and related configuration endpoints.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Customer Hub (Customer Experience Hub)",
+                "description": "Provides a unified, signed-in customer portal on the merchant’s ecommerce site where customers can manage orders, returns, subscriptions, rewards, and support from one place, feeding events back into flows and analytics.",
+                "primary_actors": [
+                    "Ecommerce managers",
+                    "CX and support leaders",
+                    "Lifecycle marketers",
+                    "Developers integrating with Shopify and other apps"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Customer Hub configuration and analytics in the Klaviyo app; embeddable and Shopify Account Extensions-based front-end experience.",
+                        "url": "https://www.klaviyo.com/products/customer-experience-hub/"
+                    },
+                    {
+                        "channel": "integration",
+                        "details": "Integrations with loyalty, subscriptions, shipping, returns, and support apps that plug into Customer Hub.",
+                        "url": "https://www.klaviyo.com/products/customer-experience-hub/ecommerce-cx"
+                    }
+                ],
+                "key_data_involved": [
+                    "Customer profile data including loyalty status and rewards",
+                    "Order history and current order status",
+                    "Returns and subscription management details",
+                    "Embedded support interactions and FAQs",
+                    "Customer Hub engagement events powering flows and campaigns"
+                ],
+                "security_relevant_traits": [
+                    "Customer Hub is a signed-in experience; authentication and session management rely on ecommerce platform accounts (e.g., Shopify).",
+                    "It centralizes many sensitive operations (returns, subscription changes, reward redemption); misconfiguration or integration bugs could allow unauthorized access to order or account data.",
+                    "Events generated in Hub are fed back into Klaviyo flows, so a compromised hub could trigger large-scale messaging or rewards flows.",
+                    "Integration with multiple third-party apps raises cumulative security risk through data sharing and embedded components."
+                ],
+                "evidence": [
+                    {
+                        "title": "Customer Hub product page",
+                        "url": "https://www.klaviyo.com/products/customer-experience-hub/",
+                        "summary": "Explains the signed-in hub, use cases (orders, returns, rewards, support), integrations, and analytics.",
+                        "notes": null
+                    }
+                ],
+                "notes": "Currently supports Shopify and headless storefronts; multilingual capabilities are mentioned but not deeply detailed."
+            },
+            {
+                "name": "Klaviyo Helpdesk (Service)",
+                "description": "An AI-augmented helpdesk that consolidates customer conversations across channels with deep profile context and integrates tightly with flows to turn support interactions into growth opportunities.",
+                "primary_actors": [
+                    "Customer support agents",
+                    "CX leaders",
+                    "Retention marketers",
+                    "Operations teams"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Helpdesk workspace UI: unified inbox, ticket views, tags, macros, AI assistance, analytics.",
+                        "url": "https://www.klaviyo.com/products/helpdesk/"
+                    },
+                    {
+                        "channel": "integration",
+                        "details": "Integrations with email, chat, SMS, WhatsApp, Instagram DMs, and potentially other support platforms.",
+                        "url": "https://www.klaviyo.com/solutions/customer-service/"
+                    }
+                ],
+                "key_data_involved": [
+                    "Customer conversations across supported channels",
+                    "Linked profile context (orders, loyalty, churn risk, browsing, past conversations)",
+                    "Ticket metadata (tags, status, assignee, resolution time, CSAT)",
+                    "Downstream flow triggers (ticket closed, churn-risk response, support tags)"
+                ],
+                "security_relevant_traits": [
+                    "Helpdesk surfaces full-profile context alongside conversations, increasing risk if agent workstations are compromised.",
+                    "AI tagging, routing, and forthcoming summarization operate on sensitive conversation data; any model errors could misroute or leak information.",
+                    "Integration with flows means support outcomes can automatically trigger marketing sends or pauses, so misconfigured rules could message customers at inappropriate times.",
+                    "Helpdesk handles subscription changes and possibly refunds or loyalty adjustments via integrated apps, which are privileged operations."
+                ],
+                "evidence": [
+                    {
+                        "title": "Klaviyo Helpdesk product page",
+                        "url": "https://www.klaviyo.com/products/helpdesk/",
+                        "summary": "Describes unified inbox, AI-driven tagging/routing, 360° profile context, and integration with flows and CSAT reporting.",
+                        "notes": null
+                    }
+                ],
+                "notes": "K:AI Customer Agent can hand off conversations to Helpdesk with full context; exact handoff and authentication mechanics are not described in the reviewed docs."
+            },
+            {
+                "name": "Social Marketing & Audience Sync",
+                "description": "Connects social engagement (especially Instagram DMs/comments/tags) to Klaviyo profiles, converts followers into email/SMS subscribers, and syncs audiences to ad platforms for precise targeting and retargeting.",
+                "primary_actors": [
+                    "Social media managers",
+                    "Performance marketers",
+                    "Lifecycle marketers"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Social marketing product UI for connecting Instagram, launching DM keyword campaigns, and viewing social-derived profile properties.",
+                        "url": "https://www.klaviyo.com/products/social/"
+                    },
+                    {
+                        "channel": "integration",
+                        "details": "Integrations with Meta (Instagram), social listening and advocacy tools (via Gatsby acquisition), and advertising platforms via audience sync.",
+                        "url": "https://www.klaviyo.com/features/audience-sync/"
+                    }
+                ],
+                "key_data_involved": [
+                    "Instagram handles, profile images, follower counts, engagement metrics",
+                    "DM interactions used to collect email/SMS consent and enrich profiles",
+                    "Tags and mentions tied to UGC and advocacy metrics",
+                    "Audience lists and lookalike seeds for ad platforms"
+                ],
+                "security_relevant_traits": [
+                    "Social-derived identifiers and engagement data enrich profiles; consent boundaries between social interactions and owned-channel messaging must be honored.",
+                    "Auto-reply sequences that collect consent in DMs must be robust against platform or policy changes.",
+                    "Audience sync with ad platforms exports identifiers and segment tags; misconfiguration could leak data or mis-target sensitive audiences.",
+                    "Beta status means APIs and behaviors may change; careful versioning and monitoring are needed for production use."
+                ],
+                "evidence": [
+                    {
+                        "title": "Social Marketing (beta) product page",
+                        "url": "https://www.klaviyo.com/products/social/",
+                        "summary": "Explains follower-to-subscriber flows, social data enrichment, audience sync, and UGC-triggered automations.",
+                        "notes": null
+                    }
+                ],
+                "notes": "Capabilities are evolving, particularly for triggering journeys from UGC and integrating with loyalty/community platforms."
+            }
+        ],
+        "administrative_and_operational_capabilities": [
+            {
+                "name": "Data Governance & Advanced KDP (Transformations, Warehouse Sync, Hosted Code)",
+                "description": "Advanced Klaviyo Data Platform features for managing, transforming, and exporting data, including no-code transformations, serverless code functions, data warehouse sync, and advanced analytics such as RFM and funnels.",
+                "primary_actors": [
+                    "Data engineers",
+                    "Analytics engineers",
+                    "Technical marketers",
+                    "Admins managing data contracts"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Advanced CDP configuration UI for data transformations, warehouse connections, analytics modules, and RFM/funnel/product views.",
+                        "url": "https://www.klaviyo.com/products/advanced-cdp/"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "Data warehouse sync, custom metrics, mapped metrics, custom objects, and monitoring endpoints exposed via JSON:API.",
+                        "url": "https://developers.klaviyo.com/en/docs/changelog_"
+                    }
+                ],
+                "key_data_involved": [
+                    "Raw and transformed customer and event data fields",
+                    "Warehouse credentials and sync configurations (Snowflake, BigQuery, Redshift, S3, Azure Synapse)",
+                    "Mappings for metrics and custom metrics definitions",
+                    "Transformation rules and hosted code functions",
+                    "Analytics artifacts (RFM segments, funnels, product insights)"
+                ],
+                "security_relevant_traits": [
+                    "Hosted code functions execute arbitrary Python/Node.js in response to events and can transform or forward data; strict sandboxing and egress rules are critical.",
+                    "Data warehouse sync moves large volumes of data into external systems; misconfiguration can violate data residency or minimization policies.",
+                    "Data transformations can correct or corrupt data across the platform, affecting segmentation, flows, and reporting.",
+                    "Custom metrics and mapped metrics can encode financial or sensitive KPIs; protecting definitions and values is important."
+                ],
+                "evidence": [
+                    {
+                        "title": "Advanced Klaviyo Data Platform product page",
+                        "url": "https://www.klaviyo.com/products/advanced-cdp/",
+                        "summary": "Details no-code transformations, hosted code functions, warehouse sync, and advanced analytics modules.",
+                        "notes": null
+                    },
+                    {
+                        "title": "API changelog – Custom Metrics, Mapped Metrics, Custom Objects, Data Sources",
+                        "url": "https://developers.klaviyo.com/en/docs/changelog_",
+                        "summary": "Describes APIs for custom metrics, mapped metrics, custom objects, and related data source management.",
+                        "notes": null
+                    }
+                ],
+                "notes": "The exact security model for hosted code (resource limits, network access, secret management) is not documented in the reviewed pages and remains an open question."
+            },
+            {
+                "name": "Consent, Compliance, and Subscription Management",
+                "description": "Central management of email/SMS/WhatsApp consent, transactional vs marketing subscriptions, suppression, age gating, and form-based consent collection.",
+                "primary_actors": [
+                    "Compliance officers",
+                    "CRM and lifecycle marketers",
+                    "Legal teams",
+                    "Marketing operations"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Account-level settings for consent, UTM tracking, and list subscription behavior; profile views showing per-channel consent.",
+                        "url": "https://help.klaviyo.com/hc/en-us/articles/360037101072"
+                    },
+                    {
+                        "channel": "ui",
+                        "details": "Forms builder and SMS configuration UIs for age gating, consent copy, and double opt-in.",
+                        "url": "https://www.klaviyo.com/features/web-forms/"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "Subscribe/Unsubscribe, Bulk Subscribe/Unsubscribe, Suppress/Unsuppress profiles, Client Subscription API, and subscription representation on profiles.",
+                        "url": "https://developers.klaviyo.com/en/docs/changelog_"
+                    }
+                ],
+                "key_data_involved": [
+                    "Consent status per channel and message type (marketing, transactional)",
+                    "Suppression reasons and timestamps (global and list-level)",
+                    "Age-gated date of birth and region-specific thresholds",
+                    "Consent-related event history and subscription metadata",
+                    "UTM tracking and URL parameters used for compliance and attribution"
+                ],
+                "security_relevant_traits": [
+                    "Subscription and suppression APIs can grant or revoke marketing permission at scale; misuse can cause legal violations or inconsistent consent.",
+                    "Transactional consent fields for SMS must be handled carefully to avoid mixing marketing with transactional traffic.",
+                    "Age gating logic and fields are central to handling restricted verticals like alcohol; incorrect implementation can expose minors.",
+                    "Tracking settings control which parameters are appended to links; accidental inclusion of PII in UTMs is a risk."
+                ],
+                "evidence": [
+                    {
+                        "title": "SMS marketing FAQ including age gating",
+                        "url": "https://www.klaviyo.com/products/sms-marketing/",
+                        "summary": "Notes age gating support for alcohol brands and link to help article.",
+                        "notes": null
+                    },
+                    {
+                        "title": "API changelog – Subscription object and consent-related changes",
+                        "url": "https://developers.klaviyo.com/en/docs/changelog_",
+                        "summary": "Describes updates to subscriptions structure, transactional consent, validation, and suppression endpoints.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Tracking Settings & Attribution Configuration",
+                "description": "Administration of UTM tracking, URL parameter injection, attribution windows and models, and related configuration affecting how performance is measured.",
+                "primary_actors": [
+                    "Marketing operations",
+                    "Analytics teams",
+                    "Admins"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Account settings for UTM tracking and attribution windows in the Klaviyo app.",
+                        "url": "https://help.klaviyo.com/hc/en-us/articles/115005247808"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "Tracking Settings API and Reporting APIs for campaigns and flows, plus attribution model controls.",
+                        "url": "https://developers.klaviyo.com/en/docs/changelog_"
+                    }
+                ],
+                "key_data_involved": [
+                    "UTM parameter definitions and URL templates",
+                    "Attribution window settings and touchpoint selection",
+                    "Campaign and flow performance aggregates under configured models",
+                    "Per-message and per-channel attribution metrics (RPR, ROI, etc.)"
+                ],
+                "security_relevant_traits": [
+                    "Tracking configuration affects privacy (what parameters are appended to links) and can inadvertently expose identifiers to third-party analytics if misused.",
+                    "Attribution settings strongly influence decision-making and reporting; misconfiguration can hide underperforming campaigns or over-credit certain channels.",
+                    "APIs allow automated systems to read and modify tracking and attribution settings; access should be tightly controlled."
+                ],
+                "evidence": [
+                    {
+                        "title": "Reporting feature page – attribution and tracking",
+                        "url": "https://www.klaviyo.com/features/reporting/",
+                        "summary": "Describes attribution configuration and reporting on marketing impact.",
+                        "notes": null
+                    },
+                    {
+                        "title": "API changelog – Tracking Settings API and Reporting API",
+                        "url": "https://developers.klaviyo.com/en/docs/changelog_",
+                        "summary": "Describes APIs for configuring and querying tracking and attribution settings.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Developer & API Key Management",
+                "description": "Manages API access via private and public keys, OAuth for tech partners, scoped permissions, and revisioning/versioning of the JSON:API surface.",
+                "primary_actors": [
+                    "Developers",
+                    "Technical partners/ISVs",
+                    "Admins and security teams"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Account settings page for generating private API keys with scopes and retrieving public (site) IDs.",
+                        "url": "https://www.klaviyo.com/settings/account/api-keys"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "API authentication mechanisms (Authorization: Klaviyo-API-Key header, OAuth flows), revision headers, and versioning/deprecation rules.",
+                        "url": "https://developers.klaviyo.com/en/reference/api_overview"
+                    }
+                ],
+                "key_data_involved": [
+                    "Private API keys and their scopes",
+                    "Public API keys (company IDs/site IDs)",
+                    "OAuth client IDs, secrets, and tokens for partner integrations",
+                    "Revision headers used for API versioning by clients",
+                    "Logs and metrics associated with API usage and rate limits"
+                ],
+                "security_relevant_traits": [
+                    "Private keys provide full or scoped access to account data; keys are no longer viewable after creation, which reduces exposure but increases reliance on secure storage by users.",
+                    "API scopes limit partner access but require correct configuration; older keys may lack fine-grained scopes.",
+                    "OAuth integrations have higher rate limits and better security posture but require correct implementation of redirects and consent screens.",
+                    "Revisioning means old revisions are eventually deprecated; clients must update to avoid service breakage."
+                ],
+                "evidence": [
+                    {
+                        "title": "API Overview – Authentication and scopes",
+                        "url": "https://developers.klaviyo.com/en/reference/api_overview",
+                        "summary": "Documents auth types, key scopes, and versioning/deprecation policies.",
+                        "notes": null
+                    },
+                    {
+                        "title": "API changelog – removal of ability to view private keys",
+                        "url": "https://developers.klaviyo.com/en/docs/changelog_",
+                        "summary": "Notes that private API keys are no longer viewable after creation.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            }
+        ],
+        "api_surface_and_integrations": [
+            {
+                "name": "Profiles & Consent APIs",
+                "description": "JSON:API endpoints for creating, updating, merging, bulk importing, subscribing, unsubscribing, suppressing, and unsuppressing profiles, including predictive analytics and subscription state.",
+                "primary_actors": [
+                    "Backend developers",
+                    "Integration partners",
+                    "ETL/ELT engineers"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "api",
+                        "details": "Profiles endpoints under /api/profiles and related bulk jobs, merge, and subscription endpoints.",
+                        "url": "https://developers.klaviyo.com/en/docs/changelog_"
+                    }
+                ],
+                "key_data_involved": [
+                    "Profile identifiers and properties",
+                    "Channel consent and suppression status",
+                    "List and segment relationships",
+                    "Predictive analytics properties",
+                    "Bulk job metadata for imports/suppressions"
+                ],
+                "security_relevant_traits": [
+                    "Bulk imports and suppression jobs can dramatically alter who is contactable; correctness and monitoring are critical.",
+                    "Merge Profiles can combine records; misuse can collapse distinct individuals into one, affecting data integrity and privacy.",
+                    "Suppression and unsuppression APIs influence regulatory compliance and must be audited.",
+                    "Predictive analytics exposure via APIs may have implications for automated decision-making and fairness."
+                ],
+                "evidence": [
+                    {
+                        "title": "API changelog – Profiles, Bulk Profile Import, Merge, Suppress/Unsuppress",
+                        "url": "https://developers.klaviyo.com/en/docs/changelog_",
+                        "summary": "Describes profile lifecycle endpoints and subscription object changes.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Events & Metrics APIs (including Bulk Events)",
+                "description": "APIs to ingest and retrieve events (client and server), define custom metrics, and report on metric properties, including bulk-create operations for efficient ingestion.",
+                "primary_actors": [
+                    "Developers instrumenting sites/apps",
+                    "Data teams building ETL pipelines",
+                    "Integration partners adding behavioral data"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "api",
+                        "details": "Event endpoints under /api/events and /client/events, plus Bulk Create Events and bulk client events endpoints.",
+                        "url": "https://developers.klaviyo.com/en/reference/events_api_overview"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "Custom Metrics API and Metric Properties API for custom metrics and schema discovery.",
+                        "url": "https://developers.klaviyo.com/en/docs/changelog_"
+                    }
+                ],
+                "key_data_involved": [
+                    "Event payloads (purchase, web activity, custom application events)",
+                    "Metric and custom metric definitions",
+                    "Metric properties (schema) metadata",
+                    "Attribution fields and relationships to profiles and campaigns"
+                ],
+                "security_relevant_traits": [
+                    "Event ingestion endpoints are often public-facing (client) or widely integrated; API keys and rate limits protect against abuse.",
+                    "Custom metrics can encode sensitive internal KPIs; exposing them via APIs or to third parties must be controlled.",
+                    "Metric properties metadata helps clients build queries and UIs; misuse might leak schema details.",
+                    "Bulk event ingestion affects data volume and storage; careful monitoring is required to detect anomalous spikes."
+                ],
+                "evidence": [
+                    {
+                        "title": "API Overview – Client and server event endpoints",
+                        "url": "https://developers.klaviyo.com/en/reference/api_overview",
+                        "summary": "Introduces /api vs /client event ingestion design.",
+                        "notes": null
+                    },
+                    {
+                        "title": "API changelog – Bulk Create Events and Custom Metrics APIs",
+                        "url": "https://developers.klaviyo.com/en/docs/changelog_",
+                        "summary": "Describes bulk event ingestion and metric-related endpoints.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Campaigns, Templates, and Universal Content APIs",
+                "description": "REST APIs to manage campaigns, messages, templates, universal content, and associated images across channels.",
+                "primary_actors": [
+                    "Marketing engineering teams",
+                    "Partners building campaign tooling",
+                    "Headless CMS or template pipeline owners"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "api",
+                        "details": "Campaigns API for creating/updating campaigns and messages (email, SMS, push), including template and image relationships.",
+                        "url": "https://developers.klaviyo.com/en/reference/campaigns_api_overview"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "Templates API and Universal Content API for managing reusable content blocks and templates.",
+                        "url": "https://developers.klaviyo.com/en/docs/changelog_"
+                    }
+                ],
+                "key_data_involved": [
+                    "Campaign metadata and schedules",
+                    "Template HTML/JSON and universal content structures",
+                    "Associated images and asset metadata",
+                    "Block structures for re-usable components",
+                    "AMP-enabled template variants (optional)"
+                ],
+                "security_relevant_traits": [
+                    "Templates can include personalization logic and data; APIs that expose raw template content must be secured.",
+                    "Universal content and web feeds may pull from external sources; XSS and sanitization concerns exist at render time.",
+                    "AMP email support requires careful handling to avoid security vulnerabilities in AMP content.",
+                    "Campaigns API can trigger sends via external automation; misuse could bypass intended approval workflows."
+                ],
+                "evidence": [
+                    {
+                        "title": "API changelog – Universal Content API, Web Feeds, Template AMP support, Campaigns updates",
+                        "url": "https://developers.klaviyo.com/en/docs/changelog_",
+                        "summary": "Details content-related endpoints and campaign structural changes.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Flows & Flow Actions APIs",
+                "description": "APIs to retrieve, create, update, and delete flows, as well as manage flow actions (messages, splits, schedules) and query flow performance.",
+                "primary_actors": [
+                    "Integration developers",
+                    "Marketing engineering",
+                    "Workflow automation builders"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "api",
+                        "details": "Flows and Flow Actions endpoints under /api/flows and related paths, plus reporting APIs.",
+                        "url": "https://developers.klaviyo.com/en/docs/changelog_"
+                    }
+                ],
+                "key_data_involved": [
+                    "Flow graph structures and triggers",
+                    "Action nodes (emails, SMS, push, webhooks, waits, splits)",
+                    "Templates and content linked to actions",
+                    "Performance metrics by action and flow"
+                ],
+                "security_relevant_traits": [
+                    "Flow modification via API allows automated systems to rewire or clone complex automations; misuse can cause large-scale behavioral changes.",
+                    "Flows reporting APIs provide detailed performance metrics that may be operationally sensitive.",
+                    "Flow actions that include webhooks or custom actions can exfiltrate sensitive data combined with personalized attributes."
+                ],
+                "evidence": [
+                    {
+                        "title": "API changelog – Flows and Flow Actions APIs and flow reporting support",
+                        "url": "https://developers.klaviyo.com/en/docs/changelog_",
+                        "summary": "Documents creation and management of flows and flow actions.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Forms & Form Reporting APIs",
+                "description": "APIs for programmatic access to form definitions, statuses, A/B configurations, and performance metrics over time.",
+                "primary_actors": [
+                    "Growth teams",
+                    "Analytics teams",
+                    "CRO engineers"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "api",
+                        "details": "Forms API and Reporting API for forms (Query Form Values/Series).",
+                        "url": "https://developers.klaviyo.com/en/docs/changelog_"
+                    }
+                ],
+                "key_data_involved": [
+                    "Form configurations (format, content, targeting rules, A/B tests)",
+                    "Views, submissions, submit rates, revenue metrics over time",
+                    "Segmentation and trigger metadata linked to forms"
+                ],
+                "security_relevant_traits": [
+                    "APIs expose which forms are live where, which could help an attacker target high-value points if leaked.",
+                    "Form definitions may include sensitive copy or offer logic that reveals marketing strategy.",
+                    "Integration with on-site JS means the underlying IDs and configs must handle untrusted environments."
+                ],
+                "evidence": [
+                    {
+                        "title": "API changelog – Forms and Form Reporting APIs",
+                        "url": "https://developers.klaviyo.com/en/docs/changelog_",
+                        "summary": "Details endpoints for retrieving form definitions and performance.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Webhooks API",
+                "description": "Enables programmatic creation, listing, updating, and deletion of outbound webhooks, as well as management of subscribed topics.",
+                "primary_actors": [
+                    "Developers building real-time integrations",
+                    "Integration/partner teams",
+                    "Operations engineers"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "api",
+                        "details": "Webhooks API overview and endpoints for managing webhook configurations and topics.",
+                        "url": "https://developers.klaviyo.com/en/reference/webhooks_api_overview"
+                    }
+                ],
+                "key_data_involved": [
+                    "Webhook endpoint URLs and secrets (if any)",
+                    "Subscribed topics (e.g., events, flows, profiles, reviews)",
+                    "Delivery logs and error responses from targets (implicitly via retries and status)"
+                ],
+                "security_relevant_traits": [
+                    "Webhooks push potentially sensitive data to external endpoints; strong authentication and TLS are assumed but configuration is user-controlled.",
+                    "Compromised webhook configs can exfiltrate profile or event data to attacker-controlled servers.",
+                    "Topic coverage and filtering determine which events leave Klaviyo; misconfiguration may leak more data than intended."
+                ],
+                "evidence": [
+                    {
+                        "title": "API changelog – Webhooks API (beta and GA releases)",
+                        "url": "https://developers.klaviyo.com/en/docs/changelog_",
+                        "summary": "Introduces and later GA’s the webhooks management APIs.",
+                        "notes": null
+                    }
+                ],
+                "notes": "The docs we saw focus on management; request signing, retries, and error-handling specifics are referenced but not fully explored."
+            },
+            {
+                "name": "Reviews APIs (Server & Client)",
+                "description": "REST APIs to retrieve, create, and moderate reviews from both server-side and client-side contexts, and to query review statistics.",
+                "primary_actors": [
+                    "Developers implementing custom review UIs",
+                    "Integration partners (ecommerce, UGC tools)",
+                    "Data teams analyzing sentiment"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "api",
+                        "details": "Server-side Reviews APIs for listing, retrieving, and updating moderation status of reviews.",
+                        "url": "https://developers.klaviyo.com/en/docs/changelog_"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "Client Reviews APIs for creating and retrieving reviews from browser or app environments.",
+                        "url": "https://developers.klaviyo.com/en/docs/changelog_"
+                    }
+                ],
+                "key_data_involved": [
+                    "Review content, rating, status, and verification flags",
+                    "Associated product/catalog IDs",
+                    "Statistics on review counts, averages, and conversion impact"
+                ],
+                "security_relevant_traits": [
+                    "Client APIs must be hardened against spam and injection, given they operate in public-facing contexts.",
+                    "Moderation APIs control which reviews are visible; misuse could hide legitimate complaints or inflate ratings.",
+                    "Review-related metrics can be commercially sensitive if exposed broadly."
+                ],
+                "evidence": [
+                    {
+                        "title": "API changelog – Reviews and Reviews Client APIs",
+                        "url": "https://developers.klaviyo.com/en/docs/changelog_",
+                        "summary": "Documents server and client endpoints for reviews.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Custom Objects & Data Sources APIs",
+                "description": "APIs for defining custom objects backed by ingested data records, including management of data sources used to create those objects.",
+                "primary_actors": [
+                    "Data engineers",
+                    "Integration partners",
+                    "Advanced users modeling non-standard entities"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "api",
+                        "details": "Custom Objects API and Data Source endpoints in newer revisions.",
+                        "url": "https://developers.klaviyo.com/en/reference/custom_objects_api_overview"
+                    }
+                ],
+                "key_data_involved": [
+                    "Custom object schemas and records (e.g., subscriptions, warranties, preferences beyond core model)",
+                    "Data source definitions pointing to ingest pipelines",
+                    "Relationships between custom objects and profiles or events"
+                ],
+                "security_relevant_traits": [
+                    "Custom objects let users store arbitrary structured data, which may include sensitive PII or business data; governance is user responsibility.",
+                    "APIs for creating and deleting data sources can affect ingestion flows and data availability.",
+                    "Feature is limited to paid plans/add-ons; access to API endpoints should align with those entitlements."
+                ],
+                "evidence": [
+                    {
+                        "title": "API changelog – Custom Objects and Data Sources",
+                        "url": "https://developers.klaviyo.com/en/docs/changelog_",
+                        "summary": "Describes the introduction and evolution of Custom Objects APIs.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            }
+        ],
+        "background_jobs_and_automation": [
+            {
+                "name": "Multi-channel Flows Execution Engine",
+                "description": "Background engine that evaluates flow triggers, manages queues and delays, and sends messages or webhooks across channels according to defined flow logic.",
+                "primary_actors": [
+                    "Implicit system actor (scheduler/worker services)",
+                    "Marketers configuring flows",
+                    "Developers enabling triggers"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Flows UI where users define triggers, waits, splits, and actions; execution is handled asynchronously by the platform.",
+                        "url": "https://www.klaviyo.com/features/flows/"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "Events and flows APIs that enqueue new flow entries for profiles based on triggers.",
+                        "url": "https://developers.klaviyo.com/en/reference/events_api_overview"
+                    }
+                ],
+                "key_data_involved": [
+                    "Queued flow instances and their current step",
+                    "Events that triggered each flow run",
+                    "Per-step send status and engagement metrics",
+                    "Scheduling metadata (delays, throttles, quiet hours where applicable)"
+                ],
+                "security_relevant_traits": [
+                    "Engine can send large volumes of messages automatically; failures in deduping or loop prevention can cause runaway sends.",
+                    "Background execution may continue long after config changes unless flows are paused or instances reset.",
+                    "Webhook and custom action steps execute in background; network egress from these actions must be controlled."
+                ],
+                "evidence": [
+                    {
+                        "title": "Automated Flows feature page",
+                        "url": "https://www.klaviyo.com/features/flows/",
+                        "summary": "Describes behavior of automated flows and performance tracking.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "AI-driven Automation Builders (K:AI Marketing Agent, Flows AI, Segments AI)",
+                "description": "Background AI services that generate segments, flows, campaigns, templates, and subject lines based on high-level user prompts and existing account data.",
+                "primary_actors": [
+                    "Marketers using AI to accelerate setup",
+                    "Agencies deploying many flows/campaigns",
+                    "Klaviyo’s AI services behind the scenes"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "K:AI Marketing Agent experiences, Segments AI prompt interfaces, and AI options in templates/flows builders.",
+                        "url": "https://www.klaviyo.com/products/ai/"
+                    }
+                ],
+                "key_data_involved": [
+                    "Existing flows, campaigns, and performance data used as training context",
+                    "Profile and segment characteristics to propose audiences",
+                    "Generated flow structures, segments, and message content"
+                ],
+                "security_relevant_traits": [
+                    "AI may generate logic that segments users on sensitive attributes or makes aggressive send decisions if not reviewed.",
+                    "Generated content can include hallucinations or incorrect references; human review is needed before activation.",
+                    "Underlying models likely process a mix of account-specific and global learnings; data isolation between tenants is assumed but not documented."
+                ],
+                "evidence": [
+                    {
+                        "title": "Segmentation and Marketing Automation pages referencing AI features",
+                        "url": "https://www.klaviyo.com/features/segmentation/",
+                        "summary": "Describe Segments AI and K:AI Marketing Agent for building audiences and strategies.",
+                        "notes": null
+                    },
+                    {
+                        "title": "Email Marketing product page – AI templates and subject lines",
+                        "url": "https://www.klaviyo.com/products/email-marketing/",
+                        "summary": "Mentions AI-generated templates and Smart Send Time.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Deliverability Optimization & Smart Send Time",
+                "description": "Automated processes that monitor deliverability, repair sending reputation, and optimize send time per recipient to maximize inbox placement and engagement.",
+                "primary_actors": [
+                    "Email deliverability subsystem",
+                    "Marketers configuring campaigns",
+                    "Klaviyo AI models"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Reputation repair tools and Smart Send Time options in email campaign/flown configuration.",
+                        "url": "https://www.klaviyo.com/products/email-marketing/"
+                    }
+                ],
+                "key_data_involved": [
+                    "Per-sender and per-profile engagement signals (opens, clicks, bounces, spam complaints)",
+                    "Historical send times and resulting metrics",
+                    "Deliverability scores and recommended throttling"
+                ],
+                "security_relevant_traits": [
+                    "Automated reputation repair can change who receives emails and when, potentially masking underlying abuse signals or policy violations.",
+                    "If an account is compromised, these tools might mitigate some harm but are not a substitute for secure authentication and send controls.",
+                    "Smart Send Time relies on tracking and modeling user behavior; privacy expectations and regional regulations may limit some signals."
+                ],
+                "evidence": [
+                    {
+                        "title": "Email Marketing product page – Klaviyo AI deliverability features",
+                        "url": "https://www.klaviyo.com/products/email-marketing/",
+                        "summary": "Lists automated reputation repair and Smart Send Time.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Bulk Jobs & Async Processing (Imports, Jobs, Monitors)",
+                "description": "Back-end job framework that handles long-running operations such as bulk profile imports, bulk subscribe/suppress operations, reporting queries, and custom monitors.",
+                "primary_actors": [
+                    "Klaviyo job workers",
+                    "Developers invoking bulk APIs",
+                    "Admins configuring monitors"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "api",
+                        "details": "Bulk profile import, bulk subscribe/unsubscribe, bulk suppress/unsuppress, and job status endpoints.",
+                        "url": "https://developers.klaviyo.com/en/docs/changelog_"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "Custom monitors and reporting endpoints for alerting.",
+                        "url": "https://help.klaviyo.com/hc/en-us/articles/27160071187739"
+                    }
+                ],
+                "key_data_involved": [
+                    "Job payloads (lists of profiles, events, or metrics to process)",
+                    "Job progress and status metadata (queued, running, completed, failed)",
+                    "Monitor definitions and thresholds, and generated alerts"
+                ],
+                "security_relevant_traits": [
+                    "Bulk jobs can alter large data sets; failure or misconfiguration can have systemic impact.",
+                    "Job status endpoints can leak operational metadata; access should be limited.",
+                    "Monitors may be wired to external alerting tools; misconfigured monitors can cause noise or miss critical anomalies."
+                ],
+                "evidence": [
+                    {
+                        "title": "API changelog – Bulk jobs and (Un)Suppress Profile Job APIs",
+                        "url": "https://developers.klaviyo.com/en/docs/changelog_",
+                        "summary": "Documents bulk job semantics and job status endpoints.",
+                        "notes": null
+                    },
+                    {
+                        "title": "Advanced KDP – Custom monitors",
+                        "url": "https://www.klaviyo.com/products/advanced-cdp/",
+                        "summary": "Mentions alerting via custom monitors.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            }
+        ]
+    },
+    "technical_components_and_data_flows": {
+        "services_or_modules": [
+            {
+                "name": "Klaviyo Data Platform (KDP)",
+                "description": "Core backend service providing unified profiles, events, predictive analytics, segmentation, and data access to higher-level modules."
+            },
+            {
+                "name": "Klaviyo Marketing",
+                "description": "Omnichannel marketing automation layer handling campaigns, flows, templates, forms, and AI-driven marketing features."
+            },
+            {
+                "name": "Klaviyo Analytics / Marketing Analytics",
+                "description": "Analytics subsystem providing dashboards, attribution models, RFM, funnels, cohorts, and advanced CLV predictions."
+            },
+            {
+                "name": "Klaviyo Service (Helpdesk + Customer Hub + Customer Agent)",
+                "description": "Customer service suite built on KDP, combining Helpdesk, Customer Hub, and AI-powered Customer Agent features."
+            },
+            {
+                "name": "Messaging Infrastructure",
+                "description": "Channel services for email, SMS, RCS, mobile push, in-app messaging, WhatsApp, and social messaging, integrated with flows and campaigns."
+            },
+            {
+                "name": "Integrations Layer",
+                "description": "3rd-party integration framework handling data syncs with ecommerce, POS, loyalty, subscriptions, ads, warehouses, and other tools."
+            },
+            {
+                "name": "Developer APIs and Gateway",
+                "description": "JSON:API-based HTTP layer enforcing authentication, key scopes, versioning, rate limiting, and routing for /api and /client endpoints."
+            },
+            {
+                "name": "AI Services (K:AI)",
+                "description": "Shared AI services powering segmentation, flows, campaigns, templates, deliverability optimization, and conversational agents."
+            },
+            {
+                "name": "Background Job & Queue System",
+                "description": "Workers and schedulers responsible for executing flows, bulk jobs, monitors, webhooks, and hosted code functions."
+            }
+        ],
+        "storage_and_logs": [
+            {
+                "name": "Profile Store",
+                "description": "Primary data store for customer profiles, identifiers, properties, predictions, and channel-specific consent state."
+            },
+            {
+                "name": "Event and Metrics Store",
+                "description": "Time-series storage for events (web, purchase, app, reviews, support) and associated metrics used in analytics and flows."
+            },
+            {
+                "name": "Content and Template Store",
+                "description": "Stores email/SMS/push templates, universal content, web feeds, and images."
+            },
+            {
+                "name": "Job and Monitor Metadata Store",
+                "description": "Tracks bulk import jobs, webhook configs, custom monitors, and other async job status data."
+            }
+        ],
+        "external_systems": [
+            {
+                "name": "Ecommerce Platforms (Shopify, WooCommerce, BigCommerce, etc.)",
+                "description": "Primary source of orders, products, and some profiles; also host embedded Customer Hub and forms."
+            },
+            {
+                "name": "Advertising Platforms (Meta, Google, TikTok, Pinterest, etc.)",
+                "description": "Consume synced segments/audiences for acquisition and retargeting, and may contribute conversion signals."
+            },
+            {
+                "name": "Data Warehouses (Snowflake, BigQuery, Redshift, Azure Synapse, S3)",
+                "description": "Serve as external storage/analytics platforms that receive synchronized KDP data and possibly feed data back in."
+            },
+            {
+                "name": "Third-party Support & Commerce Tools (e.g., Gorgias, loyalty and returns platforms)",
+                "description": "Integrated with Helpdesk and Customer Hub to show and update customer support and loyalty data."
+            },
+            {
+                "name": "WhatsApp/Meta and SMS Carriers",
+                "description": "Deliver WhatsApp and SMS messages and report delivery/engagement events."
+            }
+        ],
+        "data_flows": [
+            {
+                "name": "Ingestion from Integrations & APIs",
+                "description": "Ecommerce platforms, apps, and custom systems send events and profile data into KDP via integrations, client SDKs, and server APIs."
+            },
+            {
+                "name": "Profile & Segment Computation",
+                "description": "KDP processes events to update profiles, compute predictive analytics, and maintain real-time segment memberships."
+            },
+            {
+                "name": "Activation via Flows & Campaigns",
+                "description": "Segments and triggers feed into flows and campaigns, which generate channel-specific messages and external webhooks."
+            },
+            {
+                "name": "Feedback Loop to Analytics",
+                "description": "Engagement and conversion events from channels and external systems feed back into KDP for reporting and optimization."
+            },
+            {
+                "name": "Export to Data Warehouses & Ad Platforms",
+                "description": "Profiles, metrics, and segments are periodically synced to external warehouses and advertising platforms for further analysis and activation."
+            }
+        ]
+    },
+    "security_relevant_behaviours": {
+        "privileged_operations": [
+            "Creating, rotating, and revoking private API keys and configuring their scopes for access to profiles, events, campaigns, and admin settings.",
+            "Enabling and configuring data warehouse syncs, including credentials and sync frequencies for Snowflake, BigQuery, Redshift, S3, and Azure.",
+            "Defining and editing hosted code functions and webhooks in flows, which can read and transform data or send it to external endpoints.",
+            "Managing tracking and attribution settings (UTMs, attribution windows) that affect how user behavior is tracked and reported.",
+            "Executing bulk profile imports, suppression/unsuppression jobs, and merge operations that can change large sets of customer records.",
+            "Configuring consent defaults, double opt-in behavior, age gating, and SMS/WhatsApp availability by region.",
+            "Enabling or disabling advanced features like Custom Objects, Custom Metrics, and Reviews that change data retention and exposure patterns."
+        ],
+        "user_configurable_logic": [
+            "Flow logic (triggers, delays, conditional/trigger splits, random splits for A/B testing) controlling when and how messages and webhooks are fired.",
+            "Segmentation rules, including AI-created segments that act over all-time data, predictive fields, and third-party integration properties.",
+            "Form display rules and targeting (segments, pages, cart value, UTM, device/behavior triggers) that define where and when data collection occurs.",
+            "Custom monitors and alerts that evaluate arbitrary metrics and thresholds, potentially driving manual or automated responses.",
+            "Reviews moderation settings (auto-verification rules, status changes) and widget placement logic on websites and app stores.",
+            "Helpdesk automation (auto-tagging, routing, macros) and future AI summarization logic that drive case handling at scale."
+        ],
+        "auth_and_identity_behaviours": [
+            "Use of private API keys with scopes for server-side /api endpoints and public site IDs for /client endpoints, with three main auth methods: private key, OAuth, and public key.",
+            "Hybrid identity resolution approach that merges profiles based on prioritized identifiers (email, phone, external_id, anonymous_id, device IDs) and consolidates anonymous history.",
+            "Per-channel and per-message-type consent management (marketing vs transactional) at the profile level, with detailed subscription objects and suppression reasons.",
+            "Integration with ecommerce account systems (e.g., Shopify Customer Accounts) to authenticate signed-in experiences like Customer Hub.",
+            "Support for double opt-in and age gating for SMS in regulated contexts, including specialized handling for high-risk verticals such as alcohol.",
+            "OAuth-based integrations for tech partners with improved rate limits and better separation between partner and merchant permissions."
+        ],
+        "logging_and_audit_behaviours": [
+            "Rate limiting with distinct burst and steady windows, returning HTTP 429 and limit headers when thresholds are exceeded.",
+            "API versioning and deprecation policy where each revision is supported for a limited period (typically two years), with changelog entries describing breaking changes.",
+            "Use of bulk job status endpoints for long-running operations (imports, suppressions, bulk reviews, etc.), which can be used for operational monitoring.",
+            "Reporting APIs and dashboards providing historical metrics for campaigns, flows, segments, and forms, which indirectly serve as audit trails of activity and effectiveness.",
+            "Custom monitors that can be configured to alert on anomalies in key metrics (e.g., flow performance, abandoned carts) and track alerts over time."
+        ],
+        "failure_modes": [
+            "Hitting rate limits on APIs results in HTTP 429 errors; clients must back off or adjust usage. Excessive retries could exacerbate load.",
+            "Using deprecated revisions past their end-of-support window may cause 404 or unexpected behavior, requiring timely client upgrades.",
+            "Invalid or missing API keys return HTTP 400/401 errors; misconfigured scopes can produce subtle authorization issues.",
+            "Misconfigured flows or segments can create message loops or oversending, damaging deliverability and customer trust despite reputation repair tools.",
+            "Integration or webhook misconfigurations can lead to data not syncing (broken journeys) or over-syncing (duplicate or noisy events).",
+            "Tracking configuration mistakes (e.g., improper UTMs) can corrupt attribution data and mislead decision-making without affecting underlying system operation."
+        ]
+    },
+    "open_questions": [
+        {
+            "question": "What is the detailed RBAC and permission model for the Klaviyo UI and APIs (roles, scopes beyond API keys, per-workspace permissions)?",
+            "context": "Marketing and API docs reference general account settings and API scopes but do not document user roles (e.g., admin vs analyst vs editor) or how permissions are enforced across modules.",
+            "related_capabilities": [
+                "Developer & API Key Management",
+                "Klaviyo Marketing",
+                "Klaviyo Service",
+                "Klaviyo Data Platform (Core CDP)"
+            ]
+        },
+        {
+            "question": "How is tenant isolation implemented technically (data partitioning, cross-tenant access controls, and safeguards for integrations that connect to multiple accounts)?",
+            "context": "The documentation implies a multi-tenant SaaS but does not describe isolation guarantees, e.g., whether separate logical DBs, schemas, or row-level controls are used.",
+            "related_capabilities": [
+                "Klaviyo Data Platform (Core CDP)",
+                "Integrations Layer",
+                "Developer APIs and Gateway"
+            ]
+        },
+        {
+            "question": "What are the security and resource constraints of hosted code functions and custom actions (network egress controls, timeout limits, memory/CPU limits, secret management)?",
+            "context": "Advanced CDP docs mention hosted code functions to transform data or forward it to webhooks, but sandbox details and access controls are not described.",
+            "related_capabilities": [
+                "Data Governance & Advanced KDP (Transformations, Warehouse Sync, Hosted Code)",
+                "Multi-channel Flows Execution Engine"
+            ]
+        },
+        {
+            "question": "What native audit logging exists for configuration changes (e.g., flows edits, tracking settings changes, permissions updates) and who can access these logs?",
+            "context": "Reporting is strong for marketing outcomes but little was found about configuration-level audit trails or admin change history.",
+            "related_capabilities": [
+                "Klaviyo Marketing",
+                "Consent, Compliance, and Subscription Management",
+                "Tracking Settings & Attribution Configuration",
+                "Developer & API Key Management"
+            ]
+        },
+        {
+            "question": "How does Klaviyo handle data residency and region-specific storage/processing (e.g., EU vs US data centers) and is this configurable per-account?",
+            "context": "Product copy references GDPR/CCPA alignment and ISO/SOC certifications, but implementation details of residency and cross-border transfer controls are not exposed in these docs.",
+            "related_capabilities": [
+                "Klaviyo Data Platform (Core CDP)",
+                "Data Governance & Advanced KDP (Transformations, Warehouse Sync, Hosted Code)"
+            ]
+        },
+        {
+            "question": "How are incoming and outgoing webhooks authenticated and validated (e.g., signatures, replay protection, IP allowlisting options)?",
+            "context": "Webhooks API and flow webhooks are documented at a high level but security mechanics of signing and verification are not detailed in the pages reviewed.",
+            "related_capabilities": [
+                "Webhooks API",
+                "Multi-channel Flows Execution Engine"
+            ]
+        },
+        {
+            "question": "How does Customer Hub authenticate with non-Shopify platforms, and what is the security posture of embedded third-party widgets within the hub?",
+            "context": "Customer Hub is currently documented as working with Shopify and headless storefronts, integrating multiple loyalty/returns/support apps, but the embedding and isolation model is not described.",
+            "related_capabilities": [
+                "Customer Hub (Customer Experience Hub)",
+                "Klaviyo Service (Helpdesk + Customer Agent)"
+            ]
+        }
+    ],
+    "evidence_index": [
+        {
+            "title": "Klaviyo main sitemap (static-sitemap.xml, level 0)",
+            "url": "https://www.klaviyo.com/static-sitemap.xml",
+            "summary": "Provided an overview of top-level product, feature, solution, and resources URLs used to prioritize analysis.",
+            "notes": null
+        },
+        {
+            "title": "Email Marketing product page",
+            "url": "https://www.klaviyo.com/products/email-marketing/",
+            "summary": "Source for email marketing capabilities, personalization, AI tools, deliverability, and benchmarks.",
+            "notes": null
+        },
+        {
+            "title": "SMS Marketing product page",
+            "url": "https://www.klaviyo.com/products/sms-marketing/",
+            "summary": "Source for SMS marketing feature set, compliance tooling, country coverage, and AI capabilities.",
+            "notes": null
+        },
+        {
+            "title": "Advanced Klaviyo Data Platform product page",
+            "url": "https://www.klaviyo.com/products/advanced-cdp/",
+            "summary": "Describes advanced CDP data management (transformations, hosted code, warehouse sync) and analytics.",
+            "notes": null
+        },
+        {
+            "title": "Customer Hub product page",
+            "url": "https://www.klaviyo.com/products/customer-experience-hub/",
+            "summary": "Source for Customer Hub capability details and integrations.",
+            "notes": null
+        },
+        {
+            "title": "Marketing Analytics product page",
+            "url": "https://www.klaviyo.com/products/marketing-analytics/",
+            "summary": "Source for advanced analytics, attribution, RFM, and product analysis capabilities.",
+            "notes": null
+        },
+        {
+            "title": "Klaviyo Helpdesk product page",
+            "url": "https://www.klaviyo.com/products/helpdesk/",
+            "summary": "Source for helpdesk workspace, AI automation, and integration with marketing flows.",
+            "notes": null
+        },
+        {
+            "title": "Mobile App Marketing product page",
+            "url": "https://www.klaviyo.com/products/mobile-app-marketing/",
+            "summary": "Source for push and in-app messaging capabilities and SDK requirements.",
+            "notes": null
+        },
+        {
+            "title": "Klaviyo Reviews product page",
+            "url": "https://www.klaviyo.com/products/review-management/",
+            "summary": "Source for reviews collection, moderation, widgets, AI, and reporting.",
+            "notes": null
+        },
+        {
+            "title": "Social Marketing (beta) product page",
+            "url": "https://www.klaviyo.com/products/social/",
+            "summary": "Source for social engagement ingestion, follower-to-subscriber flows, and audience sync usage.",
+            "notes": null
+        },
+        {
+            "title": "WhatsApp Marketing product page",
+            "url": "https://www.klaviyo.com/products/whatsapp/",
+            "summary": "Source for WhatsApp channel specifics, message types, omnichannel integration, and constraints.",
+            "notes": null
+        },
+        {
+            "title": "Customer Segmentation feature page",
+            "url": "https://www.klaviyo.com/features/segmentation/",
+            "summary": "Source for segmentation model, Segments AI, and cross-channel activation patterns.",
+            "notes": null
+        },
+        {
+            "title": "Customer Profiles feature page",
+            "url": "https://www.klaviyo.com/features/customer-profiles/",
+            "summary": "Source for unified profiles, identity resolution, predictive fields, and consent tracking.",
+            "notes": null
+        },
+        {
+            "title": "Web Forms feature page",
+            "url": "https://www.klaviyo.com/features/web-forms/",
+            "summary": "Source for form templates, targeting rules, spin-to-win, Shop Pay, SMS smart opt-in, and reporting.",
+            "notes": null
+        },
+        {
+            "title": "Automated Flows feature page",
+            "url": "https://www.klaviyo.com/features/flows/",
+            "summary": "Source for flow triggers, split logic, cross-channel automation, webhooks, and reporting.",
+            "notes": null
+        },
+        {
+            "title": "Campaigns feature page",
+            "url": "https://www.klaviyo.com/features/campaigns/",
+            "summary": "Source for campaign orchestration, AI optimization, and compliance features.",
+            "notes": null
+        },
+        {
+            "title": "Reporting feature page",
+            "url": "https://www.klaviyo.com/features/reporting/",
+            "summary": "Source for reporting capabilities, benchmarks, and analytics integrations.",
+            "notes": null
+        },
+        {
+            "title": "Klaviyo Data Platform solution page",
+            "url": "https://www.klaviyo.com/solutions/customer-data-platform/",
+            "summary": "Source for overall CDP positioning, unified profiles, predictive analytics, and security claims.",
+            "notes": null
+        },
+        {
+            "title": "Klaviyo Marketing solution page",
+            "url": "https://www.klaviyo.com/solutions/marketing-automation/",
+            "summary": "Source for overarching marketing automation narrative across channels.",
+            "notes": null
+        },
+        {
+            "title": "API Overview (developers.klaviyo.com)",
+            "url": "https://developers.klaviyo.com/en/reference/api_overview",
+            "summary": "Primary source for authentication, JSON:API patterns, rate limits, and pagination.",
+            "notes": null
+        },
+        {
+            "title": "Developer Get Started guide",
+            "url": "https://developers.klaviyo.com/en/docs/get_started",
+            "summary": "Explains data model, architecture, and first steps for using APIs and SDKs.",
+            "notes": null
+        },
+        {
+            "title": "API changelog and docs index",
+            "url": "https://developers.klaviyo.com/en/docs/changelog_",
+            "summary": "Central reference for the evolution of the API surface, including flows, campaigns, forms, reviews, webhooks, custom metrics, custom objects, and more.",
+            "notes": null
+        }
+    ]
+}

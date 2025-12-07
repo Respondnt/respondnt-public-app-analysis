@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import { copyFileSync, mkdirSync, readdirSync, statSync } from 'fs'
+import { copyFileSync, mkdirSync, readdirSync, statSync, existsSync } from 'fs'
 import { join } from 'path'
 
 // Helper function to recursively copy directory
@@ -33,6 +33,14 @@ export default defineConfig({
 
                 // Copy all subdirectories (breakdowns, attack_paths, initial_access)
                 copyDir(dataDir, distDataDir)
+                
+                // Copy index.html to 404.html for GitHub Pages SPA routing
+                // This ensures that direct navigation to routes like /app/box works
+                const indexPath = join(process.cwd(), 'dist', 'index.html')
+                const notFoundPath = join(process.cwd(), 'dist', '404.html')
+                if (existsSync(indexPath)) {
+                    copyFileSync(indexPath, notFoundPath)
+                }
             }
         }
     ],

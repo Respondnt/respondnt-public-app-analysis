@@ -21,6 +21,11 @@ const apps = [
     displayName: 'Box',
     description: 'Content Collaboration Platform',
   },
+  {
+    name: 'klaviyo',
+    displayName: 'Klaviyo',
+    description: 'Email Marketing Platform',
+  },
 ]
 
 function Home() {
