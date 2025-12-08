@@ -1,0 +1,961 @@
+{
+  "application_name": "Slack (core product and developer platform)",
+  "initial_access_vectors": [
+    {
+      "can_achieve": true,
+      "technique_name": "Cloud Accounts (stolen Slack user or admin credentials)",
+      "technique_stix_id": "T1078.004",
+      "method_steps": [
+        {
+          "step_id": 1,
+          "description": "Using previously obtained Slack or IdP credentials for a target user, the attacker opens the Slack web or desktop client and navigates to the organization’s Slack sign-in flow (workspace URL or SSO entry point).",
+          "related_capabilities": [
+            "Authentication and access control (SSO, 2FA, SCIM, EMM)",
+            "Workspace and Enterprise organization management",
+            "Core messaging and collaboration service",
+            "Client-to-Slack communication flow"
+          ],
+          "related_interfaces": [
+            "Slack desktop and web client – channel list, message composer, threads, reactions, pins – https://slack.com/team-chat/",
+            "Admin security and authentication settings in the Slack admin console (where SSO and 2FA requirements are configured) – https://slack.com/enterprise/"
+          ],
+          "related_data": [
+            "User identity attributes (email, name, IdP GUID)",
+            "workspace_id and enterprise_id",
+            "SAML assertions exchanged with the IdP (for SSO-enabled orgs)"
+          ],
+          "notes": "Credential acquisition (e.g., phishing, password reuse, keylogging) occurs before this step and is out of scope for Initial Access analysis."
+        },
+        {
+          "step_id": 2,
+          "description": "The attacker authenticates as the victim by submitting the stolen username/email and password to either Slack’s native login or the configured SAML IdP, successfully completing any SSO redirection.",
+          "related_capabilities": [
+            "Authentication and access control (SSO, 2FA, SCIM, EMM)",
+            "Client-to-Slack communication flow"
+          ],
+          "related_interfaces": [
+            "Slack web/desktop sign-in screens reached via the standard Slack clients – https://slack.com/team-chat/",
+            "Slack-to-IdP and SCIM flow for SAML assertions – https://docs.slack.dev/admins/scim-api/"
+          ],
+          "related_data": [
+            "User credentials (email and password) processed by the IdP or Slack auth backend",
+            "SAML assertions indicating successful authentication",
+            "Session establishment metadata (authenticated user_id bound to workspace_id)"
+          ],
+          "notes": "In SSO-only environments, credentials are validated entirely by the IdP, but the end result is a valid Slack session for the compromised account."
+        },
+        {
+          "step_id": 3,
+          "description": "If MFA is required, the attacker satisfies the second factor (e.g., OTP, push approval, or hardware token) using previously compromised MFA material or access.",
+          "related_capabilities": [
+            "Authentication and access control (SSO, 2FA, SCIM, EMM)"
+          ],
+          "related_interfaces": [
+            "Admin-configured MFA flows invoked during sign-in – managed via https://slack.com/enterprise/"
+          ],
+          "related_data": [
+            "MFA tokens or challenge responses associated with the victim account",
+            "Authentication event logs recorded for the login attempt"
+          ],
+          "notes": "How the attacker obtained or bypassed MFA is out of scope; from Slack’s perspective this is a normal successful second factor challenge."
+        },
+        {
+          "step_id": 4,
+          "description": "With authentication completed, the attacker now has an active, fully authenticated Slack session as the victim user and can access channels, DMs, files, canvases, and lists according to that user’s existing memberships and permissions.",
+          "related_capabilities": [
+            "Channel-based team messaging",
+            "Direct messages and private conversations",
+            "File sharing and contextual document collaboration",
+            "Workspaces with canvases and lists (Work Operating System)",
+            "Search and knowledge management"
+          ],
+          "related_interfaces": [
+            "Slack desktop/web clients for channels and DMs – https://slack.com/team-chat/",
+            "Work Operating System surfaces (canvases and lists) – https://slack.com/work-operating-system/",
+            "Search UI and enterprise search interfaces – https://slack.com/enterprise/"
+          ],
+          "related_data": [
+            "channel_id, dm_conversation_id, message_ts and full message content",
+            "file_id and file content/metadata",
+            "canvas_id, list_id and list item data",
+            "Search indexes and results scoped to the compromised user’s permissions"
+          ],
+          "notes": "At this point, Initial Access is achieved: the attacker can act as a legitimate Slack user or admin in the target tenant."
+        }
+      ],
+      "capabilities_used": [
+        "Authentication and access control (SSO, 2FA, SCIM, EMM)",
+        "Workspace and Enterprise organization management",
+        "Channel-based team messaging",
+        "Direct messages and private conversations",
+        "File sharing and contextual document collaboration",
+        "Workspaces with canvases and lists (Work Operating System)",
+        "Search and knowledge management",
+        "Client-to-Slack communication flow"
+      ],
+      "interfaces_used": [
+        "Slack desktop and web client – https://slack.com/team-chat/",
+        "Slack mobile apps (sign-in and client access) – https://slack.com/team-chat/",
+        "Admin security and authentication settings UI – https://slack.com/enterprise/",
+        "Slack-to-IdP SAML SSO integrations – https://docs.slack.dev/authentication/",
+        "SCIM and identity flows underpinning SSO – https://docs.slack.dev/admins/scim-api/"
+      ],
+      "data_accessed": [
+        "All messages and files in channels and DMs visible to the compromised user",
+        "User profile data and workspace membership for the compromised account",
+        "Canvas and list content associated with channels the user can access",
+        "Enterprise search results and AI summaries scoped to the user’s permissions"
+      ],
+      "preconditions_required": [
+        "Attacker possesses valid Slack or IdP credentials for a user in the target workspace or Enterprise organization.",
+        "If MFA Required is enforced, the attacker must also control or bypass the second factor for that user.",
+        "If SSO-Only Authentication is configured, the attacker must authenticate through the IdP successfully as the victim.",
+        "If IP Allowlisting is in place, the attacker must originate connections from an allowed IP range (e.g., via a compromised VPN or proxy).",
+        "Attacker knows or can discover the correct Slack workspace login path or SSO entry URL for the target organization."
+      ],
+      "constraints_encountered": [
+        "MFA Required: blocks simple password-only reuse; attacker must have MFA material or exploit weaknesses in MFA workflows.",
+        "SSO-Only Authentication: prevents use of local Slack passwords; attacker must compromise IdP credentials or assertions instead.",
+        "IP Allowlisting: disallows logins from arbitrary networks; attacker must pivot through an allowed network path.",
+        "Rate Limiting: limits rapid or high-volume login attempts, making brute-force and credential stuffing impractical.",
+        "CAPTCHA Protection: hinders automated login attempts; attacker may need manual interaction or CAPTCHA-solving services."
+      ],
+      "evasion_considerations": [
+        "Log in from IP ranges, geographies, and time windows consistent with the victim’s normal behavior to blend into audit logs.",
+        "Avoid repeated failed logins; only attempt authentication when credentials are believed to be correct to sidestep rate limits and alerts.",
+        "Use standard Slack clients and user agents rather than unusual automation frameworks to appear like a normal user session."
+      ],
+      "resulting_access": "An authenticated Slack user or admin session in the target workspace or Enterprise organization, with full access to all channels, DMs, files, canvases, lists, and search results permitted to that account.",
+      "comments": "This is the most direct and common form of Initial Access for Slack: using compromised cloud identities to authenticate through normal SSO/2FA-controlled flows (Cloud Accounts / Valid Accounts). Environmental controls harden this path but do not remove it if upstream identity stores are compromised."
+    },
+    {
+      "can_achieve": true,
+      "technique_name": "Trusted Relationship via SCIM and SSO provider",
+      "technique_stix_id": "T1199",
+      "method_steps": [
+        {
+          "step_id": 1,
+          "description": "With control over an organization’s IdP or SCIM provisioning integration, the attacker uses the SCIM API to create a new user object that will provision into the target Slack org (for example, by specifying an approved corporate email domain and appropriate profile attributes).",
+          "related_capabilities": [
+            "SCIM provisioning API",
+            "Authentication and access control (SSO, 2FA, SCIM, EMM)",
+            "Workspace and Enterprise organization management"
+          ],
+          "related_interfaces": [
+            "SCIM API endpoints for user and group lifecycle operations – https://docs.slack.dev/admins/scim-api/",
+            "Admin security and authentication configuration (where SCIM and SSO are wired to Slack) – https://slack.com/enterprise/"
+          ],
+          "related_data": [
+            "SCIM user records (userName, emails, active flag, group memberships)",
+            "IdP GUIDs and identity attributes bound to the new Slack account",
+            "workspace_id and enterprise_id for the target organization"
+          ],
+          "notes": "The attacker abuses the trusted link between Slack and the IdP/SCIM provider to introduce a new identity that Slack will treat as legitimate."
+        },
+        {
+          "step_id": 2,
+          "description": "Optionally, the attacker assigns the SCIM-created account to privileged groups or roles in the IdP that map to elevated Slack roles (e.g., Workspace or Org Admin) when SSO is performed.",
+          "related_capabilities": [
+            "SCIM provisioning API",
+            "Workspace and Enterprise organization management"
+          ],
+          "related_interfaces": [
+            "SCIM group membership APIs – https://docs.slack.dev/admins/scim-api/",
+            "Admin APIs for org-wide management (for role reflection and user management) – https://docs.slack.dev/admins/"
+          ],
+          "related_data": [
+            "Group membership attributes in SCIM records",
+            "Role indicators synchronized into Slack user profiles"
+          ],
+          "notes": "Exact role mappings are controlled by customer configuration, but SCIM is identified as a mechanism that can assign admin and owner roles."
+        },
+        {
+          "step_id": 3,
+          "description": "The attacker then authenticates to Slack using SSO as the newly provisioned user, satisfying any MFA and IP-based controls, and establishes an initial Slack session under this attacker-created identity.",
+          "related_capabilities": [
+            "Authentication and access control (SSO, 2FA, SCIM, EMM)",
+            "Client-to-Slack communication flow",
+            "Core messaging and collaboration service"
+          ],
+          "related_interfaces": [
+            "Slack client sign-in flow integrated with SAML SSO – https://docs.slack.dev/authentication/",
+            "Slack desktop/web clients – https://slack.com/team-chat/"
+          ],
+          "related_data": [
+            "SAML assertions for the attacker-controlled identity",
+            "MFA challenge/response data for that identity",
+            "Session and device metadata for the newly created account"
+          ],
+          "notes": "From Slack’s perspective, this looks like a normal new employee account provisioned via SCIM and SSO."
+        }
+      ],
+      "capabilities_used": [
+        "SCIM provisioning API",
+        "Authentication and access control (SSO, 2FA, SCIM, EMM)",
+        "Workspace and Enterprise organization management",
+        "Admin APIs for org-wide management",
+        "Client-to-Slack communication flow"
+      ],
+      "interfaces_used": [
+        "SCIM API endpoints – https://docs.slack.dev/admins/scim-api/",
+        "Admin.* APIs for user and group management – https://docs.slack.dev/admins/",
+        "Admin security and authentication configuration UI – https://slack.com/enterprise/",
+        "Slack desktop/web clients for sign-in and usage – https://slack.com/team-chat/"
+      ],
+      "data_accessed": [
+        "Newly created Slack user account and profile attributes",
+        "Group and role assignments that determine Slack privileges",
+        "All Slack data (channels, DMs, files, canvases, lists) visible to the new account once logged in"
+      ],
+      "preconditions_required": [
+        "Attacker has administrative control over the organization’s IdP tenant and/or the SCIM integration used to provision Slack accounts.",
+        "The Slack organization is configured to trust that IdP/SCIM integration for user lifecycle and role assignment.",
+        "The email domain for the attacker-created identity is accepted by Slack’s Domain-Based Registration or equivalent policies.",
+        "If MFA Required and SSO-Only Authentication are enforced, the attacker can configure MFA or bypass it for the new identity and complete SSO flows.",
+        "If Admin Approval Required exists for new Slack users, attacker’s new identity must appear legitimate enough to be approved."
+      ],
+      "constraints_encountered": [
+        "Domain-Based Registration: restricts which email domains can become Slack users; attacker must provision an identity under an allowed domain.",
+        "SSO-Only Authentication: enforces that logins go through the IdP; attacker must maintain their control at the IdP layer.",
+        "MFA Required: may obligate the attacker to configure or compromise MFA for the injected account.",
+        "Admin Approval Required: if admins must explicitly approve new users, social or procedural evasion is needed so the account is approved without scrutiny."
+      ],
+      "evasion_considerations": [
+        "Provision the new Slack user with naming and group memberships that resemble real employees or service accounts to avoid standing out in admin dashboards.",
+        "Create the account during typical onboarding windows or maintenance periods to blend with normal provisioning activity.",
+        "Use the account sparingly at first, limiting unusual behaviour that might trigger audit or HR review of new accounts."
+      ],
+      "resulting_access": "A newly created, attacker-controlled Slack cloud account within the target workspace or Enterprise org, potentially with elevated roles if group mappings are abused, obtained via the trusted SCIM/SSO integration.",
+      "comments": "This vector abuses the trusted relationship between Slack and enterprise identity providers/SCIM systems. It is realistic wherever Slack relies on external identity and lifecycle management and those systems are compromised."
+    },
+    {
+      "can_achieve": true,
+      "technique_name": "Valid Accounts (stolen Slack OAuth or service tokens)",
+      "technique_stix_id": "T1078",
+      "method_steps": [
+        {
+          "step_id": 1,
+          "description": "Using a previously compromised Slack OAuth access token (bot, user, app token) or Slack CLI service token associated with the target organization, the attacker verifies the token by making a low-impact Web API call to confirm it is valid and to learn which workspace and scopes it belongs to.",
+          "related_capabilities": [
+            "OAuth-based authentication and tokens for apps",
+            "Web API for core Slack operations",
+            "Developer tools: Slack CLI, Bolt frameworks, SDKs, and sandboxes"
+          ],
+          "related_interfaces": [
+            "OAuth 2.0 token endpoints and authentication overview – https://docs.slack.dev/authentication/",
+            "Slack Web API methods (e.g., general methods underlying app behaviour) – https://docs.slack.dev/apis/web-api/",
+            "Slack CLI and CI/CD integration that rely on service tokens – https://docs.slack.dev/tools/slack-cli/"
+          ],
+          "related_data": [
+            "Compromised OAuth access token or CLI service token",
+            "workspace_id and enterprise_id associated with the token",
+            "Granted OAuth scopes indicating what data and actions are allowed"
+          ],
+          "notes": "Token theft may occur via source-code compromise, CI/CD leaks, endpoint compromise, or other off-Slack means; that acquisition step is out of scope here."
+        },
+        {
+          "step_id": 2,
+          "description": "The attacker enumerates what the token can see or do by calling allowed Web API methods (for example, listing channels, users, or app installations) within the limits of its scopes.",
+          "related_capabilities": [
+            "Web API for core Slack operations",
+            "Admin APIs for org-wide management"
+          ],
+          "related_interfaces": [
+            "Web API endpoints for channels, users, and messages – https://docs.slack.dev/apis/web-api/",
+            "Admin.* API methods if the token has admin scopes – https://docs.slack.dev/admins/"
+          ],
+          "related_data": [
+            "Channel and user identifiers (channel_id, user_id)",
+            "Organization-wide configuration and membership metadata",
+            "Audit-relevant events if the token is used to perform admin actions"
+          ],
+          "notes": "The attacker keeps requests low-volume to avoid triggering rate limits or abnormal-usage alerts."
+        },
+        {
+          "step_id": 3,
+          "description": "The attacker uses the token’s access to perform initial actions inside Slack, such as reading channel histories, listing or downloading files, or posting messages as the app or service account in visible channels or DMs.",
+          "related_capabilities": [
+            "Web API for core Slack operations",
+            "Channel-based team messaging",
+            "File sharing and contextual document collaboration"
+          ],
+          "related_interfaces": [
+            "Web API methods for messages, files, and conversations – https://docs.slack.dev/apis/web-api/"
+          ],
+          "related_data": [
+            "Message content and metadata from channels and DMs accessible to the token",
+            "File metadata and content for files visible to the app or service",
+            "Any admin or governance data accessible via elevated scopes (if present)"
+          ],
+          "notes": "This constitutes Initial Access via programmatic identity, even if the attacker never signs into the Slack UI as a human user."
+        }
+      ],
+      "capabilities_used": [
+        "OAuth-based authentication and tokens for apps",
+        "Web API for core Slack operations",
+        "Admin APIs for org-wide management",
+        "Developer tools: Slack CLI, Bolt frameworks, SDKs, and sandboxes",
+        "App distribution and Slack Marketplace listing"
+      ],
+      "interfaces_used": [
+        "OAuth 2.0 authorization and token endpoints – https://docs.slack.dev/authentication/installing-with-oauth",
+        "Authentication overview and token lifecycle guidance – https://docs.slack.dev/authentication/",
+        "Slack Web API method surface – https://docs.slack.dev/apis/web-api/",
+        "Admin APIs for elevated admin.* calls – https://docs.slack.dev/admins/",
+        "Slack CLI service-token based deployment and automation – https://docs.slack.dev/tools/slack-cli/"
+      ],
+      "data_accessed": [
+        "Organization identifiers (workspace_id, enterprise_id) and metadata associated with the token",
+        "Messages, files, canvases, and lists visible to the app or service account represented by the token",
+        "Admin configuration and membership data if admin-level scopes are present"
+      ],
+      "preconditions_required": [
+        "Attacker has obtained one or more valid Slack OAuth access tokens (bot, user, or app tokens) or Slack CLI service tokens tied to the target organization.",
+        "Tokens have not been revoked or rotated by administrators or automated token-rotation processes.",
+        "If IP Allowlisting is enforced for API access, the attacker can send API requests from an allowed IP range (e.g., using a compromised on-premise host or corporate cloud resource)."
+      ],
+      "constraints_encountered": [
+        "IP Allowlisting: may limit from where Web API calls can be successfully made with the stolen token.",
+        "Rate Limiting: Slack Web API imposes rate limits; high-volume enumeration with a stolen token risks throttling and detection.",
+        "Scope-based permission model: tokens may not have broad enough scopes to access sensitive channels or admin functions, limiting the impact of this initial foothold."
+      ],
+      "evasion_considerations": [
+        "Use the stolen token in a way that mimics the legitimate app’s normal traffic patterns (e.g., similar endpoints, timing, and volume).",
+        "Throttle API calls and avoid bulk exports that could stand out in Audit Logs or SIEM dashboards.",
+        "If multiple tokens are obtained, prefer ones tied to long-standing, low-noise integrations to benefit from existing trust and expectations."
+      ],
+      "resulting_access": "Programmatic access to the target Slack organization via a valid app or service identity, with the ability to read and/or modify data according to the stolen token’s scopes, without needing an interactive user login.",
+      "comments": "From Slack’s perspective this is a straightforward use of valid cloud credentials (app or service accounts). It is particularly dangerous when admin or oversight scopes are present, as it bypasses many user-facing security controls such as MFA."
+    },
+    {
+      "can_achieve": true,
+      "technique_name": "Spearphishing Link (OAuth consent phishing for a malicious Slack app)",
+      "technique_stix_id": "T1566.002",
+      "method_steps": [
+        {
+          "step_id": 1,
+          "description": "The attacker registers a Slack app under their control, defining an app manifest that requests broad but plausible scopes (for example, read access to messages and files and permission to post messages), and enables unlisted distribution so the app can be installed via a direct OAuth install link.",
+          "related_capabilities": [
+            "OAuth-based authentication and tokens for apps",
+            "App distribution and Slack Marketplace listing",
+            "Slack Marketplace and app ecosystem",
+            "Developer tools: Slack CLI, Bolt frameworks, SDKs, and sandboxes"
+          ],
+          "related_interfaces": [
+            "App management and distribution settings – https://docs.slack.dev/app-management/distribution/",
+            "Scopes and permissions reference – https://docs.slack.dev/reference/scopes",
+            "Developer tools and app creation workflows – https://docs.slack.dev/tools/"
+          ],
+          "related_data": [
+            "App manifest (requested scopes, events, and surfaces)",
+            "client_id, client_secret, and redirect URIs for the malicious app"
+          ],
+          "notes": "The attacker may make the app appear benign (e.g., productivity helper) to reduce suspicion during consent."
+        },
+        {
+          "step_id": 2,
+          "description": "The attacker generates an OAuth install URL (Add to Slack-style link) for the malicious app and embeds it in a highly targeted spearphishing message (for example, to a workspace admin or power user) sent via email or another communication channel.",
+          "related_capabilities": [
+            "OAuth-based authentication and tokens for apps",
+            "App distribution and Slack Marketplace listing"
+          ],
+          "related_interfaces": [
+            "OAuth install URLs and consent screens – https://docs.slack.dev/authentication/installing-with-oauth",
+            "Slack Marketplace-style install flows and app listing metadata – https://slack.com/marketplace/"
+          ],
+          "related_data": [
+            "OAuth authorization request parameters (client_id, scopes, redirect_uri, state)",
+            "Phishing email content containing the install link"
+          ],
+          "notes": "This mirrors real-world consent-phishing campaigns that leverage OAuth grants instead of credential theft."
+        },
+        {
+          "step_id": 3,
+          "description": "The target user follows the link, authenticates to Slack (via SSO and MFA as usual), and is shown Slack’s OAuth consent screen listing the requested scopes; persuaded by the pretext, the user grants consent, allowing the app to be installed in the organization.",
+          "related_capabilities": [
+            "Authentication and access control (SSO, 2FA, SCIM, EMM)",
+            "OAuth-based authentication and tokens for apps",
+            "App governance and approval workflows"
+          ],
+          "related_interfaces": [
+            "Slack OAuth consent UI – https://docs.slack.dev/authentication/installing-with-oauth",
+            "Admin app-approval flows that may gate installations – https://docs.slack.dev/admins/managing-app-approvals"
+          ],
+          "related_data": [
+            "User’s authenticated session (via SSO/MFA) used to approve the app",
+            "Record of granted OAuth scopes and installation metadata for the app"
+          ],
+          "notes": "If the org enforces app-approval workflows, the phish may target an admin with authority to approve or a workflow that auto-approves certain apps."
+        },
+        {
+          "step_id": 4,
+          "description": "Slack completes the OAuth flow and redirects to the attacker-controlled redirect URI with an authorization code, which the attacker exchanges for one or more access tokens that are scoped to the victim workspace.",
+          "related_capabilities": [
+            "OAuth-based authentication and tokens for apps",
+            "Web API for core Slack operations"
+          ],
+          "related_interfaces": [
+            "OAuth token exchange endpoint – https://docs.slack.dev/authentication/installing-with-oauth",
+            "Web API surface that the tokens will subsequently drive – https://docs.slack.dev/apis/web-api/"
+          ],
+          "related_data": [
+            "Authorization code and resulting bot/user/app access tokens",
+            "workspace_id and team metadata returned in token responses"
+          ],
+          "notes": "At this point the attacker has valid tokens without ever handling the victim’s raw credentials."
+        },
+        {
+          "step_id": 5,
+          "description": "The attacker uses the newly issued tokens to call Slack Web API methods and gain access to messages, files, channels, or admin resources as permitted by the granted scopes, establishing initial access into the organization via a seemingly legitimate app.",
+          "related_capabilities": [
+            "Web API for core Slack operations",
+            "Slack Marketplace and app ecosystem"
+          ],
+          "related_interfaces": [
+            "Web API endpoints for messages, channels, and files – https://docs.slack.dev/apis/web-api/"
+          ],
+          "related_data": [
+            "Messages, files, canvases, and lists accessible via the app’s scopes",
+            "Installation records tying the malicious app to the victim workspace"
+          ],
+          "notes": "Subsequent activity (e.g., data exfiltration or persistence) would fall under later tactics; initial access is the acquisition and first use of these tokens."
+        }
+      ],
+      "capabilities_used": [
+        "OAuth-based authentication and tokens for apps",
+        "App distribution and Slack Marketplace listing",
+        "Slack Marketplace and app ecosystem",
+        "App governance and approval workflows",
+        "Web API for core Slack operations",
+        "Authentication and access control (SSO, 2FA, SCIM, EMM)",
+        "Developer tools: Slack CLI, Bolt frameworks, SDKs, and sandboxes"
+      ],
+      "interfaces_used": [
+        "App management and distribution console – https://docs.slack.dev/app-management/distribution/",
+        "OAuth authorization and token endpoints – https://docs.slack.dev/authentication/installing-with-oauth",
+        "Scopes and permissions reference – https://docs.slack.dev/reference/scopes",
+        "Slack Marketplace install and listing pages – https://slack.com/marketplace/",
+        "Admin app-approval APIs and UI – https://docs.slack.dev/admins/managing-app-approvals"
+      ],
+      "data_accessed": [
+        "OAuth authorization codes and resulting Slack access tokens for the target workspace",
+        "workspace_id, user_id, and app installation metadata",
+        "All Slack resources (messages, files, channels, admin settings) reachable via the granted scopes"
+      ],
+      "preconditions_required": [
+        "The target organization permits installation of unlisted or Marketplace apps, at least with admin approval.",
+        "The attacker can reliably reach one or more users with app-install rights (often Workspace or Org Admins) via spearphishing channels such as email.",
+        "If Admin Approval workflows are in place for new apps, the attacker’s app and pretext must be convincing enough to be approved.",
+        "MFA Required and SSO-Only Authentication remain enforced but do not prevent the user from granting OAuth consent; they only protect the underlying credentials."
+      ],
+      "constraints_encountered": [
+        "Admin Approval Required (for apps, via app governance): can prevent end users from directly installing unvetted apps; the attacker must trick or compromise an approver.",
+        "MFA Required and SSO-Only Authentication: protect credential theft but do not meaningfully mitigate OAuth consent phishing once a legitimate user is logged in.",
+        "Rate Limiting and CAPTCHA: mainly affect automated login attempts, not single interactive OAuth consent flows."
+      ],
+      "evasion_considerations": [
+        "Use an app name, icon, and description that closely match legitimate productivity tools or internal integrations to reduce suspicion on the consent screen.",
+        "Request scopes that are powerful but defensible (for example, channel read and post permissions) rather than obviously excessive admin scopes that may trigger a manual review.",
+        "Host the OAuth redirect URI on a domain that appears legitimate or closely related to the organization’s tooling ecosystem."
+      ],
+      "resulting_access": "A malicious but ostensibly legitimate Slack app installed in the target workspace, with long-lived OAuth tokens granting programmatic access to organizational data and actions under the guise of an approved integration.",
+      "comments": "This vector cleanly matches SaaS-focused consent phishing patterns: Initial Access arises when a user authorizes a malicious app via Slack’s normal OAuth flows, giving the attacker tokens rather than raw credentials."
+    },
+    {
+      "can_achieve": true,
+      "technique_name": "Trusted Relationship via Slack Connect shared channels",
+      "technique_stix_id": "T1199",
+      "method_steps": [
+        {
+          "step_id": 1,
+          "description": "The attacker controls or creates their own Slack workspace and associated domain, positioning it as a customer, vendor, or partner that could plausibly collaborate with the target organization via Slack Connect.",
+          "related_capabilities": [
+            "External collaboration with Slack Connect",
+            "Workspace and Enterprise organization management"
+          ],
+          "related_interfaces": [
+            "Slack workspace and channel management UIs – https://slack.com/help/categories/200122103",
+            "Slack Connect overview and creation flows – https://slack.com/connect/"
+          ],
+          "related_data": [
+            "Attacker-controlled workspace_id and domain identifiers",
+            "Basic channel and user metadata in the attacker’s workspace"
+          ],
+          "notes": "Creation of the attacker-controlled workspace occurs outside the target tenant but uses the same Slack platform."
+        },
+        {
+          "step_id": 2,
+          "description": "From the attacker-controlled workspace, the attacker initiates a Slack Connect invitation to the target organization, proposing a shared channel or external DM using the Slack Connect channel creation and invite flows.",
+          "related_capabilities": [
+            "External collaboration with Slack Connect",
+            "Slack Connect governance",
+            "Channel-based team messaging"
+          ],
+          "related_interfaces": [
+            "Slack Connect channel creation and invite UI – https://slack.com/connect/",
+            "Slack Connect admin governance settings for approvals and allowlists – https://slack.com/resources/slack-for-admins/slack-connect-security"
+          ],
+          "related_data": [
+            "shared_channel_id proposed for connection",
+            "External workspace and domain identifiers included in the invitation",
+            "Invitation metadata (inviting workspace, invited organization, timestamps)"
+          ],
+          "notes": "The attacker may tailor the invitation and channel name to match a real project or vendor relationship."
+        },
+        {
+          "step_id": 3,
+          "description": "Admins or authorized users in the target organization review and approve the Slack Connect invitation according to their governance policies (e.g., domain allowlists and approval workflows), creating a shared channel that bridges the attacker’s workspace and the victim org.",
+          "related_capabilities": [
+            "Slack Connect governance",
+            "Workspace and Enterprise organization management"
+          ],
+          "related_interfaces": [
+            "Slack Connect governance UI for approvals and monitoring – https://slack.com/resources/slack-for-admins/slack-connect-security"
+          ],
+          "related_data": [
+            "Connection approval decision and resulting shared_channel_id",
+            "Policy records indicating which internal channels are shared and with whom"
+          ],
+          "notes": "Where policies are strict, this step is the main barrier; where they are lax or over-trusting of partners, it may be routine."
+        },
+        {
+          "step_id": 4,
+          "description": "Once the shared Slack Connect channel or DM is active, the attacker uses their own Slack account in the external workspace to send and receive messages, files, and canvases in that shared space, gaining initial, bounded access into the target organization’s conversations.",
+          "related_capabilities": [
+            "External collaboration with Slack Connect",
+            "Channel-based team messaging",
+            "File sharing and contextual document collaboration",
+            "Workspaces with canvases and lists (Work Operating System)"
+          ],
+          "related_interfaces": [
+            "Slack channel UI for Slack Connect shared channels – https://slack.com/connect/",
+            "File-sharing and canvas/list surfaces inside shared channels – https://slack.com/work-operating-system/"
+          ],
+          "related_data": [
+            "Messages and files posted by the victim organization in the shared channel",
+            "Canvases and lists attached to the shared channel, including structured project data",
+            "User_ids and profile metadata of internal participants exposed via the shared space"
+          ],
+          "notes": "The attacker’s visibility is limited to what is shared, but this is still an initial foothold inside the target’s Slack environment via a cross-tenant trust relationship."
+        }
+      ],
+      "capabilities_used": [
+        "External collaboration with Slack Connect",
+        "Slack Connect governance",
+        "Channel-based team messaging",
+        "File sharing and contextual document collaboration",
+        "Workspaces with canvases and lists (Work Operating System)",
+        "Workspace and Enterprise organization management"
+      ],
+      "interfaces_used": [
+        "Slack Connect creation and invite flows – https://slack.com/connect/",
+        "Slack Connect security and governance settings – https://slack.com/resources/slack-for-admins/slack-connect-security",
+        "Workspace and org admin consoles – https://slack.com/help/categories/200122103"
+      ],
+      "data_accessed": [
+        "Messages and files shared by the victim organization in Slack Connect channels and external DMs",
+        "Canvas and list content attached to Slack Connect channels",
+        "Metadata about internal channels, participants, and connected external organizations"
+      ],
+      "preconditions_required": [
+        "The target organization actively uses Slack Connect to collaborate with external parties.",
+        "Slack Connect governance allows invitations from external domains (or at least from the attacker’s domain) subject to approval.",
+        "An internal user or admin at the target is willing or tricked into approving the Slack Connect invitation from the attacker-controlled workspace.",
+        "If Admin Approval Required is configured for Slack Connect conversations, the attacker’s workspace and pretext must be convincing enough to pass review."
+      ],
+      "constraints_encountered": [
+        "Slack Connect governance policies may restrict who can create external shared channels and which external domains are allowed.",
+        "Admin Approval Required (in governance) can introduce manual checks that may block suspicious or unknown partners from establishing shared channels.",
+        "External participants are typically confined to the specific shared channels or DMs, limiting immediate lateral access inside the victim org."
+      ],
+      "evasion_considerations": [
+        "Brand the attacker-controlled workspace and domain to resemble a legitimate customer, vendor, or partner already working with the target.",
+        "Align the shared channel’s name and description with real projects or business initiatives to normalize its presence.",
+        "Maintain professional, low-risk interactions at first to avoid drawing security or admin attention to the new external collaboration."
+      ],
+      "resulting_access": "An external Slack account that legitimately participates in one or more Slack Connect shared channels or DMs with the target organization, providing bounded but real access to internal conversations, files, and work artifacts.",
+      "comments": "This vector leverages Slack’s cross-tenant collaboration model as an initial foothold. It is especially relevant where Slack Connect policies are permissive or where business pressure to onboard partners quickly weakens scrutiny of new external connections."
+    },
+    {
+      "can_achieve": true,
+      "technique_name": "Exploit Public-Facing Application (misconfigured Slack app event/interaction endpoints)",
+      "technique_stix_id": "T1190",
+      "method_steps": [
+        {
+          "step_id": 1,
+          "description": "The attacker identifies HTTP endpoints exposed by custom or third-party Slack apps installed in the target organization (for example, event receivers or interactive request URLs) by reconnaissance on the organization’s public infrastructure, documentation, or leaked configuration.",
+          "related_capabilities": [
+            "Events API and Socket Mode",
+            "Interactivity: shortcuts, slash commands, and interactive components",
+            "Slack Marketplace and app ecosystem",
+            "App distribution and Slack Marketplace listing"
+          ],
+          "related_interfaces": [
+            "Events API configuration and delivery documentation – https://docs.slack.dev/apis/events-api/",
+            "Interactivity request URLs for shortcuts, slash commands, and Block Kit actions – https://docs.slack.dev/interactivity/",
+            "Slack Marketplace listings or internal docs that may reference app endpoints – https://slack.com/marketplace/"
+          ],
+          "related_data": [
+            "App request URLs used for Events API deliveries and interactive payloads",
+            "Information about which apps are installed and what scopes they hold"
+          ],
+          "notes": "These endpoints are hosted by the app developer or customer, not by Slack itself, but they are defined and used via Slack’s platform capabilities."
+        },
+        {
+          "step_id": 2,
+          "description": "Against a target app whose endpoints do not correctly validate Slack’s request signatures or other authentication, the attacker crafts HTTP POST requests that mimic Slack event or interaction payloads (for example, forging a slash-command or interactive button payload referencing high-value channels).",
+          "related_capabilities": [
+            "Events API and Socket Mode",
+            "Interactivity: shortcuts, slash commands, and interactive components"
+          ],
+          "related_interfaces": [
+            "Interactivity documentation describing interaction payload formats – https://docs.slack.dev/interactivity/",
+            "Reference: interaction payloads – https://docs.slack.dev/reference/interaction-payloads"
+          ],
+          "related_data": [
+            "Forged JSON payloads containing team_id, channel_id, user_id, and action details",
+            "Headers intended to imitate or bypass Slack’s signing scheme if validation is weak or absent"
+          ],
+          "notes": "Slack docs explicitly state that apps must verify signatures; this vector assumes an app that fails to do so or does so incorrectly."
+        },
+        {
+          "step_id": 3,
+          "description": "The vulnerable app accepts the forged request as if it originated from Slack, and, using its own OAuth tokens and configured logic, calls Slack Web API methods to execute actions in the victim workspace such as posting messages, creating resources, or reading data and relaying it externally.",
+          "related_capabilities": [
+            "Web API for core Slack operations",
+            "OAuth-based authentication and tokens for apps",
+            "Slack Marketplace and app ecosystem"
+          ],
+          "related_interfaces": [
+            "Slack Web API – https://docs.slack.dev/apis/web-api/",
+            "OAuth-based token usage for apps – https://docs.slack.dev/authentication/"
+          ],
+          "related_data": [
+            "Messages posted by the app into internal channels on behalf of forged interactions",
+            "Any data the app reads from Slack and then forwards to attacker-controlled infrastructure (depending on app’s design and scopes)",
+            "Audit log entries reflecting app actions, not an external user"
+          ],
+          "notes": "Initial Access from Slack’s point of view is achieved when the attacker first causes the app to perform unauthorized actions in the victim workspace using its valid tokens."
+        }
+      ],
+      "capabilities_used": [
+        "Events API and Socket Mode",
+        "Interactivity: shortcuts, slash commands, and interactive components",
+        "Web API for core Slack operations",
+        "OAuth-based authentication and tokens for apps",
+        "Slack Marketplace and app ecosystem",
+        "App distribution and Slack Marketplace listing"
+      ],
+      "interfaces_used": [
+        "Events API event delivery to app-hosted HTTPS endpoints – https://docs.slack.dev/apis/events-api/",
+        "Interactivity request URLs for shortcuts, slash commands, and Block Kit components – https://docs.slack.dev/interactivity/",
+        "Web API endpoints called by the compromised app – https://docs.slack.dev/apis/web-api/",
+        "Marketplace and app distribution metadata revealing app presence – https://slack.com/marketplace/, https://docs.slack.dev/app-management/distribution/"
+      ],
+      "data_accessed": [
+        "Messages, files, and channel metadata accessed or posted by the compromised app using its OAuth tokens",
+        "Any sensitive data the app’s logic processes and forwards off-platform based on forged triggers",
+        "Audit logs that attribute these actions to the app rather than an external attacker"
+      ],
+      "preconditions_required": [
+        "A Slack app with significant privileges (e.g., message or file access) is installed in the target organization.",
+        "The app exposes internet-facing HTTP endpoints for Events API deliveries or interactive payloads, as documented for Slack apps.",
+        "The app’s implementation fails to correctly authenticate and validate Slack-signed requests or otherwise allows crafted requests to be accepted.",
+        "The app’s OAuth tokens remain valid and are not restricted by IP allowlisting at the Slack org level."
+      ],
+      "constraints_encountered": [
+        "Correct implementation of signature verification on Events API and interactivity endpoints would block forged requests and remove this vector.",
+        "If the organization limits app installations via App governance and approval workflows, fewer vulnerable apps may exist to target.",
+        "Rate Limiting at the app’s HTTP endpoints or in Slack Web API may limit the volume of abuse but not individual initial actions."
+      ],
+      "evasion_considerations": [
+        "Replay expected interaction patterns (e.g., plausible slash-command payloads) rather than obviously malicious actions, to avoid functional and logging anomalies.",
+        "Throttle forged requests so that the app’s traffic volume and timing remain similar to normal usage.",
+        "Where possible, target apps that already send data to third-party endpoints so additional exfiltration looks like normal integration behaviour."
+      ],
+      "resulting_access": "Indirect, but real, access to the victim Slack org through a compromised or misconfigured app, enabling the attacker to cause actions in channels and potentially read or exfiltrate data using the app’s OAuth tokens without holding a Slack user account.",
+      "comments": "This is a classic SaaS public-facing application vector: the exploitable surface is the app’s HTTPS endpoints defined via Slack’s Events and Interactivity features, and the resulting foothold is via the app’s trusted identity inside Slack."
+    },
+    {
+      "can_achieve": true,
+      "technique_name": "Exploit Public-Facing Application (exposed incoming webhooks and workflow/webhook triggers)",
+      "technique_stix_id": "T1190",
+      "method_steps": [
+        {
+          "step_id": 1,
+          "description": "The attacker discovers an incoming webhook URL or webhook trigger URL associated with a Slack workflow or Deno Slack SDK app in the target organization, for example via leaked documentation, misconfigured public repositories, logs, or accidental sharing.",
+          "related_capabilities": [
+            "Event- and schedule-driven workflow execution",
+            "No-code automation with Workflow Builder",
+            "Interactivity: shortcuts, slash commands, and interactive components"
+          ],
+          "related_interfaces": [
+            "Interactions initiated by external services and webhook triggers – https://docs.slack.dev/interactivity/#interactions-initiated-by-external-services",
+            "Guide to webhook triggers using the Deno Slack SDK – linked from https://docs.slack.dev/interactivity/",
+            "Workflow Builder external-start workflows – https://slack.com/help/articles/360041352714-Build-a-workflow--Create-a-workflow-that-starts-outside-of-Slack"
+          ],
+          "related_data": [
+            "Unique webhook URLs and any embedded secrets/identifiers",
+            "Workflow and trigger metadata (what channel or action the webhook initiates)"
+          ],
+          "notes": "Slack docs emphasize that external webhooks must be authenticated; this vector assumes URLs or secrets are exposed or inadequate validation is configured."
+        },
+        {
+          "step_id": 2,
+          "description": "The attacker crafts an HTTP request to the discovered webhook URL, supplying arbitrary payload fields expected by the workflow or app (for example, text and metadata that the workflow will insert into a channel message or use to update a canvas or list).",
+          "related_capabilities": [
+            "Event- and schedule-driven workflow execution",
+            "No-code automation with Workflow Builder"
+          ],
+          "related_interfaces": [
+            "Webhook-triggered workflows and app interactions as documented under automatic invocations – https://docs.slack.dev/interactivity/",
+            "Workflow Builder guide describing externally started workflows – https://slack.com/help/articles/360041352714-Build-a-workflow--Create-a-workflow-that-starts-outside-of-Slack"
+          ],
+          "related_data": [
+            "HTTP request body fields consumed by the workflow or app",
+            "Any tokens or headers required by weakly implemented webhook authentication"
+          ],
+          "notes": "If webhook authentication is implemented only via a hardcoded token in the URL or header, theft of that token effectively gives the attacker full control over the workflow trigger."
+        },
+        {
+          "step_id": 3,
+          "description": "Slack receives the external webhook request and invokes the associated workflow or app logic, which then uses Slack-native steps or app tokens to post messages, update canvases or lists, or interact with other tools using connector steps within the target workspace.",
+          "related_capabilities": [
+            "No-code automation with Workflow Builder",
+            "Event- and schedule-driven workflow execution",
+            "Web API for core Slack operations",
+            "File sharing and contextual document collaboration"
+          ],
+          "related_interfaces": [
+            "Workflow Builder runtime executing steps in Slack – https://slack.com/help/articles/360035692513-Guide-to-Slack-Workflow-Builder",
+            "Slack Web API or built-in functions used by workflows – https://docs.slack.dev/apis/web-api/"
+          ],
+          "related_data": [
+            "Messages posted into target channels by workflows or apps acting on behalf of internal owners",
+            "Canvas or list updates driven by workflow steps",
+            "Connector step data sent to external SaaS tools and any responses shown back in Slack"
+          ],
+          "notes": "Initial Access is realized when the attacker can inject content or trigger actions in internal Slack channels solely via the exposed webhook, without any Slack account."
+        }
+      ],
+      "capabilities_used": [
+        "Event- and schedule-driven workflow execution",
+        "No-code automation with Workflow Builder",
+        "Interactivity: shortcuts, slash commands, and interactive components",
+        "Web API for core Slack operations"
+      ],
+      "interfaces_used": [
+        "Webhook triggers for Deno Slack SDK apps – linked from https://docs.slack.dev/interactivity/",
+        "Workflow Builder external-start workflows – https://slack.com/help/articles/360041352714-Build-a-workflow--Create-a-workflow-that-starts-outside-of-Slack",
+        "Workflow Builder general guide – https://slack.com/help/articles/360035692513-Guide-to-Slack-Workflow-Builder",
+        "Web API endpoints used implicitly by Slack functions and workflows – https://docs.slack.dev/apis/web-api/"
+      ],
+      "data_accessed": [
+        "Messages, canvases, lists, and other artifacts created or modified in Slack by workflows in response to attacker-controlled webhook calls",
+        "Any data passed to or from third-party connector steps triggered by the workflow",
+        "Audit and workflow activity logs that show the automation, not an external attacker, as the actor"
+      ],
+      "preconditions_required": [
+        "The target organization has configured incoming webhooks or externally started workflows (via Workflow Builder or Deno Slack SDK) that take action in internal channels or on work artifacts.",
+        "One or more webhook URLs or associated secrets have been exposed or can be guessed/brute-forced by the attacker.",
+        "Webhook authentication is weak (for example, relying only on an unrotated shared secret in the URL) or misconfigured such that external callers are not adequately validated."
+      ],
+      "constraints_encountered": [
+        "Strong webhook authentication and regular rotation of secrets significantly reduce this risk.",
+        "Rate Limiting at Slack’s webhook endpoints or in workflow execution may limit the speed and volume of abuse.",
+        "Workflow Builder administration can restrict which members can create externally triggered workflows and which connectors/steps they can include."
+      ],
+      "evasion_considerations": [
+        "Trigger workflows at low frequency and on realistic schedules so that resulting messages or updates appear like normal automation activity.",
+        "Craft payload content (messages, form inputs) that looks legitimate and aligned with the workflow’s intended purpose.",
+        "If the workflow posts into lower-visibility channels (for example, operational or system channels), prefer those to avoid user-driven detection."
+      ],
+      "resulting_access": "The ability to cause Slack workflows or incoming webhooks to run inside the victim workspace, posting messages or modifying work artifacts without any Slack account, effectively providing an automation-based foothold into the environment.",
+      "comments": "This vector relies on exposed or weakly protected webhook URLs for Workflow Builder or Deno Slack SDK triggers. It is realistic wherever external triggers are used and webhook security is not tightly enforced."
+    },
+    {
+      "can_achieve": true,
+      "technique_name": "Supply Chain Compromise (trusted Slack app vendor or integration)",
+      "technique_stix_id": "T1195",
+      "method_steps": [
+        {
+          "step_id": 1,
+          "description": "The attacker compromises the infrastructure or build pipeline of a third-party or internal vendor whose Slack app is already installed in the target organization, gaining the ability to modify the app’s code or operational configuration.",
+          "related_capabilities": [
+            "Slack Marketplace and app ecosystem",
+            "App distribution and Slack Marketplace listing",
+            "Developer tools: Slack CLI, Bolt frameworks, SDKs, and sandboxes"
+          ],
+          "related_interfaces": [
+            "Slack Marketplace listing and install flows for the trusted app – https://slack.com/marketplace/",
+            "App distribution and CI/CD guidance – https://docs.slack.dev/app-management/distribution/#ci-cd",
+            "Developer tools and deployment practices – https://docs.slack.dev/tools/"
+          ],
+          "related_data": [
+            "Source code and deployment configuration for the vendor’s Slack app",
+            "CI/CD service tokens used to deploy the app",
+            "App manifest defining requested scopes and events"
+          ],
+          "notes": "This compromise occurs outside Slack but directly affects an app that has a trusted presence and OAuth tokens inside many customer workspaces."
+        },
+        {
+          "step_id": 2,
+          "description": "Without changing the app’s requested scopes or distribution status (to avoid prompting new reviews), the attacker introduces malicious behaviour into the app, such as additional data collection or covert exfiltration using existing OAuth tokens in installed tenants.",
+          "related_capabilities": [
+            "OAuth-based authentication and tokens for apps",
+            "Web API for core Slack operations",
+            "Slack Marketplace and app ecosystem"
+          ],
+          "related_interfaces": [
+            "Web API used by the app to access messages, files, and admin data – https://docs.slack.dev/apis/web-api/",
+            "Existing OAuth tokens and installation records in each customer workspace – https://docs.slack.dev/authentication/"
+          ],
+          "related_data": [
+            "Slack OAuth tokens for installed instances in the target organization",
+            "Messages, files, and admin metadata accessible under the app’s scopes"
+          ],
+          "notes": "Because scopes do not change, customers are unlikely to see new consent prompts, making this difficult to notice."
+        },
+        {
+          "step_id": 3,
+          "description": "In the target organization, the compromised app begins to use its existing tokens to make additional or altered API calls (for example, broader conversations history reads or exporting data to new attacker-controlled endpoints), establishing malicious initial access inside Slack while appearing as the same trusted integration.",
+          "related_capabilities": [
+            "Web API for core Slack operations",
+            "Audit Logs API and Admin Oversight API"
+          ],
+          "related_interfaces": [
+            "Web API calls made on behalf of the app – https://docs.slack.dev/apis/web-api/",
+            "Any monitoring or SIEM integration consuming Audit Logs API – https://docs.slack.dev/admins/audit-logs-api/"
+          ],
+          "related_data": [
+            "Historical and current messages, files, and workspace metadata retrieved by the app",
+            "Logs indicating app-originated activity across channels and workspaces"
+          ],
+          "notes": "From Slack’s viewpoint, this is simply the app doing more with its legitimate access; the attacker’s initial foothold into the tenant is via the compromised supply chain."
+        }
+      ],
+      "capabilities_used": [
+        "Slack Marketplace and app ecosystem",
+        "App distribution and Slack Marketplace listing",
+        "OAuth-based authentication and tokens for apps",
+        "Web API for core Slack operations",
+        "Developer tools: Slack CLI, Bolt frameworks, SDKs, and sandboxes",
+        "App governance and approval workflows"
+      ],
+      "interfaces_used": [
+        "Slack Marketplace listing and install flows – https://slack.com/marketplace/",
+        "App management and distribution settings – https://docs.slack.dev/app-management/distribution/",
+        "OAuth token issuance and usage – https://docs.slack.dev/authentication/",
+        "Slack Web API – https://docs.slack.dev/apis/web-api/",
+        "Admin app approval and governance controls – https://docs.slack.dev/admins/managing-app-approvals"
+      ],
+      "data_accessed": [
+        "All Slack data (messages, files, canvases, lists, admin metadata) that the trusted app’s scopes already permitted inside the target org",
+        "Potentially sensitive governance and audit information if the app was granted admin or oversight-related scopes",
+        "App installation and configuration metadata within the tenant"
+      ],
+      "preconditions_required": [
+        "A third-party or internal Slack app with meaningful scopes is already installed and approved in the target organization.",
+        "The attacker can compromise that app’s vendor environment or build pipeline, or otherwise alter its behaviour without triggering a new Slack review or app-approval process.",
+        "The app’s OAuth tokens in the target tenant remain valid and are not constrained by strict IP Allowlisting or anomaly-detection rules."
+      ],
+      "constraints_encountered": [
+        "App governance and Marketplace-only policies reduce which apps can be installed and therefore which vendors can serve as a supply-chain foothold.",
+        "Security monitoring via Audit Logs API or third-party tools might detect sudden changes in an app’s behaviour (new endpoints contacted, unusual API usage patterns).",
+        "If customers aggressively scope apps to least privilege and avoid granting admin-level scopes, the impact of a compromised app is limited, even if initial access is achieved."
+      ],
+      "evasion_considerations": [
+        "Maintain the app’s previous traffic patterns and API usage as much as possible, slowly expanding activity to avoid triggering anomaly detection.",
+        "Avoid requesting new scopes or changing the Marketplace listing in ways that would force re-review or re-consent from customers.",
+        "Throttle and stagger data collection across tenants to reduce obvious spikes in backend or API logs."
+      ],
+      "resulting_access": "Covert, programmatic access to the target Slack organization through an already trusted and widely deployed app whose supply chain has been compromised, using existing OAuth tokens and permissions.",
+      "comments": "Slack’s rich Marketplace ecosystem and CI/CD tooling mean supply-chain compromise of a popular app can immediately grant attackers initial access into many customer workspaces without any new installs or user interaction."
+    },
+    {
+      "can_achieve": true,
+      "technique_name": "Phishing for Slack SSO/cloud credentials followed by login",
+      "technique_stix_id": "T1566",
+      "method_steps": [
+        {
+          "step_id": 1,
+          "description": "The attacker sends targeted phishing messages (for example, via email) that imitate Slack login prompts or SSO notifications, luring users to a fake sign-in page designed to capture Slack or IdP credentials.",
+          "related_capabilities": [
+            "Authentication and access control (SSO, 2FA, SCIM, EMM)"
+          ],
+          "related_interfaces": [
+            "User-facing sign-in experience for Slack clients and SSO, as governed by admin authentication settings – https://slack.com/enterprise/",
+            "Branding and login flows implied by the Authentication overview – https://docs.slack.dev/authentication/"
+          ],
+          "related_data": [
+            "Usernames/emails and passwords for Slack or IdP accounts",
+            "Potential MFA codes if the phishing page also requests second factors"
+          ],
+          "notes": "The phishing infrastructure is external, but it is explicitly themed around Slack’s SSO and login behaviour to harvest Slack-relevant credentials."
+        },
+        {
+          "step_id": 2,
+          "description": "Once the victim submits credentials (and possibly MFA codes) to the phishing site, the attacker uses those stolen credentials to authenticate to Slack’s legitimate sign-in flows and establish a session, as described in the Cloud Accounts vector.",
+          "related_capabilities": [
+            "Authentication and access control (SSO, 2FA, SCIM, EMM)",
+            "Client-to-Slack communication flow"
+          ],
+          "related_interfaces": [
+            "Slack desktop/web clients – https://slack.com/team-chat/",
+            "SSO integration with the IdP – https://docs.slack.dev/authentication/"
+          ],
+          "related_data": [
+            "Stolen credentials reused against real Slack or IdP login endpoints",
+            "New Slack session cookies and authentication tokens bound to the victim user"
+          ],
+          "notes": "From Slack’s perspective, this appears as a normal interactive login from the victim’s account; the credential theft itself is handled in the phishing infrastructure."
+        }
+      ],
+      "capabilities_used": [
+        "Authentication and access control (SSO, 2FA, SCIM, EMM)",
+        "Client-to-Slack communication flow"
+      ],
+      "interfaces_used": [
+        "Slack client sign-in flows – https://slack.com/team-chat/",
+        "Admin-configured SSO and MFA flows – https://slack.com/enterprise/",
+        "Authentication documentation (used indirectly to craft realistic phishing lures) – https://docs.slack.dev/authentication/"
+      ],
+      "data_accessed": [
+        "Slack or IdP credentials and possibly MFA factors harvested via phishing (before use against Slack)",
+        "All Slack data visible to the compromised account once the attacker logs in (channels, DMs, files, canvases, lists, search results)"
+      ],
+      "preconditions_required": [
+        "The attacker can reliably reach target users via email or other channels to send phishing messages.",
+        "Victims do not consistently verify Slack/SSO URLs and may be tricked into entering credentials into a look-alike page.",
+        "If MFA Required is enforced, the phishing infrastructure must capture or bypass MFA as part of the phish (for example, man-in-the-middle of SSO)."
+      ],
+      "constraints_encountered": [
+        "MFA Required significantly raises the bar for successful credential phishing; attackers must capture MFA in real time or steal session tokens instead.",
+        "SSO-Only Authentication means phishing must target the IdP login experience rather than any legacy Slack username/password flow.",
+        "Rate Limiting and CAPTCHA Protection on login endpoints make automated credential-stuffing style phishing reuse more difficult but do not prevent single successful logins."
+      ],
+      "evasion_considerations": [
+        "Use domains and TLS certificates that closely resemble legitimate Slack or IdP domains to defeat superficial URL checks.",
+        "Time the use of stolen credentials so that logins occur soon after phishing, matching expected user behaviour and reducing risk of password changes.",
+        "If possible, reuse victims’ typical IP ranges via compromised endpoints to blend into IP-based anomaly detection."
+      ],
+      "resulting_access": "An authenticated Slack session under a legitimate user or admin account, obtained by phishing credentials and then logging in through Slack’s normal authentication flows.",
+      "comments": "Although credential theft is a separate tactic, this vector represents a common Initial Access pattern in SaaS environments: phishing specifically for SSO/Slack credentials and immediately using them to authenticate to Slack."
+    },
+    {
+      "can_achieve": false,
+      "technique_name": "Default Accounts",
+      "technique_stix_id": "T1078.001",
+      "method_steps": [],
+      "capabilities_used": [],
+      "interfaces_used": [],
+      "data_accessed": [],
+      "preconditions_required": [],
+      "constraints_encountered": [],
+      "evasion_considerations": [],
+      "resulting_access": "",
+      "comments": "Slack’s public documentation and the analyzed capability set do not describe any built-in default user accounts (for example, shared admin credentials or factory-set logins) that are accessible to customers or attackers. Account creation is driven by workspace owners, org admins, SCIM provisioning, and identity providers, and no static default passwords or usernames are documented. As a result, there is no realistic Initial Access vector based on abusing default Slack accounts; attackers must instead target provisioned cloud accounts, trusted identity integrations, or apps as covered in the other vectors."
+    }
+  ],
+  "summary": "Slack’s initial access surface is dominated by its identity integrations and app platform. Realistic entry points include use of compromised cloud identities (direct login with stolen Slack/SSO credentials or accounts injected via SCIM), consent phishing for malicious OAuth apps, abuse of stolen OAuth or service tokens, and exploitation of trusted relationships such as Slack Connect shared channels and widely deployed third-party apps. Public- or semi-public integration surfaces—app event/interaction endpoints and webhook-triggered workflows—add additional vectors when signature or webhook validation is weak. Default-account style access does not appear viable given Slack’s documented authentication and provisioning model."
+}
