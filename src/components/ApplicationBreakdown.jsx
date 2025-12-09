@@ -1,16 +1,15 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import AttackPaths from './AttackPaths'
 
 function ApplicationBreakdown({ appName }) {
   const [breakdownData, setBreakdownData] = useState(null)
   const [attackPathsData, setAttackPathsData] = useState(null)
-  const [initialAccessData, setInitialAccessData] = useState(null)
+  const [discoveryMap, setDiscoveryMap] = useState(new Map())
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
-  const [activeSection, setActiveSection] = useState('attack_analysis')
-  const [expandedAttackPaths, setExpandedAttackPaths] = useState(new Set())
-  const [expandedMethods, setExpandedMethods] = useState(new Set())
-  const [expandedInitialAccess, setExpandedInitialAccess] = useState(new Set())
+  const [activeSection, setActiveSection] = useState('attack_paths')
+  const [activeBreakdownSection, setActiveBreakdownSection] = useState('technical')
 
   useEffect(() => {
     const loadData = async () => {
@@ -43,20 +42,29 @@ function ApplicationBreakdown({ appName }) {
           setAttackPathsData(null)
         }
 
-        // Try to load initial access data (optional - may not exist)
+        // Try to load discovery data (optional - may not exist)
         try {
-          const initialAccessResponse = await fetch(`${baseUrl}data/initial_access/${appName}_initial_access_vectors.json`)
-          if (initialAccessResponse.ok) {
-            const initialAccessData = await initialAccessResponse.json()
-            setInitialAccessData(initialAccessData)
+          const discoveryResponse = await fetch(`${baseUrl}data/discovery/${appName}_discovery_vectors.json`)
+          if (discoveryResponse.ok) {
+            const discoveryData = await discoveryResponse.json()
+            // Create a map from initial access vector technique_name to discovery vectors
+            const map = new Map()
+            if (Array.isArray(discoveryData)) {
+              discoveryData.forEach(entry => {
+                if (entry.initial_access_vector && entry.initial_access_vector.technique_name) {
+                  map.set(entry.initial_access_vector.technique_name, entry.discovery_vectors || [])
+                }
+              })
+            }
+            setDiscoveryMap(map)
           } else {
-            // Initial access not available - set to null
-            setInitialAccessData(null)
+            // Discovery not available - set to empty map
+            setDiscoveryMap(new Map())
           }
-        } catch (initialAccessErr) {
-          // Initial access not available - set to null
-          console.log('Initial access data not available for this application')
-          setInitialAccessData(null)
+        } catch (discoveryErr) {
+          // Discovery not available - set to empty map
+          console.log('Discovery data not available for this application')
+          setDiscoveryMap(new Map())
         }
         
         setError(null)
@@ -72,7 +80,7 @@ function ApplicationBreakdown({ appName }) {
 
   if (loading) {
     return (
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
+      <div className="w-full h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="text-body text-gray-600 dark:text-gray-400">Loading...</div>
         </div>
@@ -82,7 +90,7 @@ function ApplicationBreakdown({ appName }) {
 
   if (error || !breakdownData) {
     return (
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
+      <div className="w-full h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="text-body text-red-600 dark:text-red-400 mb-4">
             {error || 'Failed to load application breakdown'}
@@ -250,8 +258,12 @@ function ApplicationBreakdown({ appName }) {
     </div>
   )
 
-  const sections = [
-    { id: 'attack_analysis', label: 'Attack Analysis' },
+  const mainSections = [
+    { id: 'attack_paths', label: 'Attack Paths' },
+    { id: 'app_breakdown', label: 'App Breakdown' },
+  ]
+
+  const breakdownSections = [
     { id: 'technical', label: 'Technical Components' },
     { id: 'admin', label: 'Admin & Operations' },
     { id: 'api', label: 'API & Integrations' },
@@ -259,54 +271,176 @@ function ApplicationBreakdown({ appName }) {
     { id: 'core', label: 'Core Product Capabilities' },
   ]
 
+  // For attack_paths, use full width layout
+  if (activeSection === 'attack_paths') {
+    return (
+      <div className="w-full h-screen flex flex-col">
+        {/* Modern Compact Sticky Header */}
+        <div className="sticky top-0 z-40 flex-shrink-0 bg-white/95 dark:bg-gray-950/95 backdrop-blur-sm border-b border-gray-200 dark:border-gray-800 shadow-sm">
+          <div className="px-4 lg:px-6">
+            {/* Top Row: Breadcrumb + Title + Metadata */}
+            <div className="h-14 flex items-center justify-between gap-4">
+              <div className="flex items-center gap-3 min-w-0 flex-1">
+                <Link
+                  to="/"
+                  className="flex items-center justify-center w-8 h-8 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors flex-shrink-0"
+                  aria-label="Back to home"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
+                </Link>
+                <div className="h-4 w-px bg-gray-300 dark:bg-gray-700 flex-shrink-0" />
+                <div className="min-w-0 flex-1">
+                  <h1 className="text-body-base font-semibold text-gray-900 dark:text-white truncate">
+                    {breakdownData.application_name}
+                  </h1>
+                  {breakdownData.generated_at && (
+                    <p className="text-body-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                      Generated {new Date(breakdownData.generated_at).toLocaleDateString()}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+            
+            {/* Bottom Row: Tabs */}
+            <div className="h-12 flex items-center gap-1 border-t border-gray-100 dark:border-gray-800">
+              {mainSections.map((section) => (
+                <button
+                  key={section.id}
+                  onClick={() => setActiveSection(section.id)}
+                  className={`
+                    relative h-full px-4 text-body-sm font-medium transition-all
+                    ${activeSection === section.id
+                      ? section.id === 'attack_paths'
+                        ? 'text-purple-700 dark:text-purple-300'
+                        : 'text-accent-primary dark:text-accent-primary'
+                      : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
+                    }
+                  `}
+                >
+                  <span className="relative z-10">{section.label}</span>
+                  {activeSection === section.id && (
+                    <span 
+                      className={`
+                        absolute bottom-0 left-0 right-0 h-0.5
+                        ${section.id === 'attack_paths'
+                          ? 'bg-purple-600 dark:bg-purple-400'
+                          : 'bg-accent-primary'
+                        }
+                      `}
+                    />
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+        
+        {/* Full width content */}
+        <div className="flex-1 overflow-auto">
+          <AttackPaths appName={appName} />
+        </div>
+      </div>
+    )
+  }
+
   return (
-    <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
-      <div className="mb-8">
-        <Link
-          to="/"
-          className="inline-flex items-center text-body-sm text-gray-600 dark:text-gray-400 hover:text-accent-primary transition-colors mb-4"
-        >
-          ← Back to Home
-        </Link>
-        <h1 className="text-display-lg font-bold text-gray-900 dark:text-white mb-2">
-          {breakdownData.application_name}
-        </h1>
-        {breakdownData.generated_at && (
-          <p className="text-body-sm text-gray-600 dark:text-gray-400">
-            Generated: {new Date(breakdownData.generated_at).toLocaleDateString()}
-          </p>
-        )}
+    <div className="w-full h-screen flex flex-col">
+      {/* Modern Compact Sticky Header */}
+      <div className="sticky top-0 z-40 flex-shrink-0 bg-white/95 dark:bg-gray-950/95 backdrop-blur-sm border-b border-gray-200 dark:border-gray-800 shadow-sm">
+        <div className="px-4 lg:px-6">
+          {/* Top Row: Breadcrumb + Title + Metadata */}
+          <div className="h-14 flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3 min-w-0 flex-1">
+              <Link
+                to="/"
+                className="flex items-center justify-center w-8 h-8 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors flex-shrink-0"
+                aria-label="Back to home"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+              </Link>
+              <div className="h-4 w-px bg-gray-300 dark:bg-gray-700 flex-shrink-0" />
+              <div className="min-w-0 flex-1">
+                <h1 className="text-body-base font-semibold text-gray-900 dark:text-white truncate">
+                  {breakdownData.application_name}
+                </h1>
+                {breakdownData.generated_at && (
+                  <p className="text-body-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                    Generated {new Date(breakdownData.generated_at).toLocaleDateString()}
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
+          
+          {/* Bottom Row: Main Tabs */}
+          <div className="h-12 flex items-center gap-1 border-t border-gray-100 dark:border-gray-800">
+            {mainSections.map((section) => (
+              <button
+                key={section.id}
+                onClick={() => setActiveSection(section.id)}
+                className={`
+                  relative h-full px-4 text-body-sm font-medium transition-all
+                  ${activeSection === section.id
+                    ? section.id === 'attack_paths'
+                      ? 'text-purple-700 dark:text-purple-300'
+                      : 'text-accent-primary dark:text-accent-primary'
+                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
+                  }
+                `}
+              >
+                <span className="relative z-10">{section.label}</span>
+                {activeSection === section.id && (
+                  <span 
+                    className={`
+                      absolute bottom-0 left-0 right-0 h-0.5
+                      ${section.id === 'attack_paths'
+                        ? 'bg-purple-600 dark:bg-purple-400'
+                        : 'bg-accent-primary'
+                      }
+                    `}
+                  />
+                )}
+              </button>
+            ))}
+          </div>
+          
+          {/* Sub-tabs Row: Only for App Breakdown */}
+          {activeSection === 'app_breakdown' && (
+            <div className="h-10 flex items-center gap-1 border-t border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-900/50">
+              {breakdownSections.map((section) => (
+                <button
+                  key={section.id}
+                  onClick={() => setActiveBreakdownSection(section.id)}
+                  className={`
+                    relative h-full px-3 text-body-xs font-medium transition-all
+                    ${activeBreakdownSection === section.id
+                      ? 'text-accent-primary dark:text-accent-primary'
+                      : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
+                    }
+                  `}
+                >
+                  <span className="relative z-10">{section.label}</span>
+                  {activeBreakdownSection === section.id && (
+                    <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-accent-primary" />
+                  )}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
 
-      <div className="space-y-6">
-        {/* Section Navigation */}
-        <div className="flex flex-wrap gap-2 border-b border-gray-200 dark:border-gray-700 pb-4">
-          {sections.map((section) => (
-            <button
-              key={section.id}
-              onClick={() => setActiveSection(section.id)}
-              className={`
-                px-4 py-2 rounded-lg text-body-sm font-medium transition-all
-                ${activeSection === section.id
-                  ? section.id === 'attack_analysis'
-                    ? 'bg-red-100 dark:bg-red-950/30 text-red-800 dark:text-red-300 border border-red-200 dark:border-red-900/50'
-                    : 'bg-accent-primary text-white'
-                  : section.id === 'attack_analysis'
-                    ? 'bg-red-50 dark:bg-red-950/10 text-red-700 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-950/20 border border-red-100 dark:border-red-900/30'
-                    : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
-                }
-              `}
-            >
-              {section.label}
-            </button>
-          ))}
-        </div>
-
-        {/* Content */}
-        <div>
-          {activeSection === 'core' && breakdownData.capability_map?.core_product_capabilities && (
+      {/* Content - Scrollable area */}
+      <div className="flex-1 overflow-y-auto px-4 lg:px-6 pb-6">
+        <div className={activeSection === 'app_breakdown' ? 'pt-6' : 'pt-4'}>
+          {activeSection === 'app_breakdown' && activeBreakdownSection === 'core' && breakdownData.capability_map?.core_product_capabilities && (
             <div>
-              <h3 className="text-h3 font-semibold text-gray-900 dark:text-white mb-6">
+              <h3 className="text-h4 font-semibold text-gray-900 dark:text-white mb-4">
                 Core Product Capabilities
               </h3>
               {breakdownData.capability_map.core_product_capabilities.map((cap, idx) => renderCapability(cap, idx))}
@@ -314,9 +448,9 @@ function ApplicationBreakdown({ appName }) {
           )}
 
           {/* Administrative and Operational Capabilities */}
-          {activeSection === 'admin' && breakdownData.capability_map?.administrative_and_operational_capabilities && (
+          {activeSection === 'app_breakdown' && activeBreakdownSection === 'admin' && breakdownData.capability_map?.administrative_and_operational_capabilities && (
             <div>
-              <h3 className="text-h3 font-semibold text-gray-900 dark:text-white mb-6">
+              <h3 className="text-h4 font-semibold text-gray-900 dark:text-white mb-4">
                 Administrative and Operational Capabilities
               </h3>
               {breakdownData.capability_map.administrative_and_operational_capabilities.map((cap, idx) => renderCapability(cap, idx))}
@@ -324,9 +458,9 @@ function ApplicationBreakdown({ appName }) {
           )}
 
           {/* API Surface and Integrations */}
-          {activeSection === 'api' && breakdownData.capability_map?.api_surface_and_integrations && (
+          {activeSection === 'app_breakdown' && activeBreakdownSection === 'api' && breakdownData.capability_map?.api_surface_and_integrations && (
             <div>
-              <h3 className="text-h3 font-semibold text-gray-900 dark:text-white mb-6">
+              <h3 className="text-h4 font-semibold text-gray-900 dark:text-white mb-4">
                 API Surface and Integrations
               </h3>
               {breakdownData.capability_map.api_surface_and_integrations.map((cap, idx) => renderCapability(cap, idx))}
@@ -334,9 +468,9 @@ function ApplicationBreakdown({ appName }) {
           )}
 
           {/* Background Jobs and Automation */}
-          {activeSection === 'automation' && breakdownData.capability_map?.background_jobs_and_automation && (
+          {activeSection === 'app_breakdown' && activeBreakdownSection === 'automation' && breakdownData.capability_map?.background_jobs_and_automation && (
             <div>
-              <h3 className="text-h3 font-semibold text-gray-900 dark:text-white mb-6">
+              <h3 className="text-h4 font-semibold text-gray-900 dark:text-white mb-4">
                 Background Jobs and Automation
               </h3>
               {breakdownData.capability_map.background_jobs_and_automation.map((cap, idx) => renderCapability(cap, idx))}
@@ -344,11 +478,11 @@ function ApplicationBreakdown({ appName }) {
           )}
 
           {/* Technical Components and Data Flows */}
-          {activeSection === 'technical' && breakdownData.technical_components_and_data_flows && (
+          {activeSection === 'app_breakdown' && activeBreakdownSection === 'technical' && breakdownData.technical_components_and_data_flows && (
             <div className="space-y-6">
               {breakdownData.technical_components_and_data_flows.services_or_modules && (
                 <div>
-                  <h3 className="text-h3 font-semibold text-gray-900 dark:text-white mb-4">
+                  <h3 className="text-h4 font-semibold text-gray-900 dark:text-white mb-4">
                     Services or Modules
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -431,654 +565,6 @@ function ApplicationBreakdown({ appName }) {
                       </div>
                     ))}
                   </div>
-                </div>
-              )}
-            </div>
-          )}
-
-
-          {/* Attack Analysis - Unified view for Attack Paths or Initial Access */}
-          {activeSection === 'attack_analysis' && (
-            <div>
-              <div className="flex items-center gap-3 mb-6">
-                <h3 className="text-h3 font-semibold text-gray-900 dark:text-white">
-                  Attack Analysis
-                </h3>
-                {!initialAccessData && attackPathsData && (
-                  <span className="inline-flex items-center px-2.5 py-1 rounded-md text-body-xs font-medium bg-blue-50 dark:bg-blue-950/20 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-900/30">
-                    Full Attack Paths
-                  </span>
-                )}
-                {initialAccessData && (
-                  <span className="inline-flex items-center px-2.5 py-1 rounded-md text-body-xs font-medium bg-green-50 dark:bg-green-950/20 text-green-700 dark:text-green-300 border border-green-200 dark:border-green-900/30">
-                    Initial Access Vectors
-                  </span>
-                )}
-              </div>
-
-              {/* Render Initial Access Vectors if available (prioritize over attack paths) */}
-              {initialAccessData && initialAccessData.initial_access_vectors && initialAccessData.initial_access_vectors.length > 0 ? (
-                <div className="space-y-4">
-                  {initialAccessData.initial_access_vectors.map((vector, idx) => {
-                    const isExpanded = expandedInitialAccess.has(idx)
-                    return (
-                      <div key={idx} className="bg-gray-50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
-                        {/* Clickable Header */}
-                        <button
-                          onClick={() => {
-                            const newExpanded = new Set(expandedInitialAccess)
-                            if (isExpanded) {
-                              newExpanded.delete(idx)
-                            } else {
-                              newExpanded.add(idx)
-                            }
-                            setExpandedInitialAccess(newExpanded)
-                          }}
-                          className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-left"
-                        >
-                          <div className="flex items-center gap-3 flex-1">
-                            <h4 className="text-h4 font-semibold text-gray-900 dark:text-white pr-4">
-                              {vector.technique_name}
-                            </h4>
-                            {vector.technique_stix_id && (
-                              <span className="inline-flex items-center px-2.5 py-1 rounded-md text-body-xs font-medium bg-blue-50 dark:bg-blue-950/20 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-900/30">
-                                {vector.technique_stix_id}
-                              </span>
-                            )}
-                            {vector.can_achieve !== undefined && (
-                              <span className={`inline-flex items-center px-2.5 py-1 rounded-md text-body-xs font-medium ${
-                                vector.can_achieve 
-                                  ? 'bg-green-50 dark:bg-green-950/20 text-green-700 dark:text-green-300 border border-green-200 dark:border-green-900/30'
-                                  : 'bg-red-50 dark:bg-red-950/20 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-900/30'
-                              }`}>
-                                {vector.can_achieve ? 'Achievable' : 'Not Achievable'}
-                              </span>
-                            )}
-                          </div>
-                          <svg
-                            className={`w-5 h-5 text-gray-600 dark:text-gray-400 transition-transform flex-shrink-0 ${isExpanded ? 'transform rotate-180' : ''}`}
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                          </svg>
-                        </button>
-
-                        {/* Collapsible Content */}
-                        {isExpanded && (
-                          <div className="px-6 pb-6 space-y-4">
-                            {/* Method Steps */}
-                            {vector.method_steps && vector.method_steps.length > 0 && (
-                              <div className="mb-6">
-                                <h5 className="text-body-sm font-semibold text-gray-900 dark:text-white mb-3">
-                                  Method Steps
-                                </h5>
-                                <div className="space-y-3">
-                                  {vector.method_steps.map((step, stepIdx) => (
-                                    <div key={stepIdx} className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4">
-                                      <div className="flex items-start gap-3 mb-2">
-                                        <div className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-500 text-white text-body-xs font-semibold flex items-center justify-center">
-                                          {step.step_id || stepIdx + 1}
-                                        </div>
-                                        <p className="text-body-sm text-gray-700 dark:text-gray-300 flex-1">
-                                          {step.description}
-                                        </p>
-                                      </div>
-                                      
-                                      {step.related_capabilities && step.related_capabilities.length > 0 && (
-                                        <div className="mt-3">
-                                          <div className="text-body-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Related Capabilities:</div>
-                                          <div className="flex flex-wrap gap-2">
-                                            {step.related_capabilities.map((cap, capIdx) => (
-                                              <span
-                                                key={capIdx}
-                                                className="inline-flex items-center px-2 py-0.5 rounded text-body-xs font-medium bg-orange-50 dark:bg-orange-950/20 text-orange-700 dark:text-orange-300"
-                                              >
-                                                {cap}
-                                              </span>
-                                            ))}
-                                          </div>
-                                        </div>
-                                      )}
-
-                                      {step.related_interfaces && step.related_interfaces.length > 0 && (
-                                        <div className="mt-3">
-                                          <div className="text-body-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Related Interfaces:</div>
-                                          <ul className="space-y-1">
-                                            {step.related_interfaces.map((iface, ifaceIdx) => (
-                                              <li key={ifaceIdx} className="text-body-xs text-gray-700 dark:text-gray-300">
-                                                {iface.startsWith('http') ? (
-                                                  <a href={iface} target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline">
-                                                    {iface}
-                                                  </a>
-                                                ) : (
-                                                  <span>{iface}</span>
-                                                )}
-                                              </li>
-                                            ))}
-                                          </ul>
-                                        </div>
-                                      )}
-
-                                      {step.related_data && step.related_data.length > 0 && (
-                                        <div className="mt-3">
-                                          <div className="text-body-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Related Data:</div>
-                                          <ul className="space-y-1">
-                                            {step.related_data.map((data, dataIdx) => (
-                                              <li key={dataIdx} className="text-body-xs text-gray-700 dark:text-gray-300 flex items-start gap-2">
-                                                <span className="text-green-600 dark:text-green-400 mt-1">•</span>
-                                                <span>{data}</span>
-                                              </li>
-                                            ))}
-                                          </ul>
-                                        </div>
-                                      )}
-
-                                      {step.notes && (
-                                        <div className="mt-3 p-2 bg-amber-50/50 dark:bg-amber-950/10 rounded border border-amber-200 dark:border-amber-900/30">
-                                          <p className="text-body-xs text-amber-700 dark:text-amber-300 italic">
-                                            {step.notes}
-                                          </p>
-                                        </div>
-                                      )}
-                                    </div>
-                                  ))}
-                                </div>
-                              </div>
-                            )}
-
-                            {/* Capabilities Used */}
-                            {vector.capabilities_used && vector.capabilities_used.length > 0 && (
-                              <div className="mb-4">
-                                <h5 className="text-body-sm font-semibold text-gray-900 dark:text-white mb-2">
-                                  Capabilities Used
-                                </h5>
-                                <div className="flex flex-wrap gap-2">
-                                  {vector.capabilities_used.map((capability, capIdx) => (
-                                    <span
-                                      key={capIdx}
-                                      className="inline-flex items-center px-2.5 py-1 rounded-md text-body-xs font-medium bg-orange-50 dark:bg-orange-950/20 text-orange-700 dark:text-orange-300 border border-orange-200 dark:border-orange-900/30"
-                                    >
-                                      {capability}
-                                    </span>
-                                  ))}
-                                </div>
-                              </div>
-                            )}
-
-                            {/* Interfaces Used */}
-                            {vector.interfaces_used && vector.interfaces_used.length > 0 && (
-                              <div className="mb-4">
-                                <h5 className="text-body-sm font-semibold text-gray-900 dark:text-white mb-2">
-                                  Interfaces Used
-                                </h5>
-                                <ul className="space-y-1">
-                                  {vector.interfaces_used.map((iface, ifaceIdx) => (
-                                    <li key={ifaceIdx} className="text-body-sm text-gray-700 dark:text-gray-300">
-                                      {iface.startsWith('http') ? (
-                                        <a href={iface} target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline">
-                                          {iface}
-                                        </a>
-                                      ) : (
-                                        <span>{iface}</span>
-                                      )}
-                                    </li>
-                                  ))}
-                                </ul>
-                              </div>
-                            )}
-
-                            {/* Data Accessed */}
-                            {vector.data_accessed && vector.data_accessed.length > 0 && (
-                              <div className="mb-4">
-                                <h5 className="text-body-sm font-semibold text-gray-900 dark:text-white mb-2">
-                                  Data Accessed
-                                </h5>
-                                <ul className="space-y-1">
-                                  {vector.data_accessed.map((data, dataIdx) => (
-                                    <li key={dataIdx} className="text-body-sm text-gray-700 dark:text-gray-300 flex items-start gap-2">
-                                      <span className="text-green-600 dark:text-green-400 mt-1">•</span>
-                                      <span>{data}</span>
-                                    </li>
-                                  ))}
-                                </ul>
-                              </div>
-                            )}
-
-                            {/* Preconditions Required */}
-                            {vector.preconditions_required && vector.preconditions_required.length > 0 && (
-                              <div className="mb-4 bg-amber-50/50 dark:bg-amber-950/10 rounded-lg p-3 border border-amber-200 dark:border-amber-900/30">
-                                <h5 className="text-body-sm font-semibold text-gray-900 dark:text-white mb-2">
-                                  Preconditions Required
-                                </h5>
-                                <ul className="space-y-1">
-                                  {vector.preconditions_required.map((precondition, precIdx) => (
-                                    <li key={precIdx} className="text-body-sm text-gray-700 dark:text-gray-300 flex items-start gap-2">
-                                      <span className="text-amber-600 dark:text-amber-400 mt-1">✓</span>
-                                      <span>{precondition}</span>
-                                    </li>
-                                  ))}
-                                </ul>
-                              </div>
-                            )}
-
-                            {/* Constraints Encountered */}
-                            {vector.constraints_encountered && vector.constraints_encountered.length > 0 && (
-                              <div className="mb-4 bg-yellow-50/50 dark:bg-yellow-950/10 rounded-lg p-3 border border-yellow-200 dark:border-yellow-900/30">
-                                <h5 className="text-body-sm font-semibold text-gray-900 dark:text-white mb-2">
-                                  Constraints Encountered
-                                </h5>
-                                <ul className="space-y-1">
-                                  {vector.constraints_encountered.map((constraint, constIdx) => (
-                                    <li key={constIdx} className="text-body-sm text-yellow-700 dark:text-yellow-300 flex items-start gap-2">
-                                      <span className="mt-1">⚠</span>
-                                      <span>{constraint}</span>
-                                    </li>
-                                  ))}
-                                </ul>
-                              </div>
-                            )}
-
-                            {/* Evasion Considerations */}
-                            {vector.evasion_considerations && vector.evasion_considerations.length > 0 && (
-                              <div className="mb-4 bg-purple-50/50 dark:bg-purple-950/10 rounded-lg p-3 border border-purple-200 dark:border-purple-900/30">
-                                <h5 className="text-body-sm font-semibold text-gray-900 dark:text-white mb-2">
-                                  Evasion Considerations
-                                </h5>
-                                <ul className="space-y-1">
-                                  {vector.evasion_considerations.map((evasion, evasIdx) => (
-                                    <li key={evasIdx} className="text-body-sm text-purple-700 dark:text-purple-300 flex items-start gap-2">
-                                      <span className="mt-1">🔒</span>
-                                      <span>{evasion}</span>
-                                    </li>
-                                  ))}
-                                </ul>
-                              </div>
-                            )}
-
-                            {/* Resulting Access */}
-                            {vector.resulting_access && (
-                              <div className="mb-4 bg-green-50/50 dark:bg-green-950/10 rounded-lg p-3 border border-green-200 dark:border-green-900/30">
-                                <h5 className="text-body-sm font-semibold text-gray-900 dark:text-white mb-2">
-                                  Resulting Access
-                                </h5>
-                                <p className="text-body-sm text-green-700 dark:text-green-300">
-                                  {vector.resulting_access}
-                                </p>
-                              </div>
-                            )}
-
-                            {/* Comments */}
-                            {vector.comments && (
-                              <div className="mb-4">
-                                <h5 className="text-body-sm font-semibold text-gray-900 dark:text-white mb-2">
-                                  Comments
-                                </h5>
-                                <p className="text-body-sm text-gray-600 dark:text-gray-400 italic">
-                                  {vector.comments}
-                                </p>
-                              </div>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                    )
-                  })}
-                </div>
-              ) : null}
-
-              {/* Render Attack Paths only if initial access is not available */}
-              {!initialAccessData && attackPathsData && attackPathsData.attack_paths && attackPathsData.attack_paths.length > 0 ? (
-                <div className="space-y-4">
-                  {attackPathsData.attack_paths.map((attackPath, idx) => {
-                    const isExpanded = expandedAttackPaths.has(idx)
-                    return (
-                      <div key={idx} className="bg-gray-50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
-                        {/* Clickable Header */}
-                        <button
-                          onClick={() => {
-                            const newExpanded = new Set(expandedAttackPaths)
-                            if (isExpanded) {
-                              newExpanded.delete(idx)
-                            } else {
-                              newExpanded.add(idx)
-                            }
-                            setExpandedAttackPaths(newExpanded)
-                          }}
-                          className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-left"
-                        >
-                          <h4 className="text-h4 font-semibold text-gray-900 dark:text-white pr-4">
-                            {attackPath.scenario_name}
-                          </h4>
-                          <svg
-                            className={`w-5 h-5 text-gray-600 dark:text-gray-400 transition-transform flex-shrink-0 ${isExpanded ? 'transform rotate-180' : ''}`}
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                          </svg>
-                        </button>
-
-                        {/* Collapsible Content */}
-                        {isExpanded && (
-                          <div className="px-6 pb-6 space-y-4">
-                            {/* Attack Target */}
-                            {attackPath.hypothesis?.attack_target && (
-                              <div className="mb-4">
-                                <h5 className="text-body-sm font-semibold text-gray-900 dark:text-white mb-2">
-                                  Attack Target
-                                </h5>
-                                <p className="text-body text-gray-700 dark:text-gray-300">
-                                  {attackPath.hypothesis.attack_target}
-                                </p>
-                              </div>
-                            )}
-
-                            {/* Preconditions */}
-                            {attackPath.hypothesis?.preconditions && (
-                              <div className="mb-4">
-                                <h5 className="text-body-sm font-semibold text-gray-900 dark:text-white mb-2">
-                                  Preconditions
-                                </h5>
-                                <p className="text-body-sm text-gray-700 dark:text-gray-300">
-                                  {attackPath.hypothesis.preconditions}
-                                </p>
-                              </div>
-                            )}
-
-                            {/* Attack Flow Hypothesis */}
-                            {attackPath.hypothesis?.attack_flow_hypothesis && attackPath.hypothesis.attack_flow_hypothesis.length > 0 && (
-                              <div className="mb-6">
-                                <h5 className="text-body-sm font-semibold text-gray-900 dark:text-white mb-3">
-                                  Attack Flow
-                                </h5>
-                                <div className="space-y-3">
-                                  {attackPath.hypothesis.attack_flow_hypothesis.map((step, stepIdx) => (
-                                    <div key={stepIdx} className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4">
-                                      <div className="flex items-start justify-between mb-2">
-                                        <h6 className="text-body font-medium text-gray-900 dark:text-white">
-                                          {step.step_name}
-                                        </h6>
-                                        <div className="flex flex-col items-end gap-1">
-                                          <span className="inline-flex items-center px-2.5 py-1 rounded-md text-body-xs font-medium bg-red-50 dark:bg-red-950/20 text-red-700 dark:text-red-300">
-                                            {step.step_mitre_tactic}
-                                          </span>
-                                          <span className="text-body-xs text-gray-600 dark:text-gray-400">
-                                            {step.step_mitre_technique}
-                                          </span>
-                                        </div>
-                                      </div>
-                                      <p className="text-body-sm text-gray-700 dark:text-gray-300">
-                                        {step.step_description}
-                                      </p>
-                                    </div>
-                                  ))}
-                                </div>
-                              </div>
-                            )}
-
-                            {/* Adversarial Methods */}
-                            {attackPath.adversarial_methods && attackPath.adversarial_methods.length > 0 && (
-                              <div className="mb-6">
-                                <h5 className="text-body-sm font-semibold text-gray-900 dark:text-white mb-4">
-                                  Adversarial Methods
-                                </h5>
-                                <div className="space-y-3">
-                                  {attackPath.adversarial_methods.map((method, methodIdx) => {
-                                    const methodKey = `${idx}-${methodIdx}`
-                                    const isMethodExpanded = expandedMethods.has(methodKey)
-                                    const hasSteps = method.method_steps && method.method_steps.length > 0
-                                    const stepCount = hasSteps ? method.method_steps.length : 0
-                                    
-                                    return (
-                                      <div key={methodIdx} className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
-                                        {/* Method Header - Always Visible */}
-                                        <button
-                                          onClick={() => {
-                                            const newExpanded = new Set(expandedMethods)
-                                            if (isMethodExpanded) {
-                                              newExpanded.delete(methodKey)
-                                            } else {
-                                              newExpanded.add(methodKey)
-                                            }
-                                            setExpandedMethods(newExpanded)
-                                          }}
-                                          className="w-full px-4 py-3 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors text-left"
-                                        >
-                                          <div className="flex-1">
-                                            <h6 className="text-body font-semibold text-gray-900 dark:text-white mb-1">
-                                              {method.tactic_name}
-                                            </h6>
-                                            {hasSteps && (
-                                              <div className="flex items-center gap-3 text-body-xs text-gray-500 dark:text-gray-400">
-                                                <span>{stepCount} step{stepCount !== 1 ? 's' : ''}</span>
-                                                {method.capabilities_used && method.capabilities_used.length > 0 && (
-                                                  <span>• {method.capabilities_used.length} capabilit{method.capabilities_used.length !== 1 ? 'ies' : 'y'}</span>
-                                                )}
-                                              </div>
-                                            )}
-                                          </div>
-                                          <svg
-                                            className={`w-4 h-4 text-gray-500 dark:text-gray-400 transition-transform flex-shrink-0 ml-2 ${isMethodExpanded ? 'transform rotate-180' : ''}`}
-                                            fill="none"
-                                            stroke="currentColor"
-                                            viewBox="0 0 24 24"
-                                          >
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                                          </svg>
-                                        </button>
-
-                                        {/* Collapsible Method Details */}
-                                        {isMethodExpanded && (
-                                          <div className="px-4 pb-4 space-y-4 border-t border-gray-200 dark:border-gray-700 pt-4">
-                                            {/* Method Steps - Enhanced with numbered cards */}
-                                            {hasSteps && (
-                                              <div>
-                                                <div className="flex items-center gap-2 mb-3">
-                                                  <svg className="w-4 h-4 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                                                  </svg>
-                                                  <div className="text-body-sm font-semibold text-gray-900 dark:text-white">
-                                                    Method Steps
-                                                  </div>
-                                                </div>
-                                                <div className="space-y-2">
-                                                  {method.method_steps.map((step, stepIdx) => (
-                                                    <div key={stepIdx} className="flex gap-3 p-3 bg-blue-50/50 dark:bg-blue-950/10 rounded-lg border-l-4 border-blue-500">
-                                                      <div className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-500 text-white text-body-xs font-semibold flex items-center justify-center">
-                                                        {stepIdx + 1}
-                                                      </div>
-                                                      <p className="text-body-sm text-gray-700 dark:text-gray-300 flex-1">
-                                                        {step}
-                                                      </p>
-                                                    </div>
-                                                  ))}
-                                                </div>
-                                              </div>
-                                            )}
-
-                                            {/* Quick Info Grid */}
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                              {/* Capabilities Used */}
-                                              {method.capabilities_used && method.capabilities_used.length > 0 && (
-                                                <div>
-                                                  <div className="flex items-center gap-2 mb-2">
-                                                    <svg className="w-4 h-4 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                    </svg>
-                                                    <div className="text-body-sm font-semibold text-gray-900 dark:text-white">
-                                                      Capabilities Used
-                                                    </div>
-                                                  </div>
-                                                  <div className="flex flex-wrap gap-2">
-                                                    {method.capabilities_used.map((capability, capIdx) => (
-                                                      <span
-                                                        key={capIdx}
-                                                        className="inline-flex items-center px-2.5 py-1 rounded-md text-body-xs font-medium bg-orange-50 dark:bg-orange-950/20 text-orange-700 dark:text-orange-300 border border-orange-200 dark:border-orange-900/30"
-                                                      >
-                                                        {capability}
-                                                      </span>
-                                                    ))}
-                                                  </div>
-                                                </div>
-                                              )}
-
-                                              {/* Data Accessed */}
-                                              {method.data_accessed && method.data_accessed.length > 0 && (
-                                                <div>
-                                                  <div className="flex items-center gap-2 mb-2">
-                                                    <svg className="w-4 h-4 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4" />
-                                                    </svg>
-                                                    <div className="text-body-sm font-semibold text-gray-900 dark:text-white">
-                                                      Data Accessed
-                                                    </div>
-                                                  </div>
-                                                  <ul className="space-y-1">
-                                                    {method.data_accessed.map((data, dataIdx) => (
-                                                      <li key={dataIdx} className="text-body-xs text-gray-700 dark:text-gray-300 flex items-start gap-2">
-                                                        <span className="text-green-600 dark:text-green-400 mt-1">•</span>
-                                                        <span>{data}</span>
-                                                      </li>
-                                                    ))}
-                                                  </ul>
-                                                </div>
-                                              )}
-                                            </div>
-
-                                            {/* Interfaces Used */}
-                                            {method.interfaces_used && method.interfaces_used.length > 0 && (
-                                              <div>
-                                                <div className="flex items-center gap-2 mb-2">
-                                                  <svg className="w-4 h-4 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                                  </svg>
-                                                  <div className="text-body-sm font-semibold text-gray-900 dark:text-white">
-                                                    Interfaces Used
-                                                  </div>
-                                                </div>
-                                                <ul className="space-y-1">
-                                                  {method.interfaces_used.map((iface, ifaceIdx) => (
-                                                    <li key={ifaceIdx} className="text-body-xs text-gray-700 dark:text-gray-300 flex items-start gap-2 pl-6">
-                                                      <span className="text-purple-600 dark:text-purple-400 mt-1">→</span>
-                                                      <span className="font-mono">{iface}</span>
-                                                    </li>
-                                                  ))}
-                                                </ul>
-                                              </div>
-                                            )}
-
-                                            {/* Preconditions Required */}
-                                            {method.preconditions_required && method.preconditions_required.length > 0 && (
-                                              <div className="bg-amber-50/50 dark:bg-amber-950/10 rounded-lg p-3 border border-amber-200 dark:border-amber-900/30">
-                                                <div className="flex items-center gap-2 mb-2">
-                                                  <svg className="w-4 h-4 text-amber-600 dark:text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                                                  </svg>
-                                                  <div className="text-body-sm font-semibold text-gray-900 dark:text-white">
-                                                    Preconditions Required
-                                                  </div>
-                                                </div>
-                                                <ul className="space-y-1">
-                                                  {method.preconditions_required.map((precondition, precIdx) => (
-                                                    <li key={precIdx} className="text-body-xs text-gray-700 dark:text-gray-300 flex items-start gap-2">
-                                                      <span className="text-amber-600 dark:text-amber-400 mt-1">✓</span>
-                                                      <span>{precondition}</span>
-                                                    </li>
-                                                  ))}
-                                                </ul>
-                                              </div>
-                                            )}
-
-                                            {/* Constraints & Evasion - Side by Side */}
-                                            {(method.constraints_encountered && method.constraints_encountered.length > 0) || 
-                                             (method.evasion_considerations && method.evasion_considerations.length > 0) ? (
-                                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                {/* Constraints Encountered */}
-                                                {method.constraints_encountered && method.constraints_encountered.length > 0 && (
-                                                  <div className="bg-yellow-50/50 dark:bg-yellow-950/10 rounded-lg p-3 border border-yellow-200 dark:border-yellow-900/30">
-                                                    <div className="flex items-center gap-2 mb-2">
-                                                      <svg className="w-4 h-4 text-yellow-600 dark:text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                                                      </svg>
-                                                      <div className="text-body-sm font-semibold text-gray-900 dark:text-white">
-                                                        Constraints
-                                                      </div>
-                                                    </div>
-                                                    <ul className="space-y-1">
-                                                      {method.constraints_encountered.map((constraint, constIdx) => (
-                                                        <li key={constIdx} className="text-body-xs text-yellow-700 dark:text-yellow-300 flex items-start gap-2">
-                                                          <span className="mt-1">⚠</span>
-                                                          <span>{constraint}</span>
-                                                        </li>
-                                                      ))}
-                                                    </ul>
-                                                  </div>
-                                                )}
-
-                                                {/* Evasion Considerations */}
-                                                {method.evasion_considerations && method.evasion_considerations.length > 0 && (
-                                                  <div className="bg-purple-50/50 dark:bg-purple-950/10 rounded-lg p-3 border border-purple-200 dark:border-purple-900/30">
-                                                    <div className="flex items-center gap-2 mb-2">
-                                                      <svg className="w-4 h-4 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                                                      </svg>
-                                                      <div className="text-body-sm font-semibold text-gray-900 dark:text-white">
-                                                        Evasion Considerations
-                                                      </div>
-                                                    </div>
-                                                    <ul className="space-y-1">
-                                                      {method.evasion_considerations.map((evasion, evasIdx) => (
-                                                        <li key={evasIdx} className="text-body-xs text-purple-700 dark:text-purple-300 flex items-start gap-2">
-                                                          <span className="mt-1">🔒</span>
-                                                          <span>{evasion}</span>
-                                                        </li>
-                                                      ))}
-                                                    </ul>
-                                                  </div>
-                                                )}
-                                              </div>
-                                            ) : null}
-                                          </div>
-                                        )}
-                                      </div>
-                                    )
-                                  })}
-                                </div>
-                              </div>
-                            )}
-
-                            {/* Attack Chain Summary Steps */}
-                            {attackPath.attack_chain_summary_steps && attackPath.attack_chain_summary_steps.length > 0 && (
-                              <div>
-                                <h5 className="text-body-sm font-semibold text-gray-900 dark:text-white mb-3">
-                                  Attack Chain Summary
-                                </h5>
-                                <ol className="list-decimal list-inside space-y-2">
-                                  {attackPath.attack_chain_summary_steps.map((step, stepIdx) => (
-                                    <li key={stepIdx} className="text-body-sm text-gray-700 dark:text-gray-300">
-                                      {step}
-                                    </li>
-                                  ))}
-                                </ol>
-                              </div>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                    )
-                  })}
-                </div>
-              ) : null}
-
-              {/* Show message if neither is available */}
-              {!attackPathsData && !initialAccessData && (
-                <div className="bg-gray-50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-700 rounded-lg p-8 text-center">
-                  <p className="text-body text-gray-600 dark:text-gray-400">
-                    Attack analysis data is not available for this application.
-                  </p>
                 </div>
               )}
             </div>

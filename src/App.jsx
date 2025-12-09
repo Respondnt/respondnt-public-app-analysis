@@ -1,13 +1,14 @@
 import { BrowserRouter, Routes, Route, Link, useParams } from 'react-router-dom'
 import ApplicationBreakdown from './components/ApplicationBreakdown'
+import DiscoveryVectors from './components/DiscoveryVectors'
 import Home from './components/Home'
 
 function App() {
   return (
     <BrowserRouter basename="/">
-      <div className="min-h-screen bg-white dark:bg-gray-950">
-        <header className="fixed top-0 left-0 right-0 z-40 bg-white/80 dark:bg-gray-950/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
-          <nav className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div className="h-screen bg-white dark:bg-gray-950 flex flex-col overflow-hidden">
+        <header className="flex-shrink-0 z-40 bg-white/80 dark:bg-gray-950/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
+          <nav className="w-full px-6 py-4 flex items-center justify-between">
             <Link to="/" className="flex items-center gap-3 text-h4 font-semibold text-gray-900 dark:text-white hover:text-accent-primary transition-colors">
               <img src="/logo.png" alt="Respondnt Logo" className="h-8 w-8 object-contain" />
               Respondnt
@@ -24,10 +25,11 @@ function App() {
             </div>
           </nav>
         </header>
-        <main className="pt-20">
+        <main className="flex-1 overflow-hidden">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/app/:appName" element={<AppView />} />
+            <Route path="/app/:appName/discovery/:techniqueName" element={<DiscoveryView />} />
           </Routes>
         </main>
       </div>
@@ -38,6 +40,13 @@ function App() {
 function AppView() {
   const { appName } = useParams()
   return <ApplicationBreakdown appName={appName} />
+}
+
+function DiscoveryView() {
+  const { appName, techniqueName } = useParams()
+  // Decode the technique name from URL encoding
+  const decodedTechniqueName = techniqueName ? decodeURIComponent(techniqueName) : ''
+  return <DiscoveryVectors appName={appName} techniqueName={decodedTechniqueName} />
 }
 
 export default App
