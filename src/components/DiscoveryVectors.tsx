@@ -1,16 +1,55 @@
 import { useState, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 
-function DiscoveryVectors({ appName, techniqueName }) {
-  const [discoveryData, setDiscoveryData] = useState(null)
-  const [initialAccessVector, setInitialAccessVector] = useState(null)
-  const [discoveryVectors, setDiscoveryVectors] = useState([])
+interface MethodStep {
+  step_id?: string | number
+  description: string
+  related_capabilities?: string[]
+  related_interfaces?: string[]
+  related_data?: string[]
+  notes?: string
+}
+
+interface DiscoveryVector {
+  technique_name: string
+  technique_stix_id?: string
+  can_achieve?: boolean
+  method_steps?: MethodStep[]
+  capabilities_used?: string[]
+  interfaces_used?: string[]
+  data_accessed?: string[]
+  preconditions_required?: string[]
+  constraints_encountered?: string[]
+  evasion_considerations?: string[]
+  resulting_access?: string
+  comments?: string
+}
+
+interface InitialAccessVector {
+  technique_name: string
+  technique_stix_id?: string
+}
+
+interface DiscoveryDataEntry {
+  initial_access_vector: InitialAccessVector
+  discovery_vectors: DiscoveryVector[]
+}
+
+interface DiscoveryVectorsProps {
+  appName: string
+  techniqueName: string
+}
+
+function DiscoveryVectors({ appName, techniqueName }: DiscoveryVectorsProps): JSX.Element {
+  const [discoveryData, setDiscoveryData] = useState<DiscoveryDataEntry[] | null>(null)
+  const [initialAccessVector, setInitialAccessVector] = useState<InitialAccessVector | null>(null)
+  const [discoveryVectors, setDiscoveryVectors] = useState<DiscoveryVector[]>([])
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-  const [expandedDiscovery, setExpandedDiscovery] = useState(new Set())
+  const [error, setError] = useState<string | null>(null)
+  const [expandedDiscovery, setExpandedDiscovery] = useState<Set<number>>(new Set())
 
   useEffect(() => {
-    const loadData = async () => {
+    const loadData = async (): Promise<void> => {
       try {
         setLoading(true)
         const baseUrl = import.meta.env.BASE_URL
@@ -20,7 +59,7 @@ function DiscoveryVectors({ appName, techniqueName }) {
         if (!discoveryResponse.ok) {
           throw new Error(`Failed to load discovery data: ${discoveryResponse.statusText}`)
         }
-        const discoveryData = await discoveryResponse.json()
+        const discoveryData = await discoveryResponse.json() as DiscoveryDataEntry[]
         setDiscoveryData(discoveryData)
         
         // Find the entry that matches the technique name
@@ -41,7 +80,7 @@ function DiscoveryVectors({ appName, techniqueName }) {
         setError(null)
       } catch (err) {
         console.error('Error loading discovery vectors:', err)
-        setError(err.message)
+        setError(err instanceof Error ? err.message : 'Unknown error')
       } finally {
         setLoading(false)
       }
@@ -77,7 +116,7 @@ function DiscoveryVectors({ appName, techniqueName }) {
     )
   }
 
-  const renderDiscoveryVector = (discoveryVector, idx) => {
+  const renderDiscoveryVector = (discoveryVector: DiscoveryVector, idx: number): JSX.Element => {
     const isExpanded = expandedDiscovery.has(idx)
     return (
       <div key={idx} className="bg-gray-50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">

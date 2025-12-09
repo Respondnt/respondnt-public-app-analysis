@@ -1,12 +1,12 @@
-import { defineConfig } from 'vite'
+import { defineConfig, Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
-import { copyFileSync, mkdirSync, readdirSync, statSync, existsSync } from 'fs'
+import { copyFileSync, mkdirSync, readdirSync, existsSync, Dirent } from 'fs'
 import { join } from 'path'
 
 // Helper function to recursively copy directory
-function copyDir(src, dest) {
+function copyDir(src: string, dest: string): void {
     mkdirSync(dest, { recursive: true })
-    const entries = readdirSync(src, { withFileTypes: true })
+    const entries: Dirent[] = readdirSync(src, { withFileTypes: true })
 
     for (const entry of entries) {
         const srcPath = join(src, entry.name)
@@ -26,7 +26,7 @@ export default defineConfig({
         react(),
         {
             name: 'copy-data-files',
-            closeBundle() {
+            closeBundle(): void {
                 // Copy data files to dist after build
                 const dataDir = join(process.cwd(), 'data')
                 const distDataDir = join(process.cwd(), 'dist', 'data')
@@ -42,7 +42,7 @@ export default defineConfig({
                     copyFileSync(indexPath, notFoundPath)
                 }
             }
-        }
+        } as Plugin
     ],
     base: '/',
     publicDir: 'public',

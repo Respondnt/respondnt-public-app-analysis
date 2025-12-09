@@ -1,5 +1,7 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect } from 'react'
 import PathVisualization from './PathVisualization'
+import type { AttackPathsData, Technique, TechniqueInfo, Finding, TechniqueSpecificInfo } from '../types'
+import { loadAttackPathsData } from '../utils/dataLoaders'
 
 // MITRE ATT&CK Tactics in order
 const MITRE_TACTICS = [
@@ -15,93 +17,84 @@ const MITRE_TACTICS = [
   'Command and Control',
   'Exfiltration',
   'Impact',
-]
+] as const
 
-function AttackPaths({ appName }) {
-  const [attackPathsData, setAttackPathsData] = useState(null)
-  const [techniquesByTactic, setTechniquesByTactic] = useState(new Map())
-  const [findingsByTechnique, setFindingsByTechnique] = useState(new Map())
+type ViewType = 'matrix' | 'technique' | 'finding' | 'path-visualization'
+
+interface AttackPathsProps {
+  appName: string
+}
+
+function AttackPaths({ appName }: AttackPathsProps): JSX.Element {
+  const [attackPathsData, setAttackPathsData] = useState<AttackPathsData | null>(null)
+  const [techniquesByTactic, setTechniquesByTactic] = useState<Map<string, Map<string, Technique>>>(new Map())
+  const [findingsByTechnique, setFindingsByTechnique] = useState<Map<string, Finding[]>>(new Map())
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-  const [view, setView] = useState('matrix') // 'matrix' | 'technique' | 'finding' | 'path-visualization'
-  const [selectedTechnique, setSelectedTechnique] = useState(null) // { tactic, techniqueKey, technique }
-  const [selectedFinding, setSelectedFinding] = useState(null) // attack path object
-  const [selectedTactics, setSelectedTactics] = useState(new Set()) // Set of tactic names to display
+  const [error, setError] = useState<string | null>(null)
+  const [view, setView] = useState<ViewType>('matrix')
+  const [selectedTechnique, setSelectedTechnique] = useState<TechniqueInfo | null>(null)
+  const [selectedFinding, setSelectedFinding] = useState<Finding | null>(null)
+  const [selectedTactics, setSelectedTactics] = useState<Set<string>>(new Set())
   const [dropdownOpen, setDropdownOpen] = useState(false)
-  const [pathVisualizationFinding, setPathVisualizationFinding] = useState(null) // Finding to visualize
+  const [pathVisualizationFinding, setPathVisualizationFinding] = useState<Finding | null>(null)
+  const [selectedFindingForTechnique, setSelectedFindingForTechnique] = useState<Finding | null>(null)
 
   useEffect(() => {
-    const loadData = async () => {
+    const loadData = async (): Promise<void> => {
       try {
         setLoading(true)
         const baseUrl = import.meta.env.BASE_URL
-        
-        const attackPathsResponse = await fetch(`${baseUrl}data/attack_paths/${appName}_attack_paths.json`)
-        if (!attackPathsResponse.ok) {
-          throw new Error(`Failed to load attack paths data: ${attackPathsResponse.statusText}`)
-        }
-        const attackPathsData = await attackPathsResponse.json()
+
+        // Use the data loader with fallback logic
+        const attackPathsData = await loadAttackPathsData(baseUrl, appName)
         setAttackPathsData(attackPathsData)
-        
+
         // Extract all techniques and group by tactic, tracking which findings use each
-        const techniquesMap = new Map()
-        const findingsMap = new Map()
-        
+        const techniquesMap = new Map<string, Map<string, Technique>>()
+        const findingsMap = new Map<string, Finding[]>()
+
         // Helper function to extract MITRE technique ID from a string
-        const extractTechniqueId = (str) => {
+        const extractTechniqueId = (str: string | null | undefined): string | null => {
           if (!str) return null
           const match = str.match(/T\d{4}(\.\d{3})?/)
           return match ? match[0] : null
         }
-        
-        // Helper function to create a technique object from attack flow step
-        const createTechniqueFromStep = (step, tacticName) => {
-          const techniqueId = extractTechniqueId(step.step_mitre_technique)
-          if (!techniqueId) return null
-          
-          // Extract technique name from step_mitre_technique (format: "T1078 – Valid Accounts")
-          const nameMatch = step.step_mitre_technique.match(/T\d{4}(\.\d{3})?\s*[–-]\s*(.+)/)
-          const techniqueName = nameMatch ? nameMatch[2].trim() : step.step_mitre_technique
-          
-          return {
-            stix_id: `attack-pattern--${techniqueId.toLowerCase().replace(/\./g, '-')}`,
-            name: techniqueName,
-            rationale: step.step_description || null,
-          }
-        }
-        
+
+
         if (attackPathsData.attack_paths && Array.isArray(attackPathsData.attack_paths)) {
           attackPathsData.attack_paths.forEach((attackPath) => {
             if (attackPath.adversarial_methods && Array.isArray(attackPath.adversarial_methods)) {
               attackPath.adversarial_methods.forEach((method) => {
                 const tacticName = method.tactic_name
                 if (!tacticName) return
-                
+
                 if (!techniquesMap.has(tacticName)) {
                   techniquesMap.set(tacticName, new Map())
                 }
-                
+
                 const tacticMap = techniquesMap.get(tacticName)
-                
+                if (!tacticMap) return
+
                 // First, try to use selected_techniques if available
                 if (method.selected_techniques && Array.isArray(method.selected_techniques)) {
                   method.selected_techniques.forEach((technique) => {
                     const techniqueKey = technique.stix_id || technique.name
                     const fullKey = `${tacticName}::${techniqueKey}`
-                    
+
                     if (!tacticMap.has(techniqueKey)) {
                       tacticMap.set(techniqueKey, {
                         ...technique,
                         tactic: tacticName,
                       })
                     }
-                    
+
                     // Track findings for this technique
                     if (!findingsMap.has(fullKey)) {
                       findingsMap.set(fullKey, [])
                     }
-                    
+
                     const findings = findingsMap.get(fullKey)
+                    if (!findings) return
                     // Add attack path if not already present
                     if (!findings.find(f => f.scenario_name === attackPath.scenario_name)) {
                       findings.push({
@@ -117,54 +110,57 @@ function AttackPaths({ appName }) {
                   const matchingSteps = attackFlow.filter(
                     step => step.step_mitre_tactic === tacticName
                   )
-                  
+
                   // Extract unique techniques from matching steps
                   // Steps can have multiple techniques separated by semicolons
-                  const seenTechniqueKeys = new Set()
+                  const seenTechniqueKeys = new Set<string>()
                   matchingSteps.forEach((step) => {
+                    if (!step) return
                     // Split by semicolon to get all techniques in the step
                     const techniqueStrings = (step.step_mitre_technique || '').split(';').map(s => s.trim()).filter(s => s)
-                    
+
                     techniqueStrings.forEach((techniqueStr) => {
                       const techniqueId = extractTechniqueId(techniqueStr)
                       if (!techniqueId) return
-                      
+
                       // Create technique key from ID
                       const techniqueKey = `attack-pattern--${techniqueId.toLowerCase().replace(/\./g, '-')}`
-                      
+
                       // Skip if we've already processed this technique for this attack path
                       if (seenTechniqueKeys.has(techniqueKey)) return
                       seenTechniqueKeys.add(techniqueKey)
-                      
+
                       // Extract technique name from the string (format: "T1078 – Valid Accounts")
                       const nameMatch = techniqueStr.match(/T\d{4}(\.\d{3})?\s*[–-]\s*(.+)/)
-                      const techniqueName = nameMatch ? nameMatch[2].trim() : techniqueStr
-                      
-                      const technique = {
+                      const techniqueName = nameMatch && nameMatch[2] ? nameMatch[2].trim() : techniqueStr
+
+                      const technique: Technique = {
                         stix_id: techniqueKey,
                         name: techniqueName,
-                        rationale: step.step_description || null,
+                        rationale: step.step_description || undefined,
                         tactic: tacticName,
                       }
-                      
+
                       const fullKey = `${tacticName}::${techniqueKey}`
-                      
+
                       if (!tacticMap.has(techniqueKey)) {
                         tacticMap.set(techniqueKey, technique)
                       }
-                      
+
                       // Track findings for this technique
                       if (!findingsMap.has(fullKey)) {
                         findingsMap.set(fullKey, [])
                       }
-                      
+
                       const findings = findingsMap.get(fullKey)
-                      // Add attack path if not already present
-                      if (!findings.find(f => f.scenario_name === attackPath.scenario_name)) {
-                        findings.push({
-                          ...attackPath,
-                          method: method, // Store the specific method that uses this technique
-                        })
+                      if (findings) {
+                        // Add attack path if not already present
+                        if (!findings.find(f => f.scenario_name === attackPath.scenario_name)) {
+                          findings.push({
+                            ...attackPath,
+                            method: method, // Store the specific method that uses this technique
+                          })
+                        }
                       }
                     })
                   })
@@ -173,37 +169,34 @@ function AttackPaths({ appName }) {
             }
           })
         }
-        
+
         setTechniquesByTactic(techniquesMap)
         setFindingsByTechnique(findingsMap)
-        
+
         // Initialize selected tactics to all tactics that have techniques
         const tacticsWithTechniques = Array.from(techniquesMap.keys())
         setSelectedTactics(new Set(tacticsWithTechniques))
-        
+
         setError(null)
       } catch (err) {
         console.error('Error loading attack paths:', err)
-        setError(err.message)
+        setError(err instanceof Error ? err.message : 'Unknown error')
       } finally {
         setLoading(false)
       }
     }
-    
+
     loadData()
   }, [appName])
 
-  const handleTechniqueClick = (tactic, techniqueKey, technique) => {
+  const handleTechniqueClick = (tactic: string, techniqueKey: string, technique: Technique): void => {
     setSelectedTechnique({ tactic, techniqueKey, technique })
     setView('technique')
+    setSelectedFindingForTechnique(null) // Reset selected finding when switching techniques
   }
 
-  const handleFindingClick = (finding) => {
-    setSelectedFinding(finding)
-    setView('finding')
-  }
 
-  const handleBack = () => {
+  const handleBack = (): void => {
     if (view === 'path-visualization') {
       setView('technique')
       setPathVisualizationFinding(null)
@@ -216,13 +209,13 @@ function AttackPaths({ appName }) {
     }
   }
 
-  const handleViewInContext = (finding) => {
+  const handleViewInContext = (finding: Finding): void => {
     setPathVisualizationFinding(finding)
     setView('path-visualization')
   }
 
   // Helper function to extract MITRE technique ID from a string
-  const extractTechniqueIdFromKey = (key) => {
+  const extractTechniqueIdFromKey = (key: string): string | null => {
     // Try to extract from STIX ID format: "attack-pattern--t1078-..."
     const stixMatch = key.match(/attack-pattern--t(\d{4}(?:\.\d{3})?)/i)
     if (stixMatch) {
@@ -237,7 +230,7 @@ function AttackPaths({ appName }) {
   }
 
   // Helper function to get technique-specific information from a finding
-  const getTechniqueSpecificInfo = (finding, techniqueKey, techniqueName, tacticName) => {
+  const getTechniqueSpecificInfo = (finding: Finding, techniqueKey: string, techniqueName: string | undefined, tacticName: string): TechniqueSpecificInfo | null => {
     if (!finding.adversarial_methods || !Array.isArray(finding.adversarial_methods)) {
       return null
     }
@@ -251,10 +244,21 @@ function AttackPaths({ appName }) {
       if (tacticName && method.tactic_name && method.tactic_name.toLowerCase() !== tacticName.toLowerCase()) {
         continue
       }
-      // Case 1: Method has selected_techniques (Slack format)
+      // Case 1: Method has selected_techniques (Slack format or Box/Klaviyo format)
       if (method.selected_techniques && Array.isArray(method.selected_techniques)) {
         const technique = method.selected_techniques.find(
-          (t) => (t.stix_id || t.name) === techniqueKey
+          (t) => {
+            // Try exact match first
+            if ((t.stix_id || t.name) === techniqueKey) return true
+            // Try case-insensitive match
+            if (t.stix_id && t.stix_id.toLowerCase() === techniqueKey.toLowerCase()) return true
+            if (t.name && t.name.toLowerCase() === techniqueKey.toLowerCase()) return true
+            // Try matching by extracted MITRE ID
+            const tId = extractTechniqueIdFromKey(t.stix_id || '') || extractTechniqueIdFromKey(t.name || '')
+            const keyId = extractTechniqueIdFromKey(techniqueKey)
+            if (tId && keyId && tId.toUpperCase() === keyId.toUpperCase()) return true
+            return false
+          }
         )
         if (technique) {
           // Filter attack flow steps to only those matching this technique
@@ -264,105 +268,129 @@ function AttackPaths({ appName }) {
             const stepTechnique = (step.step_mitre_technique || '').toLowerCase()
             const stepTactic = (step.step_mitre_tactic || '').toLowerCase()
             const methodTactic = (method.tactic_name || '').toLowerCase()
-            
+
             // Extract MITRE technique IDs from step (e.g., "T1566", "T1199")
             const stepTechniqueIds = stepTechnique.match(/T\d{4}(\.\d{3})?/gi) || []
-            
+
             // Try to extract technique ID from STIX ID or name
             let stepTechniqueId = null
             const techniqueNameStr = (techniqueName || technique.name || '').toLowerCase()
-            
+
             // Look for T numbers in the technique name or description
             const nameMatch = techniqueNameStr.match(/T\d{4}(\.\d{3})?/i)
             if (nameMatch) {
               stepTechniqueId = nameMatch[0]
             }
-            
+
             // Match by MITRE technique ID if found
             if (stepTechniqueId && stepTechniqueIds.some(id => id.toUpperCase() === stepTechniqueId.toUpperCase())) {
               return true
             }
-            
+
             // Match by technique name - check if step's technique description contains the technique name
             // Remove common words and focus on key terms
             const keyWords = techniqueNameStr
               .split(/\s+/)
               .filter(word => word.length > 3 && !['and', 'the', 'via', 'for', 'with'].includes(word))
-            
+
             if (keyWords.length > 0) {
               const hasKeyWord = keyWords.some(word => stepTechnique.includes(word))
               if (hasKeyWord && stepTactic === methodTactic) {
                 return true
               }
             }
-            
+
             // As a last resort, if the step is in the same tactic and we can't match by name/ID,
             // only include it if this method is the only one in this tactic for this finding
             // This prevents showing steps from other techniques in the same tactic
             const methodsInSameTactic = finding.adversarial_methods?.filter(
               m => m.tactic_name?.toLowerCase() === methodTactic
             ) || []
-            
+
             if (stepTactic === methodTactic && methodsInSameTactic.length === 1) {
               // Only one method in this tactic, so steps likely belong to this technique
               return true
             }
-            
+
             return false
           })
+
+          // If no attack flow steps found (e.g., for Box/Klaviyo initial access data),
+          // use method_steps directly instead
+          const finalMethodSteps = techniqueSteps.length > 0
+            ? techniqueSteps
+            : (method.method_steps || []).map((step, idx) => {
+              // Format step name - use step_id if available, otherwise use index
+              const stepName = step.step_id
+                ? `Step ${step.step_id}`
+                : `Step ${idx + 1}`
+
+              // Format technique display - include both ID and name if available
+              const techniqueDisplay = technique.stix_id && technique.name
+                ? `${technique.stix_id} – ${technique.name}`
+                : (technique.stix_id || technique.name || '')
+
+              return {
+                step_name: stepName,
+                step_description: step.description || '',
+                step_mitre_tactic: method.tactic_name || '',
+                step_mitre_technique: techniqueDisplay,
+              }
+            })
 
           return {
             method,
             technique,
             rationale: technique.rationale,
-            methodSteps: techniqueSteps, // Only show matching attack flow steps
-            allMethodSteps: method.method_steps || [], // Keep all for reference if needed
+            methodSteps: finalMethodSteps,
+            allMethodSteps: method.method_steps || [],
           }
         }
       }
-      
+
       // Case 2: Method doesn't have selected_techniques (1password/miro format)
       // Match by tactic and extract technique from attack flow steps
       if (techniqueId) {
         const methodTactic = (method.tactic_name || '').toLowerCase()
         const attackFlow = finding.hypothesis?.attack_flow_hypothesis || []
-        
+
         // Helper to check if technique IDs match (handles sub-techniques)
         // T1098.003 matches T1098, and T1098 matches T1098.003
-        const techniqueIdsMatch = (id1, id2) => {
+        const techniqueIdsMatch = (id1: string, id2: string): boolean => {
           const base1 = id1.split('.')[0]
           const base2 = id2.split('.')[0]
           return base1 === base2
         }
-        
+
         // Find steps that match both the tactic and the technique ID
         const matchingSteps = attackFlow.filter((step) => {
           const stepTactic = (step.step_mitre_tactic || '').toLowerCase()
-          
+
           // Check if tactic matches
           if (stepTactic !== methodTactic) return false
-          
+
           // Split by semicolon to handle multiple techniques in one step
           const stepTechniqueStrings = (step.step_mitre_technique || '').split(';').map(s => s.trim()).filter(s => s)
-          
+
           // Check if any technique in the step matches our technique ID
           return stepTechniqueStrings.some((techniqueStr) => {
             const stepTechniqueIds = techniqueStr.match(/T\d{4}(\.\d{3})?/gi) || []
             return stepTechniqueIds.some(id => techniqueIdsMatch(id.toUpperCase(), techniqueId.toUpperCase()))
           })
         })
-        
-        if (matchingSteps.length > 0) {
+
+        if (matchingSteps.length > 0 && matchingSteps[0]) {
           // Find the specific technique name from the matching steps
           let techniqueNameFromStep = techniqueName
           for (const step of matchingSteps) {
+            if (!step) continue
             const stepTechniqueStrings = (step.step_mitre_technique || '').split(';').map(s => s.trim()).filter(s => s)
             for (const techniqueStr of stepTechniqueStrings) {
               const stepTechniqueIds = techniqueStr.match(/T\d{4}(\.\d{3})?/gi) || []
               if (stepTechniqueIds.some(id => techniqueIdsMatch(id.toUpperCase(), techniqueId.toUpperCase()))) {
                 // Extract name from this technique string
                 const nameMatch = techniqueStr.match(/T\d{4}(\.\d{3})?\s*[–-]\s*(.+)/)
-                if (nameMatch) {
+                if (nameMatch && nameMatch[2]) {
                   techniqueNameFromStep = nameMatch[2].trim()
                   break
                 }
@@ -370,13 +398,14 @@ function AttackPaths({ appName }) {
             }
             if (techniqueNameFromStep !== techniqueName) break
           }
-          
-          const technique = {
+
+          const firstStep = matchingSteps[0]
+          const technique: Technique = {
             stix_id: techniqueKey,
-            name: techniqueNameFromStep,
-            rationale: matchingSteps[0].step_description || null,
+            name: techniqueNameFromStep || techniqueName || 'Unknown',
+            rationale: firstStep?.step_description || undefined,
           }
-          
+
           return {
             method,
             technique,
@@ -416,16 +445,34 @@ function AttackPaths({ appName }) {
   if (view === 'technique' && selectedTechnique) {
     const fullKey = `${selectedTechnique.tactic}::${selectedTechnique.techniqueKey}`
     const findings = findingsByTechnique.get(fullKey) || []
-    
-    // Get technique info from the first finding
-    const firstFinding = findings[0]
-    const techniqueInfo = firstFinding ? getTechniqueSpecificInfo(
-      firstFinding,
+
+    // Use selected finding if available, otherwise use first finding
+    const activeFinding = selectedFindingForTechnique || findings[0]
+    const techniqueInfo = activeFinding ? getTechniqueSpecificInfo(
+      activeFinding,
       selectedTechnique.techniqueKey,
       selectedTechnique.technique.name,
       selectedTechnique.tactic
     ) : null
-    
+
+    // Extract MITRE technique ID for display
+    let mitreTechniqueId: string | null = null
+    if (techniqueInfo && techniqueInfo.methodSteps && techniqueInfo.methodSteps.length > 0) {
+      const firstStep = techniqueInfo.methodSteps[0]
+      if (firstStep && firstStep.step_mitre_technique) {
+        const mitreMatch = firstStep.step_mitre_technique.match(/T\d{4}(\.\d{3})?/g)
+        if (mitreMatch && mitreMatch.length > 0) {
+          mitreTechniqueId = mitreMatch[0]
+        }
+      }
+    }
+    if (!mitreTechniqueId && selectedTechnique.technique.name) {
+      const nameMatch = selectedTechnique.technique.name.match(/T\d{4}(\.\d{3})?/)
+      if (nameMatch) {
+        mitreTechniqueId = nameMatch[0]
+      }
+    }
+
     return (
       <div className="w-full h-full flex flex-col overflow-hidden">
         <div className="flex-shrink-0 px-6 lg:px-8 py-4 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
@@ -445,42 +492,20 @@ function AttackPaths({ appName }) {
                 <h2 className="text-body-base font-semibold text-gray-900 dark:text-white truncate">
                   {selectedTechnique.technique.name}
                 </h2>
-                {(() => {
-                  // Extract MITRE technique ID from attack flow steps or technique name
-                  let mitreTechniqueId = null
-                  if (techniqueInfo && techniqueInfo.methodSteps && techniqueInfo.methodSteps.length > 0) {
-                    // Get MITRE technique ID from the first step
-                    const firstStep = techniqueInfo.methodSteps[0]
-                    if (firstStep.step_mitre_technique) {
-                      const mitreMatch = firstStep.step_mitre_technique.match(/T\d{4}(\.\d{3})?/g)
-                      if (mitreMatch && mitreMatch.length > 0) {
-                        mitreTechniqueId = mitreMatch[0]
-                      }
-                    }
-                  }
-                  // Fallback: try to extract from technique name
-                  if (!mitreTechniqueId && selectedTechnique.technique.name) {
-                    const nameMatch = selectedTechnique.technique.name.match(/T\d{4}(\.\d{3})?/)
-                    if (nameMatch) {
-                      mitreTechniqueId = nameMatch[0]
-                    }
-                  }
-                  
-                  return mitreTechniqueId ? (
-                    <p className="text-body-xs text-gray-500 dark:text-gray-400 mt-0.5">
-                      {mitreTechniqueId}
-                    </p>
-                  ) : selectedTechnique.technique.stix_id ? (
-                    <p className="text-body-xs text-gray-500 dark:text-gray-400 mt-0.5">
-                      {selectedTechnique.technique.stix_id}
-                    </p>
-                  ) : null
-                })()}
+                {mitreTechniqueId ? (
+                  <p className="text-body-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                    {mitreTechniqueId}
+                  </p>
+                ) : selectedTechnique.technique.stix_id ? (
+                  <p className="text-body-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                    {selectedTechnique.technique.stix_id}
+                  </p>
+                ) : null}
               </div>
             </div>
-            {firstFinding && (
+            {activeFinding && (
               <button
-                onClick={() => handleViewInContext(firstFinding)}
+                onClick={() => handleViewInContext(activeFinding)}
                 className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-body-sm font-medium transition-colors shadow-sm hover:shadow-md flex-shrink-0"
               >
                 View in Attack Path
@@ -489,60 +514,117 @@ function AttackPaths({ appName }) {
           </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto px-6 lg:px-8 pb-8 bg-gray-50 dark:bg-gray-950">
-          <div className="max-w-4xl mx-auto pt-6 space-y-6">
-            {techniqueInfo && (
-              <>
-                {/* Rationale */}
-                {techniqueInfo.rationale && (
-                  <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm p-6">
-                    <h3 className="text-h4 font-semibold text-gray-900 dark:text-white mb-3">
-                      Rationale
-                    </h3>
-                    <p className="text-body text-gray-700 dark:text-gray-300">
-                      {techniqueInfo.rationale}
-                    </p>
-                  </div>
-                )}
+        {/* Split View: Table on left, Details on right */}
+        <div className="flex-1 flex overflow-hidden bg-gray-50 dark:bg-gray-950">
+          {/* Left Side: Findings Table */}
+          <div className="w-1/3 border-r border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 flex flex-col overflow-hidden">
+            <div className="flex-shrink-0 px-4 py-3 border-b border-gray-200 dark:border-gray-800">
+              <h3 className="text-body-sm font-semibold text-gray-900 dark:text-white">
+                Findings ({findings.length})
+              </h3>
+            </div>
+            <div className="flex-1 overflow-y-auto">
+              {findings.length === 0 ? (
+                <div className="p-4 text-center text-body-sm text-gray-500 dark:text-gray-400">
+                  No findings available
+                </div>
+              ) : (
+                <table className="w-full">
+                  <thead className="bg-gray-50 dark:bg-gray-800 sticky top-0">
+                    <tr>
+                      <th className="px-4 py-2 text-left text-body-xs font-semibold text-gray-700 dark:text-gray-300 border-b border-gray-200 dark:border-gray-700">
+                        Step Title
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {findings.map((finding, idx) => {
+                      const isSelected = selectedFindingForTechnique === finding || (!selectedFindingForTechnique && idx === 0)
+                      // Get the step title for this finding and technique
+                      const findingTechniqueInfo = getTechniqueSpecificInfo(
+                        finding,
+                        selectedTechnique.techniqueKey,
+                        selectedTechnique.technique.name,
+                        selectedTechnique.tactic
+                      )
+                      const stepTitle = findingTechniqueInfo?.methodSteps?.[0]?.step_name || finding.scenario_name || `Finding ${idx + 1}`
+                      return (
+                        <tr
+                          key={idx}
+                          onClick={() => setSelectedFindingForTechnique(finding)}
+                          className={`cursor-pointer transition-colors ${isSelected
+                            ? 'bg-blue-50 dark:bg-blue-950/20 border-l-2 border-l-blue-600 dark:border-l-blue-400'
+                            : 'hover:bg-gray-50 dark:hover:bg-gray-800'
+                            }`}
+                        >
+                          <td className="px-4 py-3 text-body-sm text-gray-900 dark:text-white">
+                            {stepTitle}
+                          </td>
+                        </tr>
+                      )
+                    })}
+                  </tbody>
+                </table>
+              )}
+            </div>
+          </div>
 
-                {/* Attack Flow Steps */}
-                {techniqueInfo.methodSteps && techniqueInfo.methodSteps.length > 0 && (
-                  <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm p-6">
-                    <h3 className="text-h4 font-semibold text-gray-900 dark:text-white mb-4">
-                      Attack Flow Steps for this Technique
-                    </h3>
-                    <div className="space-y-4">
-                      {techniqueInfo.methodSteps.map((step, stepIdx) => (
-                        <div key={stepIdx} className="space-y-2">
-                          <h5 className="text-body font-semibold text-gray-900 dark:text-white">
-                            {step.step_name}
-                          </h5>
-                          <p className="text-body text-gray-700 dark:text-gray-300">
-                            {step.step_description}
-                          </p>
-                          <div className="flex items-center gap-2 pt-2">
-                            <span className="px-2 py-1 rounded text-body-xs font-medium bg-red-50 dark:bg-red-950/30 text-red-700 dark:text-red-300">
-                              {step.step_mitre_tactic}
-                            </span>
-                            <span className="text-body-xs text-gray-600 dark:text-gray-400">
-                              {step.step_mitre_technique}
-                            </span>
-                          </div>
-                        </div>
-                      ))}
+          {/* Right Side: Detail View */}
+          <div className="flex-1 overflow-y-auto px-6 lg:px-8 pb-8">
+            <div className="max-w-4xl mx-auto pt-6 space-y-6">
+              {techniqueInfo && (
+                <>
+                  {/* Rationale */}
+                  {techniqueInfo.rationale && (
+                    <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm p-6">
+                      <h3 className="text-h4 font-semibold text-gray-900 dark:text-white mb-3">
+                        Rationale
+                      </h3>
+                      <p className="text-body text-gray-700 dark:text-gray-300">
+                        {techniqueInfo.rationale}
+                      </p>
                     </div>
-                  </div>
-                )}
-              </>
-            )}
+                  )}
 
-            {!techniqueInfo && (
-              <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm p-6 text-center">
-                <p className="text-body text-gray-500 dark:text-gray-400">
-                  No information available for this technique.
-                </p>
-              </div>
-            )}
+                  {/* Attack Flow Steps */}
+                  {techniqueInfo.methodSteps && techniqueInfo.methodSteps.length > 0 && (
+                    <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm p-6">
+                      <h3 className="text-h4 font-semibold text-gray-900 dark:text-white mb-4">
+                        Attack Flow Steps for this Technique
+                      </h3>
+                      <div className="space-y-4">
+                        {techniqueInfo.methodSteps.map((step, stepIdx) => (
+                          <div key={stepIdx} className="space-y-2">
+                            <h5 className="text-body font-semibold text-gray-900 dark:text-white">
+                              {step.step_name}
+                            </h5>
+                            <p className="text-body text-gray-700 dark:text-gray-300">
+                              {step.step_description}
+                            </p>
+                            <div className="flex items-center gap-2 pt-2">
+                              <span className="px-2 py-1 rounded text-body-xs font-medium bg-red-50 dark:bg-red-950/30 text-red-700 dark:text-red-300">
+                                {step.step_mitre_tactic}
+                              </span>
+                              <span className="text-body-xs text-gray-600 dark:text-gray-400">
+                                {step.step_mitre_technique}
+                              </span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </>
+              )}
+
+              {!techniqueInfo && (
+                <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm p-6 text-center">
+                  <p className="text-body text-gray-500 dark:text-gray-400">
+                    No information available for this technique.
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -552,7 +634,7 @@ function AttackPaths({ appName }) {
   // Finding Detail View
   if (view === 'finding' && selectedFinding) {
     const method = selectedFinding.method || (selectedFinding.adversarial_methods && selectedFinding.adversarial_methods[0])
-    
+
     return (
       <div className="w-full h-full flex flex-col overflow-hidden">
         <div className="flex-shrink-0 px-6 lg:px-8 py-8">
@@ -575,7 +657,7 @@ function AttackPaths({ appName }) {
             {selectedFinding.hypothesis && (
               <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
                 <h3 className="text-h4 font-semibold text-gray-900 dark:text-white mb-4">Hypothesis</h3>
-                
+
                 {selectedFinding.hypothesis.attack_target && (
                   <div className="mb-4">
                     <div className="text-body-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">
@@ -666,10 +748,10 @@ function AttackPaths({ appName }) {
                           {step.step_id || stepIdx + 1}
                         </div>
                         <p className="text-body-sm text-gray-700 dark:text-gray-300 flex-1">
-                          {step.description || step}
+                          {typeof step === 'string' ? step : step.description}
                         </p>
                       </div>
-                      
+
                       {step.related_capabilities && step.related_capabilities.length > 0 && (
                         <div className="mt-3">
                           <div className="text-body-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Related Capabilities:</div>
@@ -788,7 +870,7 @@ function AttackPaths({ appName }) {
     return techniqueList.length > 0
   })
 
-  const handleTacticToggle = (tactic) => {
+  const handleTacticToggle = (tactic: string): void => {
     setSelectedTactics((prev) => {
       const newSet = new Set(prev)
       if (newSet.has(tactic)) {
@@ -817,121 +899,140 @@ function AttackPaths({ appName }) {
       {/* Enhanced Header Section */}
       <div className="flex-shrink-0 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
         <div className="px-6 lg:px-8 py-6">
-          <div className="flex items-start justify-between mb-4">
+          <div className="flex items-start justify-between gap-4">
             <div className="flex-1">
             </div>
-            <div className="relative ml-4">
-              <button
-                onClick={() => setDropdownOpen(!dropdownOpen)}
-                className="inline-flex items-center gap-2 px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-body-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-400 dark:hover:border-gray-500 transition-all shadow-sm hover:shadow"
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
-                </svg>
-                <span>Filter Columns</span>
-                <svg
-                  className={`w-4 h-4 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
+            <div className="flex items-center gap-4">
+              {/* Stats Bar - Combined with Filter */}
+              <div className="flex items-center gap-6">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-blue-500"></div>
+                  <span className="text-body-xs text-gray-600 dark:text-gray-400">
+                    <span className="font-semibold text-gray-900 dark:text-white">{visibleColumnsCount}</span> columns visible
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-purple-500"></div>
+                  <span className="text-body-xs text-gray-600 dark:text-gray-400">
+                    <span className="font-semibold text-gray-900 dark:text-white">{totalTechniques}</span> techniques
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                  <span className="text-body-xs text-gray-600 dark:text-gray-400">
+                    <span className="font-semibold text-gray-900 dark:text-white">{totalFindings}</span> findings
+                  </span>
+                </div>
+              </div>
+              <div className="relative">
+                <button
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                  className="inline-flex items-center gap-2 px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-body-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-400 dark:hover:border-gray-500 transition-all shadow-sm hover:shadow"
                 >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-              {dropdownOpen && (
-                <>
-                  <div
-                    className="fixed inset-0 z-10"
-                    onClick={() => setDropdownOpen(false)}
-                  />
-                  <div className="absolute right-0 mt-2 w-72 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-xl z-20 max-h-[500px] overflow-hidden flex flex-col">
-                    <div className="p-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50">
-                      <div className="text-body-sm font-semibold text-gray-900 dark:text-white mb-3">
-                        Select Columns to Display
-                      </div>
-                      <div className="flex gap-2">
-                        <button
-                          onClick={() => {
-                            setSelectedTactics(new Set(availableTactics))
-                          }}
-                          className="px-3 py-1.5 text-body-xs font-medium text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/30 rounded-md hover:bg-blue-100 dark:hover:bg-blue-950/50 transition-colors"
-                        >
-                          Select All
-                        </button>
-                        <button
-                          onClick={() => {
-                            setSelectedTactics(new Set())
-                          }}
-                          className="px-3 py-1.5 text-body-xs font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
-                        >
-                          Deselect All
-                        </button>
-                      </div>
-                    </div>
-                    <div className="overflow-y-auto p-2">
-                      {availableTactics.map((tactic) => {
-                        const techniques = techniquesByTactic.get(tactic)
-                        const techniqueList = techniques ? Array.from(techniques.values()) : []
-                        const isSelected = selectedTactics.has(tactic)
-                        
-                        return (
-                          <label
-                            key={tactic}
-                            className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all ${
-                              isSelected 
-                                ? 'bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-900/50' 
-                                : 'hover:bg-gray-50 dark:hover:bg-gray-800/50'
-                            }`}
-                          >
-                            <input
-                              type="checkbox"
-                              checked={isSelected}
-                              onChange={() => handleTacticToggle(tactic)}
-                              className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:ring-offset-0 dark:bg-gray-700 dark:border-gray-600"
-                            />
-                            <span className={`text-body-sm flex-1 font-medium ${
-                              isSelected 
-                                ? 'text-gray-900 dark:text-white' 
-                                : 'text-gray-700 dark:text-gray-300'
-                            }`}>
-                              {tactic}
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                  </svg>
+                  <span>Filter Columns</span>
+                  <svg
+                    className={`w-4 h-4 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                {dropdownOpen && (
+                  <>
+                    <div
+                      className="fixed inset-0 z-10"
+                      onClick={() => setDropdownOpen(false)}
+                    />
+                    <div className="absolute right-0 mt-2 w-80 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-xl z-20 max-h-[600px] overflow-hidden flex flex-col">
+                      <div className="p-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50">
+                        <div className="text-body-sm font-semibold text-gray-900 dark:text-white mb-3">
+                          Select Columns to Display
+                        </div>
+                        {/* Stats in Dropdown */}
+                        <div className="flex items-center gap-4 mb-3 pb-3 border-b border-gray-200 dark:border-gray-700">
+                          <div className="flex items-center gap-1.5">
+                            <div className="w-2 h-2 rounded-full bg-blue-500"></div>
+                            <span className="text-body-xs text-gray-600 dark:text-gray-400">
+                              <span className="font-semibold text-gray-900 dark:text-white">{visibleColumnsCount}</span> visible
                             </span>
-                            <span className={`text-body-xs px-2 py-0.5 rounded-full font-medium ${
-                              isSelected
+                          </div>
+                          <div className="flex items-center gap-1.5">
+                            <div className="w-2 h-2 rounded-full bg-purple-500"></div>
+                            <span className="text-body-xs text-gray-600 dark:text-gray-400">
+                              <span className="font-semibold text-gray-900 dark:text-white">{totalTechniques}</span> techniques
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-1.5">
+                            <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                            <span className="text-body-xs text-gray-600 dark:text-gray-400">
+                              <span className="font-semibold text-gray-900 dark:text-white">{totalFindings}</span> findings
+                            </span>
+                          </div>
+                        </div>
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => {
+                              setSelectedTactics(new Set(availableTactics))
+                            }}
+                            className="px-3 py-1.5 text-body-xs font-medium text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/30 rounded-md hover:bg-blue-100 dark:hover:bg-blue-950/50 transition-colors"
+                          >
+                            Select All
+                          </button>
+                          <button
+                            onClick={() => {
+                              setSelectedTactics(new Set())
+                            }}
+                            className="px-3 py-1.5 text-body-xs font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                          >
+                            Deselect All
+                          </button>
+                        </div>
+                      </div>
+                      <div className="overflow-y-auto p-2">
+                        {availableTactics.map((tactic) => {
+                          const techniques = techniquesByTactic.get(tactic)
+                          const techniqueList = techniques ? Array.from(techniques.values()) : []
+                          const isSelected = selectedTactics.has(tactic)
+
+                          return (
+                            <label
+                              key={tactic}
+                              className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all ${isSelected
+                                ? 'bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-900/50'
+                                : 'hover:bg-gray-50 dark:hover:bg-gray-800/50'
+                                }`}
+                            >
+                              <input
+                                type="checkbox"
+                                checked={isSelected}
+                                onChange={() => handleTacticToggle(tactic)}
+                                className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:ring-offset-0 dark:bg-gray-700 dark:border-gray-600"
+                              />
+                              <span className={`text-body-sm flex-1 font-medium ${isSelected
+                                ? 'text-gray-900 dark:text-white'
+                                : 'text-gray-700 dark:text-gray-300'
+                                }`}>
+                                {tactic}
+                              </span>
+                              <span className={`text-body-xs px-2 py-0.5 rounded-full font-medium ${isSelected
                                 ? 'bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300'
                                 : 'bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-400'
-                            }`}>
-                              {techniqueList.length}
-                            </span>
-                          </label>
-                        )
-                      })}
+                                }`}>
+                                {techniqueList.length}
+                              </span>
+                            </label>
+                          )
+                        })}
+                      </div>
                     </div>
-                  </div>
-                </>
-              )}
-            </div>
-          </div>
-          
-          {/* Stats Bar */}
-          <div className="flex items-center gap-6 pt-4 border-t border-gray-200 dark:border-gray-800">
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-blue-500"></div>
-              <span className="text-body-xs text-gray-600 dark:text-gray-400">
-                <span className="font-semibold text-gray-900 dark:text-white">{visibleColumnsCount}</span> columns visible
-              </span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-purple-500"></div>
-              <span className="text-body-xs text-gray-600 dark:text-gray-400">
-                <span className="font-semibold text-gray-900 dark:text-white">{totalTechniques}</span> techniques
-              </span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-green-500"></div>
-              <span className="text-body-xs text-gray-600 dark:text-gray-400">
-                <span className="font-semibold text-gray-900 dark:text-white">{totalFindings}</span> findings
-              </span>
+                  </>
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -969,7 +1070,7 @@ function AttackPaths({ appName }) {
             {availableTactics.filter((tactic) => selectedTactics.has(tactic)).map((tactic) => {
               const techniques = techniquesByTactic.get(tactic)
               const techniqueList = techniques ? Array.from(techniques.values()) : []
-              
+
               return (
                 <div
                   key={tactic}
@@ -1003,7 +1104,7 @@ function AttackPaths({ appName }) {
                           const fullKey = `${tactic}::${techniqueKey}`
                           const findings = findingsByTechnique.get(fullKey) || []
                           const findingCount = findings.length
-                          
+
                           return (
                             <button
                               key={techniqueKey}
