@@ -614,6 +614,144 @@ function AttackPaths({ appName }: AttackPathsProps): JSX.Element {
                       </div>
                     </div>
                   )}
+
+                  {/* Preconditions Required */}
+                  {techniqueInfo.method.preconditions_required && techniqueInfo.method.preconditions_required.length > 0 && (
+                    <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm p-6">
+                      <h3 className="text-h4 font-semibold text-gray-900 dark:text-white mb-3">
+                        Preconditions Required
+                      </h3>
+                      <ul className="space-y-2">
+                        {techniqueInfo.method.preconditions_required.map((precondition, idx) => (
+                          <li key={idx} className="text-body text-gray-700 dark:text-gray-300 flex items-start gap-2">
+                            <span className="text-blue-600 dark:text-blue-400 mt-1 flex-shrink-0">•</span>
+                            <span>{precondition}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {/* Constraints Encountered */}
+                  {techniqueInfo.method.constraints_encountered && techniqueInfo.method.constraints_encountered.length > 0 && (
+                    <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm p-6">
+                      <h3 className="text-h4 font-semibold text-gray-900 dark:text-white mb-3">
+                        Constraints Encountered
+                      </h3>
+                      <ul className="space-y-2">
+                        {techniqueInfo.method.constraints_encountered.map((constraint, idx) => (
+                          <li key={idx} className="text-body text-gray-700 dark:text-gray-300 flex items-start gap-2">
+                            <span className="text-amber-600 dark:text-amber-400 mt-1 flex-shrink-0">•</span>
+                            <span>{constraint}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {/* Evasion Considerations */}
+                  {techniqueInfo.method.evasion_considerations && techniqueInfo.method.evasion_considerations.length > 0 && (
+                    <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm p-6">
+                      <h3 className="text-h4 font-semibold text-gray-900 dark:text-white mb-3">
+                        Evasion Considerations
+                      </h3>
+                      <ul className="space-y-2">
+                        {techniqueInfo.method.evasion_considerations.map((consideration, idx) => (
+                          <li key={idx} className="text-body text-gray-700 dark:text-gray-300 flex items-start gap-2">
+                            <span className="text-purple-600 dark:text-purple-400 mt-1 flex-shrink-0">•</span>
+                            <span>{consideration}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {/* Capabilities Used */}
+                  {techniqueInfo.method.capabilities_used && techniqueInfo.method.capabilities_used.length > 0 && (
+                    <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm p-6">
+                      <h3 className="text-h4 font-semibold text-gray-900 dark:text-white mb-3">
+                        Capabilities Used
+                      </h3>
+                      <div className="flex flex-wrap gap-2">
+                        {techniqueInfo.method.capabilities_used.map((capability, idx) => (
+                          <span
+                            key={idx}
+                            className="inline-flex items-center px-3 py-1.5 rounded-md text-body-sm font-medium bg-orange-50 dark:bg-orange-950/20 text-orange-700 dark:text-orange-300"
+                          >
+                            {capability}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Interfaces Used */}
+                  {techniqueInfo.method.interfaces_used && techniqueInfo.method.interfaces_used.length > 0 && (
+                    <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm p-6">
+                      <h3 className="text-h4 font-semibold text-gray-900 dark:text-white mb-3">
+                        Interfaces Used
+                      </h3>
+                      <ul className="space-y-2">
+                        {techniqueInfo.method.interfaces_used.map((iface, idx) => (
+                          <li key={idx} className="text-body text-gray-700 dark:text-gray-300">
+                            {iface.startsWith('http') ? (
+                              <a
+                                href={iface}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-blue-600 dark:text-blue-400 hover:underline"
+                              >
+                                {iface}
+                              </a>
+                            ) : (
+                              <span>{iface}</span>
+                            )}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {/* Data Accessed */}
+                  {techniqueInfo.method.data_accessed && techniqueInfo.method.data_accessed.length > 0 && (
+                    <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm p-6">
+                      <h3 className="text-h4 font-semibold text-gray-900 dark:text-white mb-3">
+                        Data Accessed
+                      </h3>
+                      <ul className="space-y-2">
+                        {techniqueInfo.method.data_accessed.map((data, idx) => (
+                          <li key={idx} className="text-body text-gray-700 dark:text-gray-300 flex items-start gap-2">
+                            <span className="text-green-600 dark:text-green-400 mt-1 flex-shrink-0">•</span>
+                            <span>{data}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {/* Resulting Access */}
+                  {techniqueInfo.method.resulting_access && (
+                    <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm p-6">
+                      <h3 className="text-h4 font-semibold text-gray-900 dark:text-white mb-3">
+                        Resulting Access
+                      </h3>
+                      <p className="text-body text-gray-700 dark:text-gray-300">
+                        {techniqueInfo.method.resulting_access}
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Comments */}
+                  {techniqueInfo.method.comments && (
+                    <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm p-6">
+                      <h3 className="text-h4 font-semibold text-gray-900 dark:text-white mb-3">
+                        Comments
+                      </h3>
+                      <p className="text-body text-gray-700 dark:text-gray-300">
+                        {techniqueInfo.method.comments}
+                      </p>
+                    </div>
+                  )}
                 </>
               )}
 

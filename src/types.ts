@@ -11,6 +11,15 @@ export interface AdversarialMethod {
   tactic_name: string
   selected_techniques?: Technique[]
   method_steps?: MethodStep[]
+  can_achieve?: boolean
+  capabilities_used?: string[]
+  interfaces_used?: string[]
+  data_accessed?: string[]
+  preconditions_required?: string[]
+  constraints_encountered?: string[]
+  evasion_considerations?: string[]
+  resulting_access?: string
+  comments?: string
 }
 
 export interface AttackFlowStep {
