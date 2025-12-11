@@ -1,0 +1,1732 @@
+{
+    "application_name": "GitHub.com & GitHub Enterprise Cloud",
+    "generated_at": "2025-12-10T00:00:00Z",
+    "coverage_overview": {
+        "sources_analysed": [
+            {
+                "name": "GitHub Docs: Get started overview",
+                "url": "https://docs.github.com/en/get-started",
+                "description": "Entry point for GitHub concepts, account types, onboarding, Git basics, and writing on GitHub."
+            },
+            {
+                "name": "GitHub Docs: Repositories",
+                "url": "https://docs.github.com/en/repositories",
+                "description": "Top-level documentation for creating, managing, configuring, and archiving repositories."
+            },
+            {
+                "name": "GitHub Docs: Issues",
+                "url": "https://docs.github.com/en/issues",
+                "description": "Overview of GitHub Issues and Projects for tracking work."
+            },
+            {
+                "name": "GitHub Docs: Planning and tracking with Projects",
+                "url": "https://docs.github.com/en/issues/planning-and-tracking-with-projects",
+                "description": "Detailed docs for the Projects planning and tracking system."
+            },
+            {
+                "name": "GitHub Docs: Pull requests",
+                "url": "https://docs.github.com/en/pull-requests",
+                "description": "Docs for pull request creation, review, merging, and related workflows."
+            },
+            {
+                "name": "GitHub Docs: GitHub Actions",
+                "url": "https://docs.github.com/en/actions",
+                "description": "Concepts, how-tos, and reference for GitHub Actions workflows and runners."
+            },
+            {
+                "name": "GitHub Docs: Code scanning",
+                "url": "https://docs.github.com/en/code-security/code-scanning",
+                "description": "Overview and configuration of code scanning with CodeQL and related tooling."
+            },
+            {
+                "name": "GitHub Docs: Dependabot",
+                "url": "https://docs.github.com/en/code-security/dependabot",
+                "description": "Docs for Dependabot alerts, security updates, and version updates."
+            },
+            {
+                "name": "GitHub Docs: Secret scanning",
+                "url": "https://docs.github.com/en/code-security/secret-scanning",
+                "description": "Docs for secret detection, push protection, and advanced secret scanning features."
+            },
+            {
+                "name": "GitHub Docs: Securing your organization",
+                "url": "https://docs.github.com/en/code-security/securing-your-organization",
+                "description": "Org-scale security configurations, risk assessments, and security campaigns."
+            },
+            {
+                "name": "GitHub Docs: Organizations",
+                "url": "https://docs.github.com/en/organizations",
+                "description": "Organization creation, membership, roles, settings, and security management."
+            },
+            {
+                "name": "GitHub Docs: Enterprise Cloud admin",
+                "url": "https://docs.github.com/en/enterprise-cloud@latest/admin",
+                "description": "Administration, IAM, policies, and monitoring for GitHub Enterprise Cloud."
+            },
+            {
+                "name": "GitHub Docs: Apps platform",
+                "url": "https://docs.github.com/en/apps",
+                "description": "Docs for GitHub Apps, OAuth apps, Marketplace, and related APIs."
+            },
+            {
+                "name": "GitHub Docs: Copilot",
+                "url": "https://docs.github.com/en/copilot",
+                "description": "Overview and usage of GitHub Copilot, Copilot Chat, CLI, and agents."
+            },
+            {
+                "name": "GitHub Docs: Codespaces",
+                "url": "https://docs.github.com/en/codespaces",
+                "description": "Docs for GitHub Codespaces environments, lifecycle, dev containers, and org management."
+            },
+            {
+                "name": "GitHub Docs: Packages",
+                "url": "https://docs.github.com/en/packages",
+                "description": "GitHub Packages concepts, registries, permissions, and Actions integration."
+            },
+            {
+                "name": "GitHub Docs: REST API",
+                "url": "https://docs.github.com/en/rest",
+                "description": "Overview and index of all GitHub REST API categories and endpoints."
+            },
+            {
+                "name": "GitHub Docs: Webhooks",
+                "url": "https://docs.github.com/en/webhooks",
+                "description": "Docs for configuring, validating, and troubleshooting webhooks."
+            },
+            {
+                "name": "GitHub Docs: Authentication",
+                "url": "https://docs.github.com/en/authentication",
+                "description": "Authentication methods, 2FA, passkeys, SSH, tokens, and commit signing."
+            },
+            {
+                "name": "GitHub Docs: Billing",
+                "url": "https://docs.github.com/en/billing",
+                "description": "Billing model, product metering, budgets, and billing administration."
+            },
+            {
+                "name": "GitHub Docs: Documentation home",
+                "url": "https://docs.github.com/en",
+                "description": "Top-level navigation to all major GitHub product areas and documentation sections."
+            }
+        ],
+        "likely_uncovered_areas_or_ambiguities": [
+            "GraphQL API documentation and specific schema details were not directly analyzed; only REST API docs were reviewed.",
+            "Limited or no deep coverage of GitHub Discussions, GitHub Pages, GitHub Sponsors, GitHub Education, GitHub CLI, GitHub Desktop, and GitHub Mobile beyond their presence in navigation.",
+            "Enterprise Server (self-hosted) features and differences versus Enterprise Cloud are largely out of scope here; focus is on GitHub.com and GitHub Enterprise Cloud.",
+            "Internal implementation details (e.g., exact microservices, storage technologies, and job orchestration internals) are not documented and are inferred only at a conceptual level.",
+            "Precise default retention periods for all logs, artifacts, caches, and security alerts across products are not fully enumerated in the reviewed docs."
+        ],
+        "assumptions_made": [
+            "Descriptions of some well-known features (for example, how pull requests behave in detail, or how Codespaces provides a VS Code-compatible environment) are informed by general product knowledge plus headings in the docs, not full reading of every article.",
+            "The mapping between documented REST API categories and underlying services (e.g., actions, codespaces, orgs) is assumed to align one-to-one with backend capabilities.",
+            "Where navigation listed articles such as 'About repositories' or 'About issues', their high-level semantics were assumed from titles and context without reading the full article.",
+            "Security-related flows (for example, how code scanning integrates with Actions or how Dependabot opens pull requests) are inferred from topic groupings and standard GitHub usage patterns.",
+            "The term 'service' or 'module' in the technical components section reflects conceptual groupings, not necessarily distinct deployment units at GitHub."
+        ]
+    },
+    "capability_map": {
+        "core_product_capabilities": [
+            {
+                "name": "Repository Management & Source Code Hosting",
+                "description": "Hosts Git repositories on GitHub, allowing users to create, clone, configure, and archive repositories while controlling visibility and collaboration.",
+                "primary_actors": [
+                    "Individual developers",
+                    "Repository administrators",
+                    "Organization owners",
+                    "Open source maintainers"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Web UI for creating repositories, managing settings, enabling features, and browsing code and history.",
+                        "url": "https://docs.github.com/en/repositories"
+                    },
+                    {
+                        "channel": "cli",
+                        "details": "Git CLI interacting with GitHub remotes for cloning, pushing, and fetching, plus GitHub CLI for repo administration.",
+                        "url": "https://docs.github.com/en/get-started/git-basics/set-up-git"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "REST API endpoints under /repos for programmatic repository lifecycle and configuration.",
+                        "url": "https://docs.github.com/en/rest/repos/repos"
+                    }
+                ],
+                "key_data_involved": [
+                    "Repositories and repository metadata",
+                    "Commits, branches, and tags",
+                    "Files, blobs, and trees",
+                    "Releases and release assets",
+                    "Repository visibility and collaborator permissions",
+                    "Repository rulesets and branch protection configuration"
+                ],
+                "security_relevant_traits": [
+                    "Controls repository visibility (public, private, internal) and who can read or write code.",
+                    "Supports branch protection rules and rulesets that gate merges on reviews, status checks, and other conditions.",
+                    "Allows privileged actions such as deleting, transferring, or restoring repositories.",
+                    "Releases and artifacts may contain production binaries; improper access settings can expose sensitive assets."
+                ],
+                "evidence": [
+                    {
+                        "title": "GitHub Docs: Repositories",
+                        "url": "https://docs.github.com/en/repositories",
+                        "summary": "Outlines creating and managing repositories, settings, branches, releases, and archiving.",
+                        "notes": null
+                    },
+                    {
+                        "title": "GitHub Docs: Creating and managing repositories",
+                        "url": "https://docs.github.com/en/repositories/creating-and-managing-repositories/about-repositories",
+                        "summary": "Defines repositories and describes creation, cloning, limits, and visibility.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Issue Tracking & Work Management with GitHub Issues",
+                "description": "Enables tracking of bugs, tasks, ideas, and feedback using issues, labels, milestones, and templates, tightly integrated with repositories and pull requests.",
+                "primary_actors": [
+                    "Developers",
+                    "Product managers",
+                    "Project managers",
+                    "Support and operations staff",
+                    "Community contributors"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Issues tab in repositories and organization-level issues views, including templates, labels, and milestones.",
+                        "url": "https://docs.github.com/en/issues"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "REST API endpoints for issues, comments, labels, milestones, and issue events.",
+                        "url": "https://docs.github.com/en/rest/issues/issues"
+                    },
+                    {
+                        "channel": "cli",
+                        "details": "GitHub CLI commands for creating, listing, and updating issues from the terminal.",
+                        "url": "https://docs.github.com/en/github-cli"
+                    }
+                ],
+                "key_data_involved": [
+                    "Issues and their titles, bodies, and states",
+                    "Comments and reactions",
+                    "Labels and milestones",
+                    "Assignees and linked pull requests",
+                    "Issue templates and form metadata"
+                ],
+                "security_relevant_traits": [
+                    "Issues may hold sensitive operational details or security reports if not triaged properly.",
+                    "Permissions for creating, editing, and deleting issues are controlled by repository and org settings.",
+                    "Issue templates can enforce structured information (e.g., requiring security impact details)."
+                ],
+                "evidence": [
+                    {
+                        "title": "GitHub Docs: About issues",
+                        "url": "https://docs.github.com/en/issues/tracking-your-work-with-issues/learning-about-issues/about-issues",
+                        "summary": "Explains how GitHub Issues are used to track ideas, feedback, tasks, and bugs.",
+                        "notes": null
+                    },
+                    {
+                        "title": "GitHub Docs: Issues overview",
+                        "url": "https://docs.github.com/en/issues",
+                        "summary": "Lists key guides for creating issues, linking PRs, and configuring templates.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Project Planning & Reporting with GitHub Projects",
+                "description": "Provides adaptable projects that track work across repositories using tables, boards, and roadmaps, with custom fields, charts, and automation.",
+                "primary_actors": [
+                    "Project and program managers",
+                    "Team leads",
+                    "Developers",
+                    "Product managers"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Projects views (table, board, roadmap) within organizations, users, and repositories.",
+                        "url": "https://docs.github.com/en/issues/planning-and-tracking-with-projects"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "REST and GraphQL APIs for managing Projects items, fields, and views.",
+                        "url": "https://docs.github.com/en/rest/projects/projects"
+                    },
+                    {
+                        "channel": "integration",
+                        "details": "Automations that connect Projects to issues, pull requests, and Actions workflows.",
+                        "url": "https://docs.github.com/en/issues/planning-and-tracking-with-projects/automating-your-project/using-the-api-to-manage-projects"
+                    }
+                ],
+                "key_data_involved": [
+                    "Project items (issues, pull requests, draft items)",
+                    "Custom fields (text, number, date, single-select, iteration)",
+                    "Views, filters, and layouts",
+                    "Charts and insights derived from project data"
+                ],
+                "security_relevant_traits": [
+                    "Project visibility and access can expose or restrict cross-repo planning information.",
+                    "Automations can add or modify items based on triggers, potentially moving sensitive work into broader visibility if misconfigured.",
+                    "Export functionality allows bulk extraction of project data, which could include sensitive work descriptions."
+                ],
+                "evidence": [
+                    {
+                        "title": "GitHub Docs: Planning and tracking with Projects",
+                        "url": "https://docs.github.com/en/issues/planning-and-tracking-with-projects",
+                        "summary": "Describes Projects, custom fields, views, automations, insights, and access controls.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Pull Requests & Code Review Workflow",
+                "description": "Supports proposing, reviewing, and merging code changes via pull requests, including branch management, reviews, conflict resolution, and merge strategies.",
+                "primary_actors": [
+                    "Developers",
+                    "Code reviewers",
+                    "Repository maintainers"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Pull requests tab in repositories for creating PRs, reviewing diffs, and merging.",
+                        "url": "https://docs.github.com/en/pull-requests"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "REST API endpoints under /pulls for PR lifecycle and review comments.",
+                        "url": "https://docs.github.com/en/rest/pulls/pulls"
+                    },
+                    {
+                        "channel": "cli",
+                        "details": "GitHub CLI commands for creating, checking out, and merging pull requests from the terminal.",
+                        "url": "https://docs.github.com/en/github-cli/github-cli/pull-requests"
+                    }
+                ],
+                "key_data_involved": [
+                    "Pull requests and their metadata",
+                    "Diffs, commits, and review comments",
+                    "Review states and approvals",
+                    "Merge commits or rebase/squash merge results",
+                    "Status checks and code scanning results attached to PRs"
+                ],
+                "security_relevant_traits": [
+                    "Branch protection and required reviews can gate merges into protected branches.",
+                    "Status checks and code scanning alerts can enforce security and quality before merge.",
+                    "Permissions for merging and force-pushing are tightly controlled and auditable."
+                ],
+                "evidence": [
+                    {
+                        "title": "GitHub Docs: Pull requests overview",
+                        "url": "https://docs.github.com/en/pull-requests",
+                        "summary": "Index of documentation for committing changes, collaborating with pull requests, resolving conflicts, and reviews.",
+                        "notes": null
+                    },
+                    {
+                        "title": "GitHub Docs: About pull request reviews",
+                        "url": "https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests/about-pull-request-reviews",
+                        "summary": "Describes how reviews work and how they integrate into pull request workflows.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Automation with GitHub Actions (User Perspective)",
+                "description": "Allows users to define workflows as code in YAML that run on events or schedules to build, test, deploy, and automate tasks across the software lifecycle.",
+                "primary_actors": [
+                    "Developers",
+                    "DevOps engineers",
+                    "Release engineers",
+                    "Security engineers"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Actions tab in repositories and organizations for configuring workflows, viewing runs, and logs.",
+                        "url": "https://docs.github.com/en/actions"
+                    },
+                    {
+                        "channel": "other",
+                        "details": "Workflow YAML files under .github/workflows in repositories.",
+                        "url": "https://docs.github.com/en/actions/reference/workflows-and-actions"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "REST API endpoints for workflows, runs, artifacts, and runners.",
+                        "url": "https://docs.github.com/en/rest/actions/workflows"
+                    }
+                ],
+                "key_data_involved": [
+                    "Workflow definitions (YAML)",
+                    "Jobs, steps, and logs",
+                    "Secrets and environment variables",
+                    "Artifacts and caches",
+                    "Runner configuration and labels"
+                ],
+                "security_relevant_traits": [
+                    "Workflows execute arbitrary code on GitHub-hosted or self-hosted runners, requiring careful secret handling.",
+                    "Organization and enterprise policies can restrict which actions and runners are allowed.",
+                    "GITHUB_TOKEN and other credentials are scoped and rate-limited but still powerful if exfiltrated.",
+                    "Actions can deploy to production systems or modify repositories, making workflow definitions security-critical."
+                ],
+                "evidence": [
+                    {
+                        "title": "GitHub Docs: GitHub Actions overview",
+                        "url": "https://docs.github.com/en/actions/get-started",
+                        "summary": "Introduces GitHub Actions, workflows, runners, and basic CI/CD use cases.",
+                        "notes": null
+                    },
+                    {
+                        "title": "GitHub Docs: Workflow syntax for GitHub Actions",
+                        "url": "https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax",
+                        "summary": "Defines the YAML schema and capabilities available in workflows.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Cloud Development Environments with GitHub Codespaces",
+                "description": "Provides cloud-hosted development environments backed by dev containers that can be created per branch or template and accessed from the browser or local IDE.",
+                "primary_actors": [
+                    "Developers",
+                    "Team leads",
+                    "Organization administrators"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Codespaces entry points in repository and user menus for creating, opening, and managing codespaces.",
+                        "url": "https://docs.github.com/en/codespaces"
+                    },
+                    {
+                        "channel": "cli",
+                        "details": "GitHub CLI commands to create and connect to codespaces from a terminal.",
+                        "url": "https://docs.github.com/en/codespaces/developing-in-a-codespace/using-github-codespaces-with-github-cli"
+                    },
+                    {
+                        "channel": "integration",
+                        "details": "Integration with VS Code and other IDEs via remote development plugins.",
+                        "url": "https://docs.github.com/en/codespaces/developing-in-a-codespace/using-github-codespaces-in-visual-studio-code"
+                    }
+                ],
+                "key_data_involved": [
+                    "Codespace instances, including filesystem state and ports",
+                    "Dev container configuration (Dockerfiles, devcontainer.json)",
+                    "Repository source code and checked-out branches",
+                    "Secrets and environment variables scoped to codespaces",
+                    "Usage metrics for billing and quotas"
+                ],
+                "security_relevant_traits": [
+                    "Codespaces run user code on GitHub-managed infrastructure; access to private repositories and registries must be controlled.",
+                    "Org and enterprise policies can restrict machine types, regions, network access, and retention.",
+                    "Secrets used within codespaces (development environment secrets) must be managed and can be audited.",
+                    "Security logs and audit logs capture access and activity related to codespaces."
+                ],
+                "evidence": [
+                    {
+                        "title": "GitHub Docs: What are GitHub Codespaces?",
+                        "url": "https://docs.github.com/en/codespaces/about-codespaces/what-are-codespaces",
+                        "summary": "Introduces Codespaces, their features, and typical workflows.",
+                        "notes": null
+                    },
+                    {
+                        "title": "GitHub Docs: Codespaces overview page",
+                        "url": "https://docs.github.com/en/codespaces",
+                        "summary": "Lists guides for codespace lifecycle, dev containers, and org-level management.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Package Management with GitHub Packages",
+                "description": "Provides package registries for multiple ecosystems (container images, npm, Maven, NuGet, etc.), integrated with repositories and GitHub Actions.",
+                "primary_actors": [
+                    "Developers",
+                    "Release engineers",
+                    "DevOps engineers"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Package views on user, organization, and repository pages for publishing, browsing, and configuring packages.",
+                        "url": "https://docs.github.com/en/packages"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "REST API endpoints for listing and managing packages and their versions.",
+                        "url": "https://docs.github.com/en/rest/packages/packages"
+                    },
+                    {
+                        "channel": "integration",
+                        "details": "Ecosystem-native tooling (npm, Maven, Docker, etc.) configured to use GitHub Packages registries.",
+                        "url": "https://docs.github.com/en/packages/working-with-a-github-packages-registry"
+                    }
+                ],
+                "key_data_involved": [
+                    "Packages and versions across supported ecosystems",
+                    "Package metadata (names, descriptions, licenses)",
+                    "Package visibility and access control configuration",
+                    "Authentication tokens for publishing and consuming packages",
+                    "Links between packages and source repositories"
+                ],
+                "security_relevant_traits": [
+                    "Packages may be deployed to production systems; unauthorized modification can be supply-chain compromising.",
+                    "Access control and visibility settings determine who can publish or download packages.",
+                    "Actions workflows used to publish packages must protect credentials and enforce review.",
+                    "Dependency links from repositories feed into dependency graph and security analysis."
+                ],
+                "evidence": [
+                    {
+                        "title": "GitHub Docs: Introduction to GitHub Packages",
+                        "url": "https://docs.github.com/en/packages/learn-github-packages/introduction-to-github-packages",
+                        "summary": "Explains what GitHub Packages is and how to publish, view, install, and delete packages.",
+                        "notes": null
+                    },
+                    {
+                        "title": "GitHub Docs: Working with the Container registry",
+                        "url": "https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry",
+                        "summary": "Describes using GitHub's container registry to store and manage Docker and OCI images.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Developer Assistance with GitHub Copilot",
+                "description": "Offers AI-powered coding assistance, chat, CLI, code review, and agents that help generate, explain, and modify code and configuration.",
+                "primary_actors": [
+                    "Developers",
+                    "Data scientists",
+                    "DevOps engineers",
+                    "Security engineers"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "integration",
+                        "details": "IDE integrations (e.g., VS Code, JetBrains) that surface Copilot completions and chat.",
+                        "url": "https://docs.github.com/en/copilot"
+                    },
+                    {
+                        "channel": "cli",
+                        "details": "Copilot CLI for using AI assistance from the terminal.",
+                        "url": "https://docs.github.com/en/copilot/concepts/agents/about-copilot-cli"
+                    },
+                    {
+                        "channel": "ui",
+                        "details": "Copilot Chat and coding agents in the GitHub.com web UI for repositories and pull requests.",
+                        "url": "https://docs.github.com/en/copilot/concepts/chat"
+                    }
+                ],
+                "key_data_involved": [
+                    "Source code and configuration files in repositories or open in the IDE",
+                    "Prompts and conversation history with Copilot Chat",
+                    "Repository context (issues, PRs, docs) used as context for suggestions",
+                    "Usage and billing data for Copilot licenses"
+                ],
+                "security_relevant_traits": [
+                    "Copilot suggestions can introduce insecure patterns if not reviewed; code review remains essential.",
+                    "Copilot access and usage are controlled via org and enterprise policies, including which repositories are in scope.",
+                    "Copilot code review and coding agents can open or modify pull requests automatically on a user’s behalf.",
+                    "Organizations can manage data usage and model selection for compliance requirements."
+                ],
+                "evidence": [
+                    {
+                        "title": "GitHub Docs: GitHub Copilot documentation",
+                        "url": "https://docs.github.com/en/copilot",
+                        "summary": "Landing page for Copilot docs including chat, CLI, coding agent, billing, and customization.",
+                        "notes": null
+                    },
+                    {
+                        "title": "GitHub Docs: About GitHub Copilot Chat",
+                        "url": "https://docs.github.com/en/copilot/concepts/chat",
+                        "summary": "Describes Copilot Chat capabilities and how it augments coding workflows.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Code Scanning for Static Application Security Testing",
+                "description": "Runs static analysis (primarily via CodeQL) on repositories to detect code vulnerabilities and quality issues, surfacing alerts and gating merges.",
+                "primary_actors": [
+                    "Security engineers",
+                    "Developers",
+                    "Repository administrators",
+                    "Organization security managers"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Security tab in repositories and organizations showing code scanning alerts and configurations.",
+                        "url": "https://docs.github.com/en/code-security/code-scanning"
+                    },
+                    {
+                        "channel": "other",
+                        "details": "Actions workflows or external CI jobs that run CodeQL analysis and upload SARIF results.",
+                        "url": "https://docs.github.com/en/code-security/code-scanning/enabling-code-scanning"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "REST API endpoints for querying code scanning alerts and uploading SARIF results.",
+                        "url": "https://docs.github.com/en/rest/code-scanning/code-scanning"
+                    }
+                ],
+                "key_data_involved": [
+                    "Source code analyzed by CodeQL or other scanners",
+                    "Analysis results and SARIF files",
+                    "Code scanning alerts and triage metadata",
+                    "Security configurations and query suites"
+                ],
+                "security_relevant_traits": [
+                    "Alerts can be configured to block pull request merges via branch protection.",
+                    "Default and advanced setups can be applied at scale via org and enterprise policies.",
+                    "Integration with external CI systems and SARIF uploads extends trust boundaries.",
+                    "Copilot Autofix can propose remediation changes, which must be carefully reviewed."
+                ],
+                "evidence": [
+                    {
+                        "title": "GitHub Docs: Finding security vulnerabilities with code scanning",
+                        "url": "https://docs.github.com/en/code-security/code-scanning",
+                        "summary": "Explains code scanning availability, setup modes, and alert management.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Dependency & Supply Chain Management with Dependabot",
+                "description": "Monitors project dependencies for known vulnerabilities and out-of-date versions, generating alerts and automated pull requests to update dependencies.",
+                "primary_actors": [
+                    "Developers",
+                    "Security engineers",
+                    "DevOps and platform teams"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Security alerts views for Dependabot alerts and configuration screens in the repository or organization.",
+                        "url": "https://docs.github.com/en/code-security/dependabot"
+                    },
+                    {
+                        "channel": "other",
+                        "details": "Dependabot configuration files in repositories controlling ecosystems, update schedules, and policies.",
+                        "url": "https://docs.github.com/en/code-security/dependabot/dependabot-version-updates"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "REST API endpoints for Dependabot alerts and repository access configuration.",
+                        "url": "https://docs.github.com/en/rest/dependabot/alerts"
+                    }
+                ],
+                "key_data_involved": [
+                    "Dependency manifests and lockfiles",
+                    "Vulnerability advisories and alerts",
+                    "Dependabot configuration (update cadence, allowlists/blocklists)",
+                    "Automated PRs with dependency updates",
+                    "Metrics for alerts and auto-triage rules"
+                ],
+                "security_relevant_traits": [
+                    "Dependabot alerts highlight exploitable vulnerabilities in dependencies.",
+                    "Auto-triage rules and auto-dismissal must be configured carefully to avoid suppressing important alerts.",
+                    "Automated PRs can update code and workflows; review and testing gates are crucial.",
+                    "Integration with private registries and self-hosted runners widens the trust boundary."
+                ],
+                "evidence": [
+                    {
+                        "title": "GitHub Docs: Keeping your supply chain secure with Dependabot",
+                        "url": "https://docs.github.com/en/code-security/dependabot",
+                        "summary": "Describes supported ecosystems, alerts, auto-triage rules, security and version updates, and troubleshooting.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Secret Scanning & Push Protection",
+                "description": "Detects leaked credentials and secrets in repositories and optionally blocks pushes that contain patterns resembling secrets, supporting custom patterns and partner integrations.",
+                "primary_actors": [
+                    "Security engineers",
+                    "Organization owners",
+                    "Developers"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Secret scanning configuration and alert views under the Security section of repositories and organizations.",
+                        "url": "https://docs.github.com/en/code-security/secret-scanning"
+                    },
+                    {
+                        "channel": "other",
+                        "details": "Push protection enforcement during git push from local development tools, and command-line prompts for bypass or remediation.",
+                        "url": "https://docs.github.com/en/code-security/secret-scanning/working-with-secret-scanning-and-push-protection/push-protection-for-users"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "REST API endpoints for secret scanning alerts and push protection configuration.",
+                        "url": "https://docs.github.com/en/rest/secret-scanning/secret-scanning"
+                    }
+                ],
+                "key_data_involved": [
+                    "Repository content and history",
+                    "Detected secret tokens and metadata",
+                    "Secret scanning alerts and states",
+                    "Custom and provider secret patterns",
+                    "Push protection configuration and bypass decisions"
+                ],
+                "security_relevant_traits": [
+                    "Can proactively block pushes that include secrets, preventing leakage into history.",
+                    "Supports custom patterns and delegated bypass and dismissal, which govern who can override protections.",
+                    "Copilot secret scanning features can generate patterns and detect generic secrets, introducing AI-based detection into the pipeline.",
+                    "Org-level secret risk assessments summarize exposure and inform adoption of advanced protections."
+                ],
+                "evidence": [
+                    {
+                        "title": "GitHub Docs: Keeping secrets secure with secret scanning",
+                        "url": "https://docs.github.com/en/code-security/secret-scanning",
+                        "summary": "Explains secret scanning, push protection, supported patterns, alert management, and advanced features.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            }
+        ],
+        "administrative_and_operational_capabilities": [
+            {
+                "name": "Organization & Team Administration",
+                "description": "Manages organizations, membership, teams, repository access, and organization-wide settings and security policies.",
+                "primary_actors": [
+                    "Organization owners",
+                    "Organization administrators",
+                    "Team maintainers",
+                    "Security managers",
+                    "Billing managers"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Organization settings UI covering members, teams, repositories, policies, and security settings.",
+                        "url": "https://docs.github.com/en/organizations"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "REST API endpoints for organizations, members, teams, and org-level settings.",
+                        "url": "https://docs.github.com/en/rest/orgs/orgs"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "REST API endpoints for teams and their memberships.",
+                        "url": "https://docs.github.com/en/rest/teams/teams"
+                    }
+                ],
+                "key_data_involved": [
+                    "Organization accounts and profiles",
+                    "Members, outside collaborators, and roles",
+                    "Teams and team hierarchies",
+                    "Repository access policies and base permissions",
+                    "Org-level feature flags and restrictions (Actions, Pages, Discussions, Codespaces)"
+                ],
+                "security_relevant_traits": [
+                    "Controls who can create repositories, change visibility, delete or transfer repos, and manage actions like forking.",
+                    "Team-based permission models and roles affect access to code, issues, and security data.",
+                    "Org-level settings govern 2FA requirements, SSO, commit signoff, and model usage.",
+                    "Org audit logs provide detailed records of configuration and access changes."
+                ],
+                "evidence": [
+                    {
+                        "title": "GitHub Docs: Organizations overview",
+                        "url": "https://docs.github.com/en/organizations/collaborating-with-groups-in-organizations/about-organizations",
+                        "summary": "Defines organizations and describes membership, settings, and best practices.",
+                        "notes": null
+                    },
+                    {
+                        "title": "GitHub Docs: Organizations index",
+                        "url": "https://docs.github.com/en/organizations",
+                        "summary": "Lists documentation for roles, membership, repository access, security, and settings.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Enterprise Account & Policy Administration (GitHub Enterprise Cloud)",
+                "description": "Provides enterprise accounts that own multiple organizations, centralizing governance, identity, policies, data residency, and auditing for large customers.",
+                "primary_actors": [
+                    "Enterprise owners",
+                    "Enterprise administrators",
+                    "Identity and access management teams",
+                    "Compliance and security officers",
+                    "Billing administrators"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Enterprise account settings for managing orgs, policies, IAM, data residency, and audit logs.",
+                        "url": "https://docs.github.com/en/enterprise-cloud@latest/admin"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "REST API endpoints covering enterprise teams, enterprise-level metrics, and administration.",
+                        "url": "https://docs.github.com/en/rest/enterprise-teams/enterprise-teams"
+                    },
+                    {
+                        "channel": "webhook",
+                        "details": "Global webhooks configured at the enterprise scope for monitoring events across all organizations.",
+                        "url": "https://docs.github.com/en/enterprise-cloud@latest/admin/monitoring-activity-in-your-enterprise/exploring-user-activity-in-your-enterprise/managing-global-webhooks"
+                    }
+                ],
+                "key_data_involved": [
+                    "Enterprise account metadata",
+                    "List of organizations and their settings",
+                    "Enterprise roles and delegations",
+                    "Compliance reports and audit logs",
+                    "Enterprise-wide policies for Actions, security, and repositories",
+                    "Data residency configuration and region assignments"
+                ],
+                "security_relevant_traits": [
+                    "Enterprise-level policies can enforce or relax security and governance controls across all child organizations.",
+                    "Enterprise IAM configuration (including SAML and EMU) centralizes identity across many users.",
+                    "Audit logs at enterprise scope enable forensics and regulatory compliance.",
+                    "Data residency configurations influence where user and repository data is stored and processed."
+                ],
+                "evidence": [
+                    {
+                        "title": "GitHub Docs: Enterprise administrators overview",
+                        "url": "https://docs.github.com/en/enterprise-cloud@latest/admin/overview/about-github-for-enterprises",
+                        "summary": "Introduces GitHub for enterprises and the role of enterprise accounts.",
+                        "notes": null
+                    },
+                    {
+                        "title": "GitHub Docs: Enterprise Cloud admin index",
+                        "url": "https://docs.github.com/en/enterprise-cloud@latest/admin",
+                        "summary": "Lists enterprise-level docs including IAM, policies, monitoring, and data residency.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Organization-Scale Security Configuration, Risk Assessment & Campaigns",
+                "description": "Allows organizations to define and apply security configurations, run secret and vulnerability risk assessments, and manage remediation campaigns at scale.",
+                "primary_actors": [
+                    "Organization security managers",
+                    "Enterprise security teams",
+                    "CISOs and security program leads"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Org-level security center views and configuration pages for security configurations and risk reports.",
+                        "url": "https://docs.github.com/en/code-security/securing-your-organization"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "REST API endpoints for code security configurations and campaigns.",
+                        "url": "https://docs.github.com/en/rest/code-security/configurations"
+                    }
+                ],
+                "key_data_involved": [
+                    "Security configurations applied to repositories",
+                    "Lists of repositories and their security feature status",
+                    "Secret risk assessment data and reports",
+                    "Vulnerability exposure metrics and prioritization data",
+                    "Security campaigns and their progress"
+                ],
+                "security_relevant_traits": [
+                    "Centralizes enabling and configuring features like code scanning, Dependabot, and secret scanning across repositories.",
+                    "Secret risk assessments reveal where secrets may have leaked and help justify adoption of push protection.",
+                    "Security campaigns orchestrate large-scale remediation efforts with tracking and best practices.",
+                    "Misconfiguration of security configurations can unintentionally disable key protections at scale."
+                ],
+                "evidence": [
+                    {
+                        "title": "GitHub Docs: Securing your organization",
+                        "url": "https://docs.github.com/en/code-security/securing-your-organization",
+                        "summary": "Covers enabling security features, managing configurations, secret risk assessments, vulnerability exposure, and campaigns.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Authentication & Account Security Management",
+                "description": "Provides mechanisms to authenticate users and services (passwords, passkeys, 2FA, SSH, personal access tokens, SSO) and manage security of accounts and tokens.",
+                "primary_actors": [
+                    "Individual users",
+                    "Organization owners",
+                    "Enterprise IAM and security teams"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "User account security settings for passwords, two-factor authentication, passkeys, SSH keys, and tokens.",
+                        "url": "https://docs.github.com/en/authentication"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "REST API endpoints for authentication, credential scopes, and token permissions.",
+                        "url": "https://docs.github.com/en/rest/authentication"
+                    },
+                    {
+                        "channel": "integration",
+                        "details": "SSO integrations via SAML/OIDC and enterprise-managed user provisioning via SCIM.",
+                        "url": "https://docs.github.com/en/enterprise-cloud@latest/admin/managing-iam"
+                    }
+                ],
+                "key_data_involved": [
+                    "User identities and account metadata",
+                    "Authentication credentials (password hashes, passkeys, SSH keys, tokens)",
+                    "2FA configuration and recovery codes",
+                    "Security logs of sessions and sign-in attempts",
+                    "SSO and SAML assertion metadata"
+                ],
+                "security_relevant_traits": [
+                    "Supports mandatory 2FA enforcement at org and enterprise levels.",
+                    "Fine-grained personal access tokens and GitHub App tokens have scoped permissions and expiration.",
+                    "Security logs and audit logs capture authentication events and credential changes.",
+                    "Passkeys and WebAuthn-based authentication reduce reliance on passwords."
+                ],
+                "evidence": [
+                    {
+                        "title": "GitHub Docs: Authentication index",
+                        "url": "https://docs.github.com/en/authentication",
+                        "summary": "Lists docs for account security, 2FA, passkeys, SSH, and commit signing.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Billing & Usage Management",
+                "description": "Manages billing accounts, payment methods, plans, budgets, and usage for metered GitHub products such as Actions, Codespaces, and Copilot.",
+                "primary_actors": [
+                    "Billing managers",
+                    "Finance teams",
+                    "Organization and enterprise owners"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Billing settings and usage dashboards for organizations and enterprises.",
+                        "url": "https://docs.github.com/en/billing"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "REST API endpoints for budgets and usage data.",
+                        "url": "https://docs.github.com/en/rest/billing/usage"
+                    }
+                ],
+                "key_data_involved": [
+                    "Billing accounts and contacts",
+                    "Product usage metrics (Actions minutes, Codespaces hours, Copilot seats)",
+                    "Budgets, alerts, and cost centers",
+                    "Invoices and payment transactions"
+                ],
+                "security_relevant_traits": [
+                    "Billing roles determine who can change plans, payment methods, and budgets at org or enterprise scale.",
+                    "Budgets and alerts help detect anomalous usage that could indicate abuse (e.g., malicious Actions workloads).",
+                    "Billing data may be subject to compliance and privacy requirements depending on geography and customer type."
+                ],
+                "evidence": [
+                    {
+                        "title": "GitHub Docs: Introduction to billing and licensing",
+                        "url": "https://docs.github.com/en/billing/get-started/introduction-to-billing",
+                        "summary": "Explains the billing platform, key concepts, and managing spending.",
+                        "notes": null
+                    },
+                    {
+                        "title": "GitHub Docs: How GitHub billing works",
+                        "url": "https://docs.github.com/en/billing/get-started/how-billing-works",
+                        "summary": "Describes what is billed, when, and how to track usage.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            }
+        ],
+        "api_surface_and_integrations": [
+            {
+                "name": "GitHub REST API",
+                "description": "Exposes a comprehensive HTTP-based API for interacting with nearly all GitHub resources, including repositories, issues, pull requests, actions, security, and administration.",
+                "primary_actors": [
+                    "Integrators and tool developers",
+                    "Platform and DevOps teams",
+                    "Security automation engineers",
+                    "Data and analytics engineers"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "api",
+                        "details": "Versioned REST API endpoints under api.github.com organized by resource categories.",
+                        "url": "https://docs.github.com/en/rest"
+                    },
+                    {
+                        "channel": "other",
+                        "details": "Official SDKs such as Octokit libraries for various languages built on the REST API.",
+                        "url": "https://docs.github.com/en/rest/using-the-rest-api/libraries-for-the-rest-api"
+                    }
+                ],
+                "key_data_involved": [
+                    "All core GitHub resource types (users, orgs, repos, issues, PRs, actions, security alerts, etc.)",
+                    "Authentication credentials (PATs, GitHub App tokens, OAuth tokens)",
+                    "Webhooks configuration and delivery data when managed via API",
+                    "Rate limit metadata and audit-relevant request details"
+                ],
+                "security_relevant_traits": [
+                    "Authentication and authorization mirror the web UI, but automated access increases impact of credential compromise.",
+                    "Rate limits protect the platform but also act as signals of potential abuse.",
+                    "Fine-grained scopes and permission models for tokens limit which endpoints can be called.",
+                    "API versions and breaking changes are managed explicitly to reduce integration risk."
+                ],
+                "evidence": [
+                    {
+                        "title": "GitHub Docs: About the REST API",
+                        "url": "https://docs.github.com/en/rest/about-the-rest-api/about-the-rest-api",
+                        "summary": "Introduces the REST API, its resources, and versioning.",
+                        "notes": null
+                    },
+                    {
+                        "title": "GitHub Docs: REST API index",
+                        "url": "https://docs.github.com/en/rest",
+                        "summary": "Lists all REST API categories and endpoints by feature area.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Webhook Event Delivery",
+                "description": "Delivers HTTP callbacks to customer-provided endpoints when events occur in GitHub (such as pushes, issues, and workflow runs), enabling event-driven integrations.",
+                "primary_actors": [
+                    "Third-party integrators",
+                    "Internal platform teams",
+                    "Security monitoring teams",
+                    "Enterprise administrators"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "webhook",
+                        "details": "Repository, organization, app, and enterprise-level webhooks configured via the UI.",
+                        "url": "https://docs.github.com/en/webhooks"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "REST API endpoints for managing webhook configurations and deliveries.",
+                        "url": "https://docs.github.com/en/rest/orgs/webhooks"
+                    }
+                ],
+                "key_data_involved": [
+                    "Event payloads containing repository, org, user, and activity data",
+                    "Webhook endpoint URLs and shared secrets",
+                    "Delivery logs, response codes, and timestamps",
+                    "Redelivery attempts and failure metadata"
+                ],
+                "security_relevant_traits": [
+                    "Webhook payloads may contain sensitive information about code, issues, and security events.",
+                    "Secrets (HMAC signatures) and TLS must be used to authenticate deliveries.",
+                    "Misconfigured endpoints or forwarding tooling can leak data outside intended boundaries.",
+                    "Redelivery and troubleshooting features can be used to replay events into test systems."
+                ],
+                "evidence": [
+                    {
+                        "title": "GitHub Docs: Webhooks overview",
+                        "url": "https://docs.github.com/en/webhooks",
+                        "summary": "Explains creating, handling, validating, and troubleshooting webhooks.",
+                        "notes": null
+                    },
+                    {
+                        "title": "GitHub Docs: Webhook events and payloads",
+                        "url": "https://docs.github.com/en/webhooks/webhook-events-and-payloads",
+                        "summary": "Documents supported webhook events and their payload schemas.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "GitHub Apps & OAuth Apps Platform",
+                "description": "Provides an extensibility platform via GitHub Apps and OAuth apps, enabling fine-grained, token-based integrations that can act as bots, tools, or login providers.",
+                "primary_actors": [
+                    "App developers",
+                    "Marketplace vendors",
+                    "Organization and enterprise admins",
+                    "Security and compliance teams"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "App registration and installation configuration pages for GitHub Apps and OAuth apps.",
+                        "url": "https://docs.github.com/en/apps"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "REST APIs for GitHub Apps, installations, and Marketplace operations.",
+                        "url": "https://docs.github.com/en/rest/apps/apps"
+                    },
+                    {
+                        "channel": "webhook",
+                        "details": "GitHub App webhooks delivering app-specific event payloads.",
+                        "url": "https://docs.github.com/en/apps/creating-github-apps/writing-code-for-a-github-app/building-a-github-app-that-responds-to-webhook-events"
+                    }
+                ],
+                "key_data_involved": [
+                    "App registrations and metadata (name, permissions, webhook URL)",
+                    "Installation records across users and organizations",
+                    "App tokens and user access tokens",
+                    "Marketplace listing and billing data for paid apps"
+                ],
+                "security_relevant_traits": [
+                    "GitHub Apps use fine-grained permissions and short-lived tokens, reducing blast radius compared to classic OAuth apps.",
+                    "App installations can be scoped to specific repositories and organizations, and are reviewable by admins.",
+                    "Privileged GitHub Apps can have elevated capabilities and require special oversight.",
+                    "Misconfigured apps or over-broad permissions can still lead to major compromise if tokens are abused."
+                ],
+                "evidence": [
+                    {
+                        "title": "GitHub Docs: About using GitHub Apps",
+                        "url": "https://docs.github.com/en/apps/using-github-apps/about-using-github-apps",
+                        "summary": "Explains what GitHub Apps are and why to use them.",
+                        "notes": null
+                    },
+                    {
+                        "title": "GitHub Docs: About creating GitHub Apps",
+                        "url": "https://docs.github.com/en/apps/creating-github-apps/about-creating-github-apps/about-creating-github-apps",
+                        "summary": "Describes registering and building GitHub Apps with fine-grained permissions.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            }
+        ],
+        "background_jobs_and_automation": [
+            {
+                "name": "Event-Driven Workflows with GitHub Actions Runners",
+                "description": "Executes workflows on hosted or self-hosted runners in response to repository and organization events, schedules, or manual triggers.",
+                "primary_actors": [
+                    "Developers",
+                    "DevOps and platform engineers",
+                    "Security engineers",
+                    "Enterprise admins managing runners"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "other",
+                        "details": "Workflow YAML files defining jobs that run asynchronously on events or schedules.",
+                        "url": "https://docs.github.com/en/actions/concepts/workflows-and-actions"
+                    },
+                    {
+                        "channel": "ui",
+                        "details": "Actions run history, logs, and artifact views in the repository and org UI.",
+                        "url": "https://docs.github.com/en/actions/how-tos/manage-workflow-runs"
+                    },
+                    {
+                        "channel": "api",
+                        "details": "REST API endpoints for workflow runs, jobs, artifacts, and runners.",
+                        "url": "https://docs.github.com/en/rest/actions/workflow-runs"
+                    }
+                ],
+                "key_data_involved": [
+                    "Job execution metadata and logs",
+                    "Artifacts and caches generated by workflows",
+                    "Runner configuration and labels",
+                    "Triggers and event payloads associated with each run"
+                ],
+                "security_relevant_traits": [
+                    "Jobs may access secrets and tokens; logs and artifacts can inadvertently store sensitive data.",
+                    "Runner policies determine where code runs and what network access it has.",
+                    "Misconfigured triggers (e.g., on pull_request from forks) can be abused for secret exfiltration if not mitigated.",
+                    "Limits and quotas help mitigate abuse and manage cost."
+                ],
+                "evidence": [
+                    {
+                        "title": "GitHub Docs: Concepts for GitHub Actions",
+                        "url": "https://docs.github.com/en/actions/concepts",
+                        "summary": "Describes workflows, runners, security, metrics, and billing concepts.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Automated Dependency & Security Remediation Jobs",
+                "description": "Runs background jobs to analyze dependencies, raise alerts, and open or update pull requests to remediate vulnerabilities and keep dependencies current.",
+                "primary_actors": [
+                    "Security engineering teams",
+                    "Developers and maintainers",
+                    "Platform teams"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "other",
+                        "details": "Dependabot configuration files and security settings that schedule background checks.",
+                        "url": "https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuring-dependabot-version-updates"
+                    },
+                    {
+                        "channel": "ui",
+                        "details": "Security alerts views and Dependabot job logs in the repository UI.",
+                        "url": "https://docs.github.com/en/code-security/dependabot/dependabot-alerts/viewing-and-updating-dependabot-alerts"
+                    }
+                ],
+                "key_data_involved": [
+                    "Dependency manifests and lockfiles across repositories",
+                    "Vulnerability advisories and CVE metadata",
+                    "Background job run logs and status",
+                    "Automated PRs and their merge status"
+                ],
+                "security_relevant_traits": [
+                    "Background jobs regularly check for and surface new vulnerabilities as advisories are published.",
+                    "Auto-updating dependencies via PRs reduces time-to-remediation but must be controlled to avoid breaking changes.",
+                    "Metrics and auto-triage rules can prioritize vulnerabilities based on exploitability and usage context.",
+                    "Background jobs may require access to private registries and self-hosted runners, expanding trust boundaries."
+                ],
+                "evidence": [
+                    {
+                        "title": "GitHub Docs: Working with Dependabot",
+                        "url": "https://docs.github.com/en/code-security/dependabot/working-with-dependabot",
+                        "summary": "Details workflows for dependency updates, including job logs and troubleshooting.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Security Scanning, Push Protection & Policy Enforcement Pipelines",
+                "description": "Runs automated pipelines that scan code for vulnerabilities and secrets, enforce merge protections, and block risky pushes based on configured policies.",
+                "primary_actors": [
+                    "Security and compliance teams",
+                    "Repository admins",
+                    "Organization and enterprise security admins"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "other",
+                        "details": "Code scanning and secret scanning jobs triggered by pushes, pull requests, and schedules.",
+                        "url": "https://docs.github.com/en/code-security/code-scanning/enabling-code-scanning"
+                    },
+                    {
+                        "channel": "ui",
+                        "details": "Security views for code scanning and secret scanning alerts, and branch protection settings.",
+                        "url": "https://docs.github.com/en/code-security/securing-your-organization/enabling-security-features-in-your-organization"
+                    }
+                ],
+                "key_data_involved": [
+                    "Source code and configuration scanned for issues",
+                    "Security alerts and their triage state",
+                    "Branch protection and merge protection settings",
+                    "Push protection events and bypass reason data"
+                ],
+                "security_relevant_traits": [
+                    "Merge protection based on code scanning alerts or required checks can prevent known-vulnerable code from landing in protected branches.",
+                    "Push protection can block secrets from entering history at all, not just alert after the fact.",
+                    "Org and enterprise policies define which protections are mandatory and where exceptions are allowed.",
+                    "Central dashboards aggregate these pipeline results for monitoring risk posture."
+                ],
+                "evidence": [
+                    {
+                        "title": "GitHub Docs: Managing your code scanning configuration",
+                        "url": "https://docs.github.com/en/code-security/code-scanning/managing-your-code-scanning-configuration/set-code-scanning-merge-protection",
+                        "summary": "Documents configuring merge protection based on code scanning results.",
+                        "notes": null
+                    },
+                    {
+                        "title": "GitHub Docs: Working with secret scanning and push protection",
+                        "url": "https://docs.github.com/en/code-security/secret-scanning/working-with-secret-scanning-and-push-protection",
+                        "summary": "Explains push protection workflows and remediation for leaked secrets.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            },
+            {
+                "name": "Projects & Codespaces Automation and Prebuilds",
+                "description": "Automates project management (for example, auto-updating fields and views) and prebuilds Codespaces environments to speed up developer onboarding and workflow.",
+                "primary_actors": [
+                    "Project administrators",
+                    "Developers",
+                    "Platform teams",
+                    "Organization admins"
+                ],
+                "main_interfaces": [
+                    {
+                        "channel": "ui",
+                        "details": "Projects automation configuration within project settings and views.",
+                        "url": "https://docs.github.com/en/issues/planning-and-tracking-with-projects/automating-your-project"
+                    },
+                    {
+                        "channel": "ui",
+                        "details": "Codespaces prebuilds configuration in repository and organization settings.",
+                        "url": "https://docs.github.com/en/codespaces/prebuilding-your-codespaces"
+                    }
+                ],
+                "key_data_involved": [
+                    "Project items and field values updated by automations",
+                    "Automation rules and conditions",
+                    "Codespaces prebuild configurations and VM images",
+                    "Metrics on prebuild usage and performance"
+                ],
+                "security_relevant_traits": [
+                    "Automations can change visibility or status of work items, indirectly affecting who sees sensitive tasks.",
+                    "Codespaces prebuilds may include compiled dependencies or cached secrets access, which must be carefully configured.",
+                    "Org-level restrictions on machine types, retention, and networking affect how prebuilds operate.",
+                    "Misconfigured automations could inadvertently move sensitive items into broader visibility or delete critical data."
+                ],
+                "evidence": [
+                    {
+                        "title": "GitHub Docs: Automating your project",
+                        "url": "https://docs.github.com/en/issues/planning-and-tracking-with-projects/automating-your-project",
+                        "summary": "Describes built-in automations and API-based automation for Projects.",
+                        "notes": null
+                    },
+                    {
+                        "title": "GitHub Docs: Prebuilding your codespaces",
+                        "url": "https://docs.github.com/en/codespaces/prebuilding-your-codespaces",
+                        "summary": "Explains prebuilds, their configuration, and management.",
+                        "notes": null
+                    }
+                ],
+                "notes": null
+            }
+        ]
+    },
+    "technical_components_and_data_flows": {
+        "services_or_modules": [
+            {
+                "name": "Repository & Git Service",
+                "description": "Stores Git repositories and provides operations for cloning, pushing, pulling, and browsing code and history."
+            },
+            {
+                "name": "Issues, Projects & Collaboration Service",
+                "description": "Handles issues, comments, labels, milestones, and Projects data and views."
+            },
+            {
+                "name": "Pull Request & Review Service",
+                "description": "Manages pull requests, reviews, review comments, merge strategies, and status checks integration."
+            },
+            {
+                "name": "Actions & Workflow Service",
+                "description": "Schedules and executes workflows on runners, tracks runs, logs, artifacts, and caches."
+            },
+            {
+                "name": "Codespaces Service",
+                "description": "Provision and manages dev container–based development environments, including lifecycle and prebuilds."
+            },
+            {
+                "name": "Packages & Container Registry Service",
+                "description": "Hosts package registries for various ecosystems and integrates them with repositories and workflows."
+            },
+            {
+                "name": "Security & Advanced Security Service",
+                "description": "Encompasses code scanning, secret scanning, Dependabot, security configurations, and security campaigns."
+            },
+            {
+                "name": "Organizations & Enterprise Admin Service",
+                "description": "Maintains orgs and enterprise accounts, roles, policies, and audit logs."
+            },
+            {
+                "name": "Identity & Authentication Service",
+                "description": "Provides authentication mechanisms, token issuance, and SSO/SAML/SCIM integrations."
+            },
+            {
+                "name": "Billing & Metering Service",
+                "description": "Measures usage for metered products, calculates billing, and surfaces budgets and cost centers."
+            },
+            {
+                "name": "API Gateway & REST Layer",
+                "description": "Exposes GitHub resources via versioned REST endpoints, applies auth, rate limiting, and validation."
+            },
+            {
+                "name": "Webhook Delivery Service",
+                "description": "Queues and delivers webhook events, tracks delivery status, and supports retries and inspection."
+            },
+            {
+                "name": "Apps & Integrations Platform",
+                "description": "Manages GitHub Apps, OAuth apps, Marketplace, and associated permissions and webhooks."
+            },
+            {
+                "name": "Copilot & Models Service",
+                "description": "Surfaces AI models via IDE integrations, chat, CLI, and coding agents, and integrates with repositories."
+            }
+        ],
+        "storage_and_logs": [
+            {
+                "name": "Git Repository Storage",
+                "description": "Stores Git objects and refs backing repositories and associated metadata."
+            },
+            {
+                "name": "Metadata Datastores",
+                "description": "Hold issues, PRs, projects, orgs, security alerts, and other relational or document-style metadata."
+            },
+            {
+                "name": "Actions Artifacts & Logs Storage",
+                "description": "Persists workflow logs, artifacts, and caches for troubleshooting and reuse."
+            },
+            {
+                "name": "Codespaces Storage & Snapshots",
+                "description": "Maintains persistent volumes and snapshots for codespaces, including dev container images."
+            },
+            {
+                "name": "Security & Audit Logs",
+                "description": "Stores organization and enterprise audit logs and account security logs for compliance and forensics."
+            },
+            {
+                "name": "Billing & Usage Datastores",
+                "description": "Aggregate metered product usage and billing-related data, including budgets and reports."
+            }
+        ],
+        "external_systems": [
+            {
+                "name": "Identity Providers (IdPs)",
+                "description": "External SAML/OIDC identity systems used for SSO and Enterprise Managed Users."
+            },
+            {
+                "name": "Payment Providers and Azure Billing",
+                "description": "External billing and payment platforms handling credit card and Azure subscription payments."
+            },
+            {
+                "name": "Customer CI/CD and Deployment Systems",
+                "description": "External systems triggered by GitHub webhooks or Actions to deploy code or run additional checks."
+            },
+            {
+                "name": "Private Package Registries",
+                "description": "Third-party or self-hosted registries used with Dependabot and security features."
+            },
+            {
+                "name": "Secret Scanning Partners",
+                "description": "Service providers that receive notifications about leaked secrets for revocation and remediation."
+            }
+        ],
+        "data_flows": [
+            {
+                "name": "Code Push and Repository Update Flow",
+                "description": "Developers push commits to GitHub; the repository service updates Git data, which triggers downstream events such as Actions workflows, webhooks, code scanning, secret scanning, and project automations."
+            },
+            {
+                "name": "Issue and Project Management Flow",
+                "description": "Users create and update issues and project items via UI or API; changes propagate to notifications, dashboards, charts, and, when configured, Actions-based automations."
+            },
+            {
+                "name": "Pull Request & Review Flow",
+                "description": "Pull requests aggregate commits; reviewers provide feedback; status checks and scans run; once criteria are met under branch protection rules, merges update protected branches."
+            },
+            {
+                "name": "Security Scanning & Alerting Flow",
+                "description": "Code scanning and secret scanning jobs analyze repositories; results are stored as security alerts and surfaced in dashboards and via APIs; policies can block merges or pushes based on these results."
+            },
+            {
+                "name": "Dependency & Vulnerability Management Flow",
+                "description": "Dependabot and security services ingest dependency manifests and vulnerability advisories; alerts are raised and automated PRs created; merged updates feed back into dependency graph and risk metrics."
+            },
+            {
+                "name": "Webhook & Integration Flow",
+                "description": "Events from repositories, orgs, or apps are serialized into payloads and delivered via webhooks; external systems respond and may call back into the REST API to perform actions."
+            },
+            {
+                "name": "Billing & Usage Flow",
+                "description": "Usage from Actions, Codespaces, Copilot, and other products is recorded and aggregated; budgets and alerts are evaluated; billing statements are generated and exposed through UI and APIs."
+            }
+        ]
+    },
+    "security_relevant_behaviours": {
+        "privileged_operations": [
+            "Changing repository visibility, deleting repositories, or transferring repository or organization ownership.",
+            "Creating, editing, and deleting organization- or enterprise-level policies for Actions, security features, and repository management.",
+            "Configuring enterprise IAM, including SAML SSO, Enterprise Managed Users, and SCIM provisioning.",
+            "Managing security configurations and applying or detaching them from large sets of repositories.",
+            "Enabling or disabling powerful features like Codespaces, GitHub Actions, and GitHub Copilot for an organization or enterprise.",
+            "Managing billing settings, budgets, and payment methods that control access to paid features."
+        ],
+        "user_configurable_logic": [
+            "Workflow logic defined in GitHub Actions YAML files that can execute arbitrary code, deploy systems, or modify repositories.",
+            "Project automations that update fields, move items between views, or archive items based on conditions.",
+            "Dependabot configuration that controls how and when dependency update jobs run and which dependencies are included.",
+            "Security configurations and rulesets that define when code scanning, secret scanning, and other protections are applied and how merge or push protections behave.",
+            "Webhooks and GitHub Apps that execute user-defined code in response to GitHub events."
+        ],
+        "auth_and_identity_behaviours": [
+            "Support for multiple authentication factors (passwords, 2FA, passkeys) and recovery methods, with optional mandatory 2FA for organizations.",
+            "Use of personal access tokens, fine-grained tokens, and GitHub App tokens with scoped permissions and expiration for API and Git operations.",
+            "Single sign-on with SAML/OIDC and Enterprise Managed Users centralizes identity and may enforce login via IdP.",
+            "Session and device verification flows (e.g., sudo mode, new-device verification) to mitigate account takeover.",
+            "Management and rotation of SSH keys, deploy keys, and GPG keys used for code signing and repository access."
+        ],
+        "logging_and_audit_behaviours": [
+            "Organization and enterprise audit logs record administrative actions, security configuration changes, and significant repository events.",
+            "Account-level security logs record sign-in events, credential updates, and token usage.",
+            "Codespaces and Actions provide logs of environment usage and workflow runs, respectively, for troubleshooting and incident response.",
+            "Billing reports and usage logs help detect anomalous usage that could be associated with abuse or compromise."
+        ],
+        "failure_modes": [
+            "Workflow runs can fail due to configuration errors, unavailable runners, or rate limits, potentially blocking deployments or quality/security checks.",
+            "Webhook deliveries can fail due to endpoint errors or network issues; without proper retries or monitoring, integrations may silently break.",
+            "Code scanning and secret scanning may be misconfigured or disabled on some repositories, leaving gaps in coverage.",
+            "Dependabot jobs can stop generating updates due to misconfiguration, registry access issues, or hitting limits, leaving dependencies stale.",
+            "Codespaces creation or prebuilds may fail due to dev container misconfiguration, quota exhaustion, or network restrictions.",
+            "Authentication failures (e.g., misconfigured SAML, revoked tokens) can lock users out or cause service interruptions if not mitigated by recovery mechanisms."
+        ]
+    },
+    "open_questions": [
+        {
+            "question": "What are the precise data residency guarantees and tenant isolation properties for all GitHub features (Actions, Codespaces, Copilot, Packages) when using Enterprise Cloud with data residency?",
+            "context": "The Enterprise Cloud admin docs describe data residency generally, but per-feature behavior and any exceptions are not fully detailed in the reviewed sections.",
+            "related_capabilities": [
+                "Enterprise Account & Policy Administration (GitHub Enterprise Cloud)",
+                "Cloud Development Environments with GitHub Codespaces",
+                "Automation with GitHub Actions (User Perspective)",
+                "Developer Assistance with GitHub Copilot"
+            ]
+        },
+        {
+            "question": "How exactly are GitHub Models and Copilot services architected relative to core GitHub data stores, and what data is retained or used for training versus only for inference?",
+            "context": "The Copilot and GitHub Models docs describe usage and customization, but do not deeply document internal data flows or retention policies in the sections analyzed.",
+            "related_capabilities": [
+                "Developer Assistance with GitHub Copilot",
+                "Copilot & Models Service"
+            ]
+        },
+        {
+            "question": "What are the default and maximum retention periods for all classes of logs, artifacts, caches, and security alerts across Actions, Codespaces, security products, and audits?",
+            "context": "Individual docs mention retention configuration for some artifacts and logs, but a consolidated matrix of defaults and limits was not found.",
+            "related_capabilities": [
+                "Event-Driven Workflows with GitHub Actions Runners",
+                "Cloud Development Environments with GitHub Codespaces",
+                "Security Scanning, Push Protection & Policy Enforcement Pipelines",
+                "Billing & Usage Management"
+            ]
+        },
+        {
+            "question": "How do fine-grained personal access token permissions map exhaustively to REST API endpoints, and how are edge cases handled when multiple permission sources overlap?",
+            "context": "The REST auth docs list endpoint sets and required permissions, but a full mapping and conflict resolution behavior across token types and roles was not fully explored.",
+            "related_capabilities": [
+                "GitHub REST API",
+                "Authentication & Account Security Management",
+                "GitHub Apps & OAuth Apps Platform"
+            ]
+        }
+    ],
+    "evidence_index": [
+        {
+            "title": "GitHub Docs: Get started overview",
+            "url": "https://docs.github.com/en/get-started",
+            "summary": "Top-level onboarding docs covering GitHub accounts, Git basics, learning resources, and using GitHub.",
+            "notes": null
+        },
+        {
+            "title": "GitHub Docs: Repositories",
+            "url": "https://docs.github.com/en/repositories",
+            "summary": "Comprehensive documentation for repository lifecycle, configuration, branches, and releases.",
+            "notes": null
+        },
+        {
+            "title": "GitHub Docs: Creating and managing repositories – About repositories",
+            "url": "https://docs.github.com/en/repositories/creating-and-managing-repositories/about-repositories",
+            "summary": "Defines repositories and outlines creation, cloning, limits, and visibility.",
+            "notes": null
+        },
+        {
+            "title": "GitHub Docs: Issues overview",
+            "url": "https://docs.github.com/en/issues",
+            "summary": "Entry point for GitHub Issues, Projects, and labels/milestones tracking.",
+            "notes": null
+        },
+        {
+            "title": "GitHub Docs: About issues",
+            "url": "https://docs.github.com/en/issues/tracking-your-work-with-issues/learning-about-issues/about-issues",
+            "summary": "Describes how issues can track ideas, feedback, tasks, and bugs.",
+            "notes": null
+        },
+        {
+            "title": "GitHub Docs: Planning and tracking with Projects",
+            "url": "https://docs.github.com/en/issues/planning-and-tracking-with-projects",
+            "summary": "Documents Projects, including fields, views, automations, and insights.",
+            "notes": null
+        },
+        {
+            "title": "GitHub Docs: Pull requests",
+            "url": "https://docs.github.com/en/pull-requests",
+            "summary": "Index for pull request creation, review, merge strategies, and related topics.",
+            "notes": null
+        },
+        {
+            "title": "GitHub Docs: About pull request reviews",
+            "url": "https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests/about-pull-request-reviews",
+            "summary": "Explains the PR review model and review states.",
+            "notes": null
+        },
+        {
+            "title": "GitHub Docs: GitHub Actions",
+            "url": "https://docs.github.com/en/actions",
+            "summary": "Landing page for Actions concepts, how-tos, reference, and tutorials.",
+            "notes": null
+        },
+        {
+            "title": "GitHub Docs: Workflows and actions concepts",
+            "url": "https://docs.github.com/en/actions/concepts/workflows-and-actions",
+            "summary": "Discusses how workflows and actions are structured and executed.",
+            "notes": null
+        },
+        {
+            "title": "GitHub Docs: Workflow syntax for GitHub Actions",
+            "url": "https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax",
+            "summary": "Defines configuration syntax for Actions workflows.",
+            "notes": null
+        },
+        {
+            "title": "GitHub Docs: Code scanning overview",
+            "url": "https://docs.github.com/en/code-security/code-scanning",
+            "summary": "Describes code scanning setup, alert management, and integrations.",
+            "notes": null
+        },
+        {
+            "title": "GitHub Docs: Keeping your supply chain secure with Dependabot",
+            "url": "https://docs.github.com/en/code-security/dependabot",
+            "summary": "Central docs for Dependabot ecosystems, alerts, security and version updates, and troubleshooting.",
+            "notes": null
+        },
+        {
+            "title": "GitHub Docs: Keeping secrets secure with secret scanning",
+            "url": "https://docs.github.com/en/code-security/secret-scanning",
+            "summary": "Introduces secret scanning, push protection, advanced features, and partnerships.",
+            "notes": null
+        },
+        {
+            "title": "GitHub Docs: Securing your organization",
+            "url": "https://docs.github.com/en/code-security/securing-your-organization",
+            "summary": "Org-scale security configs, secret risk assessments, exposure metrics, and campaigns.",
+            "notes": null
+        },
+        {
+            "title": "GitHub Docs: Organizations index",
+            "url": "https://docs.github.com/en/organizations",
+            "summary": "Documentation for organization creation, roles, membership, settings, and security.",
+            "notes": null
+        },
+        {
+            "title": "GitHub Docs: Enterprise administrators",
+            "url": "https://docs.github.com/en/enterprise-cloud@latest/admin",
+            "summary": "Enterprise admin documentation including overview, IAM, policies, and monitoring.",
+            "notes": null
+        },
+        {
+            "title": "GitHub Docs: Apps platform index",
+            "url": "https://docs.github.com/en/apps",
+            "summary": "Docs for using, creating, sharing, and maintaining GitHub Apps and OAuth apps.",
+            "notes": null
+        },
+        {
+            "title": "GitHub Docs: About using GitHub Apps",
+            "url": "https://docs.github.com/en/apps/using-github-apps/about-using-github-apps",
+            "summary": "Explains what GitHub Apps are and common usage scenarios.",
+            "notes": null
+        },
+        {
+            "title": "GitHub Docs: GitHub Copilot documentation",
+            "url": "https://docs.github.com/en/copilot",
+            "summary": "Landing page for Copilot usage, agents, billing, and customization.",
+            "notes": null
+        },
+        {
+            "title": "GitHub Docs: About GitHub Copilot Chat",
+            "url": "https://docs.github.com/en/copilot/concepts/chat",
+            "summary": "Describes Copilot Chat and its capabilities within the IDE and GitHub.com.",
+            "notes": null
+        },
+        {
+            "title": "GitHub Docs: Codespaces index",
+            "url": "https://docs.github.com/en/codespaces",
+            "summary": "Docs for the Codespaces lifecycle, dev containers, user preferences, and org management.",
+            "notes": null
+        },
+        {
+            "title": "GitHub Docs: What are GitHub Codespaces?",
+            "url": "https://docs.github.com/en/codespaces/about-codespaces/what-are-codespaces",
+            "summary": "Introduction to Codespaces capabilities and typical workflows.",
+            "notes": null
+        },
+        {
+            "title": "GitHub Docs: Prebuilding your codespaces",
+            "url": "https://docs.github.com/en/codespaces/prebuilding-your-codespaces",
+            "summary": "Covers Codespaces prebuilds, configuration, and management.",
+            "notes": null
+        },
+        {
+            "title": "GitHub Docs: Packages index",
+            "url": "https://docs.github.com/en/packages",
+            "summary": "Landing page for GitHub Packages, registries, and Actions integration.",
+            "notes": null
+        },
+        {
+            "title": "GitHub Docs: Introduction to GitHub Packages",
+            "url": "https://docs.github.com/en/packages/learn-github-packages/introduction-to-github-packages",
+            "summary": "High-level description of GitHub Packages and core concepts.",
+            "notes": null
+        },
+        {
+            "title": "GitHub Docs: Working with the Container registry",
+            "url": "https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry",
+            "summary": "How to store and manage Docker and OCI images in GitHub's container registry.",
+            "notes": null
+        },
+        {
+            "title": "GitHub Docs: REST API index",
+            "url": "https://docs.github.com/en/rest",
+            "summary": "Index of REST API categories and top-level guides.",
+            "notes": null
+        },
+        {
+            "title": "GitHub Docs: About the REST API",
+            "url": "https://docs.github.com/en/rest/about-the-rest-api/about-the-rest-api",
+            "summary": "Overview of the REST API, resource model, and versioning.",
+            "notes": null
+        },
+        {
+            "title": "GitHub Docs: Webhooks index",
+            "url": "https://docs.github.com/en/webhooks",
+            "summary": "Docs for creating, handling, validating, and troubleshooting webhooks.",
+            "notes": null
+        },
+        {
+            "title": "GitHub Docs: Webhook events and payloads",
+            "url": "https://docs.github.com/en/webhooks/webhook-events-and-payloads",
+            "summary": "Details of webhook event types and payload contents.",
+            "notes": null
+        },
+        {
+            "title": "GitHub Docs: Authentication index",
+            "url": "https://docs.github.com/en/authentication",
+            "summary": "Covers account security, 2FA, passkeys, SSH, and commit signing.",
+            "notes": null
+        },
+        {
+            "title": "GitHub Docs: Billing index",
+            "url": "https://docs.github.com/en/billing",
+            "summary": "Docs for billing concepts, how-tos, references, and tutorials.",
+            "notes": null
+        },
+        {
+            "title": "GitHub Docs: Introduction to billing and licensing",
+            "url": "https://docs.github.com/en/billing/get-started/introduction-to-billing",
+            "summary": "Overview of the billing platform and license management.",
+            "notes": null
+        },
+        {
+            "title": "GitHub Docs: How GitHub billing works",
+            "url": "https://docs.github.com/en/billing/get-started/how-billing-works",
+            "summary": "Describes chargeable items, billing cycles, and tracking usage.",
+            "notes": null
+        },
+        {
+            "title": "GitHub Docs: Automating your project",
+            "url": "https://docs.github.com/en/issues/planning-and-tracking-with-projects/automating-your-project",
+            "summary": "Details built-in and API-based automations for Projects.",
+            "notes": null
+        }
+    ]
+}

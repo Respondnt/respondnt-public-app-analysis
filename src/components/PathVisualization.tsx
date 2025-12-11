@@ -34,15 +34,19 @@ interface AdversarialMethod {
 }
 
 interface Hypothesis {
-    attack_flow_hypothesis: AttackFlowStep[]
+    attack_flow_hypothesis?: AttackFlowStep[]
     starting_tactic?: string
     objective_tactic?: string
+    attack_target?: string
+    preconditions?: string
+    scenario_name?: string
 }
 
 interface Finding {
     scenario_name?: string
     hypothesis?: Hypothesis
     adversarial_methods?: AdversarialMethod[]
+    method?: AdversarialMethod
 }
 
 interface TechniqueInfo {

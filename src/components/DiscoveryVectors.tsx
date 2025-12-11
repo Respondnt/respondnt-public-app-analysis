@@ -441,3 +441,6 @@ function DiscoveryVectors({ appName, techniqueName }: DiscoveryVectorsProps): JS
 
 export default DiscoveryVectors
 
+
+
+

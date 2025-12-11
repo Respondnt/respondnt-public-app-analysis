@@ -28,6 +28,7 @@ function AttackGraphs({ appName }: AttackGraphsProps): JSX.Element {
         const techniquesMap = new Map<string, Map<string, Technique>>()
         if (data.attack_paths && Array.isArray(data.attack_paths)) {
           data.attack_paths.forEach((attackPath) => {
+            // First, try to extract techniques from adversarial_methods.selected_techniques (Slack format)
             if (attackPath.adversarial_methods && Array.isArray(attackPath.adversarial_methods)) {
               attackPath.adversarial_methods.forEach((method) => {
                 const tacticName = method.tactic_name
@@ -50,6 +51,45 @@ function AttackGraphs({ appName }: AttackGraphsProps): JSX.Element {
                       })
                     }
                   })
+                }
+              })
+            }
+
+            // If no techniques found in selected_techniques, extract from attack_flow_hypothesis (Miro/1Password format)
+            // This ensures the techniques map is populated even when selected_techniques is missing
+            if (attackPath.hypothesis?.attack_flow_hypothesis && Array.isArray(attackPath.hypothesis.attack_flow_hypothesis)) {
+              attackPath.hypothesis.attack_flow_hypothesis.forEach((step) => {
+                const tacticName = step.step_mitre_tactic
+                if (!tacticName) return
+
+                if (!techniquesMap.has(tacticName)) {
+                  techniquesMap.set(tacticName, new Map())
+                }
+
+                const tacticMap = techniquesMap.get(tacticName)
+                if (!tacticMap) return
+
+                // Extract technique ID and name from step_mitre_technique
+                // Format can be "T1234" or "T1234 – Technique Name" or "T1234 / T5678 – Technique Name"
+                const techniqueString = step.step_mitre_technique
+                if (techniqueString) {
+                  // Extract all technique IDs (e.g., T1234, T1234.001)
+                  const techniqueMatches = techniqueString.match(/T\d{4}(\.\d{3})?/g)
+                  if (techniqueMatches) {
+                    // Extract technique name (everything after the last technique ID and any separators)
+                    const nameMatch = techniqueString.match(/T\d{4}(\.\d{3})?[^\w]*(?:[/–-]\s*)?(.+)/)
+                    const techniqueName = nameMatch && nameMatch[2] ? nameMatch[2].trim() : null
+
+                    techniqueMatches.forEach((techniqueId) => {
+                      if (!tacticMap.has(techniqueId)) {
+                        tacticMap.set(techniqueId, {
+                          stix_id: techniqueId,
+                          name: techniqueName || techniqueId,
+                          tactic: tacticName,
+                        })
+                      }
+                    })
+                  }
                 }
               })
             }
@@ -162,7 +202,7 @@ function AttackGraphs({ appName }: AttackGraphsProps): JSX.Element {
               {attackPaths.map((finding, idx) => {
                 const attackFlow = finding.hypothesis?.attack_flow_hypothesis || []
                 const stepCount = attackFlow.length
-                
+
                 // Count unique techniques
                 const techniqueSet = new Set<string>()
                 attackFlow.forEach((step) => {

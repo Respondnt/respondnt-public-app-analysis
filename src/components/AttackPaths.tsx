@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import PathVisualization from './PathVisualization'
-import type { AttackPathsData, Technique, TechniqueInfo, Finding, TechniqueSpecificInfo } from '../types'
-import { loadAttackPathsData } from '../utils/dataLoaders'
+import type { AttackPathsData, Technique, TechniqueInfo, Finding, TechniqueSpecificInfo, ComprehensiveAnalysisResults } from '../types'
+import { loadAttackPathsData, loadComprehensiveAnalysisData } from '../utils/dataLoaders'
 
 // MITRE ATT&CK Tactics in order
 const MITRE_TACTICS = [
@@ -27,6 +27,7 @@ interface AttackPathsProps {
 
 function AttackPaths({ appName }: AttackPathsProps): JSX.Element {
   const [attackPathsData, setAttackPathsData] = useState<AttackPathsData | null>(null)
+  const [comprehensiveAnalysisData, setComprehensiveAnalysisData] = useState<ComprehensiveAnalysisResults | null>(null)
   const [techniquesByTactic, setTechniquesByTactic] = useState<Map<string, Map<string, Technique>>>(new Map())
   const [findingsByTechnique, setFindingsByTechnique] = useState<Map<string, Finding[]>>(new Map())
   const [loading, setLoading] = useState(true)
@@ -37,6 +38,7 @@ function AttackPaths({ appName }: AttackPathsProps): JSX.Element {
   const [selectedTactics, setSelectedTactics] = useState<Set<string>>(new Set())
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const [pathVisualizationFinding, setPathVisualizationFinding] = useState<Finding | null>(null)
+  const [hoveredColumn, setHoveredColumn] = useState<string | null>(null)
   const [selectedFindingForTechnique, setSelectedFindingForTechnique] = useState<Finding | null>(null)
 
   useEffect(() => {
@@ -45,7 +47,13 @@ function AttackPaths({ appName }: AttackPathsProps): JSX.Element {
         setLoading(true)
         const baseUrl = import.meta.env.BASE_URL
 
-        // Use the data loader with fallback logic
+        // Try to load comprehensive analysis data directly first
+        const comprehensiveData = await loadComprehensiveAnalysisData(baseUrl, appName)
+        if (comprehensiveData) {
+          setComprehensiveAnalysisData(comprehensiveData)
+        }
+
+        // Use the loader function which supports multiple formats including comprehensive analysis
         const attackPathsData = await loadAttackPathsData(baseUrl, appName)
         setAttackPathsData(attackPathsData)
 
@@ -67,6 +75,9 @@ function AttackPaths({ appName }: AttackPathsProps): JSX.Element {
               attackPath.adversarial_methods.forEach((method) => {
                 const tacticName = method.tactic_name
                 if (!tacticName) return
+
+                // Only process techniques from achievable methods
+                if (method.can_achieve !== true) return
 
                 if (!techniquesMap.has(tacticName)) {
                   techniquesMap.set(tacticName, new Map())
@@ -189,10 +200,21 @@ function AttackPaths({ appName }: AttackPathsProps): JSX.Element {
     loadData()
   }, [appName])
 
+  // Auto-select first finding when entering technique view
+  useEffect(() => {
+    if (view === 'technique' && selectedTechnique && !selectedFindingForTechnique) {
+      const fullKey = `${selectedTechnique.tactic}::${selectedTechnique.techniqueKey}`
+      const findings = findingsByTechnique.get(fullKey) || []
+      if (findings.length > 0 && findings[0]) {
+        setSelectedFindingForTechnique(findings[0])
+      }
+    }
+  }, [view, selectedTechnique, selectedFindingForTechnique, findingsByTechnique])
+
   const handleTechniqueClick = (tactic: string, techniqueKey: string, technique: Technique): void => {
     setSelectedTechnique({ tactic, techniqueKey, technique })
-    setView('technique')
     setSelectedFindingForTechnique(null) // Reset selected finding when switching techniques
+    setView('technique')
   }
 
 
@@ -244,21 +266,10 @@ function AttackPaths({ appName }: AttackPathsProps): JSX.Element {
       if (tacticName && method.tactic_name && method.tactic_name.toLowerCase() !== tacticName.toLowerCase()) {
         continue
       }
-      // Case 1: Method has selected_techniques (Slack format or Box/Klaviyo format)
+      // Case 1: Method has selected_techniques (Slack format)
       if (method.selected_techniques && Array.isArray(method.selected_techniques)) {
         const technique = method.selected_techniques.find(
-          (t) => {
-            // Try exact match first
-            if ((t.stix_id || t.name) === techniqueKey) return true
-            // Try case-insensitive match
-            if (t.stix_id && t.stix_id.toLowerCase() === techniqueKey.toLowerCase()) return true
-            if (t.name && t.name.toLowerCase() === techniqueKey.toLowerCase()) return true
-            // Try matching by extracted MITRE ID
-            const tId = extractTechniqueIdFromKey(t.stix_id || '') || extractTechniqueIdFromKey(t.name || '')
-            const keyId = extractTechniqueIdFromKey(techniqueKey)
-            if (tId && keyId && tId.toUpperCase() === keyId.toUpperCase()) return true
-            return false
-          }
+          (t) => (t.stix_id || t.name) === techniqueKey
         )
         if (technique) {
           // Filter attack flow steps to only those matching this technique
@@ -315,35 +326,12 @@ function AttackPaths({ appName }: AttackPathsProps): JSX.Element {
             return false
           })
 
-          // If no attack flow steps found (e.g., for Box/Klaviyo initial access data),
-          // use method_steps directly instead
-          const finalMethodSteps = techniqueSteps.length > 0
-            ? techniqueSteps
-            : (method.method_steps || []).map((step, idx) => {
-              // Format step name - use step_id if available, otherwise use index
-              const stepName = step.step_id
-                ? `Step ${step.step_id}`
-                : `Step ${idx + 1}`
-
-              // Format technique display - include both ID and name if available
-              const techniqueDisplay = technique.stix_id && technique.name
-                ? `${technique.stix_id} – ${technique.name}`
-                : (technique.stix_id || technique.name || '')
-
-              return {
-                step_name: stepName,
-                step_description: step.description || '',
-                step_mitre_tactic: method.tactic_name || '',
-                step_mitre_technique: techniqueDisplay,
-              }
-            })
-
           return {
             method,
             technique,
             rationale: technique.rationale,
-            methodSteps: finalMethodSteps,
-            allMethodSteps: method.method_steps || [],
+            methodSteps: techniqueSteps, // Only show matching attack flow steps
+            allMethodSteps: method.method_steps || [], // Keep all for reference if needed
           }
         }
       }
@@ -446,32 +434,14 @@ function AttackPaths({ appName }: AttackPathsProps): JSX.Element {
     const fullKey = `${selectedTechnique.tactic}::${selectedTechnique.techniqueKey}`
     const findings = findingsByTechnique.get(fullKey) || []
 
-    // Use selected finding if available, otherwise use first finding
-    const activeFinding = selectedFindingForTechnique || findings[0]
-    const techniqueInfo = activeFinding ? getTechniqueSpecificInfo(
-      activeFinding,
+    // Get technique info from the selected finding, or first finding if none selected
+    const findingToUse = selectedFindingForTechnique || findings[0]
+    const techniqueInfo = findingToUse ? getTechniqueSpecificInfo(
+      findingToUse,
       selectedTechnique.techniqueKey,
       selectedTechnique.technique.name,
       selectedTechnique.tactic
     ) : null
-
-    // Extract MITRE technique ID for display
-    let mitreTechniqueId: string | null = null
-    if (techniqueInfo && techniqueInfo.methodSteps && techniqueInfo.methodSteps.length > 0) {
-      const firstStep = techniqueInfo.methodSteps[0]
-      if (firstStep && firstStep.step_mitre_technique) {
-        const mitreMatch = firstStep.step_mitre_technique.match(/T\d{4}(\.\d{3})?/g)
-        if (mitreMatch && mitreMatch.length > 0) {
-          mitreTechniqueId = mitreMatch[0]
-        }
-      }
-    }
-    if (!mitreTechniqueId && selectedTechnique.technique.name) {
-      const nameMatch = selectedTechnique.technique.name.match(/T\d{4}(\.\d{3})?/)
-      if (nameMatch) {
-        mitreTechniqueId = nameMatch[0]
-      }
-    }
 
     return (
       <div className="w-full h-full flex flex-col overflow-hidden">
@@ -492,276 +462,204 @@ function AttackPaths({ appName }: AttackPathsProps): JSX.Element {
                 <h2 className="text-body-base font-semibold text-gray-900 dark:text-white truncate">
                   {selectedTechnique.technique.name}
                 </h2>
-                {mitreTechniqueId ? (
-                  <p className="text-body-xs text-gray-500 dark:text-gray-400 mt-0.5">
-                    {mitreTechniqueId}
-                  </p>
-                ) : selectedTechnique.technique.stix_id ? (
-                  <p className="text-body-xs text-gray-500 dark:text-gray-400 mt-0.5">
-                    {selectedTechnique.technique.stix_id}
-                  </p>
-                ) : null}
+                {(() => {
+                  // Extract MITRE technique ID from attack flow steps or technique name
+                  let mitreTechniqueId: string | null = null
+                  if (techniqueInfo && techniqueInfo.methodSteps && techniqueInfo.methodSteps.length > 0) {
+                    // Get MITRE technique ID from the first step
+                    const firstStep = techniqueInfo.methodSteps[0]
+                    if (firstStep && firstStep.step_mitre_technique) {
+                      const mitreMatch = firstStep.step_mitre_technique.match(/T\d{4}(\.\d{3})?/g)
+                      if (mitreMatch && mitreMatch.length > 0) {
+                        mitreTechniqueId = mitreMatch[0]
+                      }
+                    }
+                  }
+                  // Fallback: try to extract from technique name
+                  if (!mitreTechniqueId && selectedTechnique.technique.name) {
+                    const nameMatch = selectedTechnique.technique.name.match(/T\d{4}(\.\d{3})?/)
+                    if (nameMatch) {
+                      mitreTechniqueId = nameMatch[0]
+                    }
+                  }
+
+                  return mitreTechniqueId ? (
+                    <p className="text-body-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                      {mitreTechniqueId}
+                    </p>
+                  ) : selectedTechnique.technique.stix_id ? (
+                    <p className="text-body-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                      {selectedTechnique.technique.stix_id}
+                    </p>
+                  ) : null
+                })()}
               </div>
             </div>
-            {activeFinding && (
+            {/* {findingToUse && (
               <button
-                onClick={() => handleViewInContext(activeFinding)}
+                onClick={() => handleViewInContext(findingToUse)}
                 className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-body-sm font-medium transition-colors shadow-sm hover:shadow-md flex-shrink-0"
               >
                 View in Attack Path
               </button>
-            )}
+            )} */}
           </div>
         </div>
 
-        {/* Split View: Table on left, Details on right */}
-        <div className="flex-1 flex overflow-hidden bg-gray-50 dark:bg-gray-950">
-          {/* Left Side: Findings Table */}
-          <div className="w-1/3 border-r border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 flex flex-col overflow-hidden">
-            <div className="flex-shrink-0 px-4 py-3 border-b border-gray-200 dark:border-gray-800">
-              <h3 className="text-body-sm font-semibold text-gray-900 dark:text-white">
-                Findings ({findings.length})
-              </h3>
-            </div>
-            <div className="flex-1 overflow-y-auto">
-              {findings.length === 0 ? (
-                <div className="p-4 text-center text-body-sm text-gray-500 dark:text-gray-400">
-                  No findings available
-                </div>
-              ) : (
-                <table className="w-full">
-                  <thead className="bg-gray-50 dark:bg-gray-800 sticky top-0">
-                    <tr>
-                      <th className="px-4 py-2 text-left text-body-xs font-semibold text-gray-700 dark:text-gray-300 border-b border-gray-200 dark:border-gray-700">
-                        Step Title
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {findings.map((finding, idx) => {
-                      const isSelected = selectedFindingForTechnique === finding || (!selectedFindingForTechnique && idx === 0)
-                      // Get the step title for this finding and technique
-                      const findingTechniqueInfo = getTechniqueSpecificInfo(
-                        finding,
-                        selectedTechnique.techniqueKey,
-                        selectedTechnique.technique.name,
-                        selectedTechnique.tactic
-                      )
-                      const stepTitle = findingTechniqueInfo?.methodSteps?.[0]?.step_name || finding.scenario_name || `Finding ${idx + 1}`
-                      return (
-                        <tr
-                          key={idx}
-                          onClick={() => setSelectedFindingForTechnique(finding)}
-                          className={`cursor-pointer transition-colors ${isSelected
-                            ? 'bg-blue-50 dark:bg-blue-950/20 border-l-2 border-l-blue-600 dark:border-l-blue-400'
-                            : 'hover:bg-gray-50 dark:hover:bg-gray-800'
-                            }`}
-                        >
-                          <td className="px-4 py-3 text-body-sm text-gray-900 dark:text-white">
-                            {stepTitle}
-                          </td>
-                        </tr>
-                      )
-                    })}
-                  </tbody>
-                </table>
-              )}
-            </div>
-          </div>
+        <div className="flex-1 overflow-hidden bg-gray-50 dark:bg-gray-950">
+          <div className="h-full flex gap-6 px-6 lg:px-8 py-6">
+            {/* Left Side: Technique Information */}
+            <div className="flex-1 overflow-y-auto pr-4">
+              <div className="space-y-6">
+                {techniqueInfo && (
+                  <>
+                    {/* Rationale */}
+                    {techniqueInfo.rationale && (
+                      <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm p-6">
+                        <h3 className="text-h4 font-semibold text-gray-900 dark:text-white mb-3">
+                          Rationale
+                        </h3>
+                        <p className="text-body text-gray-700 dark:text-gray-300">
+                          {techniqueInfo.rationale}
+                        </p>
+                      </div>
+                    )}
 
-          {/* Right Side: Detail View */}
-          <div className="flex-1 overflow-y-auto px-6 lg:px-8 pb-8">
-            <div className="max-w-4xl mx-auto pt-6 space-y-6">
-              {techniqueInfo && (
-                <>
-                  {/* Rationale */}
-                  {techniqueInfo.rationale && (
-                    <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm p-6">
-                      <h3 className="text-h4 font-semibold text-gray-900 dark:text-white mb-3">
-                        Rationale
-                      </h3>
-                      <p className="text-body text-gray-700 dark:text-gray-300">
-                        {techniqueInfo.rationale}
-                      </p>
-                    </div>
-                  )}
+                    {/* Attack Flow Steps */}
+                    {techniqueInfo.methodSteps && techniqueInfo.methodSteps.length > 0 && (
+                      <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm p-6">
+                        <h3 className="text-h4 font-semibold text-gray-900 dark:text-white mb-4">
+                          Attack Flow Steps for this Technique
+                        </h3>
+                        <div className="space-y-4">
+                          {techniqueInfo.methodSteps.map((step, stepIdx) => (
+                            <div key={stepIdx} className="space-y-2">
+                              <h5 className="text-body font-semibold text-gray-900 dark:text-white">
+                                {step.step_name}
+                              </h5>
+                              <p className="text-body text-gray-700 dark:text-gray-300">
+                                {step.step_description}
+                              </p>
+                              <div className="flex items-center gap-2 pt-2">
+                                <span className="px-2 py-1 rounded text-body-xs font-medium bg-red-50 dark:bg-red-950/30 text-red-700 dark:text-red-300">
+                                  {step.step_mitre_tactic}
+                                </span>
+                                <span className="text-body-xs text-gray-600 dark:text-gray-400">
+                                  {step.step_mitre_technique}
+                                </span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
 
-                  {/* Attack Flow Steps */}
-                  {techniqueInfo.methodSteps && techniqueInfo.methodSteps.length > 0 && (
-                    <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm p-6">
-                      <h3 className="text-h4 font-semibold text-gray-900 dark:text-white mb-4">
-                        Attack Flow Steps for this Technique
-                      </h3>
-                      <div className="space-y-4">
-                        {techniqueInfo.methodSteps.map((step, stepIdx) => (
-                          <div key={stepIdx} className="space-y-2">
-                            <h5 className="text-body font-semibold text-gray-900 dark:text-white">
-                              {step.step_name}
-                            </h5>
-                            <p className="text-body text-gray-700 dark:text-gray-300">
-                              {step.step_description}
-                            </p>
-                            <div className="flex items-center gap-2 pt-2">
-                              <span className="px-2 py-1 rounded text-body-xs font-medium bg-red-50 dark:bg-red-950/30 text-red-700 dark:text-red-300">
-                                {step.step_mitre_tactic}
-                              </span>
-                              <span className="text-body-xs text-gray-600 dark:text-gray-400">
-                                {step.step_mitre_technique}
-                              </span>
+                    {/* Capabilities, Preconditions, Constraints from method */}
+                    {techniqueInfo.method && (
+                      <>
+                        {techniqueInfo.method.capabilities_used && techniqueInfo.method.capabilities_used.length > 0 && (
+                          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm p-6">
+                            <h3 className="text-h4 font-semibold text-gray-900 dark:text-white mb-4">
+                              Capabilities Used
+                            </h3>
+                            <div className="flex flex-wrap gap-2">
+                              {techniqueInfo.method.capabilities_used.map((capability, capIdx) => (
+                                <span
+                                  key={capIdx}
+                                  className="inline-flex items-center px-3 py-1.5 rounded-md text-body-sm font-medium bg-blue-50 dark:bg-blue-950/20 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800"
+                                >
+                                  {capability}
+                                </span>
+                              ))}
                             </div>
                           </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
+                        )}
 
-                  {/* Preconditions Required */}
-                  {techniqueInfo.method.preconditions_required && techniqueInfo.method.preconditions_required.length > 0 && (
-                    <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm p-6">
-                      <h3 className="text-h4 font-semibold text-gray-900 dark:text-white mb-3">
-                        Preconditions Required
-                      </h3>
-                      <ul className="space-y-2">
-                        {techniqueInfo.method.preconditions_required.map((precondition, idx) => (
-                          <li key={idx} className="text-body text-gray-700 dark:text-gray-300 flex items-start gap-2">
-                            <span className="text-blue-600 dark:text-blue-400 mt-1 flex-shrink-0">•</span>
-                            <span>{precondition}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
+                        {techniqueInfo.method.preconditions_required && techniqueInfo.method.preconditions_required.length > 0 && (
+                          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm p-6">
+                            <h3 className="text-h4 font-semibold text-gray-900 dark:text-white mb-4">
+                              Preconditions Required
+                            </h3>
+                            <ul className="space-y-2">
+                              {techniqueInfo.method.preconditions_required.map((precondition, precIdx) => (
+                                <li key={precIdx} className="flex items-start gap-2">
+                                  <span className="text-green-600 dark:text-green-400 mt-1 flex-shrink-0">•</span>
+                                  <span className="text-body text-gray-700 dark:text-gray-300">{precondition}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
 
-                  {/* Constraints Encountered */}
-                  {techniqueInfo.method.constraints_encountered && techniqueInfo.method.constraints_encountered.length > 0 && (
-                    <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm p-6">
-                      <h3 className="text-h4 font-semibold text-gray-900 dark:text-white mb-3">
-                        Constraints Encountered
-                      </h3>
-                      <ul className="space-y-2">
-                        {techniqueInfo.method.constraints_encountered.map((constraint, idx) => (
-                          <li key={idx} className="text-body text-gray-700 dark:text-gray-300 flex items-start gap-2">
-                            <span className="text-amber-600 dark:text-amber-400 mt-1 flex-shrink-0">•</span>
-                            <span>{constraint}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
+                        {techniqueInfo.method.constraints_encountered && techniqueInfo.method.constraints_encountered.length > 0 && (
+                          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm p-6">
+                            <h3 className="text-h4 font-semibold text-gray-900 dark:text-white mb-4">
+                              Constraints Encountered
+                            </h3>
+                            <ul className="space-y-2">
+                              {techniqueInfo.method.constraints_encountered.map((constraint, constIdx) => (
+                                <li key={constIdx} className="flex items-start gap-2">
+                                  <span className="text-amber-600 dark:text-amber-400 mt-1 flex-shrink-0">•</span>
+                                  <span className="text-body text-gray-700 dark:text-gray-300">{constraint}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                      </>
+                    )}
+                  </>
+                )}
 
-                  {/* Evasion Considerations */}
-                  {techniqueInfo.method.evasion_considerations && techniqueInfo.method.evasion_considerations.length > 0 && (
-                    <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm p-6">
-                      <h3 className="text-h4 font-semibold text-gray-900 dark:text-white mb-3">
-                        Evasion Considerations
-                      </h3>
-                      <ul className="space-y-2">
-                        {techniqueInfo.method.evasion_considerations.map((consideration, idx) => (
-                          <li key={idx} className="text-body text-gray-700 dark:text-gray-300 flex items-start gap-2">
-                            <span className="text-purple-600 dark:text-purple-400 mt-1 flex-shrink-0">•</span>
-                            <span>{consideration}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
+                {!techniqueInfo && (
+                  <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm p-6 text-center">
+                    <p className="text-body text-gray-500 dark:text-gray-400">
+                      No information available for this technique.
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
 
-                  {/* Capabilities Used */}
-                  {techniqueInfo.method.capabilities_used && techniqueInfo.method.capabilities_used.length > 0 && (
-                    <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm p-6">
-                      <h3 className="text-h4 font-semibold text-gray-900 dark:text-white mb-3">
-                        Capabilities Used
-                      </h3>
-                      <div className="flex flex-wrap gap-2">
-                        {techniqueInfo.method.capabilities_used.map((capability, idx) => (
-                          <span
-                            key={idx}
-                            className="inline-flex items-center px-3 py-1.5 rounded-md text-body-sm font-medium bg-orange-50 dark:bg-orange-950/20 text-orange-700 dark:text-orange-300"
-                          >
-                            {capability}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Interfaces Used */}
-                  {techniqueInfo.method.interfaces_used && techniqueInfo.method.interfaces_used.length > 0 && (
-                    <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm p-6">
-                      <h3 className="text-h4 font-semibold text-gray-900 dark:text-white mb-3">
-                        Interfaces Used
-                      </h3>
-                      <ul className="space-y-2">
-                        {techniqueInfo.method.interfaces_used.map((iface, idx) => (
-                          <li key={idx} className="text-body text-gray-700 dark:text-gray-300">
-                            {iface.startsWith('http') ? (
-                              <a
-                                href={iface}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-blue-600 dark:text-blue-400 hover:underline"
-                              >
-                                {iface}
-                              </a>
-                            ) : (
-                              <span>{iface}</span>
-                            )}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-
-                  {/* Data Accessed */}
-                  {techniqueInfo.method.data_accessed && techniqueInfo.method.data_accessed.length > 0 && (
-                    <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm p-6">
-                      <h3 className="text-h4 font-semibold text-gray-900 dark:text-white mb-3">
-                        Data Accessed
-                      </h3>
-                      <ul className="space-y-2">
-                        {techniqueInfo.method.data_accessed.map((data, idx) => (
-                          <li key={idx} className="text-body text-gray-700 dark:text-gray-300 flex items-start gap-2">
-                            <span className="text-green-600 dark:text-green-400 mt-1 flex-shrink-0">•</span>
-                            <span>{data}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-
-                  {/* Resulting Access */}
-                  {techniqueInfo.method.resulting_access && (
-                    <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm p-6">
-                      <h3 className="text-h4 font-semibold text-gray-900 dark:text-white mb-3">
-                        Resulting Access
-                      </h3>
-                      <p className="text-body text-gray-700 dark:text-gray-300">
-                        {techniqueInfo.method.resulting_access}
-                      </p>
-                    </div>
-                  )}
-
-                  {/* Comments */}
-                  {techniqueInfo.method.comments && (
-                    <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm p-6">
-                      <h3 className="text-h4 font-semibold text-gray-900 dark:text-white mb-3">
-                        Comments
-                      </h3>
-                      <p className="text-body text-gray-700 dark:text-gray-300">
-                        {techniqueInfo.method.comments}
-                      </p>
-                    </div>
-                  )}
-                </>
-              )}
-
-              {!techniqueInfo && (
-                <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm p-6 text-center">
-                  <p className="text-body text-gray-500 dark:text-gray-400">
-                    No information available for this technique.
-                  </p>
-                </div>
-              )}
+            {/* Right Side: Findings List */}
+            <div className="w-80 flex-shrink-0 overflow-y-auto pl-4 border-l border-gray-200 dark:border-gray-700">
+              <div className="sticky top-0 bg-gray-50 dark:bg-gray-950 pb-4 z-10">
+                <h3 className="text-h4 font-semibold text-gray-900 dark:text-white mb-2">
+                  Findings ({findings.length})
+                </h3>
+                <p className="text-body-xs text-gray-600 dark:text-gray-400">
+                  Click on a finding to view its technique details
+                </p>
+              </div>
+              <div className="space-y-3 pt-4">
+                {findings.length === 0 ? (
+                  <div className="text-center py-8">
+                    <p className="text-body-sm text-gray-500 dark:text-gray-400">
+                      No findings for this technique
+                    </p>
+                  </div>
+                ) : (
+                  findings.map((finding, idx) => {
+                    const isSelected = selectedFindingForTechnique === finding
+                    return (
+                      <button
+                        key={idx}
+                        onClick={() => {
+                          setSelectedFindingForTechnique(finding)
+                        }}
+                        className={`w-full text-left bg-white dark:bg-gray-800 border rounded-lg p-4 transition-all ${isSelected
+                          ? 'border-blue-500 dark:border-blue-500 bg-blue-50 dark:bg-blue-950/30 shadow-md'
+                          : 'border-gray-200 dark:border-gray-700 hover:border-blue-400 dark:hover:border-blue-600 hover:shadow-md hover:bg-blue-50/50 dark:hover:bg-blue-950/10'
+                          }`}
+                      >
+                        <div className="text-body-sm font-semibold text-gray-900 dark:text-white line-clamp-2">
+                          {finding.scenario_name || `Finding ${idx + 1}`}
+                        </div>
+                      </button>
+                    )
+                  })
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -979,6 +877,59 @@ function AttackPaths({ appName }: AttackPathsProps): JSX.Element {
                 </div>
               </div>
             )}
+
+            {/* Capabilities Used */}
+            {method && method.capabilities_used && method.capabilities_used.length > 0 && (
+              <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+                <h3 className="text-h4 font-semibold text-gray-900 dark:text-white mb-4">
+                  Capabilities Used
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {method.capabilities_used.map((capability, capIdx) => (
+                    <span
+                      key={capIdx}
+                      className="inline-flex items-center px-3 py-1.5 rounded-md text-body-sm font-medium bg-blue-50 dark:bg-blue-950/20 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800"
+                    >
+                      {capability}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Preconditions Required */}
+            {method && method.preconditions_required && method.preconditions_required.length > 0 && (
+              <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+                <h3 className="text-h4 font-semibold text-gray-900 dark:text-white mb-4">
+                  Preconditions Required
+                </h3>
+                <ul className="space-y-2">
+                  {method.preconditions_required.map((precondition, precIdx) => (
+                    <li key={precIdx} className="flex items-start gap-2">
+                      <span className="text-green-600 dark:text-green-400 mt-1 flex-shrink-0">•</span>
+                      <span className="text-body text-gray-700 dark:text-gray-300">{precondition}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {/* Constraints Encountered */}
+            {method && method.constraints_encountered && method.constraints_encountered.length > 0 && (
+              <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+                <h3 className="text-h4 font-semibold text-gray-900 dark:text-white mb-4">
+                  Constraints Encountered
+                </h3>
+                <ul className="space-y-2">
+                  {method.constraints_encountered.map((constraint, constIdx) => (
+                    <li key={constIdx} className="flex items-start gap-2">
+                      <span className="text-amber-600 dark:text-amber-400 mt-1 flex-shrink-0">•</span>
+                      <span className="text-body text-gray-700 dark:text-gray-300">{constraint}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -989,7 +940,7 @@ function AttackPaths({ appName }: AttackPathsProps): JSX.Element {
   if (view === 'path-visualization' && pathVisualizationFinding) {
     return (
       <PathVisualization
-        finding={pathVisualizationFinding}
+        finding={pathVisualizationFinding as Finding}
         onBack={handleBack}
         onTechniqueClick={(technique) => {
           setSelectedTechnique(technique)
@@ -1037,140 +988,115 @@ function AttackPaths({ appName }: AttackPathsProps): JSX.Element {
       {/* Enhanced Header Section */}
       <div className="flex-shrink-0 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
         <div className="px-6 lg:px-8 py-6">
-          <div className="flex items-start justify-between gap-4">
-            <div className="flex-1">
-            </div>
-            <div className="flex items-center gap-4">
-              {/* Stats Bar - Combined with Filter */}
-              <div className="flex items-center gap-6">
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-blue-500"></div>
-                  <span className="text-body-xs text-gray-600 dark:text-gray-400">
-                    <span className="font-semibold text-gray-900 dark:text-white">{visibleColumnsCount}</span> columns visible
-                  </span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-purple-500"></div>
-                  <span className="text-body-xs text-gray-600 dark:text-gray-400">
-                    <span className="font-semibold text-gray-900 dark:text-white">{totalTechniques}</span> techniques
-                  </span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                  <span className="text-body-xs text-gray-600 dark:text-gray-400">
-                    <span className="font-semibold text-gray-900 dark:text-white">{totalFindings}</span> findings
-                  </span>
-                </div>
+          {/* Stats Bar with Filter Columns */}
+          <div className="flex items-center justify-between gap-6">
+            <div className="flex items-center gap-6">
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-blue-500"></div>
+                <span className="text-body-xs text-gray-600 dark:text-gray-400">
+                  <span className="font-semibold text-gray-900 dark:text-white">{visibleColumnsCount}</span> columns visible
+                </span>
               </div>
-              <div className="relative">
-                <button
-                  onClick={() => setDropdownOpen(!dropdownOpen)}
-                  className="inline-flex items-center gap-2 px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-body-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-400 dark:hover:border-gray-500 transition-all shadow-sm hover:shadow"
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-purple-500"></div>
+                <span className="text-body-xs text-gray-600 dark:text-gray-400">
+                  <span className="font-semibold text-gray-900 dark:text-white">{totalTechniques}</span> techniques
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                <span className="text-body-xs text-gray-600 dark:text-gray-400">
+                  <span className="font-semibold text-gray-900 dark:text-white">{totalFindings}</span> findings
+                </span>
+              </div>
+            </div>
+            <div className="relative">
+              <button
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+                className="inline-flex items-center gap-2 px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-body-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-400 dark:hover:border-gray-500 transition-all shadow-sm hover:shadow"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                </svg>
+                <span>Filter Columns</span>
+                <svg
+                  className={`w-4 h-4 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
                 >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
-                  </svg>
-                  <span>Filter Columns</span>
-                  <svg
-                    className={`w-4 h-4 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`}
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-                {dropdownOpen && (
-                  <>
-                    <div
-                      className="fixed inset-0 z-10"
-                      onClick={() => setDropdownOpen(false)}
-                    />
-                    <div className="absolute right-0 mt-2 w-80 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-xl z-20 max-h-[600px] overflow-hidden flex flex-col">
-                      <div className="p-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50">
-                        <div className="text-body-sm font-semibold text-gray-900 dark:text-white mb-3">
-                          Select Columns to Display
-                        </div>
-                        {/* Stats in Dropdown */}
-                        <div className="flex items-center gap-4 mb-3 pb-3 border-b border-gray-200 dark:border-gray-700">
-                          <div className="flex items-center gap-1.5">
-                            <div className="w-2 h-2 rounded-full bg-blue-500"></div>
-                            <span className="text-body-xs text-gray-600 dark:text-gray-400">
-                              <span className="font-semibold text-gray-900 dark:text-white">{visibleColumnsCount}</span> visible
-                            </span>
-                          </div>
-                          <div className="flex items-center gap-1.5">
-                            <div className="w-2 h-2 rounded-full bg-purple-500"></div>
-                            <span className="text-body-xs text-gray-600 dark:text-gray-400">
-                              <span className="font-semibold text-gray-900 dark:text-white">{totalTechniques}</span> techniques
-                            </span>
-                          </div>
-                          <div className="flex items-center gap-1.5">
-                            <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                            <span className="text-body-xs text-gray-600 dark:text-gray-400">
-                              <span className="font-semibold text-gray-900 dark:text-white">{totalFindings}</span> findings
-                            </span>
-                          </div>
-                        </div>
-                        <div className="flex gap-2">
-                          <button
-                            onClick={() => {
-                              setSelectedTactics(new Set(availableTactics))
-                            }}
-                            className="px-3 py-1.5 text-body-xs font-medium text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/30 rounded-md hover:bg-blue-100 dark:hover:bg-blue-950/50 transition-colors"
-                          >
-                            Select All
-                          </button>
-                          <button
-                            onClick={() => {
-                              setSelectedTactics(new Set())
-                            }}
-                            className="px-3 py-1.5 text-body-xs font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
-                          >
-                            Deselect All
-                          </button>
-                        </div>
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              {dropdownOpen && (
+                <>
+                  <div
+                    className="fixed inset-0 z-10"
+                    onClick={() => setDropdownOpen(false)}
+                  />
+                  <div className="absolute right-0 mt-2 w-72 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-xl z-20 max-h-[500px] overflow-hidden flex flex-col">
+                    <div className="p-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50">
+                      <div className="text-body-sm font-semibold text-gray-900 dark:text-white mb-3">
+                        Select Columns to Display
                       </div>
-                      <div className="overflow-y-auto p-2">
-                        {availableTactics.map((tactic) => {
-                          const techniques = techniquesByTactic.get(tactic)
-                          const techniqueList = techniques ? Array.from(techniques.values()) : []
-                          const isSelected = selectedTactics.has(tactic)
-
-                          return (
-                            <label
-                              key={tactic}
-                              className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all ${isSelected
-                                ? 'bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-900/50'
-                                : 'hover:bg-gray-50 dark:hover:bg-gray-800/50'
-                                }`}
-                            >
-                              <input
-                                type="checkbox"
-                                checked={isSelected}
-                                onChange={() => handleTacticToggle(tactic)}
-                                className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:ring-offset-0 dark:bg-gray-700 dark:border-gray-600"
-                              />
-                              <span className={`text-body-sm flex-1 font-medium ${isSelected
-                                ? 'text-gray-900 dark:text-white'
-                                : 'text-gray-700 dark:text-gray-300'
-                                }`}>
-                                {tactic}
-                              </span>
-                              <span className={`text-body-xs px-2 py-0.5 rounded-full font-medium ${isSelected
-                                ? 'bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300'
-                                : 'bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-400'
-                                }`}>
-                                {techniqueList.length}
-                              </span>
-                            </label>
-                          )
-                        })}
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => {
+                            setSelectedTactics(new Set(availableTactics))
+                          }}
+                          className="px-3 py-1.5 text-body-xs font-medium text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/30 rounded-md hover:bg-blue-100 dark:hover:bg-blue-950/50 transition-colors"
+                        >
+                          Select All
+                        </button>
+                        <button
+                          onClick={() => {
+                            setSelectedTactics(new Set())
+                          }}
+                          className="px-3 py-1.5 text-body-xs font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                        >
+                          Deselect All
+                        </button>
                       </div>
                     </div>
-                  </>
-                )}
-              </div>
+                    <div className="overflow-y-auto p-2">
+                      {availableTactics.map((tactic) => {
+                        const techniques = techniquesByTactic.get(tactic)
+                        const techniqueList = techniques ? Array.from(techniques.values()) : []
+                        const isSelected = selectedTactics.has(tactic)
+
+                        return (
+                          <label
+                            key={tactic}
+                            className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all ${isSelected
+                              ? 'bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-900/50'
+                              : 'hover:bg-gray-50 dark:hover:bg-gray-800/50'
+                              }`}
+                          >
+                            <input
+                              type="checkbox"
+                              checked={isSelected}
+                              onChange={() => handleTacticToggle(tactic)}
+                              className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:ring-offset-0 dark:bg-gray-700 dark:border-gray-600"
+                            />
+                            <span className={`text-body-sm flex-1 font-medium ${isSelected
+                              ? 'text-gray-900 dark:text-white'
+                              : 'text-gray-700 dark:text-gray-300'
+                              }`}>
+                              {tactic}
+                            </span>
+                            <span className={`text-body-xs px-2 py-0.5 rounded-full font-medium ${isSelected
+                              ? 'bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300'
+                              : 'bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-400'
+                              }`}>
+                              {techniqueList.length}
+                            </span>
+                          </label>
+                        )
+                      })}
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -1208,15 +1134,26 @@ function AttackPaths({ appName }: AttackPathsProps): JSX.Element {
             {availableTactics.filter((tactic) => selectedTactics.has(tactic)).map((tactic) => {
               const techniques = techniquesByTactic.get(tactic)
               const techniqueList = techniques ? Array.from(techniques.values()) : []
+              const isHovered = hoveredColumn === tactic
+              const hasHoveredColumn = hoveredColumn !== null
 
               return (
                 <div
                   key={tactic}
-                  className="flex-1 min-w-0 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col"
+                  onMouseEnter={() => setHoveredColumn(tactic)}
+                  onMouseLeave={() => setHoveredColumn(null)}
+                  className={`bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl overflow-hidden shadow-sm transition-all duration-300 flex flex-col ${isHovered
+                    ? 'flex-[2_2_0%] min-w-[320px] shadow-xl z-10 border-blue-300 dark:border-blue-700'
+                    : hasHoveredColumn
+                      ? 'flex-[0.5_0.5_0%] min-w-[120px] opacity-60'
+                      : 'flex-1 min-w-0'
+                    } hover:shadow-md`}
                 >
                   {/* Enhanced Tactic Header */}
-                  <div className="bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900 px-4 py-3 border-b border-gray-200 dark:border-gray-700">
-                    <h3 className="text-body-sm font-bold text-gray-900 dark:text-white text-center mb-1">
+                  <div className={`bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900 px-4 py-3 border-b border-gray-200 dark:border-gray-700 transition-all ${isHovered ? 'from-blue-100 to-blue-200 dark:from-blue-900 dark:to-blue-800' : ''
+                    }`}>
+                    <h3 className={`font-bold text-gray-900 dark:text-white text-center mb-1 transition-all ${isHovered ? 'text-body-base' : 'text-body-sm'
+                      }`}>
                       {tactic}
                     </h3>
                     <div className="flex items-center justify-center gap-1.5">
@@ -1251,7 +1188,8 @@ function AttackPaths({ appName }: AttackPathsProps): JSX.Element {
                             >
                               <div className="flex items-start justify-between gap-3">
                                 <div className="flex-1 min-w-0">
-                                  <div className="text-body-xs font-semibold text-gray-900 dark:text-white truncate group-hover:text-blue-700 dark:group-hover:text-blue-400 transition-colors">
+                                  <div className={`text-body-xs font-semibold text-gray-900 dark:text-white group-hover:text-blue-700 dark:group-hover:text-blue-400 transition-colors ${isHovered ? '' : 'truncate'
+                                    }`}>
                                     {technique.name}
                                   </div>
                                 </div>

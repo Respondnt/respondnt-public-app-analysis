@@ -38,8 +38,10 @@ jobs:
           mkdir -p dist/data/breakdowns
           mkdir -p dist/data/attack_paths
           mkdir -p dist/data/initial_access
+          mkdir -p dist/data/comprehensive
           cp -r data/breakdowns/*.json dist/data/breakdowns/
           cp -r data/attack_paths/*.json dist/data/attack_paths/
+          cp -r data/comprehensive/*.json dist/data/comprehensive/
           cp -r data/initial_access/*.json dist/data/initial_access/ 2>/dev/null || true
       
       - name: Setup Pages
