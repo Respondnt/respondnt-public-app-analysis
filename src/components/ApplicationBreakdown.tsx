@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import AttackPaths from './AttackPaths'
-import AttackGraphs from './AttackGraphs'
-import type { BreakdownData, Capability, AttackPathsData } from '../types'
-import { loadAttackPathsData } from '../utils/dataLoaders'
+import type { BreakdownData, Capability } from '../types'
+import { loadAttackPathsData, loadComprehensiveAnalysisData } from '../utils/dataLoaders'
 
 interface ApplicationBreakdownProps {
     appName: string
@@ -11,11 +10,9 @@ interface ApplicationBreakdownProps {
 
 function ApplicationBreakdown({ appName }: ApplicationBreakdownProps): JSX.Element {
     const [breakdownData, setBreakdownData] = useState<BreakdownData | null>(null)
-    const [attackPathsData, setAttackPathsData] = useState<AttackPathsData | null>(null)
-    const [discoveryMap, setDiscoveryMap] = useState<Map<string, unknown[]>>(new Map())
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
-    const [activeSection, setActiveSection] = useState<'attack_paths' | 'attack_graphs' | 'app_breakdown'>('attack_paths')
+    const [activeSection, setActiveSection] = useState<'attack_paths' | 'app_breakdown'>('attack_paths')
     const [activeBreakdownSection, setActiveBreakdownSection] = useState<'technical' | 'admin' | 'api' | 'automation' | 'core'>('technical')
 
     useEffect(() => {
@@ -33,41 +30,14 @@ function ApplicationBreakdown({ appName }: ApplicationBreakdownProps): JSX.Eleme
                 const breakdownData = await breakdownResponse.json() as BreakdownData
                 setBreakdownData(breakdownData)
 
-                // Try to load attack paths data (optional - may not exist)
-                // For Box and Klaviyo, this will automatically use initial access data
-                try {
-                    const attackPathsData = await loadAttackPathsData(baseUrl, appName)
-                    setAttackPathsData(attackPathsData)
-                } catch (attackPathsErr) {
-                    // Attack paths not available - set to null to show "not available" message
-                    console.log('Attack paths not available for this application')
-                    setAttackPathsData(null)
+                // Only load comprehensive analysis data (required)
+                const comprehensiveData = await loadComprehensiveAnalysisData(baseUrl, appName)
+                if (!comprehensiveData) {
+                    throw new Error(`Comprehensive analysis data not available for ${appName}. Only apps with comprehensive analysis data are supported.`)
                 }
 
-                // Try to load discovery data (optional - may not exist)
-                try {
-                    const discoveryResponse = await fetch(`${baseUrl}data/discovery/${appName}_discovery_vectors.json`)
-                    if (discoveryResponse.ok) {
-                        const discoveryData = await discoveryResponse.json() as Array<{ initial_access_vector?: { technique_name: string }; discovery_vectors?: unknown[] }>
-                        // Create a map from initial access vector technique_name to discovery vectors
-                        const map = new Map<string, unknown[]>()
-                        if (Array.isArray(discoveryData)) {
-                            discoveryData.forEach(entry => {
-                                if (entry.initial_access_vector && entry.initial_access_vector.technique_name) {
-                                    map.set(entry.initial_access_vector.technique_name, entry.discovery_vectors || [])
-                                }
-                            })
-                        }
-                        setDiscoveryMap(map)
-                    } else {
-                        // Discovery not available - set to empty map
-                        setDiscoveryMap(new Map())
-                    }
-                } catch (discoveryErr) {
-                    // Discovery not available - set to empty map
-                    console.log('Discovery data not available for this application')
-                    setDiscoveryMap(new Map())
-                }
+                // Transform comprehensive analysis to attack paths format for MITRE View
+                // This is done in AttackPaths component, so we don't need to store it here
 
                 setError(null)
             } catch (err) {
@@ -82,7 +52,7 @@ function ApplicationBreakdown({ appName }: ApplicationBreakdownProps): JSX.Eleme
 
     if (loading) {
         return (
-            <div className="w-full h-screen flex items-center justify-center">
+            <div className="w-full h-full flex items-center justify-center">
                 <div className="text-center">
                     <div className="text-body text-gray-600 dark:text-gray-400">Loading...</div>
                 </div>
@@ -92,7 +62,7 @@ function ApplicationBreakdown({ appName }: ApplicationBreakdownProps): JSX.Eleme
 
     if (error || !breakdownData) {
         return (
-            <div className="w-full h-screen flex items-center justify-center">
+            <div className="w-full h-full flex items-center justify-center">
                 <div className="text-center">
                     <div className="text-body text-red-600 dark:text-red-400 mb-4">
                         {error || 'Failed to load application breakdown'}
@@ -260,11 +230,12 @@ function ApplicationBreakdown({ appName }: ApplicationBreakdownProps): JSX.Eleme
         </div>
     )
 
+    // Only show MITRE View and App Breakdown (attack graphs hidden for now)
     const mainSections = [
         { id: 'attack_paths' as const, label: 'MITRE View' },
-        { id: 'attack_graphs' as const, label: 'Attack Scenarios' },
         { id: 'app_breakdown' as const, label: 'App Breakdown' },
     ]
+
 
     const breakdownSections = [
         { id: 'technical' as const, label: 'Technical Components' },
@@ -274,10 +245,10 @@ function ApplicationBreakdown({ appName }: ApplicationBreakdownProps): JSX.Eleme
         { id: 'core' as const, label: 'Core Product Capabilities' },
     ]
 
-    // For attack_paths and attack_graphs, use full width layout
-    if (activeSection === 'attack_paths' || activeSection === 'attack_graphs') {
+    // For attack_paths, use full width layout
+    if (activeSection === 'attack_paths') {
         return (
-            <div className="w-full h-screen flex flex-col">
+            <div className="w-full h-full flex flex-col">
                 {/* Modern Compact Sticky Header */}
                 <div className="sticky top-0 z-40 flex-shrink-0 bg-white/95 dark:bg-gray-950/95 backdrop-blur-sm border-b border-gray-200 dark:border-gray-800 shadow-sm">
                     <div className="px-4 lg:px-6">
@@ -317,7 +288,7 @@ function ApplicationBreakdown({ appName }: ApplicationBreakdownProps): JSX.Eleme
                                     className={`
                     relative h-full px-4 text-body-sm font-medium transition-all
                     ${activeSection === section.id
-                                            ? section.id === 'attack_paths' || section.id === 'attack_graphs'
+                                            ? section.id === 'attack_paths'
                                                 ? 'text-purple-700 dark:text-purple-300'
                                                 : 'text-accent-primary dark:text-accent-primary'
                                             : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
@@ -329,7 +300,7 @@ function ApplicationBreakdown({ appName }: ApplicationBreakdownProps): JSX.Eleme
                                         <span
                                             className={`
                         absolute bottom-0 left-0 right-0 h-0.5
-                        ${section.id === 'attack_paths' || section.id === 'attack_graphs'
+                        ${section.id === 'attack_paths'
                                                     ? 'bg-purple-600 dark:bg-purple-400'
                                                     : 'bg-accent-primary'
                                                 }
@@ -343,19 +314,15 @@ function ApplicationBreakdown({ appName }: ApplicationBreakdownProps): JSX.Eleme
                 </div>
 
                 {/* Full width content */}
-                <div className="flex-1 overflow-auto">
-                    {activeSection === 'attack_paths' ? (
-                        <AttackPaths appName={appName} />
-                    ) : (
-                        <AttackGraphs appName={appName} />
-                    )}
+                <div className="flex-1 overflow-auto -webkit-overflow-scrolling-touch">
+                    <AttackPaths appName={appName} />
                 </div>
             </div>
         )
     }
 
     return (
-        <div className="w-full h-screen flex flex-col">
+        <div className="w-full h-full flex flex-col">
             {/* Modern Compact Sticky Header */}
             <div className="sticky top-0 z-40 flex-shrink-0 bg-white/95 dark:bg-gray-950/95 backdrop-blur-sm border-b border-gray-200 dark:border-gray-800 shadow-sm">
                 <div className="px-4 lg:px-6">
@@ -395,7 +362,7 @@ function ApplicationBreakdown({ appName }: ApplicationBreakdownProps): JSX.Eleme
                                 className={`
                   relative h-full px-4 text-body-sm font-medium transition-all
                   ${activeSection === section.id
-                                        ? section.id === 'attack_paths' || section.id === 'attack_graphs'
+                                        ? section.id === 'attack_paths'
                                             ? 'text-purple-700 dark:text-purple-300'
                                             : 'text-accent-primary dark:text-accent-primary'
                                         : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
@@ -407,7 +374,7 @@ function ApplicationBreakdown({ appName }: ApplicationBreakdownProps): JSX.Eleme
                                     <span
                                         className={`
                       absolute bottom-0 left-0 right-0 h-0.5
-                      ${section.id === 'attack_paths' || section.id === 'attack_graphs'
+                      ${section.id === 'attack_paths'
                                                 ? 'bg-purple-600 dark:bg-purple-400'
                                                 : 'bg-accent-primary'
                                             }
@@ -445,7 +412,7 @@ function ApplicationBreakdown({ appName }: ApplicationBreakdownProps): JSX.Eleme
             </div>
 
             {/* Content - Scrollable area */}
-            <div className="flex-1 overflow-y-auto px-4 lg:px-6 pb-6">
+            <div className="flex-1 overflow-y-auto overflow-x-hidden px-4 lg:px-6 pb-6 -webkit-overflow-scrolling-touch">
                 <div className={activeSection === 'app_breakdown' ? 'pt-6' : 'pt-4'}>
                     {activeSection === 'app_breakdown' && activeBreakdownSection === 'core' && breakdownData.capability_map?.core_product_capabilities && (
                         <div>

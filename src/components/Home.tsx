@@ -1,4 +1,6 @@
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { loadComprehensiveAnalysisData } from '../utils/dataLoaders'
 
 interface App {
     name: string
@@ -6,7 +8,7 @@ interface App {
     description: string
 }
 
-const apps: App[] = [
+const allApps: App[] = [
     {
         name: '1password',
         displayName: '1Password',
@@ -32,9 +34,46 @@ const apps: App[] = [
         displayName: 'Klaviyo',
         description: 'Email Marketing Platform',
     },
+    {
+        name: 'github',
+        displayName: 'GitHub',
+        description: 'Code Repository Platform',
+    },
 ]
 
 function Home(): JSX.Element {
+    const [availableApps, setAvailableApps] = useState<App[]>([])
+    const [loading, setLoading] = useState(true)
+
+    useEffect(() => {
+        const checkAvailableApps = async (): Promise<void> => {
+            const baseUrl = import.meta.env.BASE_URL
+            const appsWithData: App[] = []
+
+            for (const app of allApps) {
+                const comprehensiveData = await loadComprehensiveAnalysisData(baseUrl, app.name)
+                if (comprehensiveData) {
+                    appsWithData.push(app)
+                }
+            }
+
+            setAvailableApps(appsWithData)
+            setLoading(false)
+        }
+
+        checkAvailableApps()
+    }, [])
+
+    if (loading) {
+        return (
+            <div className="w-full h-full flex items-center justify-center">
+                <div className="text-center">
+                    <div className="text-body text-gray-600 dark:text-gray-400">Loading...</div>
+                </div>
+            </div>
+        )
+    }
+
     return (
         <div className="w-full h-full overflow-y-auto px-6 lg:px-8 py-8">
             <div className="max-w-7xl mx-auto">
@@ -45,7 +84,7 @@ function Home(): JSX.Element {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6 max-w-5xl mx-auto">
-                    {apps.map((app) => (
+                    {availableApps.map((app) => (
                         <Link
                             key={app.name}
                             to={`/app/${app.name}`}

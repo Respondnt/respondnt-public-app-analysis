@@ -6,7 +6,7 @@ import Home from './components/Home'
 function App(): JSX.Element {
     return (
         <BrowserRouter basename="/">
-            <div className="h-screen bg-white dark:bg-gray-950 flex flex-col overflow-hidden">
+            <div className="min-h-screen bg-white dark:bg-gray-950 flex flex-col">
                 <header className="flex-shrink-0 z-40 bg-white/80 dark:bg-gray-950/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
                     <nav className="w-full px-6 py-4 flex items-center justify-between">
                         <Link to="/" className="flex items-center gap-3 text-h4 font-semibold text-gray-900 dark:text-white hover:text-accent-primary transition-colors">
@@ -25,7 +25,7 @@ function App(): JSX.Element {
                         </div>
                     </nav>
                 </header>
-                <main className="flex-1 overflow-hidden">
+                <main className="flex-1 min-h-0">
                     <Routes>
                         <Route path="/" element={<Home />} />
                         <Route path="/app/:appName" element={<AppView />} />
@@ -50,4 +50,5 @@ function DiscoveryView(): JSX.Element {
 }
 
 export default App
+
 
