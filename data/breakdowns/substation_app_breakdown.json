@@ -1,0 +1,1634 @@
+{
+  "application_name": "Substation",
+  "generated_at": "2025-12-16T00:00:00Z",
+  "coverage_overview": {
+    "sources_analysed": [
+      {
+        "name": "cmd/README.md",
+        "url": null,
+        "description": "Application source code and usage documentation."
+      },
+      {
+        "name": "cmd/aws/lambda/autoscale/main.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "cmd/aws/lambda/substation/api_gateway.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "cmd/aws/lambda/substation/data_firehose.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "cmd/aws/lambda/substation/dynamodb.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "cmd/aws/lambda/substation/kinesis_data_stream.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "cmd/aws/lambda/substation/lambda.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "cmd/aws/lambda/substation/main.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "cmd/aws/lambda/substation/s3.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "cmd/aws/lambda/substation/sns.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "cmd/aws/lambda/substation/sqs.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "cmd/aws/lambda/validate/main.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "cmd/gcp/function/substation/main.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "cmd/gcp/function/substation/storage.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "cmd/substation/build.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "cmd/substation/demo.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "cmd/substation/fmt.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "cmd/substation/main.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "cmd/substation/playground.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "cmd/substation/read.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "cmd/substation/tap.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "cmd/substation/test.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "cmd/substation/vet.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "condition/condition.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "config/config.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "internal/config/config.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "internal/file/file.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "internal/http/http.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "internal/kv/kv.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "internal/log/log.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "internal/metrics/aws_cloudwatch_embedded_metrics.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "internal/metrics/metrics.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "internal/secrets/aws_secrets_manager.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "internal/secrets/environment_variable.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "internal/secrets/secrets.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "message/message.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "substation.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "transform/enrich_http_get.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "transform/enrich_http_post.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "transform/enrich_kv_store_item_get.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "transform/enrich_kv_store_item_set.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "transform/enrich_kv_store_set_add.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "transform/meta_kv_store_lock.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "transform/meta_metric_duration.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "transform/send_aws_data_firehose.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "transform/send_aws_dynamodb_put.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "transform/send_aws_eventbridge.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "transform/send_aws_kinesis_data_stream.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "transform/send_aws_lambda.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "transform/send_aws_s3.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "transform/send_aws_sns.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "transform/send_aws_sqs.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "transform/send_file.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "transform/send_gcp_storage.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "transform/send_http_post.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "transform/send_stdout.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "transform/transform.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "transform/utility_metric_bytes.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "transform/utility_metric_count.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "transform/utility_metric_freshness.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "transform/utility_secret.go",
+        "url": null,
+        "description": "Application source code file."
+      },
+      {
+        "name": "build/terraform/aws/s3/main.tf",
+        "url": null,
+        "description": "Terraform infrastructure definition."
+      },
+      {
+        "name": "build/terraform/aws/kms/main.tf",
+        "url": null,
+        "description": "Terraform infrastructure definition."
+      },
+      {
+        "name": "build/terraform/aws/ecr/main.tf",
+        "url": null,
+        "description": "Terraform infrastructure definition."
+      },
+      {
+        "name": "build/terraform/aws/cloudwatch/destination/main.tf",
+        "url": null,
+        "description": "Terraform infrastructure definition."
+      },
+      {
+        "name": "build/terraform/aws/sqs/main.tf",
+        "url": null,
+        "description": "Terraform infrastructure definition."
+      },
+      {
+        "name": "build/terraform/aws/appconfig/main.tf",
+        "url": null,
+        "description": "Terraform infrastructure definition."
+      },
+      {
+        "name": "build/terraform/aws/dynamodb/main.tf",
+        "url": null,
+        "description": "Terraform infrastructure definition."
+      },
+      {
+        "name": "build/terraform/aws/sns/main.tf",
+        "url": null,
+        "description": "Terraform infrastructure definition."
+      },
+      {
+        "name": "build/terraform/aws/api_gateway/lambda/main.tf",
+        "url": null,
+        "description": "Terraform infrastructure definition."
+      },
+      {
+        "name": "build/terraform/aws/kinesis_data_stream/main.tf",
+        "url": null,
+        "description": "Terraform infrastructure definition."
+      },
+      {
+        "name": "build/terraform/aws/api_gateway/kinesis_data_stream/main.tf",
+        "url": null,
+        "description": "Terraform infrastructure definition."
+      },
+      {
+        "name": "build/terraform/aws/eventbridge/lambda/main.tf",
+        "url": null,
+        "description": "Terraform infrastructure definition."
+      },
+      {
+        "name": "build/terraform/aws/lambda/main.tf",
+        "url": null,
+        "description": "Terraform infrastructure definition."
+      },
+      {
+        "name": "build/terraform/aws/networking/vpc/main.tf",
+        "url": null,
+        "description": "Terraform infrastructure definition."
+      },
+      {
+        "name": "build/terraform/aws/cloudwatch/subscription/main.tf",
+        "url": null,
+        "description": "Terraform infrastructure definition."
+      },
+      {
+        "name": "build/terraform/aws/secret/main.tf",
+        "url": null,
+        "description": "Terraform infrastructure definition."
+      }
+    ],
+    "likely_uncovered_areas_or_ambiguities": [
+      "Runtime configuration values (Jsonnet/JSON pipeline configs, SUBSTATION_CONFIG URIs, environment variables, and IAM roles supplied via Terraform variables) were not analyzed, so actual deployed data flows and sinks may differ from those inferred from code and module structure.",
+      "Account-level guardrails (AWS Organizations SCPs, organization-wide CloudTrail/CloudWatch/KMS standards, security tooling) are outside this repository and could significantly change effective permissions and logging coverage.",
+      "GCP infrastructure beyond the single Cloud Storage–triggered Cloud Function (for example additional buckets, Pub/Sub topics, VPC connectors, or IAM bindings) is not defined here and was not evaluated.",
+      "Not every individual transform and condition implementation was deeply inspected; analysis emphasized HTTP, KV, metrics, secret, and sink-related transforms, so rare or newly added transform types may introduce additional behaviors or sinks.",
+      "Systems that invoke Substation (clients of API Gateway, SNS publishers, Kinesis producers, operators running the CLI) were not analyzed, so their authentication, input validation, and rate-limiting characteristics are unknown."
+    ],
+    "assumptions_made": [
+      "Terraform modules under build/terraform/aws/ are assumed to represent the canonical production deployment pattern for Substation on AWS, with no materially different architecture in out-of-band infrastructure-as-code.",
+      "IAM roles provided via var.access are assumed to be Substation-related workloads (Lambda execution roles, batch processors) and not broad administrator roles or cross-tenant identities.",
+      "In production, SUBSTATION_CONFIG and Jsonnet/JSON configs are assumed to be reviewed, trusted configuration artifacts rather than arbitrary untrusted user input, though the model still highlights risks if this assumption does not hold.",
+      "HTTP(S) calls made by transforms or internal/file.Get are assumed to rely on standard TLS validation and system CAs, with no additional hostname allow-lists or TLS pinning unless layered on externally."
+    ]
+  },
+  "capability_map": {
+    "core_product_capabilities": [
+      {
+        "name": "Core Substation transformation engine",
+        "description": "Provides a generic, config-driven transformation pipeline over messages, where each transform is selected by a type string and settings, and messages flow through an ordered list of Transformer implementations that can mutate, split, or drop them.",
+        "primary_actors": [
+          "Application developers",
+          "CLI commands",
+          "AWS Lambda handlers",
+          "GCP Cloud Functions",
+          "Playground HTTP server"
+        ],
+        "main_interfaces": [
+          {
+            "channel": "other",
+            "details": "substation.New(ctx, Config) and (*Substation).Transform(ctx, ...*message.Message)",
+            "url": null
+          }
+        ],
+        "key_data_involved": [
+          "substation.Config (list of transform configs)",
+          "config.Config {Type, Settings}",
+          "message.Message {data, metadata, control flag}"
+        ],
+        "security_relevant_traits": [
+          "Arbitrary combinations of transforms can include external sinks (HTTP, AWS, GCP) and enrichment steps, so configuration fully defines side effects.",
+          "All transforms are instantiated purely from type strings and JSON settings, allowing untrusted configs to direct data to unintended destinations if not constrained.",
+          "Apply returns immediately on the first non-recoverable transform error for a message, which can halt processing of entire batches."
+        ],
+        "evidence": [
+          {
+            "title": "substation.go",
+            "url": null,
+            "summary": "Defines Config, Substation struct, New(), Transform(), and String() methods.",
+            "notes": null
+          },
+          {
+            "title": "transform/transform.go",
+            "url": null,
+            "summary": "Defines Transformer interface, transform.New dispatcher, and Apply() orchestration over a sequence of transforms.",
+            "notes": null
+          },
+          {
+            "title": "message/message.go",
+            "url": null,
+            "summary": "Defines Message abstraction, JSON value accessors/mutators, metadata handling, and control message semantics.",
+            "notes": null
+          }
+        ],
+        "notes": null
+      },
+      {
+        "name": "Local ingestion and transformation CLI",
+        "description": "The 'substation read' command ingests data from local files, HTTP(S) endpoints, or AWS S3 objects and passes each record through a configurable pipeline, defaulting to printing JSON output to stdout.",
+        "primary_actors": [
+          "Data engineers",
+          "Developers"
+        ],
+        "main_interfaces": [
+          {
+            "channel": "cli",
+            "details": "substation read [config.json|.jsonnet] --file PATH | --http URL | --aws s3://bucket/key",
+            "url": null
+          }
+        ],
+        "key_data_involved": [
+          "Arbitrary input files or HTTP/S3 objects",
+          "Media type detection results",
+          "Message metadata for S3 objects"
+        ],
+        "security_relevant_traits": [
+          "HTTP ingestion uses retryablehttp without auth by default; configs can add authentication at transform level but the CLI does not enforce TLS pinning or hostname allow-lists.",
+          "S3 ingestion uses environment/IAM-based AWS credentials and can read any object the role can access.",
+          "Default config (when none is provided) sends the entire stream to stdout, which may leak sensitive data if combined with untrusted sources or verbose logging."
+        ],
+        "evidence": [
+          {
+            "title": "cmd/substation/read.go",
+            "url": null,
+            "summary": "Defines readCmd, read(), readFile(), readHTTP(), readS3(), and the concurrency pattern between source reader and Substation pipeline.",
+            "notes": null
+          },
+          {
+            "title": "internal/file/file.go",
+            "url": null,
+            "summary": "Get() resolves files from local disk, HTTP(S), S3, or GCS into temporary files.",
+            "notes": null
+          },
+          {
+            "title": "internal/media and internal/bufio (referenced)",
+            "url": null,
+            "summary": "Used to classify media type and split text files into messages.",
+            "notes": "Referenced from read.go and S3/GCS handlers; content not deeply inspected."
+          }
+        ],
+        "notes": null
+      },
+      {
+        "name": "AWS Lambda Substation event processors",
+        "description": "A multi-mode AWS Lambda binary processes various AWS event sources (API Gateway, generic Lambda, Kinesis, Firehose, DynamoDB Streams, S3, SNS, SQS) by loading a shared Substation configuration and running event-derived messages through the pipeline.",
+        "primary_actors": [
+          "AWS Lambda runtime",
+          "Platform engineers"
+        ],
+        "main_interfaces": [
+          {
+            "channel": "integration",
+            "details": "AWS Lambda handlers selected by SUBSTATION_LAMBDA_HANDLER (e.g., AWS_API_GATEWAY, AWS_DYNAMODB_STREAM, AWS_S3, AWS_SQS).",
+            "url": null
+          }
+        ],
+        "key_data_involved": [
+          "Event payloads from API Gateway, generic Lambda invocations, Kinesis, Firehose, DynamoDB Streams, S3, SNS, SQS",
+          "Metadata such as ARNs, timestamps, partition keys, sequence numbers, S3 object locations",
+          "SUBSTATION_CONFIG location (local path, HTTP URL, S3, or GCS)"
+        ],
+        "security_relevant_traits": [
+          "Configuration is dynamically fetched at runtime from SUBSTATION_CONFIG via internal/file.Get, allowing remote or cross-account config sources.",
+          "Handlers often process events asynchronously and do not return transformed messages, so side effects occur solely through configured send/enrich transforms.",
+          "API Gateway and generic Lambda handlers validate that transformed outputs are valid JSON before returning, preventing accidental emission of invalid JSON.",
+          "Concurrency levels for Kinesis, DynamoDB, and S3/SNS/SQS handlers are configurable, affecting throughput and potential downstream service load."
+        ],
+        "evidence": [
+          {
+            "title": "cmd/aws/lambda/substation/main.go",
+            "url": null,
+            "summary": "Selects the concrete handler based on SUBSTATION_LAMBDA_HANDLER and defines getConfig using internal/file.Get.",
+            "notes": null
+          },
+          {
+            "title": "cmd/aws/lambda/substation/api_gateway.go",
+            "url": null,
+            "summary": "gatewayHandler wraps APIGatewayProxyRequest into a Message and returns a JSON array of transformed messages.",
+            "notes": null
+          },
+          {
+            "title": "cmd/aws/lambda/substation/kinesis_data_stream.go",
+            "url": null,
+            "summary": "kinesisStreamHandler deaggregates records, attaches metadata, and runs a parallel Substation pipeline.",
+            "notes": null
+          },
+          {
+            "title": "cmd/aws/lambda/substation/s3.go",
+            "url": null,
+            "summary": "s3Handler/s3SnsHandler/s3SqsHandler download S3 objects, split them, and feed messages plus metadata into the pipeline.",
+            "notes": null
+          },
+          {
+            "title": "cmd/aws/lambda/substation/dynamodb.go",
+            "url": null,
+            "summary": "dynamodbHandler maps stream events to Debezium-style records and processes them through Substation.",
+            "notes": null
+          },
+          {
+            "title": "cmd/aws/lambda/substation/lambda.go",
+            "url": null,
+            "summary": "lambdaHandler handles arbitrary JSON events and returns transformed JSON messages.",
+            "notes": null
+          }
+        ],
+        "notes": null
+      },
+      {
+        "name": "GCP Cloud Storage Substation Function",
+        "description": "A Cloud Function triggered by Cloud Storage events downloads new or updated objects, splits their contents into messages, attaches metadata, and runs them through a Substation pipeline defined by SUBSTATION_CONFIG.",
+        "primary_actors": [
+          "GCP Cloud Functions runtime",
+          "Platform engineers"
+        ],
+        "main_interfaces": [
+          {
+            "channel": "integration",
+            "details": "CloudEvent handler registered via funcframework for SUBSTATION_FUNCTION_HANDLER=GCP_STORAGE at path '/'.",
+            "url": null
+          }
+        ],
+        "key_data_involved": [
+          "CloudStorageEvent {bucket, name, size, time}",
+          "Object bytes from GCS",
+          "Per-file metadata serialized into JSON and attached to Messages"
+        ],
+        "security_relevant_traits": [
+          "Function fetches Substation config via internal/file.Get, supporting local, HTTP, S3, or GCS config locations.",
+          "Concurrency level is configurable per config to control resource usage and downstream calls.",
+          "Reads from any GCS bucket the service account can access, so IAM scoping is critical."
+        ],
+        "evidence": [
+          {
+            "title": "cmd/gcp/function/substation/main.go",
+            "url": null,
+            "summary": "Registers cloudStorageHandler if SUBSTATION_FUNCTION_HANDLER is GCP_STORAGE and defines getConfig.",
+            "notes": null
+          },
+          {
+            "title": "cmd/gcp/function/substation/storage.go",
+            "url": null,
+            "summary": "cloudStorageHandler downloads objects, leverages internal/media/bufio, attaches metadata, and runs a Substation pipeline.",
+            "notes": null
+          }
+        ],
+        "notes": null
+      }
+    ],
+    "administrative_and_operational_capabilities": [
+      {
+        "name": "Configuration management and validation CLI",
+        "description": "CLI commands build, format, test, and vet Substation configurations, including recursive directory operations and Jsonnet compilation, providing early feedback on configuration and transform errors.",
+        "primary_actors": [
+          "Developers",
+          "CI/CD pipelines"
+        ],
+        "main_interfaces": [
+          {
+            "channel": "cli",
+            "details": "substation build [path]; substation fmt [path]; substation test [path]; substation vet [path]",
+            "url": null
+          }
+        ],
+        "key_data_involved": [
+          "Jsonnet and JSON configuration files",
+          "customConfig {Config, Tests}",
+          "condition configs for tests"
+        ],
+        "security_relevant_traits": [
+          "vet and test commands call substation.New and condition.New, catching many misconfigurations before deployment.",
+          "test can execute arbitrary transforms in a test configuration, including external sinks, so using it against production-like configs can mutate real resources.",
+          "build and fmt mutate config files on disk when write flags are used, which should be controlled in CI and shared-repo contexts."
+        ],
+        "evidence": [
+          {
+            "title": "cmd/substation/build.go",
+            "url": null,
+            "summary": "Implements 'substation build', compiling .jsonnet files to .json and walking directories when recursive.",
+            "notes": null
+          },
+          {
+            "title": "cmd/substation/fmt.go",
+            "url": null,
+            "summary": "Implements 'substation fmt', using go-jsonnet/formatter with optional in-place writes and recursive behavior.",
+            "notes": null
+          },
+          {
+            "title": "cmd/substation/test.go",
+            "url": null,
+            "summary": "Defines customConfig, testConfig, and 'substation test' logic including per-test pipelines and conditions.",
+            "notes": null
+          },
+          {
+            "title": "cmd/substation/vet.go",
+            "url": null,
+            "summary": "Implements 'substation vet', compiling Jsonnet and constructing Substation pipelines to surface transform errors.",
+            "notes": null
+          }
+        ],
+        "notes": null
+      },
+      {
+        "name": "Metrics and observability transforms",
+        "description": "Transforms that collect metrics like total bytes, message counts, freshness, and duration of sub-pipelines, and emit them via a pluggable metrics backend (currently AWS CloudWatch Embedded Metrics).",
+        "primary_actors": [
+          "Operations",
+          "SRE",
+          "Pipeline owners"
+        ],
+        "main_interfaces": [
+          {
+            "channel": "integration",
+            "details": "Transform types: utility_metric_bytes, utility_metric_count, utility_metric_freshness, meta_metric_duration; metrics backends via internal/metrics",
+            "url": null
+          }
+        ],
+        "key_data_involved": [
+          "Aggregated counts and sizes per control window",
+          "Timestamps from message fields for freshness",
+          "Per-transform durations in nanoseconds"
+        ],
+        "security_relevant_traits": [
+          "Metrics are emitted to CloudWatch via stdout in EMF format, potentially including identifying attributes; metric names and attributes should avoid sensitive data.",
+          "Duration and freshness metrics can reveal traffic patterns or timing characteristics if exposed to external observers.",
+          "Metric emission is triggered on control messages; missed or suppressed control messages can defer or prevent metric reporting."
+        ],
+        "evidence": [
+          {
+            "title": "internal/metrics/metrics.go",
+            "url": null,
+            "summary": "Defines metrics.Data, Generator interface, and New() factory currently supporting aws_cloudwatch_embedded_metrics.",
+            "notes": null
+          },
+          {
+            "title": "internal/metrics/aws_cloudwatch_embedded_metrics.go",
+            "url": null,
+            "summary": "Constructs EMF JSON with dimensions and metric values and prints it to stdout.",
+            "notes": null
+          },
+          {
+            "title": "transform/utility_metric_bytes.go",
+            "url": null,
+            "summary": "Counts bytes of processed messages and emits a metric on control.",
+            "notes": null
+          },
+          {
+            "title": "transform/utility_metric_count.go",
+            "url": null,
+            "summary": "Counts messages and emits a metric on control.",
+            "notes": null
+          },
+          {
+            "title": "transform/utility_metric_freshness.go",
+            "url": null,
+            "summary": "Separately counts 'fresh' vs 'stale' messages based on a timestamp threshold and emits two metrics per control.",
+            "notes": null
+          },
+          {
+            "title": "transform/meta_metric_duration.go",
+            "url": null,
+            "summary": "Wraps a sub-pipeline, accumulates total processing time, and emits a duration metric on control before forwarding the control through the sub-pipeline.",
+            "notes": null
+          }
+        ],
+        "notes": null
+      }
+    ],
+    "api_surface_and_integrations": [
+      {
+        "name": "HTTP enrichment and sending transforms",
+        "description": "Transforms that call arbitrary HTTP(S) endpoints to enrich messages (GET/POST) or send batched data (send_http_post), supporting header and URL interpolation with cached secrets.",
+        "primary_actors": [
+          "Any pipeline using HTTP enrich/send transforms"
+        ],
+        "main_interfaces": [
+          {
+            "channel": "integration",
+            "details": "Transform types: enrich_http_get, enrich_http_post, send_http_post",
+            "url": null
+          }
+        ],
+        "key_data_involved": [
+          "Message data or selected JSON fields used as URL templates or HTTP bodies",
+          "HTTP headers configured per transform, often containing API keys or tokens",
+          "Secrets retrieved via internal/secrets and interpolated into URLs and headers"
+        ],
+        "security_relevant_traits": [
+          "Allows exfiltration of arbitrary message content to external HTTP endpoints, controlled solely via configuration.",
+          "Uses retryablehttp with default TLS settings; there is no built-in hostname allow-list or TLS pinning.",
+          "Supports secret interpolation in headers and URLs, relying on correct configuration of utility_secret and the in-memory secrets cache.",
+          "send_http_post supports batching and optional auxiliary transforms that can further mutate or filter payloads before sending."
+        ],
+        "evidence": [
+          {
+            "title": "transform/enrich_http_get.go",
+            "url": null,
+            "summary": "Builds a URL by interpolating ${DATA} and secrets, issues an HTTP GET, parses the response, and writes it into a target field or overwrites message data.",
+            "notes": null
+          },
+          {
+            "title": "transform/enrich_http_post.go",
+            "url": null,
+            "summary": "Similar to enrich_http_get but issues a POST using a configured body_key and optional URL interpolation.",
+            "notes": null
+          },
+          {
+            "title": "transform/send_http_post.go",
+            "url": null,
+            "summary": "Batches messages by key, optionally applies auxiliary transforms, interpolates secrets into headers and URL, and posts each batch to an HTTP endpoint.",
+            "notes": null
+          },
+          {
+            "title": "internal/http/http.go",
+            "url": null,
+            "summary": "Defines the HTTP wrapper over retryablehttp with Get/Post and optional AWS X-Ray instrumentation.",
+            "notes": null
+          },
+          {
+            "title": "internal/secrets/secrets.go",
+            "url": null,
+            "summary": "Implements secret interpolation syntax ${SECRET:ID} over a KV-backed cache.",
+            "notes": null
+          }
+        ],
+        "notes": null
+      },
+      {
+        "name": "AWS and GCP sink transforms",
+        "description": "A suite of send_* transforms that batch and deliver messages to AWS and GCP services, including DynamoDB, Kinesis Data Streams, Firehose, S3, SNS, SQS, EventBridge, Lambda, and GCP Storage.",
+        "primary_actors": [
+          "Data engineering pipelines",
+          "Integration workflows"
+        ],
+        "main_interfaces": [
+          {
+            "channel": "integration",
+            "details": "Transform types: send_aws_dynamodb_put, send_aws_kinesis_data_stream, send_aws_data_firehose, send_aws_s3, send_aws_sns, send_aws_sqs, send_aws_eventbridge, send_aws_lambda, send_gcp_storage",
+            "url": null
+          }
+        ],
+        "key_data_involved": [
+          "Transformed message payloads (often JSON)",
+          "AWS ARN or GCP resource identifiers in config.AWS/config.GCP",
+          "Optional batch keys and object file paths"
+        ],
+        "security_relevant_traits": [
+          "Each sink uses internal/config.NewAWS or a GCP client created with default credentials, so IAM policies govern what resources can be written to but misconfigured ARNs can write cross-account.",
+          "All sink transforms enforce per-service size and batch limits and will error when limits are exceeded, potentially halting the pipeline.",
+          "Many sinks use context.WithoutCancel around SDK calls, meaning writes continue even if the outer context is canceled.",
+          "Auxiliary transforms can modify or filter batch payloads prior to sending, which can be used to strip or mask sensitive fields but also to re-route or duplicate data."
+        ],
+        "evidence": [
+          {
+            "title": "transform/send_aws_dynamodb_put.go",
+            "url": null,
+            "summary": "Validates JSON object payloads and size constraints, batches items, marshals to AttributeValues, and writes via BatchWriteItem.",
+            "notes": null
+          },
+          {
+            "title": "transform/send_aws_kinesis_data_stream.go",
+            "url": null,
+            "summary": "Configures batching, optional KPL-style aggregation, and recursive PutRecords retry behavior for Kinesis Data Streams.",
+            "notes": null
+          },
+          {
+            "title": "transform/send_aws_data_firehose.go",
+            "url": null,
+            "summary": "Batches into PutRecordBatch requests, respecting Firehose record and batch size limits.",
+            "notes": null
+          },
+          {
+            "title": "transform/send_aws_s3.go",
+            "url": null,
+            "summary": "Aggregates messages into a temp file, determines ContentType via internal/media, and uploads objects to an S3 bucket.",
+            "notes": null
+          },
+          {
+            "title": "transform/send_aws_sns.go",
+            "url": null,
+            "summary": "Batches publish requests and handles FIFO topics via MessageGroupId.",
+            "notes": null
+          },
+          {
+            "title": "transform/send_aws_sqs.go",
+            "url": null,
+            "summary": "Derives queue URL from ARN, batches messages, and handles FIFO SQS queues with MessageGroupId.",
+            "notes": null
+          },
+          {
+            "title": "transform/send_aws_eventbridge.go",
+            "url": null,
+            "summary": "Builds PutEvents entries with configurable detail type and event source, supporting a custom EventBridge bus.",
+            "notes": null
+          },
+          {
+            "title": "transform/send_aws_lambda.go",
+            "url": null,
+            "summary": "Asynchronously invokes other Lambda functions with batched payloads.",
+            "notes": null
+          },
+          {
+            "title": "transform/send_gcp_storage.go",
+            "url": null,
+            "summary": "Writes aggregated data to GCS buckets given a full resource name with a configurable object path strategy.",
+            "notes": null
+          },
+          {
+            "title": "internal/config/config.go (NewAWS and GCP structs)",
+            "url": null,
+            "summary": "Defines AWS and GCP configuration structures and NewAWS which resolves regions, assumes roles, and configures retries and X-Ray.",
+            "notes": null
+          }
+        ],
+        "notes": null
+      },
+      {
+        "name": "KV store integration and distributed locking",
+        "description": "KV-backed transforms enable enrichment from and mutation of key–value stores, including TTL-based set/add and a lock-based meta transform that gates execution of child transforms.",
+        "primary_actors": [
+          "Pipelines needing cross-message state",
+          "Workflows enforcing idempotency or mutual exclusion"
+        ],
+        "main_interfaces": [
+          {
+            "channel": "integration",
+            "details": "Transform types: enrich_kv_store_item_get, enrich_kv_store_item_set, enrich_kv_store_set_add, meta_kv_store_lock",
+            "url": null
+          }
+        ],
+        "key_data_involved": [
+          "Message fields used as KV keys and TTLs",
+          "KV backends (DynamoDB, CSV/JSON/text/MMDB files, in-memory store)",
+          "Lock keys (hashes of messages or specific source keys)"
+        ],
+        "security_relevant_traits": [
+          "KV keys can be prefixed to provide multi-tenant separation, but misconfiguration can cause key collisions across logical tenants.",
+          "TTL values can be drawn directly from message fields plus configured offsets, so untrusted input can influence how long state is retained.",
+          "meta_kv_store_lock uses a shared Locker (DynamoDB or in-memory) to prevent duplicate processing; failure to unlock on errors is mitigated by cleanup loops but stale locks may persist until TTL expiry.",
+          "KVStore.Close behavior is controlled by configuration and triggered by control messages, influencing the lifecycle of network connections and caches."
+        ],
+        "evidence": [
+          {
+            "title": "internal/kv/kv.go",
+            "url": null,
+            "summary": "Defines Storer and Locker interfaces, Get/New factories, and maps config.Config signatures to shared store and locker instances.",
+            "notes": null
+          },
+          {
+            "title": "transform/enrich_kv_store_item_get.go",
+            "url": null,
+            "summary": "Fetches values from a KV store keyed by a source field (with optional prefix) and writes them to a target field; optional store close on control.",
+            "notes": null
+          },
+          {
+            "title": "transform/enrich_kv_store_item_set.go",
+            "url": null,
+            "summary": "Computes TTL from message fields or offsets and writes target field values into the KV store via Set/SetWithTTL.",
+            "notes": null
+          },
+          {
+            "title": "transform/enrich_kv_store_set_add.go",
+            "url": null,
+            "summary": "Uses SetAddWithTTL to maintain set-like collections per key, with TTL control analogous to enrich_kv_store_item_set.",
+            "notes": null
+          },
+          {
+            "title": "transform/meta_kv_store_lock.go",
+            "url": null,
+            "summary": "Acquires KV-based locks per message (using hashed data or a source key), runs a list of child transforms, and releases locks at control or on errors.",
+            "notes": null
+          }
+        ],
+        "notes": null
+      },
+      {
+        "name": "Secrets retrieval and interpolation",
+        "description": "Combines secret retrievers (AWS Secrets Manager, environment variables), an in-memory KV cache, and interpolation helpers so that configs can refer to secrets in strings and transforms can proactively refresh them.",
+        "primary_actors": [
+          "Pipeline operators",
+          "Transforms that need credentials or tokens"
+        ],
+        "main_interfaces": [
+          {
+            "channel": "integration",
+            "details": "Transform type: utility_secret; interpolation syntax: ${SECRET:ID}",
+            "url": null
+          }
+        ],
+        "key_data_involved": [
+          "Secret identifiers and ARNs",
+          "Secret values (strings) cached in-memory",
+          "Interpolated strings used in URLs, headers, and other config fields"
+        ],
+        "security_relevant_traits": [
+          "Secrets are cached in an in-memory KV store with a default 15-minute TTL, reducing repeated API calls but keeping secrets resident in process memory.",
+          "Secrets are addressed by logical IDs, decoupling config usage from underlying secret ARNs or environment variable names.",
+          "Interpolation operates on arbitrary strings, so secrets can be embedded into URLs, file paths, or other fields; misplacement may leak secrets to logs or untrusted endpoints.",
+          "utility_secret ensures secrets are retrieved at startup and periodically refreshed when TTL expires."
+        ],
+        "evidence": [
+          {
+            "title": "internal/secrets/secrets.go",
+            "url": null,
+            "summary": "Defines secret Retriever interface, New() factory for aws_secrets_manager and environment_variable, and Interpolate() using ${SECRET:ID} syntax.",
+            "notes": null
+          },
+          {
+            "title": "internal/secrets/aws_secrets_manager.go",
+            "url": null,
+            "summary": "Implements AWS Secrets Manager retriever that loads a secret by ARN and stores it in the cache under a logical ID.",
+            "notes": null
+          },
+          {
+            "title": "internal/secrets/environment_variable.go",
+            "url": null,
+            "summary": "Implements retriever that copies environment variable values into the secrets cache with TTL.",
+            "notes": null
+          },
+          {
+            "title": "transform/utility_secret.go",
+            "url": null,
+            "summary": "Configures a secret retriever, eagerly retrieves the secret, and refreshes it on expiry for all subsequent interpolations.",
+            "notes": null
+          }
+        ],
+        "notes": null
+      }
+    ],
+    "background_jobs_and_automation": [
+      {
+        "name": "Kinesis autoscaling controller",
+        "description": "An AWS Lambda function that automatically scales Kinesis Data Streams up or down based on CloudWatch alarms and current shard usage, while also reconfiguring its own alarms to target the new capacity.",
+        "primary_actors": [
+          "Platform/SRE engineers",
+          "CloudWatch alarms",
+          "Kinesis streams"
+        ],
+        "main_interfaces": [
+          {
+            "channel": "integration",
+            "details": "Lambda handler (events.SNSEvent) reading CloudWatch alarm notifications from SNS.",
+            "url": null
+          }
+        ],
+        "key_data_involved": [
+          "CloudWatch alarm payloads including AlarmName and embedded metric-math expressions",
+          "Kinesis stream names, shard counts, stream tags, and UpdateShardCount operations",
+          "Environment variables AUTOSCALE_KINESIS_* controlling thresholds and datapoint counts"
+        ],
+        "security_relevant_traits": [
+          "Requires IAM permissions to list, tag, and update Kinesis streams and to put CloudWatch alarms; misconfiguration could resize critical streams or disable alarms.",
+          "Uses heuristics and stream tags (MinimumShards, MaximumShards, LastScalingEvent) to bound and throttle scaling decisions.",
+          "Resets alarm state to INSUFFICIENT_DATA after updating thresholds to avoid immediate re-triggering with stale metrics."
+        ],
+        "evidence": [
+          {
+            "title": "cmd/aws/lambda/autoscale/main.go",
+            "url": null,
+            "summary": "Implements init() for configuring CloudWatch/Kinesis clients and thresholds, and handler() logic for parsing SNS events, computing new shard counts, updating streams, and rewriting alarms.",
+            "notes": null
+          }
+        ],
+        "notes": null
+      }
+    ]
+  },
+  "technical_components_and_data_flows": {
+    "services_or_modules": [
+      {
+        "name": "substation (root package)",
+        "description": "Core abstraction for constructing and running transformation pipelines from configuration."
+      },
+      {
+        "name": "transform",
+        "description": "Collection of Transformer implementations for enrichment, routing, metrics, sending, and utility operations."
+      },
+      {
+        "name": "message",
+        "description": "Data model for messages, encapsulating raw data and metadata with JSON path–based accessors and a control-message flag."
+      },
+      {
+        "name": "condition",
+        "description": "Condition implementations that inspect message fields (format, network, numeric, string, and meta combinators) for use in tests and routing logic."
+      },
+      {
+        "name": "cmd/substation CLI",
+        "description": "Cobra-based CLI application providing build, fmt, read, tap, demo, test, vet, and play subcommands around the Substation engine."
+      },
+      {
+        "name": "cmd/aws/lambda/substation",
+        "description": "Multi-mode AWS Lambda application that routes different event types to appropriate handlers, all using Substation pipelines configured via SUBSTATION_CONFIG."
+      },
+      {
+        "name": "cmd/aws/lambda/validate",
+        "description": "Lightweight Lambda that validates Substation configurations received as base64-encoded JSON."
+      },
+      {
+        "name": "cmd/aws/lambda/autoscale",
+        "description": "Dedicated Lambda for Kinesis autoscaling and CloudWatch alarm management."
+      },
+      {
+        "name": "cmd/gcp/function/substation",
+        "description": "GCP Functions Framework–based Cloud Function packaging Substation handlers for GCS events."
+      },
+      {
+        "name": "internal/config",
+        "description": "Shared configuration helpers (Object, Metric, Request, Retry, Batch) and cloud-specific helpers like NewAWS and GCP resource descriptors."
+      },
+      {
+        "name": "internal/http",
+        "description": "Wrapper around hashicorp/go-retryablehttp with optional AWS X-Ray integration, used by HTTP transforms and file download helpers."
+      },
+      {
+        "name": "internal/kv",
+        "description": "Key–value store and locker abstractions supporting multiple backends (DynamoDB, in-memory, file-based, mmdb) for enrichment and locking transforms."
+      },
+      {
+        "name": "internal/secrets",
+        "description": "Secrets retrieval and caching system that supports AWS Secrets Manager and environment variables and exposes interpolation helpers."
+      },
+      {
+        "name": "internal/metrics",
+        "description": "Metrics abstraction and an AWS CloudWatch Embedded Metrics implementation used by metric-related transforms."
+      },
+      {
+        "name": "internal/file",
+        "description": "Unified file retrieval module that can read from local disk, HTTP(S), S3, and GCS into temporary files and generate dynamic file paths."
+      },
+      {
+        "name": "internal/log",
+        "description": "Logrus-based logging wrapper that centralizes log level configuration based on SUBSTATION_DEBUG."
+      },
+      {
+        "name": "Substation Lambda functions (container-image Lambdas)",
+        "description": "AWS Lambda functions defined in aws_lambda_function.lambda_function that run container images from ECR, inside a VPC with security groups and subnets supplied via var.config.vpc_config, and configured with KMS, X-Ray, and AppConfig."
+      },
+      {
+        "name": "API Gateway \u001a Lambda ingestion endpoint",
+        "description": "API Gateway REST API that exposes a POST method and proxies requests directly to a target Lambda using AWS_PROXY integration."
+      },
+      {
+        "name": "API Gateway \u001a Kinesis Data Stream ingestion endpoint",
+        "description": "API Gateway REST API that exposes a POST method integrated with Kinesis PutRecord, using an IAM role assumed by apigateway.amazonaws.com."
+      },
+      {
+        "name": "EventBridge rule triggering Lambda",
+        "description": "CloudWatch Events / EventBridge rule and target that invoke a Lambda function on a schedule or matching an event pattern."
+      },
+      {
+        "name": "AWS AppConfig application & environments",
+        "description": "AppConfig application and environment resources that manage hosted configuration and optionally invoke a validator Lambda."
+      },
+      {
+        "name": "CloudWatch Logs destinations for centralized forwarding",
+        "description": "CloudWatch Logs destination and IAM role/policy that forward log streams to a Kinesis Data Stream or Firehose delivery stream, including cross-account log ingestion support."
+      },
+      {
+        "name": "CloudWatch metric alarms for Kinesis auto-scaling",
+        "description": "Metric-math CloudWatch alarms over Kinesis metrics that publish to an SNS topic for autoscaling decisions."
+      },
+      {
+        "name": "VPC with public and private subnets, NAT, and Internet gateway",
+        "description": "Networking module that provisions a VPC, public and private subnets, NAT gateways, Internet gateway, and associated route tables."
+      },
+      {
+        "name": "Public HTTP APIs via API Gateway (Lambda proxy)",
+        "description": "API Gateway REST API with a public POST method wired via AWS_PROXY to a Substation Lambda function."
+      },
+      {
+        "name": "Public HTTP APIs via API Gateway (direct to Kinesis)",
+        "description": "API Gateway REST API with a public POST method that invokes Kinesis PutRecord to insert HTTP request bodies into a Kinesis Data Stream."
+      },
+      {
+        "name": "CloudWatch Logs subscription routing",
+        "description": "CloudWatch Logs subscription filters that attach log groups to a central destination_arn and distribute events to Kinesis or Firehose."
+      }
+    ],
+    "storage_and_logs": [
+      {
+        "name": "S3 buckets for Substation data",
+        "description": "Per-pipeline S3 buckets with private ACLs, BucketOwnerPreferred ownership, optional COMPLIANCE object-lock retention, and optional SSE-KMS, plus IAM policies granting GetObject/PutObject and related KMS rights to specific roles."
+      },
+      {
+        "name": "Kinesis Data Streams for high-throughput ingestion",
+        "description": "Encrypted Kinesis streams with configurable shard count and retention, plus IAM policies granting producer/consumer and autoscaling permissions to specified roles."
+      },
+      {
+        "name": "SQS queues for buffered processing",
+        "description": "Standard or FIFO queues with configurable delay and visibility timeout, encrypted with KMS where configured, and IAM policies for producers and consumers."
+      },
+      {
+        "name": "SNS topics for notifications and autoscaling",
+        "description": "Standard or FIFO topics with optional KMS encryption and IAM policies allowing sns:Publish and associated KMS operations for selected roles."
+      },
+      {
+        "name": "DynamoDB tables for state and streaming change data",
+        "description": "Provisioned tables with optional TTL, point-in-time recovery, optional streams, KMS encryption, autoscaling of capacity, and IAM policies for read/write and stream consumption."
+      },
+      {
+        "name": "AWS Secrets Manager secrets",
+        "description": "Secrets Manager secrets optionally encrypted with KMS, with IAM policies granting GetSecretValue and required KMS permissions to specific roles."
+      },
+      {
+        "name": "ECR repositories storing Lambda container images",
+        "description": "ECR repositories with immutable tags and scan-on-push enabled, optionally KMS-encrypted, and repository policies that allow the Lambda service principal to pull images."
+      },
+      {
+        "name": "Customer-managed KMS keys",
+        "description": "Customer-managed KMS keys with rotation enabled and user-supplied key policies, referenced by other modules for encrypting S3, SQS, SNS, DynamoDB, Kinesis, Secrets, ECR, and Lambda environment variables."
+      },
+      {
+        "name": "CloudWatch Logs groups and embedded metrics",
+        "description": "CloudWatch log groups that receive Lambda stdout/stderr and EMF metrics emitted by internal/metrics, and that may be subscribed via Terraform to centralized Kinesis or Firehose destinations."
+      }
+    ],
+    "external_systems": [
+      {
+        "name": "External HTTP clients",
+        "description": "Any external producers (applications, tools, users) that send POST requests to public API Gateway REST APIs for Lambda proxy or Kinesis ingestion."
+      },
+      {
+        "name": "AWS Lambda service principal",
+        "description": "lambda.amazonaws.com, which assumes execution roles defined in Terraform to run Substation functions and pull images from ECR."
+      },
+      {
+        "name": "Amazon API Gateway service principal",
+        "description": "apigateway.amazonaws.com, which assumes IAM roles to call Kinesis PutRecord and is authorized via Lambda permissions to invoke Substation Lambdas."
+      },
+      {
+        "name": "AWS CloudWatch Logs service",
+        "description": "logs.amazonaws.com, which assumes the CloudWatch Logs destination role to forward log events to Kinesis or Firehose and is allowed by destination policies to receive cross-account subscriptions."
+      },
+      {
+        "name": "Amazon EventBridge service",
+        "description": "events.amazonaws.com, which is permitted via Lambda resource-based policies to invoke functions from configured schedules and event rules."
+      },
+      {
+        "name": "AWS AppConfig service",
+        "description": "appconfig.amazonaws.com, which can invoke validator Lambdas and serve configuration to Lambda functions using appconfig:GetConfiguration* permissions."
+      },
+      {
+        "name": "Other AWS accounts sending logs",
+        "description": "External AWS accounts whose IDs are listed in var.config.account_ids and are allowed to create subscription filters that send their CloudWatch Logs into the central destination."
+      },
+      {
+        "name": "SNS subscribers for Kinesis autoscaling alarms",
+        "description": "Subscribers (typically an autoscaling controller Lambda) to the SNS topic used by CloudWatch Kinesis utilization alarms, which act on notifications to adjust shard counts."
+      },
+      {
+        "name": "Arbitrary external HTTP services called by Substation",
+        "description": "Third-party or internal HTTP(S) APIs that Substation contacts via enrich_http_get, enrich_http_post, send_http_post, or internal/file HTTP retrieval."
+      },
+      {
+        "name": "GCP Storage and related GCP services",
+        "description": "Google Cloud Storage buckets and associated GCP APIs accessed by the GCP Cloud Function and send_gcp_storage transform, using the function's service account credentials."
+      }
+    ],
+    "data_flows": [
+      {
+        "name": "Configuration compilation and pipeline construction",
+        "description": "CLI and playground commands read Jsonnet or JSON configs, compile Jsonnet via a VM when needed, unmarshal into substation.Config (wrapping []config.Config), then invoke substation.New which iterates cfg.Transforms and calls transform.New for each to build a sequence of Transformer instances."
+      },
+      {
+        "name": "General message pipeline execution",
+        "description": "Entry-point code (CLI, Lambda, Cloud Function, playground) wraps input data into one or more message.Message objects plus a final control message, then calls Substation.Transform, which sequentially applies each transform to each message; control messages trigger batch flushes and metric emission."
+      },
+      {
+        "name": "CLI 'read' data flow (file/HTTP/S3 \u001a pipeline \u001a sink)",
+        "description": "substation read determines the config (explicit JSON/Jsonnet or default stdout pipeline), then reads from a chosen source (local file, HTTP via retryablehttp, or S3), uses media-type sniffing and scanners to split content into records, wraps each as a Message on a channel, and runs them through a Substation pipeline in an errgroup, finally sending a control message to flush batches."
+      },
+      {
+        "name": "AWS Lambda event-based processing pipeline",
+        "description": "Each Lambda handler (API Gateway, S3, Kinesis, DynamoDB, SNS, SQS, Firehose, generic Lambda) loads SUBSTATION_CONFIG via internal/file.Get, constructs a Substation pipeline, maps the AWS event into one or more Messages with metadata, pushes them into a worker pool which calls Transform, and for streaming/batch sources sends a control message to flush; API Gateway and generic Lambda handlers serialize non-control outputs back into JSON responses."
+      },
+      {
+        "name": "GCS ingestion and Kinesis autoscaling flows",
+        "description": "The GCP Cloud Function handler maps CloudEvents to CloudStorageEvent, downloads objects into temp files, splits or reads them as binary, decorates Messages with metadata, and dispatches them through a Substation pipeline; the Kinesis autoscaler Lambda parses CloudWatch alarm SNS notifications, inspects Kinesis metrics, adjusts stream shard counts and tags, and rewrites CloudWatch alarms to target the new capacity."
+      },
+      {
+        "name": "HTTP \u001a API Gateway \u001a Lambda",
+        "description": "Clients send HTTP POST requests to the API Gateway REST API; API Gateway forwards the request context via AWS_PROXY integration to a Substation Lambda, which then processes the payload through a configured pipeline and interacts with downstream AWS services according to its IAM policy."
+      },
+      {
+        "name": "HTTP \u001a API Gateway \u001a Kinesis Data Stream",
+        "description": "External producers POST JSON payloads to a Kinesis ingestion API; API Gateway formats a PutRecord call using an IAM role assumed by apigateway.amazonaws.com, base64-encodes the HTTP body, and writes it into the configured Kinesis stream, typically using a request identifier as the partition key."
+      },
+      {
+        "name": "CloudWatch Logs \u001a Destination \u001a Kinesis/Firehose",
+        "description": "For each log group in var.config.log_groups, a CloudWatch Logs subscription filter forwards log events to a destination_arn; the destination module defines a log destination and IAM role so logs.amazonaws.com can write events into a Kinesis Data Stream or Firehose delivery stream, accepting cross-account subscriptions from approved accounts."
+      },
+      {
+        "name": "EventBridge \u001a Lambda",
+        "description": "Applications publish events to an EventBridge event bus; EventBridge rules match by schedule or pattern and route events to Substation or autoscale Lambdas, which process the payloads with their configured logic and IAM-granted access."
+      },
+      {
+        "name": "AppConfig \u001a Lambda configuration consumption",
+        "description": "AppConfig applications, environments, and configuration profiles store hosted configuration; Lambdas with appconfig:GetConfiguration* permissions fetch configuration at runtime, and AppConfig can invoke a validator Lambda during deployments to check new configuration versions."
+      },
+      {
+        "name": "Lambda \u001a encrypted data stores (S3, DynamoDB, Kinesis, SQS, SNS, Secrets)",
+        "description": "Lambda execution roles listed in var.access are granted read/write actions on S3 buckets, DynamoDB tables, Kinesis streams, SQS queues, SNS topics, and Secrets Manager secrets, along with KMS decrypt/data-key permissions; Substation transforms use these permissions to store, forward, or enrich data."
+      },
+      {
+        "name": "Container image delivery via ECR \u001a Lambda",
+        "description": "Container images are pushed to ECR repositories; repository policies allow the Lambda service principal to pull images, and aws_lambda_function resources reference image_uri values so Lambdas fetch the image at deployment and cold start."
+      },
+      {
+        "name": "Kinesis utilization metrics \u001a CloudWatch alarms \u001a SNS",
+        "description": "CloudWatch collects Kinesis metrics such as IncomingRecords and IncomingBytes; metric-math alarms compute shard utilization and, when thresholds are crossed, publish notifications to an SNS autoscaling topic consumed by an autoscaling controller."
+      },
+      {
+        "name": "DynamoDB table \u001a Streams \u001a downstream processors",
+        "description": "When stream_view_type is configured, DynamoDB tables emit change events via DynamoDB Streams; IAM policies grant roles in var.access permission to read from the stream so lambdas or other processors can consume and process change data through Substation pipelines."
+      },
+      {
+        "name": "Lambda in private subnets \u001a external AWS services via NAT/IGW",
+        "description": "Lambdas configured with private subnet IDs use NAT gateways and the Internet gateway to reach public AWS service endpoints or external APIs, traversing the VPC boundary defined in the networking module."
+      }
+    ]
+  },
+  "security_relevant_behaviours": {
+    "privileged_operations": [
+      "send_aws_dynamodb_put, send_aws_kinesis_data_stream, send_aws_data_firehose, send_aws_s3, send_aws_sns, send_aws_sqs, send_aws_eventbridge, and send_aws_lambda write data to AWS data-plane services using SDK v2 clients and credentials or roles configured via internal/config.NewAWS.",
+      "internal/kv/aws_dynamodb, combined with KV-related transforms and meta_kv_store_lock, uses DynamoDB for stateful key–value storage and distributed locking, influencing idempotency and concurrency semantics.",
+      "internal/secrets/aws_secrets_manager retrieves secrets from AWS Secrets Manager and stores them in an in-memory KV cache where they are available to interpolation code and any transform that uses them.",
+      "internal/metrics/aws_cloudwatch_embedded_metrics and the autoscale Lambda write metrics and alarm configurations to CloudWatch, affecting monitoring visibility.",
+      "The Kinesis autoscale Lambda calls Kinesis UpdateShardCount and AddTagsToStream, as well as CloudWatch PutMetricAlarm and SetAlarmState, effectively controlling stream capacity and alarm behavior.",
+      "GCP integrations (send_gcp_storage, GCP storage Cloud Function) read from and write to Cloud Storage using the process's GCP credentials, potentially crossing projects if service accounts are over-privileged.",
+      "CLI 'tap' and Lambda Kinesis handlers read from Kinesis streams using ListShards, GetShardIterator, and GetRecords, potentially exposing all stream data accessible via the IAM role.",
+      "Terraform IAM policies for Kinesis streams and autoscaling grant roles the ability to call kinesis:UpdateShardCount, PutRecord and PutRecords, Describe* APIs, and CloudWatch PutMetricAlarm and SetAlarmState, enabling both data-plane and control-plane manipulation of streaming pipelines from a single compromised role.",
+      "CloudWatch Logs destinations and subscription filters defined in Terraform allow logs.amazonaws.com to assume a dedicated role and write to shared Kinesis or Firehose targets, and authorized external AWS accounts to push log traffic into those targets via logs:PutSubscriptionFilter."
+    ],
+    "user_configurable_logic": [
+      "All transforms and conditions are instantiated purely from user-provided config.Config objects that include a Type string and arbitrary Settings map; transform.New and condition.New dispatch on Type.",
+      "Batching behavior (count, size, duration) for send_* transforms and some enrich transforms is user-configurable via internal/config.Batch, impacting when data is flushed to sinks and how it is aggregated.",
+      "KV and lock-related transforms allow users to define key prefixes, TTL offsets, and TTL source fields, effectively encoding arbitrary stateful and time-based logic in configuration.",
+      "Metric transforms accept arbitrary metric names, attributes, and thresholds (for freshness) in configuration, allowing flexible observability patterns but also the possibility of leaking identifiers as metric attributes.",
+      "The autoscale Lambda interprets Kinesis stream tags like MinimumShards, MaximumShards, and LastScalingEvent, plus environment variables AUTOSCALE_KINESIS_*, to control scaling decisions, embedding policy in tags and environment rather than fixed code.",
+      "Terraform modules expose variables such as var.access, var.config.log_groups, var.config.account_ids, and var.config.autoscaling_topic that let operators choose which IAM roles can access each data store, which log groups are centrally forwarded, which external accounts can subscribe to log destinations, and which SNS topic drives Kinesis autoscaling."
+    ],
+    "auth_and_identity_behaviours": [
+      "internal/config.NewAWS derives the AWS region from the resource ARN or environment (AWS_REGION, AWS_DEFAULT_REGION), optionally configures an STS AssumeRoleARN for cross-account access, and respects AWS_MAX_ATTEMPTS for retry behavior.",
+      "AWS clients used by send_* transforms, Lambda handlers, KV store backends, secrets retrievers, metrics, and autoscale inherit credentials from the default AWS SDK chain (environment variables, shared config files, EC2/ECS/Lambda roles).",
+      "Secrets integration uses AWS Secrets Manager ARNs and environment variables as roots of trust, but presents them to pipelines via logical IDs to decouple config from underlying secret locations.",
+      "The Lambda and Cloud Function entry points rely on environment variables SUBSTATION_LAMBDA_HANDLER, SUBSTATION_FUNCTION_HANDLER, and SUBSTATION_CONFIG to select handlers and locate configuration files; these must be set correctly and not be user-controlled in production.",
+      "The playground /run endpoint temporarily sets process environment variables from user input and restores them afterward, which can influence any transforms or SDK clients that depend on env-based configuration.",
+      "Lambda execution roles created by Terraform are trusted only by lambda.amazonaws.com and receive inline and modular access policies that determine which S3 buckets, DynamoDB tables, Kinesis streams, queues, topics, secrets, and KMS keys each function can use; concrete principals are provided via var.access.",
+      "Lambda resource-based policies (aws_lambda_permission resources) explicitly trust apigateway.amazonaws.com, appconfig.amazonaws.com, and events.amazonaws.com with function invocation rights, restricted to specific API Gateway, AppConfig, or EventBridge rule ARNs.",
+      "Customer-managed KMS keys use user-specified key policies (var.config.policy), with additional grants added via IAM to specific consumer roles; mis-scoped key policies can allow unexpected principals to decrypt S3 objects, queue messages, stream records, DynamoDB items, secrets, or Lambda environment variables.",
+      "API Gateway REST methods for both Lambda proxy and direct Kinesis ingestion are configured with authorization set to NONE and no resource policies in Terraform, making them public internet-facing endpoints unless additional authentication or network restrictions are applied elsewhere."
+    ],
+    "logging_and_audit_behaviours": [
+      "internal/log wraps logrus and sets the log level to Debug when SUBSTATION_DEBUG is present, otherwise Info, and is used primarily in CLI tools, Kinesis tap, and autoscale to report operational state without corrupting structured stdout output.",
+      "Metrics emitted via internal/metrics/aws_cloudwatch_embedded_metrics are printed as EMF JSON to stdout, where AWS Lambda automatically forwards them to CloudWatch Logs and converts them into metrics.",
+      "Many CLI commands ('test', 'vet') and the playground /test endpoint print detailed error messages and context (including transform IDs and snippets of configuration) to stderr or HTTP responses, which is valuable for debugging but may reveal configuration structure.",
+      "No dedicated audit log of data-plane operations is maintained within the library; auditability relies on external service logs (for example, CloudWatch for AWS APIs, access logs for HTTP endpoints) and optional metrics.",
+      "CloudWatch Logs subscription filters and destinations defined in Terraform continuously forward selected log groups to central Kinesis or Firehose streams, creating an aggregated audit trail whose integrity and confidentiality depend on destination IAM policies and KMS encryption.",
+      "ECR repositories are configured with image scan-on-push and immutable tags, improving provenance and vulnerability scanning for Lambda container images, although scan results are not surfaced directly in Substation logs."
+    ],
+    "failure_modes": [
+      "transform.Apply immediately returns an error if any transform in the sequence returns a non-nil error, aborting processing of the remaining messages for that invocation.",
+      "Most send_* transforms enforce per-service size limits and return explicit errors (for example, errSendAWSDynamoDBItemSizeLimit, errSendAWSKinesisDataStreamMessageSizeLimit) when message data exceeds these limits, requiring upstream truncation or filtering.",
+      "send_http_post and other batched transforms rely on an aggregation helper; if aggregation is misconfigured (for example, batch count or size too small), they can return errors when data cannot be added even after reset.",
+      "Secrets interpolation returns errors when a secret ID is not found in the cache or when retrieval fails, which can cause pipeline failures if interpolation is done in critical paths like send_http_post headers or URLs.",
+      "Lambda handlers for API Gateway and generic AWS_LAMBDA verify that transformed outputs are valid JSON and return errors (such as errLambdaInvalidJSON) if not, resulting in 500 responses or Lambda errors instead of malformed responses.",
+      "The autoscale Lambda aborts scaling if Kinesis or CloudWatch API calls fail, or if tag parsing, alarm payload parsing, or UpdateShardCount operations return errors; it also declines to scale when LastScalingEvent is too recent, logging a message instead.",
+      "GCS and S3 ingestion handlers treat unsupported media types as binary blobs and send them as single messages; if media detection misclassifies a type, this can affect how many messages are generated but not generally crash the handler.",
+      "In S3 and GCS handlers, IO and network errors while downloading or scanning files are propagated out of the errgroup, failing the entire invocation so partial ingestion is not committed if an error interrupts processing.",
+      "Because API Gateway methods are unauthenticated by default in Terraform, failing to layer on additional authentication or throttling can allow untrusted clients to send arbitrary traffic into Substation Lambdas or Kinesis streams, leading to potential denial of service, cost amplification, or abuse of downstream integrations.",
+      "Overly broad IAM access policies attached via var.access or permissive KMS key policies can increase the blast radius of credential compromise by allowing decryption or mutation of multiple data stores and secrets from a single role.",
+      "Misconfigured CloudWatch Logs destinations or cross-account destination policies could enable noisy or malicious external accounts to flood central Kinesis or Firehose streams with log data, impacting downstream processing or masking legitimate security-relevant events."
+    ]
+  },
+  "open_questions": [
+    {
+      "question": "How are the public API Gateway REST APIs that front Substation Lambdas and Kinesis streams authenticated, authorized, and rate-limited in production deployments?",
+      "context": "Terraform defines POST methods with authorization set to NONE and no resource policies or authorizers, making the endpoints internet-accessible by default.",
+      "related_capabilities": [
+        "AWS Lambda Substation event processors",
+        "Core Substation transformation engine",
+        "HTTP enrichment and sending transforms"
+      ]
+    },
+    {
+      "question": "What governance and validation controls exist around the SUBSTATION_CONFIG location and contents to prevent untrusted or tampered configuration from redirecting data flows or exfiltrating sensitive data?",
+      "context": "Lambda handlers, the GCP Function, and the CLI all load configuration dynamically via internal/file.Get from paths or URLs specified in environment variables or CLI flags.",
+      "related_capabilities": [
+        "Core Substation transformation engine",
+        "AWS Lambda Substation event processors",
+        "GCP Cloud Storage Substation Function",
+        "Local ingestion and transformation CLI"
+      ]
+    },
+    {
+      "question": "How is multi-tenant isolation enforced when multiple logical tenants share the same Substation deployment and backing KV stores or DynamoDB tables?",
+      "context": "KV transforms support configurable key prefixes and TTLs, but misconfiguration could cause key collisions or state leakage between tenants.",
+      "related_capabilities": [
+        "KV store integration and distributed locking",
+        "AWS and GCP sink transforms"
+      ]
+    },
+    {
+      "question": "Which specific IAM roles are passed into Terraform variables like var.access, and do any of these roles span multiple applications or tenants?",
+      "context": "S3, DynamoDB, Kinesis, SQS, SNS, Secrets, EventBridge, and Lambda modules all attach powerful data-plane and KMS permissions to every role listed in var.access.",
+      "related_capabilities": [
+        "AWS and GCP sink transforms",
+        "KV store integration and distributed locking",
+        "Kinesis autoscaling controller"
+      ]
+    },
+    {
+      "question": "Which external AWS accounts are allowed in var.config.account_ids for the CloudWatch Logs destination, and are there additional controls to prevent them from sending arbitrary or malicious log payloads into central Kinesis or Firehose streams?",
+      "context": "The CloudWatch Logs destination module allows specified external accounts to create subscription filters targeting a shared destination ARN.",
+      "related_capabilities": [
+        "Metrics and observability transforms",
+        "Kinesis autoscaling controller"
+      ]
+    }
+  ],
+  "evidence_index": [
+    {
+      "title": "substation.go",
+      "url": null,
+      "summary": "Defines Substation struct, Config, New(), Transform(), and String() methods central to pipeline construction and execution.",
+      "notes": null
+    },
+    {
+      "title": "transform/transform.go",
+      "url": null,
+      "summary": "Dispatches config.Type to concrete transforms, defines Transformer interface, and orchestrates Apply() over message batches.",
+      "notes": null
+    },
+    {
+      "title": "message/message.go",
+      "url": null,
+      "summary": "Defines Message data structure, control messages, and JSON value access methods used pervasively across transforms.",
+      "notes": null
+    },
+    {
+      "title": "cmd/substation/main.go",
+      "url": null,
+      "summary": "Configures the root Cobra command, shared compile helpers, and transform error formatting used by multiple CLI subcommands.",
+      "notes": null
+    },
+    {
+      "title": "cmd/substation/read.go",
+      "url": null,
+      "summary": "Implements 'substation read', including source selection (file/http/aws), scanner-based reading, message channel fan-out, and Substation pipeline consumption.",
+      "notes": null
+    },
+    {
+      "title": "cmd/substation/tap.go",
+      "url": null,
+      "summary": "Implements 'substation tap' for Kinesis streams, including offset handling, shard iteration, deaggregation, and parallel Substation processing.",
+      "notes": null
+    },
+    {
+      "title": "cmd/substation/test.go",
+      "url": null,
+      "summary": "Implements configuration testing semantics with tests array, testPath/testFile, per-test setup pipelines, and condition assertions.",
+      "notes": null
+    },
+    {
+      "title": "cmd/substation/vet.go",
+      "url": null,
+      "summary": "Implements 'substation vet' static validation using Jsonnet compilation and Substation pipeline construction, with rich error formatting.",
+      "notes": null
+    },
+    {
+      "title": "cmd/substation/playground.go",
+      "url": null,
+      "summary": "Defines the 'play' command and HTTP handlers '/', '/run', '/test', '/demo', '/fmt', '/share' that expose Substation features over HTTP.",
+      "notes": null
+    },
+    {
+      "title": "cmd/aws/lambda/substation/main.go",
+      "url": null,
+      "summary": "Selects AWS Lambda handlers based on SUBSTATION_LAMBDA_HANDLER and obtains configs via internal/file.Get.",
+      "notes": null
+    },
+    {
+      "title": "cmd/aws/lambda/substation/api_gateway.go",
+      "url": null,
+      "summary": "API Gateway handler mapping HTTP requests to Substation messages and JSON array responses.",
+      "notes": null
+    },
+    {
+      "title": "cmd/aws/lambda/substation/s3.go",
+      "url": null,
+      "summary": "S3/SNS/SQS handlers that download S3 objects, inspect media type, and split them into messages.",
+      "notes": null
+    },
+    {
+      "title": "cmd/aws/lambda/substation/dynamodb.go",
+      "url": null,
+      "summary": "DynamoDB stream handler mapping records to Debezium-like events and feeding Substation.",
+      "notes": null
+    },
+    {
+      "title": "cmd/aws/lambda/autoscale/main.go",
+      "url": null,
+      "summary": "Autoscale Lambda logic including CloudWatch and Kinesis API interactions and alarm reconfiguration.",
+      "notes": null
+    },
+    {
+      "title": "cmd/gcp/function/substation/storage.go",
+      "url": null,
+      "summary": "Cloud Storage event handler that downloads objects and streams contents into a Substation pipeline.",
+      "notes": null
+    },
+    {
+      "title": "internal/config/config.go",
+      "url": null,
+      "summary": "Defines shared config types (Object, Metric, Batch, AWS, GCP) and NewAWS(), the central AWS SDK configuration helper.",
+      "notes": null
+    },
+    {
+      "title": "internal/http/http.go",
+      "url": null,
+      "summary": "Retryable HTTP client wrapper with Get/Post methods and optional AWS X-Ray instrumentation.",
+      "notes": null
+    },
+    {
+      "title": "internal/kv/kv.go",
+      "url": null,
+      "summary": "KV store and Locker abstractions used by enrichment and locking transforms and the secrets cache.",
+      "notes": null
+    },
+    {
+      "title": "internal/secrets/secrets.go",
+      "url": null,
+      "summary": "Secret retrieval factory and interpolation logic with an in-memory KV cache.",
+      "notes": null
+    },
+    {
+      "title": "internal/metrics/aws_cloudwatch_embedded_metrics.go",
+      "url": null,
+      "summary": "EMF metrics generator printing to stdout to integrate with CloudWatch.",
+      "notes": null
+    },
+    {
+      "title": "transform/send_http_post.go",
+      "url": null,
+      "summary": "HTTP POST sink transform with batching, auxiliary transforms, and secret-interpolated headers and URLs.",
+      "notes": null
+    },
+    {
+      "title": "transform/send_aws_kinesis_data_stream.go",
+      "url": null,
+      "summary": "Kinesis Data Streams sink with KPL-style aggregation, partition key selection, and recursive retry logic.",
+      "notes": null
+    },
+    {
+      "title": "transform/send_aws_s3.go",
+      "url": null,
+      "summary": "S3 sink transform aggregating data into files and uploading with configurable storage class and checksum.",
+      "notes": null
+    },
+    {
+      "title": "transform/send_gcp_storage.go",
+      "url": null,
+      "summary": "GCP Storage sink transform writing aggregated data to bucket objects using a configurable naming pattern.",
+      "notes": null
+    },
+    {
+      "title": "transform/enrich_kv_store_item_get.go",
+      "url": null,
+      "summary": "KV-based enrichment transform reading values by key into message fields.",
+      "notes": null
+    },
+    {
+      "title": "transform/meta_kv_store_lock.go",
+      "url": null,
+      "summary": "Lock-based meta transform controlling execution of nested transforms using a KV-based locker and TTLs.",
+      "notes": null
+    },
+    {
+      "title": "build/terraform/aws/lambda/main.tf",
+      "url": null,
+      "summary": "Defines core Substation Lambda functions, their execution IAM role and managed policies, AppConfig configuration profile integration, KMS usage, and custom/access IAM policies for invoking the function and accessing other services.",
+      "notes": null
+    },
+    {
+      "title": "build/terraform/aws/api_gateway/lambda/main.tf",
+      "url": null,
+      "summary": "Creates an API Gateway REST API that proxies POST requests directly to a Lambda function using AWS_PROXY and grants API Gateway permission to invoke the function.",
+      "notes": null
+    },
+    {
+      "title": "build/terraform/aws/api_gateway/kinesis_data_stream/main.tf",
+      "url": null,
+      "summary": "Defines an API Gateway REST API integrated with Kinesis PutRecord, including an IAM role assumed by apigateway.amazonaws.com and request templates that write HTTP bodies into a specified Kinesis Data Stream.",
+      "notes": null
+    },
+    {
+      "title": "build/terraform/aws/kinesis_data_stream/main.tf",
+      "url": null,
+      "summary": "Creates an encrypted Kinesis Data Stream, an IAM access policy granting Kinesis and CloudWatch permissions to roles in var.access, and CloudWatch metric alarms that publish utilization metrics to an SNS autoscaling topic.",
+      "notes": null
+    },
+    {
+      "title": "build/terraform/aws/s3/main.tf",
+      "url": null,
+      "summary": "Defines an S3 bucket with private ACL, ownership controls, optional SSE-KMS and COMPLIANCE object lock, and an IAM policy granting GetObject/PutObject and optional KMS decrypt/data-key to var.access roles.",
+      "notes": null
+    },
+    {
+      "title": "build/terraform/aws/dynamodb/main.tf",
+      "url": null,
+      "summary": "Creates a DynamoDB table with TTL, point-in-time recovery, optional streams, KMS encryption, autoscaling for read/write capacity, and IAM policies granting read/write and stream read access plus optional KMS permissions to var.access roles.",
+      "notes": null
+    },
+    {
+      "title": "build/terraform/aws/sqs/main.tf",
+      "url": null,
+      "summary": "Creates an SQS queue (standard or FIFO) with KMS encryption and IAM policies granting receive/delete/get/send actions on the queue and optional KMS decrypt/data-key to roles in var.access.",
+      "notes": null
+    },
+    {
+      "title": "build/terraform/aws/sns/main.tf",
+      "url": null,
+      "summary": "Defines an SNS topic (standard or FIFO) with optional KMS encryption and an IAM policy that allows sns:Publish and optional KMS decrypt/data-key for roles in var.access.",
+      "notes": null
+    },
+    {
+      "title": "build/terraform/aws/secret/main.tf",
+      "url": null,
+      "summary": "Creates a Secrets Manager secret with optional KMS key and an IAM policy that allows secretsmanager:GetSecretValue and optional KMS decrypt/data-key to var.access roles.",
+      "notes": null
+    },
+    {
+      "title": "build/terraform/aws/ecr/main.tf",
+      "url": null,
+      "summary": "Creates an ECR repository with immutable tags, scan-on-push, optional KMS encryption, and a repository policy that allows the Lambda service principal to pull images.",
+      "notes": null
+    },
+    {
+      "title": "build/terraform/aws/kms/main.tf",
+      "url": null,
+      "summary": "Defines a customer-managed KMS key with rotation enabled and a user-supplied key policy, plus an alias used by other modules for encryption.",
+      "notes": null
+    },
+    {
+      "title": "build/terraform/aws/appconfig/main.tf",
+      "url": null,
+      "summary": "Creates an AppConfig application, environments, and an instant deployment strategy, and optionally grants appconfig.amazonaws.com permission to invoke a validator Lambda.",
+      "notes": null
+    },
+    {
+      "title": "build/terraform/aws/eventbridge/lambda/main.tf",
+      "url": null,
+      "summary": "Defines EventBridge and CloudWatch event rules and targets that invoke Lambda functions, plus IAM policies granting events:PutEvents to event buses for roles in var.access.",
+      "notes": null
+    },
+    {
+      "title": "build/terraform/aws/networking/vpc/main.tf",
+      "url": null,
+      "summary": "Creates a VPC with one public subnet, multiple private subnets, an Internet gateway, NAT gateways, and route tables that route private subnet traffic through NAT and public traffic through the IGW.",
+      "notes": null
+    },
+    {
+      "title": "build/terraform/aws/cloudwatch/destination/main.tf",
+      "url": null,
+      "summary": "Configures a CloudWatch Logs destination that forwards logs to a Kinesis Data Stream or Firehose, including an IAM role for logs.amazonaws.com and a destination policy allowing specified account IDs to create subscription filters.",
+      "notes": null
+    },
+    {
+      "title": "build/terraform/aws/cloudwatch/subscription/main.tf",
+      "url": null,
+      "summary": "Defines CloudWatch Logs subscription filters that subscribe configured log groups to a given destination_arn, forwarding logs and using random distribution to avoid Kinesis hot shards.",
+      "notes": null
+    }
+  ]
+}

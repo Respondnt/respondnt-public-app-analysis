@@ -6,38 +6,27 @@ interface App {
     name: string
     displayName: string
     description: string
+    tag: 'SaaS' | '1st Party'
 }
 
 const allApps: App[] = [
     {
-        name: '1password',
-        displayName: '1Password',
-        description: 'Password Manager, Extended Access Management, and Trelica by 1Password',
+        name: 'substation',
+        displayName: 'Substation',
+        description: '',
+        tag: '1st Party',
     },
     {
         name: 'slack',
         displayName: 'Slack',
         description: 'Collaboration Platform',
-    },
-    {
-        name: 'miro',
-        displayName: 'Miro',
-        description: 'AI Innovation Workspace / Online Visual Collaboration Platform',
-    },
-    {
-        name: 'box',
-        displayName: 'Box',
-        description: 'Content Collaboration Platform',
-    },
-    {
-        name: 'klaviyo',
-        displayName: 'Klaviyo',
-        description: 'Email Marketing Platform',
+        tag: 'SaaS',
     },
     {
         name: 'github',
         displayName: 'GitHub',
         description: 'Code Repository Platform',
+        tag: 'SaaS',
     },
 ]
 
@@ -51,9 +40,15 @@ function Home(): JSX.Element {
             const appsWithData: App[] = []
 
             for (const app of allApps) {
-                const comprehensiveData = await loadComprehensiveAnalysisData(baseUrl, app.name)
-                if (comprehensiveData) {
+                // 1st Party apps should always show, regardless of comprehensiveData
+                if (app.tag === '1st Party') {
                     appsWithData.push(app)
+                } else {
+                    // SaaS apps only show if they have comprehensiveData
+                    const comprehensiveData = await loadComprehensiveAnalysisData(baseUrl, app.name)
+                    if (comprehensiveData) {
+                        appsWithData.push(app)
+                    }
                 }
             }
 
@@ -95,9 +90,17 @@ function Home(): JSX.Element {
 
                             {/* Content */}
                             <div className="relative z-10">
-                                <h3 className="text-xl lg:text-2xl font-semibold text-gray-900 dark:text-white mb-3 group-hover:text-accent-primary transition-colors duration-300">
-                                    {app.displayName}
-                                </h3>
+                                <div className="flex items-center gap-2 mb-3">
+                                    <h3 className="text-xl lg:text-2xl font-semibold text-gray-900 dark:text-white group-hover:text-accent-primary transition-colors duration-300">
+                                        {app.displayName}
+                                    </h3>
+                                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-md text-body-xs font-medium ${app.tag === '1st Party'
+                                        ? 'bg-blue-50 dark:bg-blue-950/20 text-blue-700 dark:text-blue-300'
+                                        : 'bg-green-50 dark:bg-green-950/20 text-green-700 dark:text-green-300'
+                                        }`}>
+                                        {app.tag}
+                                    </span>
+                                </div>
 
                                 {/* Arrow indicator */}
                                 <div className="mt-4 flex items-center text-accent-primary opacity-0 group-hover:opacity-100 transform translate-x-0 group-hover:translate-x-1 transition-all duration-300">

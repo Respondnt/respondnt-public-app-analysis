@@ -161,4 +161,122 @@ export interface BreakdownData {
   application_name: string
   generated_at?: string
   capabilities?: Capability[]
+  capability_map?: {
+    core_product_capabilities?: Capability[]
+    administrative_and_operational_capabilities?: Capability[]
+    api_surface_and_integrations?: Capability[]
+    background_jobs_and_automation?: Capability[]
+  }
+  technical_components_and_data_flows?: {
+    services_or_modules?: Array<{ name: string; description?: string }>
+    storage_and_logs?: Array<{ name: string; description?: string }>
+    external_systems?: Array<{ name: string; description?: string }>
+    data_flows?: Array<{ name: string; description?: string }>
+  }
+}
+
+// Cloud Infrastructure Analysis types (based on CloudInfrastructureAnalysis from app_breakdown.py)
+export interface EvidenceReference {
+  title: string
+  url?: string
+  summary?: string
+  notes?: string
+}
+
+export interface NamedItem {
+  name: string
+  description?: string
+}
+
+export interface IAMRole {
+  name: string
+  arn?: string
+  attached_policies: string[]
+  inline_policies: string[]
+  permissions: string[]
+  trusted_entities: string[]
+  used_by_services: string[]
+  security_risk_level?: string
+  notes?: string
+  evidence: EvidenceReference[]
+}
+
+export interface NetworkSecurityBoundary {
+  name: string
+  type: string
+  ingress_rules: string[]
+  egress_rules: string[]
+  attached_resources: string[]
+  public_facing: boolean
+  security_concerns: string[]
+  evidence: EvidenceReference[]
+}
+
+export interface PublicResource {
+  name: string
+  resource_type: string
+  public_access_methods: string[]
+  exposed_capabilities: string[]
+  authentication_required: boolean
+  security_controls: string[]
+  evidence: EvidenceReference[]
+}
+
+export interface TrustRelationship {
+  source: string
+  target: string
+  relationship_type: string
+  permissions_granted: string[]
+  security_implications: string[]
+  evidence: EvidenceReference[]
+}
+
+export interface SecretsAndCredentials {
+  secret_stores: NamedItem[]
+  credential_storage_locations: string[]
+  secret_access_patterns: string[]
+  encryption_at_rest: string[]
+  encryption_in_transit: string[]
+  security_concerns: string[]
+  evidence: EvidenceReference[]
+}
+
+export interface CloudServiceConfiguration {
+  service_name: string
+  service_type: string
+  configuration_details: string[]
+  security_settings: string[]
+  misconfigurations: string[]
+  evidence: EvidenceReference[]
+}
+
+export interface CoverageOverview {
+  sources_analysed: Array<{
+    name: string
+    url?: string
+    description?: string
+  }>
+  likely_uncovered_areas_or_ambiguities: string[]
+  assumptions_made: string[]
+}
+
+export interface OpenQuestion {
+  question: string
+  context?: string
+  related_capabilities?: string[]
+}
+
+export interface CloudInfrastructureAnalysis {
+  infrastructure_name?: string
+  cloud_provider?: string
+  generated_at?: string
+  iam_roles: IAMRole[]
+  network_security_boundaries: NetworkSecurityBoundary[]
+  public_resources: PublicResource[]
+  trust_relationships: TrustRelationship[]
+  secrets_and_credentials: SecretsAndCredentials
+  cloud_service_configurations: CloudServiceConfiguration[]
+  coverage_overview: CoverageOverview
+  open_questions: OpenQuestion[]
+  evidence_index: EvidenceReference[]
 }

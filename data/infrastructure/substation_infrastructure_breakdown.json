@@ -1,0 +1,1276 @@
+{
+  "infrastructure_name": "brexhq/substation Terraform AWS modules",
+  "cloud_provider": "aws",
+  "generated_at": "2025-12-17T00:00:00Z",
+  "iam_roles": [
+    {
+      "name": "substation-lambda-${random_uuid}",
+      "arn": null,
+      "attached_policies": [
+        "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole",
+        "arn:aws:iam::aws:policy/AWSXrayWriteOnlyAccess",
+        "aws_iam_policy.custom_policy (substation-lambda-${random_uuid})"
+      ],
+      "inline_policies": [],
+      "permissions": [
+        "CloudWatch Logs basic execution (CreateLogGroup/CreateLogStream/PutLogEvents)",
+        "VPC access for ENIs, security groups, and networking (AWSLambdaVPCAccessExecutionRole)",
+        "X-Ray tracing write access (AWSXrayWriteOnlyAccess)",
+        "No-op custom policy statement (action none:Substation on *) to ensure a policy always exists",
+        "OPTIONAL: appconfig:GetConfiguration, appconfig:GetLatestConfiguration, appconfig:StartConfigurationSession on ${var.appconfig.arn}/* when AppConfig is configured",
+        "OPTIONAL: kms:Decrypt and kms:GenerateDataKey on the provided KMS key when var.kms is set",
+        "OPTIONAL: Arbitrary additional Allow statements from var.config.iam_statements (actions/resources defined by consumer)"
+      ],
+      "trusted_entities": [
+        "Service: lambda.amazonaws.com (via sts:AssumeRole)"
+      ],
+      "used_by_services": [
+        "aws_lambda_function.lambda_function (Substation Lambda container image function)"
+      ],
+      "security_risk_level": "medium",
+      "notes": "By default, the role has standard Lambda execution, VPC access, and X-Ray permissions plus a no-op custom policy. However, the design explicitly allows consumers to inject arbitrary additional IAM statements and KMS/AppConfig access, so effective privileges may become broad depending on how the module is used.",
+      "evidence": [
+        {
+          "title": "build/terraform/aws/lambda/main.tf",
+          "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/lambda/main.tf",
+          "summary": "Defines Lambda function, its IAM role, AWS-managed policy attachments, and a customizable inline policy document.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "name": "substation-cloudwatch-dest-${random_uuid}",
+      "arn": null,
+      "attached_policies": [
+        "aws_iam_policy.destination (substation-cloudwatch-dest-${random_uuid})"
+      ],
+      "inline_policies": [],
+      "permissions": [
+        "OPTIONAL: kms:Decrypt and kms:GenerateDataKey on the provided KMS key when var.kms is set",
+        "If destination_arn is a Firehose delivery stream: firehose:DescribeDeliveryStream, firehose:PutRecord, firehose:PutRecordBatch on that stream",
+        "If destination_arn is a Kinesis Data Stream: kinesis:DescribeStream, kinesis:DescribeStreamSummary, kinesis:DescribeStreamConsumer, kinesis:SubscribeToShard, kinesis:RegisterStreamConsumer, kinesis:PutRecord, kinesis:PutRecords on that stream"
+      ],
+      "trusted_entities": [
+        "Service: logs.amazonaws.com (CloudWatch Logs) with sts:AssumeRole, conditioned on aws:SourceArn matching arn:aws:logs:*:<account_id>:* for accounts in var.config.account_ids plus the current account"
+      ],
+      "used_by_services": [
+        "aws_cloudwatch_log_destination.destination (central log destination for CloudWatch Log subscriptions)"
+      ],
+      "security_risk_level": "medium",
+      "notes": "Role is tightly scoped to the configured destination_arn and optional KMS key, and can only be assumed by CloudWatch Logs from specified accounts. It enables powerful write access (PutRecord/PutRecords) to the downstream stream or Firehose, so compromise of CloudWatch Logs in those accounts could be used to inject or flood data into the destination.",
+      "evidence": [
+        {
+          "title": "build/terraform/aws/cloudwatch/destination/main.tf",
+          "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/cloudwatch/destination/main.tf",
+          "summary": "Defines CloudWatch Logs destination IAM role, its assume-role policy for logs.amazonaws.com, and permissions for Kinesis/Firehose and KMS.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "name": "substation-api-kinesis-${random_uuid}",
+      "arn": null,
+      "attached_policies": [],
+      "inline_policies": [],
+      "permissions": [
+        "No IAM permissions (e.g., kinesis:PutRecord) are attached in this module; separate policy attachments are required elsewhere for the role to be able to write to Kinesis."
+      ],
+      "trusted_entities": [
+        "Service: apigateway.amazonaws.com (via sts:AssumeRole)"
+      ],
+      "used_by_services": [
+        "aws_api_gateway_integration.gateway_integration (API Gateway to Kinesis PutRecord integration)"
+      ],
+      "security_risk_level": "low",
+      "notes": "As defined here, the role can be assumed by API Gateway but has no permissions to call Kinesis or other services. From a security perspective this is conservative, but the integration will not function without additional policies attached in consumer code.",
+      "evidence": [
+        {
+          "title": "build/terraform/aws/api_gateway/kinesis_data_stream/main.tf",
+          "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/api_gateway/kinesis_data_stream/main.tf",
+          "summary": "Creates an IAM role assumed by apigateway.amazonaws.com for Kinesis PutRecord integration, but does not attach any permission policies.",
+          "notes": null
+        }
+      ]
+    }
+  ],
+  "network_security_boundaries": [
+    {
+      "name": "aws_vpc.vpc (Substation VPC module)",
+      "type": "vpc",
+      "ingress_rules": [
+        "Public route table (aws_route_table.public_route) routes all IPv4 traffic 0.0.0.0/0 to aws_internet_gateway.internet_gateway, making aws_subnet.public_subnet internet-routable.",
+        "Private subnets (aws_subnet.private_subnet[*]) use default VPC/network ACLs; no explicit security groups or NACLs are defined in this module."
+      ],
+      "egress_rules": [
+        "Private route tables (aws_route_table.private_route[*]) route 0.0.0.0/0 to a NAT Gateway (aws_nat_gateway.nat_gateway[*]) in the public subnet, enabling outbound internet access from private subnets.",
+        "Public subnet has egress via the internet gateway with no additional ACL restrictions defined here."
+      ],
+      "attached_resources": [
+        "aws_vpc.vpc",
+        "aws_internet_gateway.internet_gateway",
+        "aws_subnet.public_subnet",
+        "aws_subnet.private_subnet[*] (one per var.config.private_subnets entry)",
+        "aws_nat_gateway.nat_gateway[*]",
+        "aws_route_table.public_route and aws_route_table.private_route[*]",
+        "aws_route_table_association.public_subnet_association and aws_route_table_association.private_subnet_association[*]"
+      ],
+      "public_facing": true,
+      "security_concerns": [
+        "No aws_security_group resources are defined; the module relies on security groups created and attached elsewhere (e.g., to Lambda) for actual traffic filtering.",
+        "Network ACLs are left at AWS defaults, which typically allow all inbound and outbound traffic; segmentation is entirely dependent on security groups and higher-level controls.",
+        "Any resources placed in aws_subnet.public_subnet will have direct internet routing via 0.0.0.0/0 -> internet gateway, which can be risky if security groups are misconfigured."
+      ],
+      "evidence": [
+        {
+          "title": "build/terraform/aws/networking/vpc/main.tf",
+          "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/networking/vpc/main.tf",
+          "summary": "Defines a VPC with one public subnet, multiple private subnets, an internet gateway, NAT gateways, and route tables for internet access.",
+          "notes": null
+        }
+      ]
+    }
+  ],
+  "public_resources": [
+    {
+      "name": "aws_api_gateway_rest_api.api (Lambda proxy API)",
+      "resource_type": "api_gateway_rest_api",
+      "public_access_methods": [
+        "Internet-facing API Gateway REST API with a POST method on the root resource (/) and stage name var.config.name.",
+        "Method authorization is set to NONE; no IAM, custom authorizer, or API key is required in this module."
+      ],
+      "exposed_capabilities": [
+        "Allows any internet client to invoke the configured Lambda function via POST requests.",
+        "Lambda resource policy (aws_lambda_permission.gateway_permission) permits apigateway.amazonaws.com to invoke the function for this API’s execution_arn /*/*."
+      ],
+      "authentication_required": false,
+      "security_controls": [
+        "Relies on AWS-managed HTTPS/TLS termination at API Gateway.",
+        "No usage plans, throttling, WAF web ACLs, request validation, or logging are configured in this module."
+      ],
+      "evidence": [
+        {
+          "title": "build/terraform/aws/api_gateway/lambda/main.tf",
+          "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/api_gateway/lambda/main.tf",
+          "summary": "Defines a public API Gateway REST API with POST / integrated via AWS_PROXY to a Lambda function and no authorization.",
+          "notes": null
+        },
+        {
+          "title": "build/terraform/aws/lambda/main.tf",
+          "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/lambda/main.tf",
+          "summary": "Defines the target Lambda function and its execution role.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "name": "aws_api_gateway_rest_api.api (Kinesis PutRecord API)",
+      "resource_type": "api_gateway_rest_api",
+      "public_access_methods": [
+        "Internet-facing API Gateway REST API with a POST method on the root resource (/) and stage name var.config.name.",
+        "Method authorization is NONE; no built-in authentication is required by this module."
+      ],
+      "exposed_capabilities": [
+        "Intended to allow any client to POST arbitrary JSON, which is then base64-encoded and sent to the configured Kinesis Data Stream via PutRecord.",
+        "Credentials for calling Kinesis are provided by aws_iam_role.role assumed by API Gateway."
+      ],
+      "authentication_required": false,
+      "security_controls": [
+        "Uses AWS-managed TLS at API Gateway.",
+        "No API keys, usage plans, WAF, or authorizers are configured here.",
+        "As written, the IAM role for the integration has no permissions; actual ability to write to Kinesis depends on additional policies defined elsewhere."
+      ],
+      "evidence": [
+        {
+          "title": "build/terraform/aws/api_gateway/kinesis_data_stream/main.tf",
+          "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/api_gateway/kinesis_data_stream/main.tf",
+          "summary": "Creates a public API Gateway REST API that calls Kinesis PutRecord using a service role assumed by API Gateway; authorization is NONE.",
+          "notes": null
+        },
+        {
+          "title": "build/terraform/aws/kinesis_data_stream/main.tf",
+          "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/kinesis_data_stream/main.tf",
+          "summary": "Defines the Kinesis Data Stream that the API is intended to write to.",
+          "notes": null
+        }
+      ]
+    }
+  ],
+  "trust_relationships": [
+    {
+      "source": "CloudWatch Logs service (logs.amazonaws.com) in accounts: var.config.account_ids + current account",
+      "target": "aws_iam_role.destination (substation-cloudwatch-dest-${random_uuid})",
+      "relationship_type": "assume_role",
+      "permissions_granted": [
+        "sts:AssumeRole when aws:SourceArn matches arn:aws:logs:*:<account_id>:* for allowed accounts",
+        "Through the attached policy: write permissions to the configured destination_arn (Kinesis Data Stream or Firehose) and optional KMS decrypt/data key permissions"
+      ],
+      "security_implications": [
+        "Enables CloudWatch Logs in specified accounts to stream logs into a central destination with full write access.",
+        "If CloudWatch Logs in any allowed account are compromised, an attacker could inject or flood data into the destination Kinesis/Firehose stream."
+      ],
+      "evidence": [
+        {
+          "title": "build/terraform/aws/cloudwatch/destination/main.tf",
+          "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/cloudwatch/destination/main.tf",
+          "summary": "Defines assume-role policy for logs.amazonaws.com and permissions to Kinesis/Firehose and KMS.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "source": "AWS accounts in local.account_ids (var.config.account_ids + current account)",
+      "target": "aws_cloudwatch_log_destination.destination",
+      "relationship_type": "resource_policy",
+      "permissions_granted": [
+        "logs:PutSubscriptionFilter on the CloudWatch log destination ARN"
+      ],
+      "security_implications": [
+        "Allows these accounts to attach log groups to the central destination, effectively letting them send log streams cross-account.",
+        "If an unintended account ID is included in var.config.account_ids, that account could exfiltrate or inject logs via this destination."
+      ],
+      "evidence": [
+        {
+          "title": "build/terraform/aws/cloudwatch/destination/main.tf",
+          "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/cloudwatch/destination/main.tf",
+          "summary": "Destination access policy grants logs:PutSubscriptionFilter to specified AWS account IDs.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "source": "CloudWatch log groups listed in var.config.log_groups",
+      "target": "var.config.destination_arn (e.g., Kinesis Data Stream or Firehose)",
+      "relationship_type": "service_integration",
+      "permissions_granted": [
+        "CloudWatch Logs pushes matching log events to the configured destination via aws_cloudwatch_log_subscription_filter.subscription_filter"
+      ],
+      "security_implications": [
+        "By default, filter_pattern is taken from var.config.filter_pattern; if unset, all log events are forwarded, increasing the volume and potential sensitivity of data that reaches the downstream stream.",
+        "If destination_arn points to a multi-tenant or shared stream, logs from many groups may be mixed, affecting data classification and access control."
+      ],
+      "evidence": [
+        {
+          "title": "build/terraform/aws/cloudwatch/subscription/main.tf",
+          "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/cloudwatch/subscription/main.tf",
+          "summary": "Defines CloudWatch Logs subscription filters that forward logs from specified groups to a destination ARN.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "source": "Lambda service (lambda.amazonaws.com)",
+      "target": "aws_iam_role.role (Lambda execution role, substation-lambda-${random_uuid})",
+      "relationship_type": "assume_role",
+      "permissions_granted": [
+        "sts:AssumeRole for the Lambda function",
+        "All permissions attached to the role: logging, VPC ENI management, X-Ray, and any custom or KMS/AppConfig permissions"
+      ],
+      "security_implications": [
+        "Standard trust relationship for Lambda execution. If the role is later granted broad permissions via var.config.iam_statements, any Lambda function using this role can exercise those permissions.",
+        "Compromise of the Lambda function code or environment gives an attacker the full power of this role."
+      ],
+      "evidence": [
+        {
+          "title": "build/terraform/aws/lambda/main.tf",
+          "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/lambda/main.tf",
+          "summary": "Assume-role policy for Lambda with principal lambda.amazonaws.com.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "source": "API Gateway service (apigateway.amazonaws.com)",
+      "target": "aws_iam_role.role (API Gateway Kinesis integration role, substation-api-kinesis-${random_uuid})",
+      "relationship_type": "assume_role",
+      "permissions_granted": [
+        "sts:AssumeRole to obtain credentials specified in aws_api_gateway_integration.gateway_integration.credentials"
+      ],
+      "security_implications": [
+        "Standard service principal trust for API Gateway. The role currently has no attached permissions in this module, but if additional policies are attached elsewhere, any client invoking the public API can indirectly exercise those permissions on Kinesis.",
+        "Misconfigured or over-privileged role policies could let API Gateway write to unexpected streams or perform other actions."
+      ],
+      "evidence": [
+        {
+          "title": "build/terraform/aws/api_gateway/kinesis_data_stream/main.tf",
+          "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/api_gateway/kinesis_data_stream/main.tf",
+          "summary": "Defines an IAM role with assume-role policy for apigateway.amazonaws.com.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "source": "API Gateway REST API (aws_api_gateway_rest_api.api)",
+      "target": "Lambda function var.lambda (API Gateway -> Lambda proxy)",
+      "relationship_type": "resource_policy",
+      "permissions_granted": [
+        "lambda:InvokeFunction on the target Lambda function for any method/resource under this REST API (execution_arn /*/*)"
+      ],
+      "security_implications": [
+        "Any unauthenticated caller of the public API Gateway endpoint can cause the Lambda to be invoked.",
+        "If the Lambda function has powerful backend permissions, this forms a direct unauthenticated path from the internet into those capabilities."
+      ],
+      "evidence": [
+        {
+          "title": "build/terraform/aws/api_gateway/lambda/main.tf",
+          "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/api_gateway/lambda/main.tf",
+          "summary": "aws_lambda_permission.gateway_permission grants apigateway.amazonaws.com invoke permission for the REST API execution_arn.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "source": "AWS AppConfig service (appconfig.amazonaws.com)",
+      "target": "Lambda function var.lambda.name (AppConfig validator Lambda)",
+      "relationship_type": "resource_policy",
+      "permissions_granted": [
+        "lambda:InvokeFunction on the configured Lambda function for AppConfig validation, without a source_arn constraint"
+      ],
+      "security_implications": [
+        "Any AppConfig configuration in the same account can be set up to invoke this Lambda as a validator.",
+        "Lack of a source_arn/source_account condition slightly broadens the trust; if AppConfig is misused or compromised, it could be used to trigger this Lambda."
+      ],
+      "evidence": [
+        {
+          "title": "build/terraform/aws/appconfig/main.tf",
+          "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/appconfig/main.tf",
+          "summary": "aws_lambda_permission.allow_appconfig grants appconfig.amazonaws.com invoke permissions on a Lambda function.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "source": "Amazon EventBridge / CloudWatch Events service (events.amazonaws.com)",
+      "target": "Lambda function var.config.function",
+      "relationship_type": "resource_policy",
+      "permissions_granted": [
+        "lambda:InvokeFunction on the target function when triggered by the defined CloudWatch event rule arn"
+      ],
+      "security_implications": [
+        "Standard EventBridge -> Lambda trigger. If the event rule matches broad patterns or is modifiable by other principals, they can cause the Lambda to be invoked.",
+        "The module itself does not expose cross-account triggers; risk is mostly confined to this account."
+      ],
+      "evidence": [
+        {
+          "title": "build/terraform/aws/eventbridge/lambda/main.tf",
+          "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/eventbridge/lambda/main.tf",
+          "summary": "Defines CloudWatch event rule and aws_lambda_permission.allow_cloudwatch for events.amazonaws.com.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "source": "AWS Lambda service",
+      "target": "aws_ecr_repository.repository",
+      "relationship_type": "resource_policy",
+      "permissions_granted": [
+        "ecr:BatchGetImage, ecr:GetDownloadUrlForLayer, ecr:GetRepositoryPolicy on the ECR repository for principal { Service: lambda.amazonaws.com }"
+      ],
+      "security_implications": [
+        "Allows Lambda functions to pull container images from this ECR repository.",
+        "The policy is not scoped by account or function ARN via conditions such as aws:SourceAccount or aws:SourceArn, which may be broader than necessary depending on AWS’s handling of service principals in ECR policies."
+      ],
+      "evidence": [
+        {
+          "title": "build/terraform/aws/ecr/main.tf",
+          "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/ecr/main.tf",
+          "summary": "ECR repository policy grants Lambda service principal read access to the repository.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "source": "Consumer IAM roles listed in var.access (S3 module)",
+      "target": "aws_s3_bucket.bucket and its objects",
+      "relationship_type": "iam_policy_attachment",
+      "permissions_granted": [
+        "s3:GetObject and s3:PutObject on the bucket and all objects",
+        "OPTIONAL: kms:Decrypt and kms:GenerateDataKey on the provided KMS key when var.kms is set"
+      ],
+      "security_implications": [
+        "Any role added to var.access gains full read/write access to the S3 bucket, and potentially decryption of KMS-encrypted objects.",
+        "If these roles are shared across applications or accounts, the bucket effectively becomes accessible to all of them."
+      ],
+      "evidence": [
+        {
+          "title": "build/terraform/aws/s3/main.tf",
+          "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/s3/main.tf",
+          "summary": "Attaches an access policy granting GetObject/PutObject and optional KMS access to all roles in var.access.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "source": "Consumer IAM roles listed in var.access (SQS module)",
+      "target": "aws_sqs_queue.queue",
+      "relationship_type": "iam_policy_attachment",
+      "permissions_granted": [
+        "sqs:ReceiveMessage, sqs:DeleteMessage, sqs:GetQueue* (read access)",
+        "sqs:SendMessage* (write access)",
+        "OPTIONAL: kms:Decrypt and kms:GenerateDataKey on the provided KMS key"
+      ],
+      "security_implications": [
+        "Roles in var.access can fully consume from and publish to the queue, and decrypt any KMS-encrypted content.",
+        "If the same role is reused across many queues, compromise of that role compromises all associated queues."
+      ],
+      "evidence": [
+        {
+          "title": "build/terraform/aws/sqs/main.tf",
+          "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/sqs/main.tf",
+          "summary": "Defines an access policy for the SQS queue and attaches it to roles in var.access.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "source": "Consumer IAM roles listed in var.access (Kinesis Data Stream module)",
+      "target": "aws_kinesis_stream.stream and scaling alarms",
+      "relationship_type": "iam_policy_attachment",
+      "permissions_granted": [
+        "cloudwatch:PutMetricData, cloudwatch:PutMetricAlarm, cloudwatch:SetAlarmState on the module’s CloudWatch alarms",
+        "kinesis:AddTagsToStream, kinesis:DescribeStream*, kinesis:GetRecords, kinesis:GetShardIterator, kinesis:ListShards, kinesis:ListStreams, kinesis:ListTagsForStream, kinesis:PutRecord*, kinesis:SubscribeToShard, kinesis:RegisterStreamConsumer, kinesis:UpdateShardCount on the stream",
+        "OPTIONAL: kms:Decrypt and kms:GenerateDataKey on the KMS key"
+      ],
+      "security_implications": [
+        "Roles in var.access effectively get full administrative and read/write access to the Kinesis Data Stream, including scaling (UpdateShardCount).",
+        "This is powerful access and should be limited to tightly controlled roles to avoid data exfiltration or denial-of-service via scaling changes."
+      ],
+      "evidence": [
+        {
+          "title": "build/terraform/aws/kinesis_data_stream/main.tf",
+          "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/kinesis_data_stream/main.tf",
+          "summary": "Access policy grants broad CloudWatch and Kinesis permissions to roles in var.access.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "source": "Consumer IAM roles listed in var.access (DynamoDB module)",
+      "target": "aws_dynamodb_table.table and its stream",
+      "relationship_type": "iam_policy_attachment",
+      "permissions_granted": [
+        "dynamodb:GetItem, dynamodb:Query on the table (read)",
+        "dynamodb:PutItem, dynamodb:UpdateItem, dynamodb:BatchWriteItem on the table (write)",
+        "dynamodb:DescribeStream, dynamodb:GetRecords, dynamodb:GetShardIterator, dynamodb:ListStreams on the table’s stream_arn",
+        "OPTIONAL: kms:Decrypt and kms:GenerateDataKey on the KMS key"
+      ],
+      "security_implications": [
+        "Roles in var.access gain full read/write access to the table’s primary operations and can consume from its stream, suitable for event processing but also broad from a least-privilege perspective.",
+        "If the same roles are used for multiple tables, compromise could affect multiple datasets."
+      ],
+      "evidence": [
+        {
+          "title": "build/terraform/aws/dynamodb/main.tf",
+          "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/dynamodb/main.tf",
+          "summary": "DynamoDB access policy attached to var.access roles grants read/write table and stream permissions.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "source": "Consumer IAM roles listed in var.access (SNS module)",
+      "target": "aws_sns_topic.topic",
+      "relationship_type": "iam_policy_attachment",
+      "permissions_granted": [
+        "sns:Publish on the topic ARN",
+        "OPTIONAL: kms:Decrypt and kms:GenerateDataKey on the configured KMS key"
+      ],
+      "security_implications": [
+        "Roles in var.access can publish arbitrary messages to the SNS topic; if the topic fans out to critical downstream systems, this may allow log flooding or injection.",
+        "KMS decrypt permissions expand their ability to access encrypted SNS payloads if applicable."
+      ],
+      "evidence": [
+        {
+          "title": "build/terraform/aws/sns/main.tf",
+          "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/sns/main.tf",
+          "summary": "SNS topic access policy granting sns:Publish to roles in var.access.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "source": "Consumer IAM roles listed in var.access (EventBridge/Lambda module)",
+      "target": "Default and optional custom EventBridge event buses",
+      "relationship_type": "iam_policy_attachment",
+      "permissions_granted": [
+        "events:PutEvents on arn:aws:events:*:<account_id>:event-bus/default",
+        "OPTIONAL: events:PutEvents on a custom event bus if var.config.event_bus_arn is provided"
+      ],
+      "security_implications": [
+        "Roles in var.access can inject events into the default and optionally a custom event bus, potentially triggering automation or Lambdas bound to those buses.",
+        "If these roles are widely used, unexpected principals may be able to trigger automation through EventBridge."
+      ],
+      "evidence": [
+        {
+          "title": "build/terraform/aws/eventbridge/lambda/main.tf",
+          "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/eventbridge/lambda/main.tf",
+          "summary": "EventBridge access policy attached to roles in var.access.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "source": "Consumer IAM roles listed in var.access (Lambda access policy)",
+      "target": "aws_lambda_function.lambda_function",
+      "relationship_type": "iam_policy_attachment",
+      "permissions_granted": [
+        "lambda:GetFunctionConfiguration",
+        "lambda:InvokeAsync",
+        "lambda:InvokeFunction",
+        "These permissions apply to the Lambda’s ARN and all versions via ${arn}:*",
+        "OPTIONAL: kms:Decrypt and kms:GenerateDataKey on the configured KMS key"
+      ],
+      "security_implications": [
+        "Any principal whose role is listed in var.access can invoke the Substation Lambda function and read its configuration, effectively exposing the function to those roles without further constraints.",
+        "If var.access includes cross-account roles, this becomes a cross-account invocation path."
+      ],
+      "evidence": [
+        {
+          "title": "build/terraform/aws/lambda/main.tf",
+          "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/lambda/main.tf",
+          "summary": "Lambda access policy granting invoke and configuration read privileges to roles in var.access.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "source": "Consumer IAM roles listed in var.access (Secrets Manager module)",
+      "target": "aws_secretsmanager_secret.secret",
+      "relationship_type": "iam_policy_attachment",
+      "permissions_granted": [
+        "secretsmanager:GetSecretValue on this specific secret ARN",
+        "OPTIONAL: kms:Decrypt and kms:GenerateDataKey on the configured KMS key"
+      ],
+      "security_implications": [
+        "Any role in var.access can retrieve the full secret value and decrypt it if a customer-managed KMS key is used.",
+        "If var.access includes broadly scoped or cross-account roles, secret exposure could extend beyond the intended set of consumers."
+      ],
+      "evidence": [
+        {
+          "title": "build/terraform/aws/secret/main.tf",
+          "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/secret/main.tf",
+          "summary": "Secrets Manager secret and an access policy granting GetSecretValue to roles in var.access.",
+          "notes": null
+        }
+      ]
+    }
+  ],
+  "secrets_and_credentials": {
+    "secret_stores": [
+      {
+        "name": "aws_secretsmanager_secret.secret",
+        "description": "AWS Secrets Manager secret for Substation components; optionally encrypted with a customer-managed KMS key."
+      }
+    ],
+    "credential_storage_locations": [
+      "AWS Secrets Manager (aws_secretsmanager_secret.secret) for structured secrets such as API keys or credentials.",
+      "Lambda environment variables (aws_lambda_function.lambda_function.environment) for runtime configuration; may include secrets depending on consumer usage.",
+      "KMS keys (aws_kms_key.key and keys referenced via var.kms) used to encrypt data at rest across S3, SQS, SNS, ECR, DynamoDB, Kinesis, Lambda, and Secrets Manager.",
+      "IAM role temporary credentials for the Lambda execution role and other IAM roles that are granted access via var.access."
+    ],
+    "secret_access_patterns": [
+      "Roles listed in var.access for the Secrets Manager module receive secretsmanager:GetSecretValue and kms:Decrypt/GenerateDataKey on the configured secret and its KMS key.",
+      "The Lambda execution role can be granted kms:Decrypt/GenerateDataKey to decrypt encrypted environment variables and other KMS-protected data when var.kms is configured.",
+      "Other modules (S3, SQS, SNS, DynamoDB, Kinesis) attach policies that grant kms:Decrypt/GenerateDataKey to roles in var.access, allowing them to decrypt encrypted payloads and objects."
+    ],
+    "encryption_at_rest": [
+      "S3: Optional SSE-KMS via aws_s3_bucket_server_side_encryption_configuration when var.kms is provided; otherwise no explicit bucket-level encryption is configured in Terraform.",
+      "KMS: Customer-managed CMK (aws_kms_key.key) with enable_key_rotation = true; key policy is provided by the user via var.config.policy.",
+      "ECR: encryption_configuration uses KMS when var.kms is supplied; otherwise relies on ECR’s default encryption behavior.",
+      "SQS: kms_master_key_id is set to var.kms.id when provided, enabling SSE-KMS for queue messages.",
+      "SNS: kms_master_key_id is set to var.kms.id when provided, enabling SSE-KMS for topic messages.",
+      "DynamoDB: server_side_encryption enabled with kms_key_arn when var.kms is non-null; otherwise SSE is disabled in this module (AWS defaults may still apply).",
+      "Kinesis Data Stream: encryption_type set to KMS and kms_key_id set when var.kms is non-null; otherwise encryption_type is NONE.",
+      "Lambda: kms_key_arn set when var.kms is provided, encrypting environment variables and some internal data.",
+      "Secrets Manager: kms_key_id is set to var.kms.id when provided; otherwise AWS-managed KMS key is used by default."
+    ],
+    "encryption_in_transit": [
+      "API Gateway REST APIs (Lambda and Kinesis integrations) use HTTPS/TLS endpoints managed by AWS; no custom TLS configuration is defined here.",
+      "Service-to-service integrations (CloudWatch Logs to Kinesis/Firehose, AppConfig to Lambda, EventBridge to Lambda, Lambda to downstream AWS services) use AWS’s internal TLS-encrypted endpoints."
+    ],
+    "security_concerns": [
+      "Many modules treat KMS configuration as optional; if var.kms is omitted, resources such as S3 buckets, DynamoDB tables, and Kinesis streams may be created without explicit customer-managed KMS encryption, which may not meet stricter compliance requirements.",
+      "Access policies frequently grant kms:Decrypt and kms:GenerateDataKey to arbitrary roles listed in var.access. If these roles are shared across many applications or accounts, KMS decryption capabilities may become broader than intended.",
+      "Lambda environment variables may be used to store secrets; while they can be encrypted with KMS, there is no standardized pattern in this repo for secret retrieval/rotation (e.g., from Secrets Manager) for the Lambda function.",
+      "KMS key policies themselves are not defined here (passed via var.config.policy); misconfigured key policies could inadvertently expose encryption keys to unintended principals or accounts."
+    ],
+    "evidence": [
+      {
+        "title": "build/terraform/aws/secret/main.tf",
+        "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/secret/main.tf",
+        "summary": "Secrets Manager secret with optional KMS key and an access policy for roles in var.access.",
+        "notes": null
+      },
+      {
+        "title": "build/terraform/aws/kms/main.tf",
+        "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/kms/main.tf",
+        "summary": "Defines a KMS CMK with rotation enabled and user-supplied policy.",
+        "notes": null
+      },
+      {
+        "title": "build/terraform/aws/lambda/main.tf",
+        "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/lambda/main.tf",
+        "summary": "Lambda configuration uses kms_key_arn and environment variables; access policy grants invoke permissions.",
+        "notes": null
+      },
+      {
+        "title": "build/terraform/aws/s3/main.tf",
+        "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/s3/main.tf",
+        "summary": "Optional SSE-KMS for S3 bucket and KMS actions in the access policy.",
+        "notes": null
+      },
+      {
+        "title": "build/terraform/aws/kinesis_data_stream/main.tf",
+        "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/kinesis_data_stream/main.tf",
+        "summary": "Optional KMS encryption and KMS actions in access policy for Kinesis stream.",
+        "notes": null
+      }
+    ]
+  },
+  "cloud_service_configurations": [
+    {
+      "service_name": "Substation S3 bucket module (aws_s3_bucket.bucket)",
+      "service_type": "s3",
+      "configuration_details": [
+        "Creates an S3 bucket named var.config.name with optional force_destroy and object_lock_enabled when var.config.compliance is non-null.",
+        "Sets bucket ownership_controls to BucketOwnerPreferred and ACL to private."
+      ],
+      "security_settings": [
+        "Optional SSE-KMS configured via aws_s3_bucket_server_side_encryption_configuration when var.kms is provided.",
+        "Object lock configuration in COMPLIANCE mode with a default retention period from var.config.compliance.retention when compliance is enabled.",
+        "An IAM policy (substation-s3-${random_uuid}) grants s3:GetObject and s3:PutObject on the bucket and all objects, plus optional kms:Decrypt/GenerateDataKey, and is attached to roles in var.access."
+      ],
+      "misconfigurations": [
+        "No S3 Block Public Access settings are defined; while ACL is private, broader account- or bucket-level public access settings could still affect exposure if configured elsewhere.",
+        "If var.kms is null, the bucket is created without an explicit server-side encryption resource in Terraform; encryption then depends on account-level defaults or may be absent."
+      ],
+      "evidence": [
+        {
+          "title": "build/terraform/aws/s3/main.tf",
+          "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/s3/main.tf",
+          "summary": "Defines S3 bucket, ownership controls, object lock, optional SSE-KMS, and access IAM policy.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "service_name": "KMS CMK module (aws_kms_key.key)",
+      "service_type": "kms",
+      "configuration_details": [
+        "Creates a customer-managed KMS key with enable_key_rotation = true.",
+        "Associates a KMS alias name from var.config.name pointing to the key."
+      ],
+      "security_settings": [
+        "Key rotation is enabled to reduce long-term key exposure.",
+        "Key policy is provided as var.config.policy; if null, AWS’s default CMK policy applies."
+      ],
+      "misconfigurations": [
+        "Key policies are not defined in this repo; if var.config.policy is overly permissive (e.g., wildcards or cross-account principals), the CMK could be misused.",
+        "There is no explicit restriction by service, principal, or resource in the module; secure use depends entirely on caller-provided policy."
+      ],
+      "evidence": [
+        {
+          "title": "build/terraform/aws/kms/main.tf",
+          "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/kms/main.tf",
+          "summary": "Defines a CMK with policy supplied by the module consumer and an alias.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "service_name": "ECR repository module (aws_ecr_repository.repository)",
+      "service_type": "ecr",
+      "configuration_details": [
+        "Creates an ECR repository named var.config.name with force_delete controlled by var.config.force_delete.",
+        "Enforces image_tag_mutability = IMMUTABLE and enables image scanning on push."
+      ],
+      "security_settings": [
+        "Optional KMS encryption via encryption_configuration when var.kms is provided; otherwise relies on ECR’s default encryption behavior.",
+        "Repository policy grants the Lambda service principal (lambda.amazonaws.com) read access: ecr:BatchGetImage, ecr:GetDownloadUrlForLayer, ecr:GetRepositoryPolicy."
+      ],
+      "misconfigurations": [
+        "The repository policy for the Lambda service principal is not scoped with conditions such as aws:SourceAccount or aws:SourceArn, which may be broader than necessary.",
+        "No lifecycle policies or repository-level access controls beyond the Lambda service policy are defined here; cross-account or cross-team usage must be managed externally."
+      ],
+      "evidence": [
+        {
+          "title": "build/terraform/aws/ecr/main.tf",
+          "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/ecr/main.tf",
+          "summary": "Creates an ECR repository with immutable tags, image scanning, optional KMS, and a policy for Lambda.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "service_name": "CloudWatch Logs destination module",
+      "service_type": "cloudwatch_logs_destination",
+      "configuration_details": [
+        "Creates a CloudWatch Logs destination named var.config.name that forwards logs to var.config.destination_arn (Kinesis Data Stream or Firehose).",
+        "Supports multiple source accounts via var.config.account_ids in addition to the current account."
+      ],
+      "security_settings": [
+        "IAM role for the destination is assumable only by logs.amazonaws.com and is constrained using aws:SourceArn to ARNs under the allowed accounts.",
+        "Destination role policy grants least-privilege actions required to write to Firehose (DescribeDeliveryStream/PutRecord/PutRecordBatch) or Kinesis (Describe*/SubscribeToShard/RegisterStreamConsumer/PutRecord/PutRecords) as appropriate.",
+        "Optional KMS access (kms:Decrypt/GenerateDataKey) is granted only when var.kms is configured.",
+        "Destination access policy only allows logs:PutSubscriptionFilter from allowed AWS account IDs."
+      ],
+      "misconfigurations": [
+        "Incorrect or overly broad values in var.config.account_ids could allow additional AWS accounts to attach subscriptions to this destination.",
+        "If destination_arn points to a multi-tenant Kinesis or Firehose stream without tight downstream controls, logs from multiple accounts could be mixed, complicating access control."
+      ],
+      "evidence": [
+        {
+          "title": "build/terraform/aws/cloudwatch/destination/main.tf",
+          "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/cloudwatch/destination/main.tf",
+          "summary": "Defines a CloudWatch Logs cross-account destination with IAM role, permissions, and destination policy.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "service_name": "CloudWatch Logs subscription filter module",
+      "service_type": "cloudwatch_subscription",
+      "configuration_details": [
+        "Configures aws_cloudwatch_log_subscription_filter for each log group listed in var.config.log_groups.",
+        "Forwards log events to var.config.destination_arn with distribution = Random when the destination is Kinesis."
+      ],
+      "security_settings": [
+        "filter_pattern is configurable via var.config.filter_pattern; if set, it can limit the categories of logs forwarded.",
+        "Random distribution is used to avoid Kinesis shard hot-spotting when destination_arn is a Kinesis stream."
+      ],
+      "misconfigurations": [
+        "If var.config.filter_pattern is left null or too broad, all log events from the specified groups are forwarded, which may expose more data than necessary.",
+        "No explicit IAM role is configured here; it depends on the destination policy and CloudWatch Logs service behavior."
+      ],
+      "evidence": [
+        {
+          "title": "build/terraform/aws/cloudwatch/subscription/main.tf",
+          "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/cloudwatch/subscription/main.tf",
+          "summary": "Configures CloudWatch Logs subscription filters forwarding to a given destination ARN.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "service_name": "SQS queue module",
+      "service_type": "sqs",
+      "configuration_details": [
+        "Creates an SQS queue named var.config.name with configurable delay_seconds and visibility_timeout_seconds, and FIFO settings based on the .fifo suffix.",
+        "Sets kms_master_key_id to var.kms.id when provided and kms_data_key_reuse_period_seconds to 300."
+      ],
+      "security_settings": [
+        "Optional SSE-KMS encryption when KMS key is provided.",
+        "Access policy (substation-sqs-${random_uuid}) grants a combined read_access and write_access set (ReceiveMessage/DeleteMessage/GetQueue*/SendMessage*) and optional KMS permissions to roles in var.access."
+      ],
+      "misconfigurations": [
+        "If var.kms is null, the queue relies on AWS defaults for SSE; explicit customer-managed KMS encryption is not enforced.",
+        "Access policy applies the same broad set of permissions to every role in var.access; there is no separation of read-only vs write-only roles in this module."
+      ],
+      "evidence": [
+        {
+          "title": "build/terraform/aws/sqs/main.tf",
+          "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/sqs/main.tf",
+          "summary": "Defines an SQS queue with optional KMS and an access policy attached to roles in var.access.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "service_name": "SNS topic module",
+      "service_type": "sns",
+      "configuration_details": [
+        "Creates an SNS topic named var.config.name with FIFO options when name ends with .fifo.",
+        "Configures kms_master_key_id to var.kms.id when provided."
+      ],
+      "security_settings": [
+        "Optional SSE-KMS for topic messages via kms_master_key_id.",
+        "Access policy (substation-sns-${random_uuid}) grants sns:Publish and optional KMS permissions to roles in var.access."
+      ],
+      "misconfigurations": [
+        "No resource policy is defined to restrict which principals beyond roles in var.access can publish or subscribe; by default, SNS remains account-internal, but cross-account scenarios are not addressed here.",
+        "If var.kms is omitted, explicit KMS encryption is not enforced."
+      ],
+      "evidence": [
+        {
+          "title": "build/terraform/aws/sns/main.tf",
+          "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/sns/main.tf",
+          "summary": "Defines an SNS topic with optional KMS and an access policy for roles in var.access.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "service_name": "Kinesis Data Stream module",
+      "service_type": "kinesis_data_stream",
+      "configuration_details": [
+        "Creates a Kinesis Data Stream named var.config.name with configurable shard_count and retention_period.",
+        "Configures encryption_type = KMS and kms_key_id when var.kms is provided; otherwise encryption_type = NONE.",
+        "Defines CloudWatch metric alarms for autoscaling with SNS topic actions to var.config.autoscaling_topic, using complex metric math."
+      ],
+      "security_settings": [
+        "Optional SSE-KMS when a KMS key is specified.",
+        "Access policy (substation-kinesis-${random_uuid}) grants broad Kinesis read/write and scaling operations plus CloudWatch metric/alarms permissions to roles in var.access.",
+        "Alarms themselves are tagged and treat_missing_data = ignore to avoid spurious alerts."
+      ],
+      "misconfigurations": [
+        "If var.kms is null, stream encryption_type is explicitly set to NONE, which may not meet security requirements for sensitive log data.",
+        "Access policy is powerful (includes UpdateShardCount and broad Describe/List actions); if roles in var.access are not tightly controlled, this may enable misuse or accidental misconfiguration of the stream."
+      ],
+      "evidence": [
+        {
+          "title": "build/terraform/aws/kinesis_data_stream/main.tf",
+          "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/kinesis_data_stream/main.tf",
+          "summary": "Defines a Kinesis Data Stream, autoscaling alarms, and a broad access policy for roles in var.access.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "service_name": "DynamoDB table module",
+      "service_type": "dynamodb",
+      "configuration_details": [
+        "Creates a provisioned-capacity DynamoDB table with name var.config.name, configurable hash_key, range_key, TTL attribute, and attributes map.",
+        "Enables point_in_time_recovery and ignores capacity changes in Terraform to support autoscaling.",
+        "Configures autoscaling targets and target-tracking scaling policies for read and write capacity using AWS Application Auto Scaling."
+      ],
+      "security_settings": [
+        "Optional server_side_encryption with kms_key_arn when var.kms is provided.",
+        "Access policy (substation-dynamodb-${random_uuid}) grants read (GetItem, Query) and write (PutItem, UpdateItem, BatchWriteItem) access to the table, plus stream read access, and optional KMS permissions, to roles in var.access."
+      ],
+      "misconfigurations": [
+        "If var.kms is null, server_side_encryption.enabled is false in this module, even though AWS now defaults to encryption at rest; this may conflict with compliance expectations or disable encryption depending on provider behavior.",
+        "Access policy conflates read and write capabilities into a single role set (var.access); separation of duties must be implemented outside this module if required."
+      ],
+      "evidence": [
+        {
+          "title": "build/terraform/aws/dynamodb/main.tf",
+          "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/dynamodb/main.tf",
+          "summary": "Defines a DynamoDB table with TTL, point-in-time recovery, autoscaling, and an access policy for roles in var.access.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "service_name": "Secrets Manager secret module",
+      "service_type": "secretsmanager",
+      "configuration_details": [
+        "Creates an AWS Secrets Manager secret with name var.config.name, optionally using a customer-managed KMS key (var.kms.id)."
+      ],
+      "security_settings": [
+        "By default, Secrets Manager encrypts secrets with a KMS key; this module allows specifying a custom key via kms_key_id.",
+        "Access policy (substation-secret-${random_uuid}) grants secretsmanager:GetSecretValue and optional KMS decrypt/data key permissions to roles in var.access."
+      ],
+      "misconfigurations": [
+        "The same set of roles in var.access receives full read access to the secret; finer-grained read/write/rotate distinctions are not expressed here.",
+        "If var.access is misconfigured (e.g., includes overly privileged or cross-account roles), secrets may be exposed to unintended principals."
+      ],
+      "evidence": [
+        {
+          "title": "build/terraform/aws/secret/main.tf",
+          "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/secret/main.tf",
+          "summary": "Defines a Secrets Manager secret and an access policy granting GetSecretValue to roles in var.access.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "service_name": "Lambda function module (container image)",
+      "service_type": "lambda",
+      "configuration_details": [
+        "Creates a Lambda function named var.config.name using package_type = Image and image_uri = var.config.image_uri, supporting arm64 or x86_64 architectures.",
+        "Configures runtime settings including timeout and memory_size, and plumbs VPC configuration via var.config.vpc_config.subnet_ids and security_group_ids.",
+        "Optionally integrates with AWS AppConfig via aws_appconfig_configuration_profile when var.appconfig is provided."
+      ],
+      "security_settings": [
+        "Lambda execution role is restricted to the Lambda service (lambda.amazonaws.com) via its assume-role policy.",
+        "AWS-managed policies AWSLambdaBasicExecutionRole, AWSLambdaVPCAccessExecutionRole, and AWSXrayWriteOnlyAccess are attached for logging, VPC networking, and tracing.",
+        "Custom inline policy (aws_iam_policy.custom_policy) is minimal by default (no-op), but can grant AppConfig and KMS access, plus arbitrary additional permissions specified in var.config.iam_statements.",
+        "Optional kms_key_arn encrypts environment variables and related data when var.kms is set.",
+        "An access policy (substation-lambda-access-${random_uuid}) can be attached to roles in var.access to allow them to invoke the Lambda."
+      ],
+      "misconfigurations": [
+        "Module exposes a powerful extension point (var.config.iam_statements) that can attach arbitrary additional permissions to the Lambda role; misuse could lead to overly permissive functions.",
+        "Security group behavior is entirely controlled by external security groups passed in via var.config.vpc_config.security_group_ids; this module does not enforce network least privilege.",
+        "If kms is not configured, environment variables are not explicitly encrypted with a customer-managed key, though AWS default may encrypt them with an AWS-managed key."
+      ],
+      "evidence": [
+        {
+          "title": "build/terraform/aws/lambda/main.tf",
+          "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/lambda/main.tf",
+          "summary": "Defines Lambda configuration, execution role, managed policies, custom IAM policy, and an access policy for external invokers.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "service_name": "API Gateway -> Lambda proxy module",
+      "service_type": "api_gateway",
+      "configuration_details": [
+        "Creates a REST API (aws_api_gateway_rest_api.api) named var.config.name with a single POST method on the root resource.",
+        "Integrates the method via AWS_PROXY with the provided Lambda function (var.lambda.arn).",
+        "Deploys the API with stage_name = var.config.name."
+      ],
+      "security_settings": [
+        "Lambda permission (aws_lambda_permission.gateway_permission) limits invocations to apigateway.amazonaws.com with source_arn derived from the API’s execution_arn.",
+        "Uses AWS-managed TLS for HTTPS endpoints."
+      ],
+      "misconfigurations": [
+        "Method authorization is set to NONE; there is no IAM, custom authorizer, or API key protection configured in this module, leaving the endpoint publicly callable.",
+        "No usage plans, throttling, logging, or WAF/web ACLs are defined; rate limiting and protection against abuse must be configured elsewhere."
+      ],
+      "evidence": [
+        {
+          "title": "build/terraform/aws/api_gateway/lambda/main.tf",
+          "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/api_gateway/lambda/main.tf",
+          "summary": "Defines an unauthenticated REST API integrated with a Lambda function via AWS_PROXY.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "service_name": "API Gateway -> Kinesis PutRecord module",
+      "service_type": "api_gateway",
+      "configuration_details": [
+        "Creates a REST API with a POST method on the root resource that calls Kinesis PutRecord via an AWS integration.",
+        "Uses an IAM role (substation-api-kinesis-${random_uuid}) as credentials for the integration and constructs the Kinesis PutRecord URI based on the current partition and region.",
+        "Request template base64-encodes the body and uses $context.requestId as the partition key."
+      ],
+      "security_settings": [
+        "Integration specifies Content-Type application/x-amz-json-1.1 as required by Kinesis.",
+        "IAM role is assumed only by apigateway.amazonaws.com as per its trust policy."
+      ],
+      "misconfigurations": [
+        "No IAM policy is attached to the Kinesis integration role in this module; without additional policies, the integration will not be able to call Kinesis.",
+        "Method authorization is NONE and there is no WAF, throttling, or logging configured, exposing a public endpoint that is intended to push arbitrary data into Kinesis.",
+        "Lack of request validation or schema enforcement may allow malformed or excessively large payloads to reach Kinesis if permissions are later added."
+      ],
+      "evidence": [
+        {
+          "title": "build/terraform/aws/api_gateway/kinesis_data_stream/main.tf",
+          "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/api_gateway/kinesis_data_stream/main.tf",
+          "summary": "Defines an unauthenticated REST API for Kinesis PutRecord using a service role assumed by API Gateway.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "service_name": "AppConfig application and environment module",
+      "service_type": "appconfig",
+      "configuration_details": [
+        "Creates an AppConfig application (aws_appconfig_application.app) named var.config.name.",
+        "Creates one AppConfig environment per entry in var.config.environments.",
+        "Defines an 'Instant' deployment strategy that deploys configurations to all targets immediately."
+      ],
+      "security_settings": [
+        "Optionally configures a Lambda-based configuration validator via aws_appconfig_configuration_profile in the Lambda module.",
+        "Grants AppConfig permission to invoke the validator Lambda using aws_lambda_permission.allow_appconfig."
+      ],
+      "misconfigurations": [
+        "aws_lambda_permission.allow_appconfig does not restrict by source_arn or source_account, slightly broadening the trust from AppConfig to Lambda.",
+        "No AppConfig deployment access controls, configuration profiles, or hosted configuration store policies are defined beyond validator integration."
+      ],
+      "evidence": [
+        {
+          "title": "build/terraform/aws/appconfig/main.tf",
+          "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/appconfig/main.tf",
+          "summary": "Creates AppConfig application/environments and allows AppConfig to invoke a validator Lambda.",
+          "notes": null
+        },
+        {
+          "title": "build/terraform/aws/lambda/main.tf",
+          "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/lambda/main.tf",
+          "summary": "Optionally defines an AppConfig configuration profile and Lambda policy for AppConfig access.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "service_name": "EventBridge rule -> Lambda trigger module",
+      "service_type": "eventbridge",
+      "configuration_details": [
+        "Creates an EventBridge/CloudWatch Events rule (aws_cloudwatch_event_rule.rule) with either a schedule_expression or event_pattern.",
+        "Targets a Lambda function (var.config.function.arn) via aws_cloudwatch_event_target."
+      ],
+      "security_settings": [
+        "aws_lambda_permission.allow_cloudwatch grants events.amazonaws.com invoke permissions scoped to the rule’s ARN.",
+        "Access policy (substation-eventbridge-${random_uuid}) allows roles in var.access to call events:PutEvents on the default event bus and optionally a custom bus."
+      ],
+      "misconfigurations": [
+        "If the rule’s event_pattern or schedule is broad, the target Lambda may be invoked very frequently or by unexpected events.",
+        "The EventBridge PutEvents access granted to roles in var.access is broad and should be restricted to trusted producers."
+      ],
+      "evidence": [
+        {
+          "title": "build/terraform/aws/eventbridge/lambda/main.tf",
+          "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/eventbridge/lambda/main.tf",
+          "summary": "Defines CloudWatch event rule, target Lambda, and access policy for roles in var.access.",
+          "notes": null
+        }
+      ]
+    },
+    {
+      "service_name": "VPC and subnet networking module",
+      "service_type": "vpc",
+      "configuration_details": [
+        "Creates a VPC with CIDR block var.config.cidr_block.",
+        "Creates one public subnet (aws_subnet.public_subnet) using the first entry of var.config.public_subnet, and multiple private subnets (aws_subnet.private_subnet[*]) from var.config.private_subnets.",
+        "Attaches an internet gateway and NAT gateways to provide internet connectivity for public and private subnets respectively."
+      ],
+      "security_settings": [
+        "Private subnets route outbound traffic via NAT gateways, preventing direct inbound connections from the internet in typical use.",
+        "Public subnet routes 0.0.0.0/0 via the internet gateway, suitable for internet-facing resources such as load balancers or NAT gateways."
+      ],
+      "misconfigurations": [
+        "No security groups or NACL customizations are provided; by default, network ACLs are permissive and actual isolation depends on security groups defined elsewhere.",
+        "Because public subnet route tables send all traffic to the internet gateway, any resource placed in the public subnet becomes internet-routable if associated security groups allow it."
+      ],
+      "evidence": [
+        {
+          "title": "build/terraform/aws/networking/vpc/main.tf",
+          "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/networking/vpc/main.tf",
+          "summary": "Defines VPC, public/private subnets, IGW, NAT gateways, and route tables.",
+          "notes": null
+        }
+      ]
+    }
+  ],
+  "coverage_overview": {
+    "sources_analysed": [
+      {
+        "name": "build/terraform/aws/s3/main.tf",
+        "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/s3/main.tf",
+        "description": "S3 bucket module with IAM access policy."
+      },
+      {
+        "name": "build/terraform/aws/kms/main.tf",
+        "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/kms/main.tf",
+        "description": "KMS CMK and alias module."
+      },
+      {
+        "name": "build/terraform/aws/ecr/main.tf",
+        "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/ecr/main.tf",
+        "description": "ECR repository module and repository policy for Lambda."
+      },
+      {
+        "name": "build/terraform/aws/cloudwatch/destination/main.tf",
+        "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/cloudwatch/destination/main.tf",
+        "description": "CloudWatch Logs destination module with IAM role and policies."
+      },
+      {
+        "name": "build/terraform/aws/cloudwatch/subscription/main.tf",
+        "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/cloudwatch/subscription/main.tf",
+        "description": "CloudWatch Logs subscription filter module."
+      },
+      {
+        "name": "build/terraform/aws/sqs/main.tf",
+        "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/sqs/main.tf",
+        "description": "SQS queue module with IAM access policy."
+      },
+      {
+        "name": "build/terraform/aws/sns/main.tf",
+        "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/sns/main.tf",
+        "description": "SNS topic module with IAM access policy."
+      },
+      {
+        "name": "build/terraform/aws/dynamodb/main.tf",
+        "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/dynamodb/main.tf",
+        "description": "DynamoDB table module with autoscaling and IAM access policy."
+      },
+      {
+        "name": "build/terraform/aws/kinesis_data_stream/main.tf",
+        "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/kinesis_data_stream/main.tf",
+        "description": "Kinesis Data Stream module with autoscaling alarms and IAM access policy."
+      },
+      {
+        "name": "build/terraform/aws/secret/main.tf",
+        "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/secret/main.tf",
+        "description": "Secrets Manager secret module with IAM access policy."
+      },
+      {
+        "name": "build/terraform/aws/lambda/main.tf",
+        "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/lambda/main.tf",
+        "description": "Lambda function module with IAM role and policies."
+      },
+      {
+        "name": "build/terraform/aws/api_gateway/lambda/main.tf",
+        "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/api_gateway/lambda/main.tf",
+        "description": "API Gateway module integrating with Lambda via AWS_PROXY."
+      },
+      {
+        "name": "build/terraform/aws/api_gateway/kinesis_data_stream/main.tf",
+        "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/api_gateway/kinesis_data_stream/main.tf",
+        "description": "API Gateway module integrating with Kinesis PutRecord."
+      },
+      {
+        "name": "build/terraform/aws/appconfig/main.tf",
+        "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/appconfig/main.tf",
+        "description": "AppConfig application and environment module plus Lambda invoke permission."
+      },
+      {
+        "name": "build/terraform/aws/eventbridge/lambda/main.tf",
+        "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/eventbridge/lambda/main.tf",
+        "description": "EventBridge rule targeting a Lambda function with IAM access policy."
+      },
+      {
+        "name": "build/terraform/aws/networking/vpc/main.tf",
+        "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/networking/vpc/main.tf",
+        "description": "VPC networking module with subnets, IGW, NAT, and route tables."
+      }
+    ],
+    "likely_uncovered_areas_or_ambiguities": [
+      "Actual IAM roles passed into var.access, var.lambda, var.appconfig, and other module inputs are defined in consuming Terraform code outside this repository; their identities and broader permissions are unknown.",
+      "Security groups and network ACLs that control inbound/outbound traffic for Lambda functions and other resources are not defined in these modules and are likely set in higher-level infrastructure definitions.",
+      "API Gateway hardening features such as custom domain names, WAF/web ACLs, throttling, request validation, and detailed access logging are not present here and may or may not exist elsewhere.",
+      "KMS key policies (var.config.policy) are not specified in this repo; their actual principals, conditions, and cross-account access patterns are unknown.",
+      "Variable defaults and constraints in _variables.tf files (e.g., allowed CIDR ranges, default encryption settings) were not analyzed in depth; they may impose additional security-related defaults."
+    ],
+    "assumptions_made": [
+      "Assumed these Terraform modules are composed into a typical single-account AWS environment unless cross-account ARNs are explicitly provided via vars such as var.config.account_ids or var.access.",
+      "Assumed that when var.kms or similar encryption-related variables are null, resources rely on AWS service defaults for encryption at rest (e.g., AWS-managed keys) where applicable.",
+      "Assumed no additional IAM policies or resource policies are attached to the IAM roles and resources defined here beyond what is visible in the analyzed Terraform files.",
+      "Assumed that network security (security groups, NACL rules) is implemented correctly in consuming infrastructure and that private subnets are used for sensitive compute where intended."
+    ]
+  },
+  "open_questions": [
+    {
+      "question": "Which specific IAM roles are passed into var.access across the modules (S3, SQS, SNS, DynamoDB, Kinesis, Secrets, Lambda, EventBridge), and are these roles dedicated per resource or shared broadly across applications or accounts?",
+      "context": "Access policies in multiple modules grant powerful permissions (read/write and KMS decrypt) to every role listed in var.access, but the roles themselves are defined externally.",
+      "related_capabilities": [
+        "IAM roles and permissions",
+        "Secrets access control",
+        "Stream and queue access control"
+      ]
+    },
+    {
+      "question": "Are additional IAM policies attached elsewhere to the API Gateway Kinesis integration role (substation-api-kinesis-${random_uuid}) to grant kinesis:PutRecord and related permissions, or is the integration expected to rely on a Kinesis resource policy?",
+      "context": "The module defines the assume-role trust for apigateway.amazonaws.com but does not attach any permission policies to the role.",
+      "related_capabilities": [
+        "API Gateway integration with Kinesis",
+        "IAM role permissions"
+      ]
+    },
+    {
+      "question": "What security groups and network ACLs are applied to the subnets passed into var.config.vpc_config.subnet_ids for the Lambda module, and do they enforce least-privilege network access (e.g., egress-only to required services, no direct inbound from the internet)?",
+      "context": "The VPC module defines routing and subnets, but no security groups; Lambda vpc_config expects pre-existing subnet and security group IDs.",
+      "related_capabilities": [
+        "Network security boundaries",
+        "Lambda runtime security"
+      ]
+    },
+    {
+      "question": "Are the public API Gateway endpoints fronted by WAF, usage plans, or authorization mechanisms (IAM, custom authorizers, JWT authorizers) defined in other Terraform stacks or services?",
+      "context": "Both API Gateway modules set authorization = NONE and do not configure WAF, throttling, or usage plans here.",
+      "related_capabilities": [
+        "Public API exposure",
+        "DDoS and abuse protection",
+        "Authentication and authorization"
+      ]
+    },
+    {
+      "question": "How restrictive are the KMS key policies provided via var.config.policy, and do they limit key usage to specific services, principals, and resources, or do they permit broad cross-account or wildcard access?",
+      "context": "The KMS module defers key policy entirely to user input or AWS defaults, which strongly influences the security posture of all KMS-encrypted resources.",
+      "related_capabilities": [
+        "Encryption key management",
+        "Cross-account access control"
+      ]
+    }
+  ],
+  "evidence_index": [
+    {
+      "title": "build/terraform/aws/s3/main.tf",
+      "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/s3/main.tf",
+      "summary": "Defines an S3 bucket with private ACL, optional object lock, optional SSE-KMS, and an access IAM policy attached to roles in var.access.",
+      "notes": null
+    },
+    {
+      "title": "build/terraform/aws/kms/main.tf",
+      "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/kms/main.tf",
+      "summary": "Defines a customer-managed KMS key with rotation enabled and an alias; key policy is specified by the consumer.",
+      "notes": null
+    },
+    {
+      "title": "build/terraform/aws/ecr/main.tf",
+      "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/ecr/main.tf",
+      "summary": "Defines an ECR repository with immutable tags, image scanning, optional KMS encryption, and a repository policy granting Lambda access.",
+      "notes": null
+    },
+    {
+      "title": "build/terraform/aws/cloudwatch/destination/main.tf",
+      "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/cloudwatch/destination/main.tf",
+      "summary": "Defines a CloudWatch Logs destination, its IAM role, destination policy, and permissions for writing to Kinesis/Firehose and KMS.",
+      "notes": null
+    },
+    {
+      "title": "build/terraform/aws/cloudwatch/subscription/main.tf",
+      "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/cloudwatch/subscription/main.tf",
+      "summary": "Defines log subscription filters that forward events from multiple log groups to a destination ARN.",
+      "notes": null
+    },
+    {
+      "title": "build/terraform/aws/sqs/main.tf",
+      "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/sqs/main.tf",
+      "summary": "Defines an SQS queue with optional KMS encryption and an IAM access policy for roles in var.access.",
+      "notes": null
+    },
+    {
+      "title": "build/terraform/aws/sns/main.tf",
+      "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/sns/main.tf",
+      "summary": "Defines an SNS topic with optional KMS encryption and an IAM publish policy for roles in var.access.",
+      "notes": null
+    },
+    {
+      "title": "build/terraform/aws/dynamodb/main.tf",
+      "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/dynamodb/main.tf",
+      "summary": "Defines a DynamoDB table with TTL, point-in-time recovery, autoscaling, optional KMS encryption, and an IAM access policy.",
+      "notes": null
+    },
+    {
+      "title": "build/terraform/aws/kinesis_data_stream/main.tf",
+      "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/kinesis_data_stream/main.tf",
+      "summary": "Creates a Kinesis Data Stream with optional KMS encryption, complex CloudWatch alarms for autoscaling, and an access policy.",
+      "notes": null
+    },
+    {
+      "title": "build/terraform/aws/secret/main.tf",
+      "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/secret/main.tf",
+      "summary": "Creates a Secrets Manager secret and an IAM access policy granting GetSecretValue (plus optional KMS) to roles in var.access.",
+      "notes": null
+    },
+    {
+      "title": "build/terraform/aws/lambda/main.tf",
+      "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/lambda/main.tf",
+      "summary": "Defines a Lambda function running from a container image, its IAM execution role, managed policy attachments, custom policy, and an access policy.",
+      "notes": null
+    },
+    {
+      "title": "build/terraform/aws/api_gateway/lambda/main.tf",
+      "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/api_gateway/lambda/main.tf",
+      "summary": "Defines a public API Gateway REST API integrated via AWS_PROXY with a Lambda function and grants invocation permission.",
+      "notes": null
+    },
+    {
+      "title": "build/terraform/aws/api_gateway/kinesis_data_stream/main.tf",
+      "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/api_gateway/kinesis_data_stream/main.tf",
+      "summary": "Defines a public API Gateway REST API that calls Kinesis PutRecord using a service role assumed by API Gateway.",
+      "notes": null
+    },
+    {
+      "title": "build/terraform/aws/appconfig/main.tf",
+      "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/appconfig/main.tf",
+      "summary": "Defines an AppConfig application and environments, plus a Lambda permission for AppConfig validator integration.",
+      "notes": null
+    },
+    {
+      "title": "build/terraform/aws/eventbridge/lambda/main.tf",
+      "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/eventbridge/lambda/main.tf",
+      "summary": "Defines an EventBridge rule targeting a Lambda function and an access policy for roles in var.access.",
+      "notes": null
+    },
+    {
+      "title": "build/terraform/aws/networking/vpc/main.tf",
+      "url": "https://github.com/brexhq/substation/blob/main/build/terraform/aws/networking/vpc/main.tf",
+      "summary": "Defines a VPC, public and private subnets, an internet gateway, NAT gateways, and route tables for internet access.",
+      "notes": null
+    }
+  ]
+}
