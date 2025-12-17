@@ -1,5 +1,43 @@
-import type { AttackPathsData, Finding, AdversarialMethod, Technique, Hypothesis, AttackFlowStep, ComprehensiveAnalysisResults, TacticExplorerOutput, TacticVector } from '../types'
+import type { AttackPathsData, Finding, AdversarialMethod, Technique, Hypothesis, AttackFlowStep, ComprehensiveAnalysisResults, TacticExplorerOutput, TacticVector, CloudInfrastructureAnalysis } from '../types'
 
+
+/**
+ * Normalizes comprehensive analysis data to use snake_case field names
+ * Handles both kebab-case and snake_case formats for compatibility
+ */
+function normalizeComprehensiveData(rawData: any): any {
+  if (!rawData || typeof rawData !== 'object') {
+    return rawData
+  }
+
+  const normalized: any = {
+    application_name: rawData.application_name,
+  }
+
+  // Normalize each tactic field
+  const normalizedFieldNames = [
+    'initial_access',
+    'discovery',
+    'execution',
+    'persistence',
+    'privilege_escalation',
+    'defense_evasion',
+    'credential_access',
+    'lateral_movement',
+    'collection',
+    'command_and_control',
+    'exfiltration',
+    'impact',
+  ]
+
+  normalizedFieldNames.forEach((normalizedName) => {
+    // Try snake_case first, then kebab-case
+    const kebabName = normalizedName.replace(/_/g, '-')
+    normalized[normalizedName] = rawData[normalizedName] || rawData[kebabName]
+  })
+
+  return normalized
+}
 
 /**
  * Loads comprehensive analysis results data
@@ -21,25 +59,28 @@ export async function loadComprehensiveAnalysisData(
     
     const rawData = await response.json()
     
+    // Normalize field names (handles both kebab-case and snake_case)
+    const normalizedData = normalizeComprehensiveData(rawData)
+    
     // Validate the structure matches ComprehensiveAnalysisResults
     if (
-      rawData &&
-      typeof rawData === 'object' &&
-      rawData.application_name &&
-      rawData.initial_access &&
-      rawData.discovery &&
-      rawData.execution &&
-      rawData.persistence &&
-      rawData.privilege_escalation &&
-      rawData.defense_evasion &&
-      rawData.credential_access &&
-      rawData.lateral_movement &&
-      rawData.collection &&
-      rawData.command_and_control &&
-      rawData.exfiltration &&
-      rawData.impact
+      normalizedData &&
+      typeof normalizedData === 'object' &&
+      normalizedData.application_name &&
+      normalizedData.initial_access &&
+      normalizedData.discovery &&
+      normalizedData.execution &&
+      normalizedData.persistence &&
+      normalizedData.privilege_escalation &&
+      normalizedData.defense_evasion &&
+      normalizedData.credential_access &&
+      normalizedData.lateral_movement &&
+      normalizedData.collection &&
+      normalizedData.command_and_control &&
+      normalizedData.exfiltration &&
+      normalizedData.impact
     ) {
-      return rawData as ComprehensiveAnalysisResults
+      return normalizedData as ComprehensiveAnalysisResults
     }
     
     return null
@@ -180,4 +221,29 @@ export async function loadAttackPathsData(
   return transformComprehensiveAnalysisToAttackPaths(comprehensiveData)
 }
 
+/**
+ * Loads cloud infrastructure analysis data
+ * Data comes from data/infrastructure/{appName}_infrastructure_breakdown.json
+ * 
+ * @param baseUrl - Base URL for fetching data (typically import.meta.env.BASE_URL)
+ * @param appName - Application name (e.g., 'BrexHQ')
+ * @returns Promise resolving to CloudInfrastructureAnalysis or null if not found
+ */
+export async function loadInfrastructureAnalysisData(
+  baseUrl: string,
+  appName: string
+): Promise<CloudInfrastructureAnalysis | null> {
+  try {
+    const response = await fetch(`${baseUrl}data/infrastructure/${appName}_infrastructure_breakdown.json`)
+    if (!response.ok) {
+      return null
+    }
+    
+    const data = await response.json() as CloudInfrastructureAnalysis
+    return data
+  } catch (error) {
+    console.warn(`Failed to load infrastructure analysis data for ${appName}:`, error)
+    return null
+  }
+}
 
